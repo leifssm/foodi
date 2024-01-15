@@ -1,9 +1,8 @@
-package no.ntnu.idatt1002.demo.view.components.carousel;
+package no.ntnu.idatt1002.demo.view.components;
 
 import static no.ntnu.idatt1002.demo.view.components.ComponentUtils.PADDING;
 
 import java.awt.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.*;
 import no.ntnu.idatt1002.demo.view.components.Button;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,7 @@ public class Carousel extends JLayeredPane {
   /**
    * Number of panels visible on each side of the current panel.
    */
-  private final int VISIBLE_NEIGHBORS = 2;
+  private final int VISIBLE_NEIGHBORS = 3;
   /**
    * Index of the current panel.
    */
@@ -36,11 +35,21 @@ public class Carousel extends JLayeredPane {
   /**
    * Button for turning the carousel to the left.
    */
-  private final Button leftButton = new Button("<", this::turnLeft);
+  private final Button leftButton = new Button(
+      "<",
+      Button.Style.PRIMARY,
+      Button.Type.FILLED,
+      this::turnLeft
+  );
   /**
    * Button for turning the carousel to the right.
    */
-  private final Button rightButton = new Button(">", this::turnRight);
+  private final Button rightButton = new Button(
+      ">",
+      Button.Style.PRIMARY,
+      Button.Type.FILLED,
+      this::turnRight
+  );
   /**
    * Creates a carousel with the given panels.
    *
@@ -64,7 +73,6 @@ public class Carousel extends JLayeredPane {
 
     setBackground(Color.RED);
     setPreferredSize(new Dimension(50, 50));
-    updatePanelPositions();
   }
 
   /**
@@ -78,7 +86,7 @@ public class Carousel extends JLayeredPane {
   public void doLayout() {
     super.doLayout();
     // Injects the updatePanelPositions method into the update function
-    updatePanelPositions();
+    updatePanelPositions(false);
   }
 
   /**
@@ -90,7 +98,7 @@ public class Carousel extends JLayeredPane {
     } else {
       currentIndex--;
     }
-    updatePanelPositions();
+    updatePanelPositions(true);
   }
 
   /**
@@ -102,7 +110,7 @@ public class Carousel extends JLayeredPane {
     } else {
       currentIndex++;
     }
-    updatePanelPositions();
+    updatePanelPositions(true);
   }
 
   /**
@@ -174,10 +182,60 @@ public class Carousel extends JLayeredPane {
     );
   }
 
+  private void animateItem(@NotNull CarouselItem item, @NotNull Rectangle to) {
+    if (item.getTimer() != null) {
+      item.getTimer().stop();
+    }
+
+    final JPanel panel = item.getPanel();
+    final int FPS = 40;
+    final int durationMs = 500;
+
+    final int originalX = panel.getX();
+    final int originalY = panel.getY();
+    final int originalWidth = panel.getWidth();
+    final int originalHeight = panel.getHeight();
+
+    final float posXDiff = to.x - panel.getX();
+    final float posYDiff = to.y - panel.getY();
+    final float widthDiff = to.width - panel.getWidth();
+    final float heightDiff = to.height - panel.getHeight();
+
+    final long startMoment = System.currentTimeMillis();
+
+    Timer timer = new Timer(1000 / FPS, action -> {
+      final int timeElapsed = (int) (action.getWhen() - startMoment);
+
+      if (timeElapsed >= durationMs) {
+        Timer parentTimer = (Timer) action.getSource();
+        panel.setBounds(to);
+        parentTimer.stop();
+        return;
+      }
+
+      final float percentageDone = (float) timeElapsed / durationMs;
+
+      panel.setBounds(
+          (int) (originalX + posXDiff * percentageDone),
+          (int) (originalY + posYDiff * percentageDone),
+          (int) (originalWidth + widthDiff * percentageDone),
+          (int) (originalHeight + heightDiff * percentageDone)
+      );
+    }) {
+      @Override
+      public void stop() {
+        super.stop();
+        item.setTimer(null);
+      }
+    };
+    item.setTimer(timer);
+    timer.start();
+  }
+
   /**
    * Updates the positions of the panels.
    */
-  public void updatePanelPositions() {
+  public void updatePanelPositions(boolean smooth) {
     updateButtonPositions();
     if (panels.length == 0) {
       return;
@@ -203,8 +261,6 @@ public class Carousel extends JLayeredPane {
     float posY;
 
     for (CarouselItem item : slice) {
-      JPanel panel = item.getPanel();
-
       displacement = item.getIndex() - currentIndex;
 
       if (displacement > VISIBLE_NEIGHBORS) {
@@ -222,12 +278,52 @@ public class Carousel extends JLayeredPane {
       posX = 200 * Math.tanh(0.6f * displacement) + centerX;
       posY = (getHeight() - panelHeight) / 2f;
 
-      panel.setBounds((int) posX, (int) posY, (int) panelWidth, (int) panelHeight);
+      final JPanel panel = item.getPanel();
       setLayer(
           panel,
           JLayeredPane.DEFAULT_LAYER + panels.length - Math.abs(displacement)
       );
+
+      final Rectangle newBounds = new Rectangle(
+          (int) posX,
+          (int) posY,
+          (int) panelWidth,
+          (int) panelHeight
+      );
+
+      if (smooth && (Math.abs(displacement) < VISIBLE_NEIGHBORS)) {
+        animateItem(item, newBounds);
+      } else {
+        panel.setBounds(newBounds);
+      }
       panel.setVisible(true);
+    }
+  }
+
+  static private class CarouselItem {
+    private final int index;
+    private final JPanel panel;
+    private Timer timer;
+
+    public CarouselItem(JPanel panel, int index) {
+      this.panel = panel;
+      this.index = index;
+    }
+
+    public JPanel getPanel() {
+      return panel;
+    }
+
+    public int getIndex() {
+      return index;
+    }
+
+    public void setTimer(@Nullable Timer timer) {
+      this.timer = timer;
+    }
+
+    public Timer getTimer() {
+      return timer;
     }
   }
 }

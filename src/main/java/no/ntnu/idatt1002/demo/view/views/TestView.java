@@ -1,7 +1,10 @@
-package no.ntnu.idatt1002.demo.view.components;
+package no.ntnu.idatt1002.demo.view.views;
 
 import no.ntnu.idatt1002.demo.view.View;
-import no.ntnu.idatt1002.demo.view.components.carousel.Carousel;
+import no.ntnu.idatt1002.demo.view.components.Carousel;
+import no.ntnu.idatt1002.demo.view.components.Element;
+import no.ntnu.idatt1002.demo.view.components.Footer;
+import no.ntnu.idatt1002.demo.view.components.Sidebar;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +13,7 @@ public class TestView extends View {
   public TestView() {
     super("Test");
     add(new Footer(), BorderLayout.SOUTH);
-    JPanel[] panels = new JPanel[4];
+    JPanel[] panels = new JPanel[15];
     for (int i = 0; i < panels.length; i++) {
       panels[i] = new Element("Element " + (i + 1));
     }

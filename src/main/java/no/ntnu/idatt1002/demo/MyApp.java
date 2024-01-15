@@ -1,6 +1,6 @@
 package no.ntnu.idatt1002.demo;
 
-import no.ntnu.idatt1002.demo.view.components.TestView;
+import no.ntnu.idatt1002.demo.view.views.TestView;
 import no.ntnu.idatt1002.demo.view.View;
 
 /**
