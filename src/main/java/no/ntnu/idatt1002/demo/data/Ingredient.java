@@ -17,7 +17,7 @@ public class Ingredient {
   private Date expiration;
   private String category;
 
-  private Ingredient(String name,
+  public Ingredient(String name,
                      double quantity,
                      String unit,
                      Date expiration,
@@ -29,7 +29,7 @@ public class Ingredient {
     this.category = category;
   }
 
-  private Ingredient(String name,
+  public Ingredient(String name,
                      double quantity,
                      String unit,
                      String category) {
