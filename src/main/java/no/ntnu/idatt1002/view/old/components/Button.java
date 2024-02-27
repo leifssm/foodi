@@ -1,8 +1,7 @@
-package no.ntnu.idatt1002.demo.view.components;
+package no.ntnu.idatt1002.view.old.components;
 
 import org.jetbrains.annotations.NotNull;
 
-import no.ntnu.idatt1002.demo.view.ViewUtils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -17,13 +16,13 @@ import java.awt.*;
  */
 public class Button extends JButton {
   public enum Style {
-    PRIMARY(new Color(0x0000ff), new Color(0xffffff)),
+    PRIMARY(new Color(0x16992b), new Color(0xffffff)),
     SECONDARY(new Color(0x1c1c1c), new Color(0x1c1c1c)),
     SUCCESS(new Color(0x2c2c2c), new Color(0x2c2c2c)),
     ERROR(new Color(0x3c3c3c), new Color(0x3c3c3c)),
     WARNING(new Color(0x4c4c4c), new Color(0x4c4c4c)),
     INFO(new Color(0x5c5c5c), new Color(0x5c5c5c)),
-    DISABLED(new Color(0x6c6c6c), new Color(0x6c6c6c));
+    DISABLED(new Color(0xb4b4b4), new Color(0x6c6c6c));
 
     public final Color main;
     public final Color accentColor;
@@ -54,9 +53,9 @@ public class Button extends JButton {
 
   public Button(
       @NotNull String label,
+      @NotNull Runnable action,
       @NotNull Style style,
-      @NotNull Type type,
-      @NotNull Runnable action
+      @NotNull Type type
   ) {
     super(label);
 

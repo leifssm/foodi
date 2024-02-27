@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo.view.components;
+package no.ntnu.idatt1002.view.old.components;
 
 import javax.swing.*;
 import java.awt.*;

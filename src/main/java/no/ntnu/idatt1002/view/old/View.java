@@ -1,17 +1,13 @@
-package no.ntnu.idatt1002.demo.view;
+package no.ntnu.idatt1002.view.old;
 
 import java.awt.*;
 import javax.swing.*;
-import no.ntnu.idatt1002.demo.repo.MyEntityRepo;
-import no.ntnu.idatt1002.demo.data.MyEntity;
 
 /**
- * Main window for my application!
- *
- * @author nilstes
+ * @author Leif Mørstad
  */
 public class View extends JFrame {
-  public static final Color DEFAULT_BACKGROUND_COLOR = new Color(0x282828);
+  public static final Color DEFAULT_BACKGROUND_COLOR = new Color(0x1b1b1b);
   public static final ImageIcon DEFAULT_ICON = new ImageIcon("src/main/resources/icon.png");
 
   /**

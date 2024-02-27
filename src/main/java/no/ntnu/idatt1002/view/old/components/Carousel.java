@@ -1,10 +1,10 @@
-package no.ntnu.idatt1002.demo.view.components;
+package no.ntnu.idatt1002.view.old.components;
 
-import static no.ntnu.idatt1002.demo.view.components.ComponentUtils.PADDING;
+import static no.ntnu.idatt1002.view.old.components.ComponentUtils.PADDING;
 
 import java.awt.*;
 import javax.swing.*;
-import no.ntnu.idatt1002.demo.view.components.Button;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,18 +37,18 @@ public class Carousel extends JLayeredPane {
    */
   private final Button leftButton = new Button(
       "<",
+      this::turnLeft,
       Button.Style.PRIMARY,
-      Button.Type.FILLED,
-      this::turnLeft
+      Button.Type.FILLED
   );
   /**
    * Button for turning the carousel to the right.
    */
   private final Button rightButton = new Button(
       ">",
+      this::turnRight,
       Button.Style.PRIMARY,
-      Button.Type.FILLED,
-      this::turnRight
+      Button.Type.FILLED
   );
   /**
    * Creates a carousel with the given panels.
@@ -96,7 +96,7 @@ public class Carousel extends JLayeredPane {
     if (currentIndex <= 0) {
       currentIndex = panels.length - 1;
     } else {
-      currentIndex--;
+      currentIndex -= 2;
     }
     updatePanelPositions(true);
   }
@@ -108,7 +108,7 @@ public class Carousel extends JLayeredPane {
     if (currentIndex >= panels.length - 1) {
       currentIndex = 0;
     } else {
-      currentIndex++;
+      currentIndex += 2;
     }
     updatePanelPositions(true);
   }
@@ -196,10 +196,10 @@ public class Carousel extends JLayeredPane {
     final int originalWidth = panel.getWidth();
     final int originalHeight = panel.getHeight();
 
-    final float posXDiff = to.x - panel.getX();
-    final float posYDiff = to.y - panel.getY();
-    final float widthDiff = to.width - panel.getWidth();
-    final float heightDiff = to.height - panel.getHeight();
+    final float posXDiff = to.x - originalX;
+    final float posYDiff = to.y - originalY;
+    final float widthDiff = to.width - originalWidth;
+    final float heightDiff = to.height - originalHeight;
 
     final long startMoment = System.currentTimeMillis();
 

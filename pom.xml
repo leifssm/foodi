@@ -15,7 +15,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
-        <javafx.version>17.0.1</javafx.version>
+        <javafx.version>21.0.2</javafx.version>
     </properties>
 
     <repositories>
@@ -157,7 +157,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        no.ntnu.idatt1002.demo.MyApp
+                                        no.ntnu.idatt1002.App
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -177,7 +177,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>no.ntnu.idatt1002.demo/no.ntnu.idatt1002.demo.MyApp</mainClass>
+                            <mainClass>no.ntnu.idatt1002.view.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

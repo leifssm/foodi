@@ -1,0 +1,10 @@
+.sidebar {
+  -fx-background-color: black;
+}
+
+.sidebar-button {
+}
+
+.sidebar-button:hover {
+  -fx-background-color: #f4f4f4;
+}

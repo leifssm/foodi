@@ -1,7 +1,4 @@
-package no.ntnu.idatt1002.demo.data;
-
-import java.util.Date;
-import java.util.List;
+package no.ntnu.idatt1002.data;
 
 /**
  * This is just a simple Java-bean

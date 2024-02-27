@@ -1,6 +1,4 @@
-package no.ntnu.idatt1002.demo.view.components;
-
-import javax.swing.*;
+package no.ntnu.idatt1002.view.old.components;
 
 /**
  * Centralized constants for components
