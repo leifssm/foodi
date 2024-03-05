@@ -1,10 +1,19 @@
-package no.ntnu.idatt1002.view.components.Sidebar;
+package no.ntnu.idatt1002.view.components.sidebar;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.Utils;
 
+/**
+ * A simple sidebar component.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
 public class SideBar extends VBox {
+  /**
+   * The constructor of the sidebar component.
+   */
   public SideBar() {
     super();
     getStylesheets().add(Utils.getStylesheet("sidebar"));

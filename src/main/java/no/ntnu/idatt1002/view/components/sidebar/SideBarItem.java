@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.Sidebar;
+package no.ntnu.idatt1002.view.components.sidebar;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
