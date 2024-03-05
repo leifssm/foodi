@@ -1,23 +1,47 @@
-package no.ntnu.idatt1002.demo.model.util;
+package no.ntnu.idatt1002.demo.model.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class DatabaseUtils {
+/**
+ * This class is responsible for creating and initializing the database.
+ * It also checks if the database already exists, and if it does, it will not create a new one.
+ *
+ * @version 0.1.0
+ * @author Snake727
+ */
+
+public class Database {
   private static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
   private static final String USER = "sa";
   private static final String PASS = "";
 
+  /**
+   * This method creates a database in the user's home directory. It also populates the database with the necessary tables.
+   * The method also checks if the database already exists, and if it does, it will not create a new one.
+   *
+   */
+
   public void initializeDatabase() {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-      System.out.println("Connected to the database.");
-      createTables(conn);
-      System.out.println("Database has been initialized.");
+      if (!tablesExist(conn)) {
+        System.out.println("Database does not exist. Creating a new one...");
+        createTables(conn);
+        System.out.println("Database has been created and initialized.");
+      } else {
+        System.out.println("Connected to the existing database.");
+        createTables(conn);
+        System.out.println("Database has been initialized.");
+      }
     } catch (SQLException e) {
+      System.out.println("Error while creating the database.");
       e.printStackTrace();
     }
+  }
+
+  private boolean tablesExist(Connection conn) throws SQLException {
+    DatabaseMetaData dbm = conn.getMetaData();
+    ResultSet tables = dbm.getTables(null, null, "user", null);
+    return tables.next();
   }
 
   private void createTables(Connection conn) throws SQLException {
@@ -78,8 +102,8 @@ public class DatabaseUtils {
   }
 
   // Main method for testing purposes
-  public static void main(String[] args) {
-    DatabaseUtils dbInitializer = new DatabaseUtils();
+  public static void main(String[] args){
+    Database dbInitializer = new Database();
     dbInitializer.initializeDatabase();
   }
 }
