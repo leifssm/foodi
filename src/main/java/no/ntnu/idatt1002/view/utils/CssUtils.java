@@ -21,6 +21,7 @@ public interface CssUtils {
    * @see LoadUtils#getStylesheet(String)
    */
   default void addStylesheet(@NotNull String path) {
+    // TODO, create try catch
     getStylesheets().add(LoadUtils.getStylesheet(path));
   }
 
