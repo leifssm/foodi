@@ -5,6 +5,10 @@
   -fx-pref-width: 140px;
 }
 
+.sidebar-logo {
+  -fx-padding: 10px 0px 10px 0px;
+}
+
 .sidebar-button {
   -fx-max-width: infinity;
   -fx-font-weight: bold;

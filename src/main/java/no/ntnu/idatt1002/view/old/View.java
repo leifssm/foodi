@@ -8,7 +8,7 @@ import javax.swing.*;
  */
 public class View extends JFrame {
   public static final Color DEFAULT_BACKGROUND_COLOR = new Color(0x1b1b1b);
-  public static final ImageIcon DEFAULT_ICON = new ImageIcon("src/main/resources/icon.png");
+  public static final ImageIcon DEFAULT_ICON = new ImageIcon("src/main/resources/foodi.png");
 
   /**
    * Constructor for window

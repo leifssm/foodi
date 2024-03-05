@@ -20,11 +20,12 @@ public class SideBar extends VBox implements CssUtils {
     addStylesheet("sidebar");
     addClass("sidebar");
 
-    String image = LoadUtils.getImage("icon.png");
+    String image = LoadUtils.getImage("foodi.png");
     if (image != null) {
       ImageView logo = new ImageView(image);
-      logo.setFitWidth(138);
-      logo.setFitHeight(50);
+      logo.getStyleClass().add("sidebar-logo");
+      logo.setPreserveRatio(true);
+      logo.setFitWidth(100);
       getChildren().add(logo);
     }
 

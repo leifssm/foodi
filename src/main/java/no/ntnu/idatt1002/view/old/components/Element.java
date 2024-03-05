@@ -9,7 +9,7 @@ public class Element extends JPanel {
     super();
     setBackground(new Color(0x1c1c1c));
     add(new JLabel(name));
-    add(new JLabel(new ImageIcon("src/main/resources/icon.png")));
+    add(new JLabel(new ImageIcon("src/main/resources/foodi.png")));
     setPreferredSize(new Dimension(SIZE, SIZE));
   }
 }
