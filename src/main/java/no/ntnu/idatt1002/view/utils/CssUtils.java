@@ -21,8 +21,12 @@ public interface CssUtils {
    * @see LoadUtils#getStylesheet(String)
    */
   default void addStylesheet(@NotNull String path) {
-    // TODO, create try catch
-    getStylesheets().add(LoadUtils.getStylesheet(path));
+    String url = LoadUtils.getStylesheet(path);
+    if (url == null) {
+      System.out.println("Could not load stylesheet " + path);
+      return;
+    }
+    getStylesheets().add(url);
   }
 
   /**
@@ -33,5 +37,4 @@ public interface CssUtils {
   default void addClass(@NotNull String className) {
     getStyleClass().add(className);
   }
-
 }
