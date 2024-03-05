@@ -26,7 +26,7 @@ public class LoadUtils {
   private static @Nullable URL getResource(@NotNull String path, @NotNull String errorMessage) {
     try {
       return Objects.requireNonNull(
-          LoadUtils.class.getResource(path),
+          LoadUtils.class.getResource("../" + path),
           "Could not find resource: " + path
       );
     } catch (NullPointerException e) {
