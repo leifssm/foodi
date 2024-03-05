@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view;
+package no.ntnu.idatt1002.view.utils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class Utils {
+public class LoadUtils {
   /**
    * Gets a valid a resource url from the resources folder, or returns null and prints an error
    * message if the resource is not found.
@@ -26,7 +26,7 @@ public class Utils {
   private static @Nullable URL getResource(@NotNull String path, @NotNull String errorMessage) {
     try {
       return Objects.requireNonNull(
-          Utils.class.getResource(path),
+          LoadUtils.class.getResource(path),
           "Could not find resource: " + path
       );
     } catch (NullPointerException e) {

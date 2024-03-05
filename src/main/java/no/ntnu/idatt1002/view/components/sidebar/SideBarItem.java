@@ -30,7 +30,6 @@ class SideBarItem extends BorderPane {
     subItemsContainer.getChildren().addAll(subItems);
     setBottom(subItemsContainer);
 
-
     setExpanded(expanded);
   }
 

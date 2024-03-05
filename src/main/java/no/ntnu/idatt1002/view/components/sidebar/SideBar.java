@@ -2,7 +2,8 @@ package no.ntnu.idatt1002.view.components.sidebar;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.Utils;
+import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.LoadUtils;
 
 /**
  * A simple sidebar component.
@@ -10,16 +11,16 @@ import no.ntnu.idatt1002.view.Utils;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class SideBar extends VBox {
+public class SideBar extends VBox implements CssUtils {
   /**
    * The constructor of the sidebar component.
    */
   public SideBar() {
     super();
-    getStylesheets().add(Utils.getStylesheet("sidebar"));
-    getStyleClass().add("sidebar");
+    addStylesheet("sidebar");
+    addClass("sidebar");
 
-    String image = Utils.getImage("icon.png");
+    String image = LoadUtils.getImage("icon.png");
     if (image != null) {
       ImageView logo = new ImageView(image);
       logo.setFitWidth(138);
