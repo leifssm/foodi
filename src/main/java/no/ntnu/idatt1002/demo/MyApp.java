@@ -8,11 +8,4 @@ import no.ntnu.idatt1002.demo.view.MyWindow;
  */
 public class MyApp {
 
-    /**
-     * Main method for my application
-     */
-    public static void main(String[] args) throws Exception {
-        MyWindow window = new MyWindow("The Window");
-        window.setVisible(true);
-   }  
 }
