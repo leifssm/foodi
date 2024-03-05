@@ -5,56 +5,82 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * Class that provides utility methods for database operations
- *
- * @version 0.1.0
- * @author Snake727
- */
-
-
 public class DatabaseUtils {
-  /**
-   * Method to initialize the database
-   * @return a connection to the database
-   */
+  private static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
+  private static final String USER = "sa";
+  private static final String PASS = "";
 
-  public static Connection initializeDatabase() {
-    // JDBC URL for H2 persistent database
-    // Method should also check if a database is already created
-
-    String jdbcURL = "jdbc:h2:~/testdb"; // This creates a persistent database named 'testdb'
-
-    try {
-      // Load H2 driver
-      Class.forName("org.h2.Driver");
-
-      // Establish a connection to the database
-      return DriverManager.getConnection(jdbcURL, "", "");
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  public static void createTables(Connection connection) {
-    try {
-      Statement statement = connection.createStatement();
-      // Create tables
-      String sql = "CREATE TABLE IF NOT EXISTS test_table (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255))";
-      statement.execute(sql);
-      // More table creation statements here
-      System.out.println("Tables have been created!");
-    } catch (Exception e) {
+  public void initializeDatabase() {
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+      System.out.println("Connected to the database.");
+      createTables(conn);
+      System.out.println("Database has been initialized.");
+    } catch (SQLException e) {
       e.printStackTrace();
     }
   }
 
-  // Method to populate the database with initial data
-  public static void initializeData(Connection connection) {
-    // Implementation code for initial data insertion
+  private void createTables(Connection conn) throws SQLException {
+    try (Statement stmt = conn.createStatement()) {
+      // User Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS \"user\" (" +
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "name VARCHAR);");
+
+      // Ingredient Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS ingredient (" +
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "name VARCHAR NOT NULL," +
+          "unit VARCHAR," +
+          "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON'))," +
+          "category VARCHAR," +
+          "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE')));");
+
+      // Recipe Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS recipe (" +
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "name VARCHAR NOT NULL," +
+          "description VARCHAR," +
+          "difficulty VARCHAR," +
+          "CHECK (difficulty IN ('Easy', 'Medium', 'Hard'))," +
+          "duration INT);");
+
+      // Recipe Ingredient Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS recipe_ingredient (" +
+          "recipe_id INT," +
+          "ingredient_id INT," +
+          "amount DOUBLE," +
+          "PRIMARY KEY (recipe_id, ingredient_id)," +
+          "FOREIGN KEY (recipe_id) REFERENCES recipe(id)," +
+          "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id));");
+
+      // Inventory Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS inventory (" +
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "ingredient_id INT," +
+          "amount DOUBLE," +
+          "expiration_date DATE," +
+          "user_id INT," +
+          "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)," +
+          "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
+
+      // Shopping List Table
+      stmt.execute("CREATE TABLE IF NOT EXISTS shopping_list (" +
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "ingredient_id INT," +
+          "amount DOUBLE," +
+          "user_id INT," +
+          "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)," +
+          "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
+
+      System.out.println("Tables created successfully.");
+    }
   }
 
-  // Other utility methods for database operations can be added here
+  // Main method for testing purposes
+  public static void main(String[] args) {
+    DatabaseUtils dbInitializer = new DatabaseUtils();
+    dbInitializer.initializeDatabase();
+  }
 }
+
