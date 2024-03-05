@@ -7,8 +7,8 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 public class Inventory extends TitledPage implements CssUtils {
   public Inventory() {
     super("Inventory");
-    //addClass("inventory-page");
-    //addStylesheet("inventory-page");
+    addClass("inventory");
+    addStylesheet("inventory");
 
     setContent(new Button("Hello, Inventory!"));
   }

@@ -2,6 +2,7 @@ package no.ntnu.idatt1002.view.location;
 
 import java.util.HashMap;
 import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 /**
@@ -10,7 +11,7 @@ import javafx.scene.layout.Pane;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class Router extends Pane {
+public class Router extends BorderPane {
   /**
    * A map of routes and their corresponding nodes.
    */
@@ -45,15 +46,15 @@ public class Router extends Pane {
    */
   private void updateLocation(String location) {
     if (routes.containsKey(location)) {
-      getChildren().setAll(routes.get(location));
+      setCenter(routes.get(location));
       return;
     }
     for (String route : routes.keySet()) {
       if (LocationHandler.isLocationFuzzy(route)) {
-        getChildren().setAll(routes.get(route));
+        setCenter(routes.get(route));
         return;
       }
     }
-    getChildren().clear();
+    setCenter(null);
   }
 }
