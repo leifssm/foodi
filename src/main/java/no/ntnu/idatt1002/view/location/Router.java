@@ -37,6 +37,10 @@ public class Router extends BorderPane {
       throw new IllegalArgumentException("Route already exists");
     }
     routes.put(path, node);
+
+    if (LocationHandler.isLocationFuzzy(path)) {
+      setCenter(node);
+    }
   }
 
   /**
