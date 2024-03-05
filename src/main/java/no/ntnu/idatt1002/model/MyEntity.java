@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.data;
+package no.ntnu.idatt1002.model;
 
 /**
  * This is just a simple Java-bean

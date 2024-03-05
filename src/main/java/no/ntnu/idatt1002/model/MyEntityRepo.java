@@ -1,9 +1,7 @@
-package no.ntnu.idatt1002.repo;
+package no.ntnu.idatt1002.model;
 
 import java.util.Arrays;
 import java.util.List;
-
-import no.ntnu.idatt1002.data.MyEntity;
 
 /**
  * Repository for the MyEntity-entity
