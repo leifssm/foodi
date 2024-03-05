@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.ntnu.idatt1002.demo</groupId>
+    <groupId>no.ntnu.idatt1002</groupId>
     <artifactId>idatt2002demo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>demo</name>
@@ -15,7 +15,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
-        <javafx.version>17.0.1</javafx.version>
+        <javafx.version>21.0.2</javafx.version>
     </properties>
 
     <repositories>
@@ -111,6 +111,11 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -152,7 +157,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        no.ntnu.idatt1002.demo.MyApp
+                                        no.ntnu.idatt1002.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -172,7 +177,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>no.ntnu.idatt1002.demo/no.ntnu.idatt1002.demo.MyApp</mainClass>
+                            <mainClass>no.ntnu.idatt1002.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
