@@ -10,14 +10,21 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 public class TitledPage extends BorderPane implements CssUtils {
   public TitledPage(String title, String subtitle) {
     super();
-    addClass("titled-page");
     addStylesheet("titled-page");
+    addClass("titled-page");
 
     VBox wrapper = new VBox();
-    wrapper.getChildren().add(new Label(title));
+
+    Label titleLabel = new Label(title);
+    titleLabel.getStyleClass().add("title");
+    wrapper.getChildren().add(titleLabel);
+
     if (subtitle != null) {
-      wrapper.getChildren().add(new Text(subtitle));
+      Label subtitleLabel = new Label(subtitle);
+      subtitleLabel.getStyleClass().add("subtitle");
+      wrapper.getChildren().add(subtitleLabel);
     }
+
     setTop(wrapper);
   }
 

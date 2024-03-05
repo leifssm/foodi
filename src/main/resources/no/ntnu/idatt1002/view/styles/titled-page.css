@@ -1,4 +1,15 @@
 .titled-page {
-    -fx-max-width: infinity;
-    -fx-max-height: infinity;
+  -fx-background-color: #1b1b1b;
+  -fx-padding: 20;
+}
+
+.title {
+  -fx-font-size: 50;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+}
+
+.subtitle {
+  -fx-font-size: 18;
+  -fx-text-fill: #b4b4b4;
 }
