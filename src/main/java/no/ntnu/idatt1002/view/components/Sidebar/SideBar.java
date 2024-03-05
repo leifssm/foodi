@@ -2,7 +2,6 @@ package no.ntnu.idatt1002.view.components.Sidebar;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.location.LocationHandler;
 import no.ntnu.idatt1002.view.Utils;
 
 public class SideBar extends VBox {
