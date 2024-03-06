@@ -1,0 +1,28 @@
+.inventory-list {
+    -fx-padding: 10px;
+    -fx-background-color: black;
+    -fx-background-radius: 10px;
+}
+
+/*.inventory-list > * > * {*/
+/*    -fx-margin: 10px 0 10px 0;*/
+/*}*/
+
+.inventory-list * {
+    -fx-font-weight: bold;
+}
+
+.sub-item-expiration-date {
+    -fx-fill: #b4b4b4;
+    -fx-border-color: white;
+    -fx-border-width: 0 0 0 1px;
+    -fx-padding: 0 0 0 10px;
+}
+
+.inventory-list .expiry-date * {
+    -fx-fill: #b4b4b4;
+}
+
+.inventory-list .expiry-date .expired {
+    -fx-fill: #f44949;
+}
