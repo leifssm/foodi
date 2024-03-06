@@ -4,7 +4,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 
 public class TitledPage extends BorderPane implements CssUtils {

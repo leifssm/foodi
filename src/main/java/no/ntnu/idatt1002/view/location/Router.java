@@ -3,7 +3,6 @@ package no.ntnu.idatt1002.view.location;
 import java.util.HashMap;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 /**
  * A router that displays different nodes depending on the current location.
