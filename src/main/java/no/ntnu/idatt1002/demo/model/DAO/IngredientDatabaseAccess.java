@@ -1,6 +1,6 @@
 package no.ntnu.idatt1002.demo.model.DAO;
 
-import no.ntnu.idatt1002.demo.model.Ingredient;
+import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 
 import java.sql.*;
 
