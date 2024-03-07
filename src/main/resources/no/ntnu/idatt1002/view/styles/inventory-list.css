@@ -4,6 +4,11 @@
     -fx-background-radius: 10px;
 }
 
+.inventory-list-scroll {
+    -fx-background-color: black;
+    -fx-border-color: transparent;
+}
+
 /*.inventory-list > * > * {*/
 /*    -fx-margin: 10px 0 10px 0;*/
 /*}*/
@@ -12,11 +17,31 @@
     -fx-font-weight: bold;
 }
 
-.sub-item-expiration-date {
+.inventory-list .gray {
     -fx-fill: #b4b4b4;
+    -fx-text-fill: #b4b4b4;
+}
+
+.inventory-list .sub-item-background {
+    -fx-background-color: #151515;
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+}
+
+.inventory-list .center {
+    -fx-max-width: infinity;
+    -fx-alignment: center;
+}
+
+.inventory-list .vertical-padding {
+    -fx-padding: 2px 0 3px 0px;
+}
+
+.inventory-list .sub-item-expiration-date {
     -fx-border-color: white;
     -fx-border-width: 0 0 0 1px;
-    -fx-padding: 0 0 0 10px;
+    -fx-padding: 2px 0 3px 10px;
+    -fx-alignment: center-left
 }
 
 .inventory-list .expiry-date * {

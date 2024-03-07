@@ -6,13 +6,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import no.ntnu.idatt1002.view.Paginator;
 import no.ntnu.idatt1002.view.utils.CssUtils;
-
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Class for displaying a list of ingredients
@@ -29,6 +25,7 @@ public class InventoryList extends VBox implements CssUtils {
     addClass("inventory-list");
 
     ScrollPane scrollPane = new ScrollPane();
+    scrollPane.getStyleClass().add("inventory-list-scroll");
     scrollPane.setFitToWidth(true);
     scrollPane.setFitToHeight(true);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -65,12 +62,16 @@ public class InventoryList extends VBox implements CssUtils {
         selectCol
     );
 
+    Label amount = new Label("AMOUNT");
+    amount.getStyleClass().add("center");
+    Label unit = new Label("UNIT");
+    unit.getStyleClass().add("center");
     gridPane.add(new Label("o"), 0, 0);
     gridPane.add(new Label("NAME"), 1, 0);
     gridPane.add(new Label("EXPIRATION DATE"), 2, 0);
     gridPane.add(new Label("CATEGORY"), 3, 0);
-    gridPane.add(new Label("AMOUNT"), 4, 0);
-    gridPane.add(new Label("UNIT"), 5, 0);
+    gridPane.add(amount, 4, 0);
+    gridPane.add(unit, 5, 0);
     gridPane.add(new Label(), 6, 0);
     gridPane.add(new Label(), 7, 0);
 
@@ -102,11 +103,12 @@ public class InventoryList extends VBox implements CssUtils {
 
     ArrayList<InventoryItem> currentPage = items.getCurrentPage();
     int rowNum = 2;
-    Node[][] rows;
     for (InventoryItem item : currentPage) {
-      rows = new InventoryListItem(item, item, item).createCells();
-      for (Node[] cols : rows) {
+      InventoryListItem rows = new InventoryListItem(item, item, item);
+      gridPane.addRow(rowNum++, rows.createMainRow());
+      for (Node[] cols : rows.createSubRows()) {
         gridPane.addRow(rowNum++, cols);
+        GridPane.setColumnIndex(cols[0], 1);
       }
     }
   }
