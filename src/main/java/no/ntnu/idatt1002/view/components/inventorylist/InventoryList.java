@@ -66,14 +66,17 @@ public class InventoryList extends VBox implements CssUtils {
     amount.getStyleClass().add("center");
     Label unit = new Label("UNIT");
     unit.getStyleClass().add("center");
-    gridPane.add(new Label("o"), 0, 0);
-    gridPane.add(new Label("NAME"), 1, 0);
-    gridPane.add(new Label("EXPIRATION DATE"), 2, 0);
-    gridPane.add(new Label("CATEGORY"), 3, 0);
-    gridPane.add(amount, 4, 0);
-    gridPane.add(unit, 5, 0);
-    gridPane.add(new Label(), 6, 0);
-    gridPane.add(new Label(), 7, 0);
+    gridPane.addRow(
+        0,
+        new Label("o"),
+        new Label("NAME"),
+        new Label("EXPIRATION DATE"),
+        new Label("CATEGORY"),
+        amount,
+        unit,
+        new Label(),
+        new Label()
+    );
 
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
@@ -108,7 +111,7 @@ public class InventoryList extends VBox implements CssUtils {
       gridPane.addRow(rowNum++, rows.getMainItems());
 
       for (InventoryListSubItem subRow : rows.getSubItems()) {
-        Node[] subRowItems = subRow.getItems();
+        Node[] subRowItems = subRow.getNodes();
 
         gridPane.addRow(rowNum++, subRowItems);
         GridPane.setColumnIndex(subRowItems[0], 1);

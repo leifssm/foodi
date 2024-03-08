@@ -4,15 +4,22 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import no.ntnu.idatt1002.view.components.button.DropdownButton;
+import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
+import no.ntnu.idatt1002.view.components.button.StandardCheckBoxHandler;
 
 class InventoryListItem {
   private final Node[] mainItems;
   private final InventoryListSubItem[] subItems;
 
+  private final StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
+
   public InventoryListItem(InventoryItem mainItem, InventoryItem... items) {
     this.subItems = new InventoryListSubItem[items.length];
+
     for (int i = 0; i < items.length; i++) {
-      subItems[i] = new InventoryListSubItem(items[i]);
+      InventoryListSubItem subItem = new InventoryListSubItem(items[i]);
+      subItems[i] = subItem;
+      selectHandler.bindCheckBox(subItem.getSelect());
     }
 
     Label icon = new Label(mainItem.getType());
@@ -43,8 +50,11 @@ class InventoryListItem {
     Label edit = new Label("e");
     edit.getStyleClass().add("center");
 
-    Label select = new Label("s");
+    StandardCheckBox select = new StandardCheckBox();
+    select.setScale(0.6);
     select.getStyleClass().add("center");
+
+    selectHandler.bindMainCheckBox(select);
 
     mainItems = new Node[]{
         icon,

@@ -1,13 +1,15 @@
 package no.ntnu.idatt1002.view.components.inventorylist;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
+import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
 
 public class InventoryListSubItem {
-  private final Node[] items;
+  private final Node[] nodes;
+  private final StandardCheckBox select = new StandardCheckBox();
+
   public InventoryListSubItem(InventoryItem item) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
@@ -30,10 +32,10 @@ public class InventoryListSubItem {
     Label edit = new Label("e");
     edit.getStyleClass().add("center");
 
-    Button select = new Button("s");
+    select.setScale(0.6);
     select.getStyleClass().add("center");
 
-    items = new Node[]{
+    nodes = new Node[]{
         background,
         expiryDate,
         progressBar,
@@ -45,14 +47,18 @@ public class InventoryListSubItem {
     };
   }
 
-  public Node[] getItems() {
-    return items;
+  public Node[] getNodes() {
+    return nodes;
   }
 
   public void setVisibility(boolean visible) {
-    for (Node item : items) {
-      item.setVisible(visible);
-      item.setManaged(visible);
+    for (Node node : nodes) {
+      node.setVisible(visible);
+      node.setManaged(visible);
     }
+  }
+
+  public StandardCheckBox getSelect() {
+    return select;
   }
 }
