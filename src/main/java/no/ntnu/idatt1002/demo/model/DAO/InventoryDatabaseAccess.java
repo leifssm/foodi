@@ -28,7 +28,7 @@ public class InventoryDatabaseAccess {
                 pstmt2.setInt(1, obj.getInventoryId());
                 pstmt2.setInt(2, obj.getIngredientId());
                 pstmt2.setInt(3, obj.getAmount());
-                pstmt2.setDate(4, (Date) obj.getDate());
+                pstmt2.setDate(4, (Date) obj.getExperationDate());
                 pstmt2.setInt(5, obj.getUserId());
                 pstmt2.executeUpdate();
             } catch (SQLException e) {
@@ -77,8 +77,8 @@ public class InventoryDatabaseAccess {
     }
 
     //slette inventory
-    public void delete(Inventory obj) {
-        String sql = "DELETE FROM inventory WHERE id = ?";
+    public void delete_inventory(Inventory obj) {
+        String sql = "DELETE FROM inventory WHERE TEST.PUBLIC.INVENTORY.ID = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -93,13 +93,14 @@ public class InventoryDatabaseAccess {
 
     //slette en ingrediens fra inventory
 
-    public void delete_all_of_ingredient(Inventory obj, int ingredient_id) {
-        String sql = "DELETE FROM inventory WHERE ingredient_id = ?";
+    public void delete_ingredient(int inventory_id, int ingredient_id) {
+        String sql = "DELETE FROM inventory WHERE ingredient_id = ? AND id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, ingredient_id);
+            pstmt.setInt(2, inventory_id);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
