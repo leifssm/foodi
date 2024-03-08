@@ -11,9 +11,9 @@ import java.sql.*;
  */
 
 public class Database {
-  private static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
-  private static final String USER = "sa";
-  private static final String PASS = "";
+  public static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
+  public static final String USER = "sa";
+  public static final String PASS = "";
 
   /**
    * This method creates a database in the user's home directory. It also populates the database with the necessary tables.

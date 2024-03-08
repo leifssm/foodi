@@ -1,16 +1,13 @@
 package no.ntnu.idatt1002.demo.model.DAO;
 
-
-import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.Inventory;
 
 import java.sql.*;
 
+import static no.ntnu.idatt1002.demo.model.repository.Database.*;
+
 public class InventoryDatabaseAccess {
 
-    private static final String DB_URL = "jdbc:h2:~/test";
-    private static final String USER = "sa";
-    private static final String PASS = "";
 
     public void save (Inventory obj) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ?";
