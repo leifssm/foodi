@@ -30,11 +30,20 @@ public interface CssUtils {
   }
 
   /**
-   * Adds a class name to the elements css class list.
+   * Adds a class name to the elements' css class list.
    *
    * @param className the classname to add
    */
   default void addClass(@NotNull String className) {
     getStyleClass().add(className);
+  }
+
+  /**
+   * Adds all class names to the elements' css class list.
+   *
+   * @param className the classnames to add
+   */
+  default void addClasses(@NotNull String... className) {
+    getStyleClass().addAll(className);
   }
 }

@@ -21,7 +21,7 @@ public class InventoryList extends VBox implements CssUtils {
 
   private final GridPane gridPane;
   public InventoryList() {
-    addStylesheet("inventory-list");
+    addStylesheet("components/inventory/inventory-list");
     addClass("inventory-list");
 
     ScrollPane scrollPane = new ScrollPane();
@@ -105,10 +105,13 @@ public class InventoryList extends VBox implements CssUtils {
     int rowNum = 2;
     for (InventoryItem item : currentPage) {
       InventoryListItem rows = new InventoryListItem(item, item, item);
-      gridPane.addRow(rowNum++, rows.createMainRow());
-      for (Node[] cols : rows.createSubRows()) {
-        gridPane.addRow(rowNum++, cols);
-        GridPane.setColumnIndex(cols[0], 1);
+      gridPane.addRow(rowNum++, rows.getMainItems());
+
+      for (InventoryListSubItem subRow : rows.getSubItems()) {
+        Node[] subRowItems = subRow.getItems();
+
+        gridPane.addRow(rowNum++, subRowItems);
+        GridPane.setColumnIndex(subRowItems[0], 1);
       }
     }
   }

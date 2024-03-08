@@ -17,7 +17,7 @@ public class SideBar extends VBox implements CssUtils {
    */
   public SideBar() {
     super();
-    addStylesheet("sidebar");
+    addStylesheet("components/sidebar");
     addClass("sidebar");
 
     String image = LoadUtils.getImage("foodi.png");

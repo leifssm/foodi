@@ -10,8 +10,8 @@ public class InventoryListProgressBar extends ProgressBar implements CssUtils {
 
   public InventoryListProgressBar() {
     super();
+    addStylesheet("components/inventory/inventory-list-progress-bar");
     addClass("inventory-list-progress-bar");
-    addStylesheet("inventory-list-progress-bar");
 
     updateClasses();
   }

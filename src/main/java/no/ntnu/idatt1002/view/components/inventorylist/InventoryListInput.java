@@ -6,7 +6,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 public class InventoryListInput extends TextField implements CssUtils {
   public InventoryListInput() {
     super();
-    addStylesheet("inventory-list-input");
+    addStylesheet("components/inventory/inventory-list-input");
     addClass("inventory-list-input");
   }
 }

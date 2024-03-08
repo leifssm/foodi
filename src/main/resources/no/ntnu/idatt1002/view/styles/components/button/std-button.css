@@ -1,0 +1,10 @@
+.std-button {
+  -fx-font-weight: bold;
+  -fx-text-fill: #b4b4b4;
+  -fx-background-radius: 5px;
+  -fx-background-color: transparent;
+}
+
+.std-button:hover {
+  -fx-background-color: #1b1b1b;
+}

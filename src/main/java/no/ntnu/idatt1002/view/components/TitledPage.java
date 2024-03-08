@@ -9,7 +9,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 public class TitledPage extends BorderPane implements CssUtils {
   public TitledPage(String title, String subtitle) {
     super();
-    addStylesheet("titled-page");
+    addStylesheet("components/titled-page");
     addClass("titled-page");
 
     VBox wrapper = new VBox();
