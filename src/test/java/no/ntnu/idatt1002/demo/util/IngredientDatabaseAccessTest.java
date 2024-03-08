@@ -13,6 +13,8 @@ public class IngredientDatabaseAccessTest {
   private static Ingredient testIngredient1;
   private static Ingredient testIngredient2;
 
+
+
   @BeforeAll
   public static void setUp() throws SQLException {
     // Initialize the database if not already initialized

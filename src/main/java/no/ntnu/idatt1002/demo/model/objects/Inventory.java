@@ -10,16 +10,16 @@ public class Inventory {
 
     private int amount;
 
-    private Date date;
+    private Date experationDate;
 
     private int userId;
 
 
-    public Inventory(int inventoryId, int ingredientId, int amount, Date date, int userId) {
+    public Inventory(int inventoryId, int ingredientId, int amount, Date experationDate, int userId) {
         this.inventoryId = inventoryId;
         this.ingredientId = ingredientId;
         this.amount = amount;
-        this.date = date;
+        this.experationDate = experationDate;
         this.userId = userId;
 
 
@@ -37,8 +37,8 @@ public class Inventory {
         return amount;
     }
 
-    public java.util.Date getDate() {
-        return date;
+    public java.util.Date getExperationDate() {
+        return experationDate;
     }
 
     public int getUserId() {

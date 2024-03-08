@@ -31,13 +31,9 @@ public class InventoryDatabaseAccessTest {
   @BeforeAll
   public static void setUp() throws SQLException {
 
-
-      //disse verdiene eksisterer i databasen, og blir ikke initiliert på nytt
-
-
-      //userDA = new UserDatabaseAccess();
-      //User testUser = new User(1, "Ola");
-      //userDA.save(testUser);
+      userDA = new UserDatabaseAccess();
+      User testUser = new User(1, "Ola");
+      userDA.save(testUser);
 
       ingredientDA = new IngredientDatabaseAccess();
       testIngredient1 = new Ingredient(1, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
