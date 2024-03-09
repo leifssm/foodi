@@ -14,7 +14,7 @@
   -fx-background-color: white;
 }
 
-.std-checkbox:selected .box {
+.std-checkbox:selected .box, .std-checkbox:indeterminate .box {
   -fx-border-color: #f44949;
   -fx-background-color: #f44949;
 }

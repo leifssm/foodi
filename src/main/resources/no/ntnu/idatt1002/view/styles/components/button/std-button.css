@@ -1,10 +1,89 @@
 .std-button {
   -fx-font-weight: bold;
-  -fx-text-fill: #b4b4b4;
   -fx-background-radius: 5px;
+  -fx-text-fill: white;
+}
+
+.std-button.normal {
+  -fx-text-fill: #b4b4b4;
   -fx-background-color: transparent;
 }
 
-.std-button:hover {
+.std-button.normal:hover {
   -fx-background-color: #1b1b1b;
+}
+
+.std-button.primary {
+  -fx-background-color: #398dff;
+}
+
+.std-button.primary:hover {
+  -fx-background-color: #3679d4;
+}
+
+.std-button.primary:armed {
+  -fx-background-color: #2d70cc;
+}
+
+/* not used */
+.std-button.secondary {
+  -fx-background-color: red;
+}
+
+.std-button.secondary:hover {
+  -fx-background-color: #f44949;
+}
+
+.std-button.secondary:armed {
+  -fx-background-color: #f44949;
+}
+
+.std-button.success {
+  -fx-background-color: #16992b;
+}
+
+.std-button.success:hover {
+  -fx-background-color: #1a822a;
+}
+
+.std-button.success:armed {
+  -fx-background-color: #0e651c;
+}
+
+.std-button.error {
+  -fx-background-color: #f44949;
+}
+
+.std-button.error:hover {
+  -fx-background-color: #cb4242;
+}
+
+.std-button.error:armed {
+  -fx-background-color: #c13939;
+}
+
+/* not used */
+.std-button.warning {
+  -fx-background-color: red;
+}
+
+.std-button.warning:hover {
+  -fx-background-color: #f44949;
+}
+
+.std-button.warning:armed {
+  -fx-background-color: #f44949;
+}
+
+/* not used */
+.std-button.info {
+  -fx-background-color: red;
+}
+
+.std-button.info:hover {
+  -fx-background-color: #f44949;
+}
+
+.std-button.info:armed {
+  -fx-background-color: #f44949;
 }
