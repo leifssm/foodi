@@ -202,7 +202,6 @@ public class ingredient_to_user_pipeline {
 
         @Test
         @Order(5)
-        //noe er rart her, tar det senere, skal være 1 igjen, men jaja, ække så stress ennå.
         public void delete_inventory() {
             inventoryDA.delete_inventory(inventory2);
             String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
@@ -247,9 +246,9 @@ public class ingredient_to_user_pipeline {
             Inventory inventory = inventoryDA.retrieve(inventory3);
             assertEquals(inventory3.getInventoryId(), inventory.getInventoryId());
             assertEquals(inventory3.getIngredientId(), inventory.getIngredientId());
-            assertEquals(inventory3.getAmount(), inventory.getAmount());
             assertEquals(inventory3.getExperationDate(), inventory.getExperationDate());
             assertEquals(inventory3.getUserId(), inventory.getUserId());
+            assertEquals(inventory3.getAmount(), inventory.getAmount());
         }
 
 
@@ -294,7 +293,7 @@ public class ingredient_to_user_pipeline {
         @Test
         @Order(1)
         public void retrieve_function() {
-            User user = userDA.retrieve(1);
+            User user = userDA.retrieve(testUser);
             assertEquals(testUser.getUserId(), user.getUserId());
             assertEquals(testUser.getName(), user.getName());
         }
