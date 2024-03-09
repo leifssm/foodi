@@ -48,13 +48,13 @@ public class UserDatabaseAccess {
         }
     }
 
-    public User retrieve (int id) {
+    public User retrieve (User obj) {
         String sql = "SELECT * FROM TEST.PUBLIC.\"user\" WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, obj.getUserId());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

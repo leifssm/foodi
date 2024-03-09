@@ -43,13 +43,14 @@ public class InventoryDatabaseAccess {
 
 
     public void update_amount_of_ingredient(Inventory obj, int amount, int ingredient_id) {
-        String sql = "UPDATE inventory SET amount = ? WHERE ingredient_id = ?";
+        String sql = "UPDATE inventory SET amount = ? WHERE ingredient_id = ? AND id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, amount);
             pstmt.setInt(2, ingredient_id);
+            pstmt.setInt(3, obj.getInventoryId());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

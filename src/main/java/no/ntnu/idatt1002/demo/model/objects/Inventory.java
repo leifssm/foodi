@@ -33,9 +33,7 @@ public class Inventory {
         return ingredientId;
     }
 
-    public int getAmount() {
-        return amount;
-    }
+    public int getAmount() {return amount;}
 
     public java.util.Date getExperationDate() {
         return experationDate;
