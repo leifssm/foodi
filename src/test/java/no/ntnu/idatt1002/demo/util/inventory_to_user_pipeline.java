@@ -294,7 +294,7 @@ public class inventory_to_user_pipeline {
 
 
         @Test
-        @Order(2)
+        @Order(1)
         public void delete_function() throws SQLException {
 
             Ingredient newIngredient = new Ingredient(3, "Onion", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
@@ -326,7 +326,7 @@ public class inventory_to_user_pipeline {
         }
 
         @Test
-        @Order(3)
+        @Order(2)
         public void retrieve_function() {
             Ingredient ingredient = ingredientDA.retrieve(testIngredient2);
             assertEquals(testIngredient2.getId(), ingredient.getId());
