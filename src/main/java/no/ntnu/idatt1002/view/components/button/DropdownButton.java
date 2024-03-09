@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.view.components.button;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A standard dropdown button.
  *
@@ -27,7 +29,7 @@ public class DropdownButton extends StandardButton {
    *
    * @param action The action to be performed when the button is clicked
    */
-  public DropdownButton(DropdownToggle action) {
+  public DropdownButton(@NotNull DropdownToggle action) {
     super("");
     this.mainAction = action;
     setOnAction(e -> setIsExpanded(!expanded));
@@ -44,7 +46,7 @@ public class DropdownButton extends StandardButton {
    * @param collapsedText The text to be shown when the dropdown is collapsed
    * @param action The action to be performed when the button is clicked
    */
-  public DropdownButton(String expandedText, String collapsedText, DropdownToggle action) {
+  public DropdownButton(String expandedText, String collapsedText, @NotNull DropdownToggle action) {
     this(action);
     this.expandedText = expandedText;
     this.collapsedText = collapsedText;

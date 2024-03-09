@@ -4,6 +4,7 @@ import java.util.Date;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import no.ntnu.idatt1002.view.utils.CssUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class for displaying the expiration date of an inventory item.
@@ -17,7 +18,7 @@ class InventoryExpirationDate extends TextFlow implements CssUtils {
    *
    * @param date The expiration date of the inventory item
    */
-  public InventoryExpirationDate(Date date) {
+  public InventoryExpirationDate(@NotNull Date date) {
     addClass("expiry-date");
 
     int daysUntilExpired = (int) (

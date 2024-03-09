@@ -5,16 +5,21 @@ import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.components.button.DropdownButton;
 import no.ntnu.idatt1002.view.components.button.StandardButton;
 import no.ntnu.idatt1002.view.location.LocationHandler;
+import org.jetbrains.annotations.NotNull;
 
 class SideBarItem extends BorderPane {
-  public SideBarItem(String text, String location) {
+  public SideBarItem(@NotNull String text, @NotNull String location) {
     super();
     StandardButton button = new StandardButton(text, LocationHandler.createSetter(location));
     button.addClass("sidebar-button");
     setCenter(button);
   }
 
-  public SideBarItem(String text, String location, StandardButton... subItems) {
+  public SideBarItem(
+      @NotNull String text,
+      @NotNull String location,
+      @NotNull StandardButton @NotNull ... subItems
+  ) {
     this(text, location);
 
     VBox subItemsContainer = new VBox();

@@ -3,6 +3,7 @@ package no.ntnu.idatt1002.view.components.inventorylist;
 import java.util.Date;
 import javafx.scene.control.ProgressBar;
 import no.ntnu.idatt1002.view.utils.CssUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class for displaying the progress of an inventory item.
@@ -29,7 +30,7 @@ class InventoryListProgressBar extends ProgressBar implements CssUtils {
    *
    * @param expiry The expiration date of the inventory item
    */
-  public InventoryListProgressBar(Date expiry) {
+  public InventoryListProgressBar(@NotNull Date expiry) {
     this();
     setExpiry(expiry);
   }
@@ -39,7 +40,7 @@ class InventoryListProgressBar extends ProgressBar implements CssUtils {
    *
    * @param expiry The expiration date of the inventory item
    */
-  public void setExpiry(Date expiry) {
+  public void setExpiry(@NotNull Date expiry) {
     double maxProgressInDays = 14;
     double daysUntilExpired = 1 + (
         (double) (expiry.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)

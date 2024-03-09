@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * Utility class for loading resources and views.
  *
  * @author Leif Mørstad
- * @version 1.0
+ * @version 1.1
  */
 public class LoadUtils {
   /**

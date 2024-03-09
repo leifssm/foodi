@@ -45,7 +45,7 @@ public class TitledPage extends BorderPane implements CssUtils {
    *
    * @param title The title of the page
    */
-  public TitledPage(String title) {
+  public TitledPage(@NotNull String title) {
     this(title, null);
   }
 

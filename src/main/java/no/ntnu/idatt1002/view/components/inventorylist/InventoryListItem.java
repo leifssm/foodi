@@ -6,6 +6,7 @@ import javafx.scene.layout.HBox;
 import no.ntnu.idatt1002.view.components.button.DropdownButton;
 import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
 import no.ntnu.idatt1002.view.components.button.StandardCheckBoxHandler;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for creating a standard inventory list item.
@@ -25,7 +26,7 @@ class InventoryListItem {
    * @param mainItem The main item to display
    * @param items The sub items to display, if any
    */
-  public InventoryListItem(InventoryItem mainItem, InventoryItem... items) {
+  public InventoryListItem(@NotNull InventoryItem mainItem, @NotNull InventoryItem @NotNull ... items) {
     this.subItems = new InventoryListSubItem[items.length];
 
     for (int i = 0; i < items.length; i++) {

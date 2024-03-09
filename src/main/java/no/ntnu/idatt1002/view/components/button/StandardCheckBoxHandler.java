@@ -23,7 +23,7 @@ public class StandardCheckBoxHandler {
    *
    * @param checkBoxes The checkboxes to handle
    */
-  public StandardCheckBoxHandler(StandardCheckBox... checkBoxes) {
+  public StandardCheckBoxHandler(@NotNull StandardCheckBox @NotNull ... checkBoxes) {
     this.checkBoxes = checkBoxes;
   }
 
