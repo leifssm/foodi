@@ -15,7 +15,7 @@ import no.ntnu.idatt1002.demo.model.objects.User;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene
-public class inventory_to_user_pipeline {
+public class ingredient_to_user_pipeline {
 
     private static UserDatabaseAccess userDA;
     private static InventoryDatabaseAccess inventoryDA;
@@ -36,26 +36,27 @@ public class inventory_to_user_pipeline {
     @BeforeAll
     public static void setUp() throws SQLException {
         String deleteInventorySql = "DELETE FROM inventory";
+        String deleteShoppingListSql = "DELETE FROM shopping_list";
         String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
         String deleteIngredientSql = "DELETE FROM ingredient";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmtInventory = conn.prepareStatement(deleteInventorySql);
-             PreparedStatement pstmtUser = conn.prepareStatement(deleteUserSql);
-             PreparedStatement pstmtIngredient = conn.prepareStatement(deleteIngredientSql)) {
 
-            pstmtInventory.executeUpdate();
-            pstmtUser.executeUpdate();
-            pstmtIngredient.executeUpdate();
-
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(deleteInventorySql);
+            statement.executeUpdate(deleteShoppingListSql);
+            statement.executeUpdate(deleteUserSql);
+            statement.executeUpdate(deleteIngredientSql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
+
+
         // clean sheet
 
         userDA = new UserDatabaseAccess();
-        testUser = new User(1, "Ola");
+        testUser = new User(25, "Ola");
 
         ingredientDA = new IngredientDatabaseAccess();
         testIngredient1 = new Ingredient(1, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
@@ -68,9 +69,9 @@ public class inventory_to_user_pipeline {
         Date sqlDate = Date.valueOf(localDate);
 
         inventoryDA = new InventoryDatabaseAccess();
-        inventory1 = new Inventory(1, 1, 7, sqlDate, 1);
-        inventory2 = new Inventory(2, 2, 2, sqlDate, 1);
-        inventory3 = new Inventory(3, 1, 23, sqlDate, 1);
+        inventory1 = new Inventory(1, 1, 7, sqlDate, 25);
+        inventory2 = new Inventory(2, 2, 2, sqlDate, 25);
+        inventory3 = new Inventory(3, 1, 23, sqlDate, 25);
 
         // save the user, ingredients and inventory - indirectly testing the save method
         // in the user, ingredient and inventory DAO classes
@@ -86,9 +87,32 @@ public class inventory_to_user_pipeline {
 
     }
 
-    /*
+/*
     @Test
     public void empty_tables(){
+
+        String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(number_of_entries_inventory);
+            resultSet.next();
+            int number_of_entries = resultSet.getInt(1);
+            assertEquals(0, number_of_entries);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String number_of_entries_shopping_list = "Select COUNT(*) FROM shopping_list";
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(number_of_entries_shopping_list);
+            resultSet.next();
+            int number_of_entries = resultSet.getInt(1);
+            assertEquals(0, number_of_entries);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
         String number_of_entries_ingredient = "Select COUNT(*) FROM ingredient";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
@@ -112,18 +136,8 @@ public class inventory_to_user_pipeline {
             System.out.println(e.getMessage());
         }
 
-        String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(number_of_entries_inventory);
-            resultSet.next();
-            int number_of_entries = resultSet.getInt(1);
-            assertEquals(0, number_of_entries);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
-    */
+*/
 
 
     @Nested
@@ -131,7 +145,7 @@ public class inventory_to_user_pipeline {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class BehavioralTests {
 
-        /*
+
         @Test
         @Order(1)
         public void save_function()  {
@@ -148,7 +162,7 @@ public class inventory_to_user_pipeline {
                 System.out.println(e.getMessage());
             }
         }
-        */
+
 
         @Test
         @Order(1)
