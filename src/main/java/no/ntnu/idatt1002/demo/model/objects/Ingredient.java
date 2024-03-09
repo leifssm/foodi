@@ -89,10 +89,12 @@ public class Ingredient {
     this.category = category;
   }
 
+
   public enum IngredientUnit {
     GRAM, KILOGRAM, LITER, MILLILITER, PIECE, POUNDS, OUNCE, GALLON, QUART, PINT, CUP, TABLESPOON, TEASPOON
   }
 
+  //evt. legge til legumes, nuts, seeds, oil, vinegar, alcohol, etc. - kort sagt revidering av kategorier
   public enum IngredientCategory {
     DAIRY, MEAT, VEGETABLE, FRUIT, GRAIN, SPICE, SAUCE, SWEET, BEVERAGE
   }
