@@ -31,7 +31,9 @@ public class DropdownButton extends StandardButton {
     super("");
     this.mainAction = action;
     setOnAction(e -> setIsExpanded(!expanded));
+    action.toggle(expanded);
     setIsExpanded(expanded);
+    updateText();
   }
 
   /**
