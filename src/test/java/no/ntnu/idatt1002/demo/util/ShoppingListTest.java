@@ -39,6 +39,13 @@ public class ShoppingListTest {
     @BeforeAll
     public static void setUp() throws SQLException {
 
+        String sql = "DELETE FROM shopping_list";
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
 
         ingredientDA = new IngredientDatabaseAccess();
         ingredient1 = new Ingredient(5, "Kahawa Bønner", Ingredient.IngredientUnit.LITER, Ingredient.IngredientCategory.GRAIN);
