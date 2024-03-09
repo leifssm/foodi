@@ -2,9 +2,9 @@ package no.ntnu.idatt1002.demo.model.objects;
 
 public class User {
 
-    private int userId;
+    private final int userId;
 
-    private String name;
+    private final String name;
 
     public User(int userId, String name) {
         this.userId = userId;

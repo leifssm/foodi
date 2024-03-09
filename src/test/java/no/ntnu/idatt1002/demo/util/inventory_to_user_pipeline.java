@@ -15,7 +15,7 @@ import no.ntnu.idatt1002.demo.model.objects.User;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene
-public class test_2 {
+public class inventory_to_user_pipeline {
 
     private static UserDatabaseAccess userDA;
     private static InventoryDatabaseAccess inventoryDA;
@@ -238,6 +238,102 @@ public class test_2 {
             assertEquals(inventory3.getUserId(), inventory.getUserId());
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("User Tests")
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class UserTests {
+
+
+        @Test
+        @Order(2)
+        public void delete_function() throws SQLException {
+
+            User user = new User(2, "Kevin");
+            userDA.save(user);
+
+            String number_of_entries_user = "Select COUNT(*) FROM TEST.PUBLIC.\"user\"";
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(number_of_entries_user);
+                resultSet.next();
+                int number_of_entries_before_deletion = resultSet.getInt(1);
+                assertEquals(2, number_of_entries_before_deletion);
+                userDA.delete(user);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(number_of_entries_user);
+                resultSet.next();
+                int number_of_entries_after_deletion = resultSet.getInt(1);
+                assertEquals(1, number_of_entries_after_deletion);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        @Test
+        @Order(1)
+        public void retrieve_function() {
+            User user = userDA.retrieve(1);
+            assertEquals(testUser.getUserId(), user.getUserId());
+            assertEquals(testUser.getName(), user.getName());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Ingredient Tests")
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class IngredientTests {
+
+
+        @Test
+        @Order(2)
+        public void delete_function() throws SQLException {
+
+            Ingredient newIngredient = new Ingredient(3, "Onion", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
+            ingredientDA.save(newIngredient);
+
+            String number_of_entries_ingredient = "Select COUNT(*) FROM ingredient";
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(number_of_entries_ingredient);
+                resultSet.next();
+                int number_of_entries_before_deletion = resultSet.getInt(1);
+                assertEquals(3, number_of_entries_before_deletion);
+                ingredientDA.delete(newIngredient);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(number_of_entries_ingredient);
+                resultSet.next();
+                int number_of_entries_after_deletion = resultSet.getInt(1);
+                assertEquals(2, number_of_entries_after_deletion);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+
+        }
+
+        @Test
+        @Order(3)
+        public void retrieve_function() {
+            Ingredient ingredient = ingredientDA.retrieve(testIngredient2);
+            assertEquals(testIngredient2.getId(), ingredient.getId());
+            assertEquals(testIngredient2.getName(), ingredient.getName());
+            assertEquals(testIngredient2.getUnit(), ingredient.getUnit());
+            assertEquals(testIngredient2.getCategory(), ingredient.getCategory());
+        }
 
     }
 
