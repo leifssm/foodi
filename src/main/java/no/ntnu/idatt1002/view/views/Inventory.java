@@ -9,12 +9,15 @@ import no.ntnu.idatt1002.view.components.inventorylist.InventoryList;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 
 /**
- * Class for displaying the inventory page
+ * Class for displaying the inventory page.
  *
  * @version 1.2
  * @author Leif Mørstad
  */
 public class Inventory extends TitledPage implements CssUtils {
+  /**
+   * Constructor for the Inventory class.
+   */
   public Inventory() {
     super("Inventory", "Manage your inventory");
     addStylesheet("components/inventory/inventory");
@@ -31,6 +34,7 @@ public class Inventory extends TitledPage implements CssUtils {
     actions.getStyleClass().add("inventory-actions");
     topBar.setRight(actions);
     VBox content = new VBox(topBar, new InventoryList());
+
     setContent(content);
   }
 }

@@ -1,12 +1,22 @@
 package no.ntnu.idatt1002.view.components.inventorylist;
 
+import java.util.Date;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 
-import java.util.Date;
-
-public class InventoryExpirationDate extends TextFlow implements CssUtils {
+/**
+ * A class for displaying the expiration date of an inventory item.
+ *
+ * @version 1.0
+ * @author Leif Mørstad
+ */
+class InventoryExpirationDate extends TextFlow implements CssUtils {
+  /**
+   * Constructor for the InventoryExpirationDate class.
+   *
+   * @param date The expiration date of the inventory item
+   */
   public InventoryExpirationDate(Date date) {
     addClass("expiry-date");
 
@@ -16,11 +26,10 @@ public class InventoryExpirationDate extends TextFlow implements CssUtils {
 
     if (daysUntilExpired < 0) {
       Text expiryText = new Text(
-          "Expired " +
-              -daysUntilExpired
-              + " day"
-              + (daysUntilExpired == -1 ? "" : "s")
-              + " ago"
+          String.format("Expired %d day%s ago",
+              -daysUntilExpired,
+              daysUntilExpired == -1 ? "" : "s"
+          )
       );
       expiryText.getStyleClass().add("expired");
 

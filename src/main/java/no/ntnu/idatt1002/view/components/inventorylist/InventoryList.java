@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.view.components.inventorylist;
 
+import java.util.ArrayList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -8,10 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.Paginator;
 import no.ntnu.idatt1002.view.utils.CssUtils;
-import java.util.ArrayList;
 
 /**
- * Class for displaying a list of ingredients
+ * Class for displaying a list of ingredients.
  *
  * @author Leif Mørstad
  * @version 1.0
@@ -20,6 +20,10 @@ public class InventoryList extends VBox implements CssUtils {
   private final Paginator<InventoryItem> items = new Paginator<>();
 
   private final GridPane gridPane;
+
+  /**
+   * Constructor for the InventoryList class.
+   */
   public InventoryList() {
     addStylesheet("components/inventory/inventory-list");
     addClass("inventory-list");
@@ -103,12 +107,18 @@ public class InventoryList extends VBox implements CssUtils {
     return items;
   }
 
+  /**
+   * Removes all the displayed cells from view.
+   */
   public void clearCells() {
     gridPane.getChildren().removeIf(node ->
         GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
     );
   }
 
+  /**
+   * Clears the current cells and displays all stored cells to the view.
+   */
   public void render() {
     clearCells();
 

@@ -2,14 +2,18 @@ package no.ntnu.idatt1002.view.components.button;
 
 import javafx.scene.control.Button;
 import no.ntnu.idatt1002.view.utils.CssUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Class for creating a standard styled button
+ * Class for creating a standard styled button.
  *
  * @version 1.1
  * @author Leif Mørstad
  */
 public class StandardButton extends Button implements CssUtils {
+  /**
+   * Enum for the different button styles.
+   */
   public enum Style {
     NORMAL("normal"),
     PRIMARY("primary"),
@@ -25,25 +29,50 @@ public class StandardButton extends Button implements CssUtils {
       this.className = className;
     }
   }
+
   private Style currentStyle = Style.NORMAL;
 
+  /**
+   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
+   *
+   * @param text The text to be displayed on the button
+   */
   public StandardButton(String text) {
     super(text);
     addStylesheet("components/button/std-button");
     addClasses("std-button", currentStyle.className);
   }
 
-  public StandardButton(String text, Runnable action) {
+  /**
+   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
+   *
+   * @param text The text to be displayed on the button
+   * @param action The function to run when the button is clicked
+   */
+  public StandardButton(String text, @NotNull Runnable action) {
     this(text);
     setOnAction(event -> action.run());
   }
 
-  public StandardButton(String text, Runnable action, Style style) {
+  /**
+   * Constructor for the StandardButton class.
+   *
+   * @param text The text to be displayed on the button
+   * @param action The function to run when the button is clicked
+   * @param style The style of the button
+   */
+  public StandardButton(String text, @NotNull Runnable action, @NotNull Style style) {
     this(text, action);
     addClass(style.className);
   }
 
-  public StandardButton setType(Style type) {
+  /**
+   * Sets the style of the button.
+   *
+   * @param type The style of the button
+   * @return The button
+   */
+  public StandardButton setType(@NotNull Style type) {
     removeClass(currentStyle.className);
     addClass(type.className);
     currentStyle = type;

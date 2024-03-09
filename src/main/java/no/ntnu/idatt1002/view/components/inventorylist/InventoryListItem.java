@@ -7,12 +7,24 @@ import no.ntnu.idatt1002.view.components.button.DropdownButton;
 import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
 import no.ntnu.idatt1002.view.components.button.StandardCheckBoxHandler;
 
+/**
+ * Class for creating a standard inventory list item.
+ *
+ * @version 1.0
+ * @author Leif Mørstad
+ */
 class InventoryListItem {
   private final Node[] mainItems;
   private final InventoryListSubItem[] subItems;
 
   private final StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
 
+  /**
+   * Constructor for the InventoryListItem class.
+   *
+   * @param mainItem The main item to display
+   * @param items The sub items to display, if any
+   */
   public InventoryListItem(InventoryItem mainItem, InventoryItem... items) {
     this.subItems = new InventoryListSubItem[items.length];
 
@@ -68,10 +80,16 @@ class InventoryListItem {
     };
   }
 
+  /**
+   * Returns the main items.
+   */
   public Node[] getMainItems() {
     return mainItems;
   }
 
+  /**
+   * Returns the sub items.
+   */
   public InventoryListSubItem[] getSubItems() {
     return subItems;
   }

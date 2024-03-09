@@ -5,12 +5,24 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
 import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
+import org.jetbrains.annotations.NotNull;
 
-public class InventoryListSubItem {
+/**
+ * A class for displaying the sub items in the inventory list.
+ *
+ * @version 1.0
+ * @author Leif Mørstad
+ */
+class InventoryListSubItem {
   private final Node[] nodes;
   private final StandardCheckBox select = new StandardCheckBox();
 
-  public InventoryListSubItem(InventoryItem item) {
+  /**
+   * Constructor for the InventoryListSubItem class.
+   *
+   * @param item The inventory item to display
+   */
+  public InventoryListSubItem(@NotNull InventoryItem item) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");
@@ -51,6 +63,11 @@ public class InventoryListSubItem {
     return nodes;
   }
 
+  /**
+   * Sets the visibility of the sub item.
+   *
+   * @param visible Whether the sub item should be displayed
+   */
   public void setVisibility(boolean visible) {
     for (Node node : nodes) {
       node.setVisible(visible);

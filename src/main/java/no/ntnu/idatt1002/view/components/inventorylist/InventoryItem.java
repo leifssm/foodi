@@ -3,7 +3,7 @@ package no.ntnu.idatt1002.view.components.inventorylist;
 import java.util.Date;
 
 /**
- * Temp data class
+ * Temp data class, will be replaced with actual data from the database.
  */
 public class InventoryItem {
   private final String type;
