@@ -12,4 +12,5 @@
 .subtitle {
   -fx-font-size: 18;
   -fx-text-fill: #b4b4b4;
+  -fx-padding: 0 0 20px 0;
 }
