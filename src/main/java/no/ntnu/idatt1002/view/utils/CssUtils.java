@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * Utils class that can be used with {@code implements} to add shorthands for easier css handling.
  *
  * @author Leif Mørstad
- * @version 1.0
+ * @version 1.1
  */
 public interface CssUtils {
   ObservableList<String> getStylesheets();
@@ -36,6 +36,15 @@ public interface CssUtils {
    */
   default void addClass(@NotNull String className) {
     getStyleClass().add(className);
+  }
+
+  /**
+   * Adds a class name to the elements' css class list.
+   *
+   * @param className the classname to add
+   */
+  default void removeClass(@NotNull String className) {
+    getStyleClass().remove(className);
   }
 
   /**
