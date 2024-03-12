@@ -5,9 +5,10 @@ import no.ntnu.idatt1002.demo.model.Ingredient;
 import java.sql.*;
 
 /**
- * This class is responsible for accessing the ingredient database.
+ * This class is responsible for handling the interaction between
+ * the Ingredient class and the Database.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 
