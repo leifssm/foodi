@@ -4,15 +4,15 @@ import java.sql.Date;
 
 public class Inventory {
 
-    private int inventoryId;
+    private final int inventoryId;
 
-    private int ingredientId;
+    private final int ingredientId;
 
     private int amount;
 
     private Date experationDate;
 
-    private int userId;
+    private final int userId;
 
 
     public Inventory(int inventoryId, int ingredientId, int amount, Date experationDate, int userId) {
