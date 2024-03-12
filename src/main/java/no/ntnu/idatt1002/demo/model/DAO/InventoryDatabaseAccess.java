@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.demo.model.DAO;
 
+import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.Inventory;
 
 import java.sql.*;
@@ -8,7 +9,7 @@ import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
 public class InventoryDatabaseAccess {
 
-
+    //putt inn Save Ingredient obj and User obj, as parameters, to not need to hardcode the user_id and ingredient_id
     public void save (Inventory obj) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ?";
 
