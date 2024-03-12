@@ -2,7 +2,8 @@ package no.ntnu.idatt1002.view.location;
 
 import java.util.HashMap;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A router that displays different nodes depending on the current location.
@@ -10,7 +11,7 @@ import javafx.scene.layout.Pane;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class Router extends Pane {
+public class Router extends BorderPane {
   /**
    * A map of routes and their corresponding nodes.
    */
@@ -31,11 +32,15 @@ public class Router extends Pane {
    * @param node The node to display when the route is active
    * @throws IllegalArgumentException If the route already exists
    */
-  public void addRoute(String path, Node node) throws IllegalArgumentException {
+  public void addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
     if (routes.containsKey(path)) {
       throw new IllegalArgumentException("Route already exists");
     }
     routes.put(path, node);
+
+    if (LocationHandler.isLocationFuzzy(path)) {
+      setCenter(node);
+    }
   }
 
   /**
@@ -43,17 +48,17 @@ public class Router extends Pane {
    *
    * @param location The new location
    */
-  private void updateLocation(String location) {
+  private void updateLocation(@NotNull String location) {
     if (routes.containsKey(location)) {
-      getChildren().setAll(routes.get(location));
+      setCenter(routes.get(location));
       return;
     }
     for (String route : routes.keySet()) {
       if (LocationHandler.isLocationFuzzy(route)) {
-        getChildren().setAll(routes.get(route));
+        setCenter(routes.get(route));
         return;
       }
     }
-    getChildren().clear();
+    setCenter(null);
   }
 }

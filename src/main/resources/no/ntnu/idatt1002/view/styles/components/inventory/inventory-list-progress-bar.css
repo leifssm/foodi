@@ -1,0 +1,29 @@
+.inventory-list-progress-bar {
+  -fx-max-height: 5px;
+}
+
+.inventory-list-progress-bar .track {
+  -fx-max-height: 5px;
+  -fx-background-color: #313131;
+}
+
+.inventory-list-progress-bar .bar {
+  -fx-max-height: 5px;
+  -fx-background-insets: 0;
+}
+
+.inventory-list-progress-bar.red .bar {
+  -fx-background-color: #f44949;
+}
+
+.inventory-list-progress-bar.yellow .bar {
+  -fx-background-color: #ffff00;
+}
+
+.inventory-list-progress-bar.green .bar {
+  -fx-background-color: #16992b;
+}
+
+.inventory-list-progress-bar.blue .bar {
+  -fx-background-color: #6698dc;
+}

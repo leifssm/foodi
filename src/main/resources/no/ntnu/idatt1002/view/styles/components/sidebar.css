@@ -5,13 +5,17 @@
   -fx-pref-width: 140px;
 }
 
+.sidebar-logo {
+  -fx-padding: 10px 0px 10px 0px;
+}
+
 .sidebar-button {
   -fx-max-width: infinity;
-  -fx-font-weight: bold;
-  -fx-text-fill: #b4b4b4;
   -fx-alignment: center-left;
-  -fx-background-radius: 5px;
-  -fx-background-color: transparent;
+}
+
+.selected .sidebar-button {
+  -fx-text-fill: white;
 }
 
 .sidebar-dropdown-button {
@@ -21,12 +25,4 @@
 .sidebar-dropdown {
   -fx-padding: 2px 0px 0px 15px;
   -fx-spacing: 2px;
-}
-
-.selected .sidebar-button {
-  -fx-text-fill: white;
-}
-
-.sidebar-button:hover {
-  -fx-background-color: #1b1b1b;
 }
