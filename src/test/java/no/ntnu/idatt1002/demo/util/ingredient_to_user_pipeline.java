@@ -69,7 +69,7 @@ public class ingredient_to_user_pipeline {
         Date sqlDate = Date.valueOf(localDate);
 
         inventoryDA = new InventoryDatabaseAccess();
-        inventory1 = new Inventory(1, 1, 7, sqlDate, 25);
+        inventory1 = new Inventory(1, 12, 7, sqlDate, 25);
         inventory2 = new Inventory(2, 2, 2, sqlDate, 25);
         inventory3 = new Inventory(3, 1, 23, sqlDate, 25);
 
