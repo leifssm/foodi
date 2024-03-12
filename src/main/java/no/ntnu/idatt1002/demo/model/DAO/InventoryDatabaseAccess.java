@@ -2,6 +2,7 @@ package no.ntnu.idatt1002.demo.model.DAO;
 
 import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.Inventory;
+import no.ntnu.idatt1002.demo.model.objects.User;
 
 import java.sql.*;
 
@@ -10,7 +11,7 @@ import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 public class InventoryDatabaseAccess {
 
     //putt inn Save Ingredient obj and User obj, as parameters, to not need to hardcode the user_id and ingredient_id
-    public void save (Inventory obj) throws SQLException {
+    public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -27,10 +28,10 @@ public class InventoryDatabaseAccess {
 
             try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
                 pstmt2.setInt(1, obj.getInventoryId());
-                pstmt2.setInt(2, obj.getIngredientId());
+                pstmt2.setInt(2, obj2.getId());
                 pstmt2.setInt(3, obj.getAmount());
                 pstmt2.setDate(4, (Date) obj.getExperationDate());
-                pstmt2.setInt(5, obj.getUserId());
+                pstmt2.setInt(5, obj3.getUserId());
                 pstmt2.executeUpdate();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -110,7 +111,7 @@ public class InventoryDatabaseAccess {
         }
     }
 
-    public Inventory retrieve(Inventory obj){
+    public Inventory retrieve(Inventory obj, Ingredient obj2, User obj3){
         String sql = "SELECT * FROM inventory WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -120,7 +121,7 @@ public class InventoryDatabaseAccess {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return new Inventory(rs.getInt("id"), rs.getInt("ingredient_id"), rs.getInt("amount"), rs.getDate("expiration_date"), rs.getInt("user_id"));
+                return new Inventory(rs.getInt("id"), obj2.getId(), rs.getInt("amount"), rs.getDate("expiration_date"), obj3.getUserId());
             }
 
         } catch (SQLException e) {

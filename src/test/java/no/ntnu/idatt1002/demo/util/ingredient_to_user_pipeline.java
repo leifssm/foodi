@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.demo.util;
 
+import static java.sql.Types.NULL;
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -68,10 +69,12 @@ public class ingredient_to_user_pipeline {
         // Konverter LocalDate til java.sql.Date
         Date sqlDate = Date.valueOf(localDate);
 
+
+        //når de initialiseres, bør fremmednøkkelverdiene være null og så senere, bli tilegnet, gjennom save metoden
         inventoryDA = new InventoryDatabaseAccess();
-        inventory1 = new Inventory(1, 12, 7, sqlDate, 25);
-        inventory2 = new Inventory(2, 2, 2, sqlDate, 25);
-        inventory3 = new Inventory(3, 1, 23, sqlDate, 25);
+        inventory1 = new Inventory(1, NULL, 7, sqlDate, NULL);
+        inventory2 = new Inventory(2, NULL, 2, sqlDate, NULL);
+        inventory3 = new Inventory(3, NULL, 23, sqlDate, NULL);
 
         // save the user, ingredients and inventory - indirectly testing the save method
         // in the user, ingredient and inventory DAO classes
@@ -81,9 +84,9 @@ public class ingredient_to_user_pipeline {
         ingredientDA.save(testIngredient1);
         ingredientDA.save(testIngredient2);
 
-        inventoryDA.save(inventory1);
-        inventoryDA.save(inventory2);
-        inventoryDA.save(inventory3);
+        inventoryDA.save(inventory1, testIngredient1, testUser);
+        inventoryDA.save(inventory2, testIngredient2, testUser);
+        inventoryDA.save(inventory3, testIngredient1, testUser);
 
     }
 
@@ -243,11 +246,11 @@ public class ingredient_to_user_pipeline {
         @Order(3)
         //fikser dette senere, ellers er inventory tingz gucci.
         public void retrieve_inventory() {
-            Inventory inventory = inventoryDA.retrieve(inventory3);
+            Inventory inventory = inventoryDA.retrieve(inventory3, testIngredient1, testUser);
             assertEquals(inventory3.getInventoryId(), inventory.getInventoryId());
-            assertEquals(inventory3.getIngredientId(), inventory.getIngredientId());
+            assertEquals(testIngredient1.getId(), inventory.getIngredientId());
             assertEquals(inventory3.getExperationDate(), inventory.getExperationDate());
-            assertEquals(inventory3.getUserId(), inventory.getUserId());
+            assertEquals(testUser.getUserId(), inventory.getUserId());
             assertEquals(inventory3.getAmount(), inventory.getAmount());
         }
 
