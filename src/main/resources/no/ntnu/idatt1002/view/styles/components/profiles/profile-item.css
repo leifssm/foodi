@@ -4,16 +4,17 @@
 }
 
 .profile-item Button {
-    -fx-background-color: #f44949;
-    -fx-text-fill: white;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-padding: 5px 10px;
-    -fx-border-radius: 5px;
     -fx-background-radius: 5px;
     -fx-cursor: hand;
     -fx-min-width: 100px;
     -fx-min-height: 100px;
+    -fx-opacity: 0.9;
+}
+
+.profile-item Button:hover {
+    -fx-min-width: 110px;
+    -fx-min-height: 110px;
+    -fx-opacity: 1;
 }
 
 .profile-item Label {
@@ -21,7 +22,6 @@
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-padding: 5px 10px;
-    -fx-cursor: hand;
+    -fx-padding: 10px 0;
     -fx-text-alignment: center;
 }

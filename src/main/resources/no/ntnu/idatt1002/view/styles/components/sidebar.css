@@ -1,29 +1,30 @@
 .sidebar {
-  -fx-background-color: black;
-  -fx-alignment: top-center;
-  -fx-padding: 10px;
-  -fx-spacing: 2px;
-  -fx-pref-width: 140px;
+    -fx-background-color: black;
+    -fx-alignment: top-center;
+    -fx-padding: 10px;
+    -fx-spacing: 2px;
+    -fx-pref-width: 140px;
 }
 
 .sidebar-logo {
-  -fx-padding: 10px 0px 10px 0px;
+    -fx-padding: 10px 0px 10px 0px;
+    /*This is not working!!*/
 }
 
 .sidebar-button {
-  -fx-max-width: infinity;
-  -fx-alignment: center-left;
+    -fx-max-width: infinity;
+    -fx-alignment: center-left;
 }
 
 .selected .sidebar-button {
-  -fx-text-fill: white;
+    -fx-text-fill: white;
 }
 
 .sidebar-dropdown-button {
-  -fx-margin: 0px 0px 0px 5px;
+    -fx-margin: 0px 0px 0px 5px;
 }
 
 .sidebar-dropdown {
-  -fx-padding: 2px 0px 0px 15px;
-  -fx-spacing: 2px;
+    -fx-padding: 2px 0px 0px 15px;
+    -fx-spacing: 2px;
 }

@@ -1,11 +1,12 @@
 package no.ntnu.idatt1002.view.components.profiles;
 
 import javafx.scene.layout.HBox;
+import no.ntnu.idatt1002.view.utils.CssUtils;
 
 import java.util.List;
 import java.util.Random;
 
-public class ProfileItems extends HBox {
+public class ProfileItems extends HBox implements CssUtils {
     // TODO: When integrating with the backend, the constructor should take a list of profile items
     //    public ProfileItems(ArrayList<Profile> profileItems) {
     //        super();
@@ -14,9 +15,10 @@ public class ProfileItems extends HBox {
 
     public ProfileItems(List<String> profileNames) {
         super();
+        addStylesheet("components/profiles/profile-items");
+        addClass("profile-items");
 
-        // Set spacing
-        setSpacing(36);
+        setSpacing(24);
 
         Random random = new Random();
         for (String name : profileNames) {

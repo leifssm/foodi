@@ -1,0 +1,4 @@
+.profile-items {
+    -fx-hgap: 16px;
+    /* This does not work */
+}

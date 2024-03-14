@@ -12,15 +12,8 @@ public class ProfileItem extends VBox implements CssUtils {
         addStylesheet("components/profiles/profile-item");
         addClass("profile-item");
 
-        // Make centered
-        setAlignment(javafx.geometry.Pos.CENTER);
-
-        // set spacing
-        setSpacing(10);
-
         // square button with color and no text
         Button button = new Button();
-        button.setPrefSize(100, 100);
         button.setStyle("-fx-background-color: " + color + ";");
 
         // label with name

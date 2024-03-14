@@ -19,7 +19,7 @@ public class Profiles extends CenteredPage implements CssUtils {
      */
     public Profiles() {
         super();
-        addStylesheet("components/inventory/profiles");
+        addStylesheet("components/profiles/profiles");
         addClass("profiles");
 
         List<String> profileNames = List.of("Leif", "Henrik", "Kevin", "Markus");
