@@ -2,7 +2,6 @@
   /* -fx-font-size: 16pt; */
   /* -fx-font-family: "Courier New"; */
   -fx-base: transparent;
-  -fx-background-color: transparent;
   -fx-text-fill: white;
   -fx-font-family: "Fira Code";
 }
@@ -12,5 +11,5 @@
 }
 
 .main {
-  -fx-background-color: black;
+  -fx-background-color: #1B1B1B;
 }

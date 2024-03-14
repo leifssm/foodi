@@ -1,0 +1,27 @@
+.profile-item {
+    -fx-alignment: center;
+    -fx-min-width: 100px;
+}
+
+.profile-item Button {
+    -fx-background-color: #f44949;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-min-width: 100px;
+    -fx-min-height: 100px;
+}
+
+.profile-item Label {
+    -fx-font-family: "Fira Code";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+}

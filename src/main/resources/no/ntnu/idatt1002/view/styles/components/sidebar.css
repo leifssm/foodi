@@ -1,4 +1,5 @@
 .sidebar {
+  -fx-background-color: black;
   -fx-alignment: top-center;
   -fx-padding: 10px;
   -fx-spacing: 2px;

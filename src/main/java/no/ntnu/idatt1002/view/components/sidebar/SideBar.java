@@ -31,6 +31,10 @@ public class SideBar extends VBox implements CssUtils {
 
     getChildren().addAll(
       new SideBarItem(
+        "Profiles",
+        "profiles"
+      ),
+      new SideBarItem(
           "Inventory",
           "inventory",
           new SideBarSubItem("Add item", "inventory/add"),
