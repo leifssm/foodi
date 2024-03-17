@@ -3,7 +3,7 @@ package no.ntnu.idatt1002.view.components.inventorylist;
 import java.util.Date;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  * @author Leif Mørstad
  */
-class InventoryExpirationDate extends TextFlow implements CssUtils {
+class InventoryExpirationDate extends TextFlow implements ComponentUtils {
   /**
    * Constructor for the InventoryExpirationDate class.
    *

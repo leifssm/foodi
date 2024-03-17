@@ -6,7 +6,7 @@ import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.components.TitledPage;
 import no.ntnu.idatt1002.view.components.button.StandardButton;
 import no.ntnu.idatt1002.view.components.inventorylist.InventoryList;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
  * Class for displaying the inventory page.
@@ -14,7 +14,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @version 1.2
  * @author Leif Mørstad
  */
-public class Inventory extends TitledPage implements CssUtils {
+public class Inventory extends TitledPage implements ComponentUtils {
   /**
    * Constructor for the Inventory class.
    */

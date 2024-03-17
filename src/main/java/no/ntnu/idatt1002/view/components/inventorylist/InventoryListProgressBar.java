@@ -2,7 +2,7 @@ package no.ntnu.idatt1002.view.components.inventorylist;
 
 import java.util.Date;
 import javafx.scene.control.ProgressBar;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  * @author Leif Mørstad
  */
-class InventoryListProgressBar extends ProgressBar implements CssUtils {
+class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
   private boolean isFrozen = false;
 
   /**

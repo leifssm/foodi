@@ -1,7 +1,7 @@
 package no.ntnu.idatt1002.view.components.inventorylist;
 
 import javafx.scene.control.TextField;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
  * A class for displaying the input field for the inventory list.
@@ -9,7 +9,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @version 1.0
  * @author Leif Mørstad
  */
-class InventoryListInput extends TextField implements CssUtils {
+class InventoryListInput extends TextField implements ComponentUtils {
   /**
    * Constructor for the InventoryListInput class.
    */

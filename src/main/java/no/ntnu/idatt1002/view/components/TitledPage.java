@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  */
 public class TitledPage extends BorderPane implements CssUtils {
+public class TitledPage extends BorderPane implements ComponentUtils {
   /**
    * Constructor for the TitledPage class.
    *

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.1
  */
-public interface CssUtils {
+public interface ComponentUtils {
   ObservableList<String> getStylesheets();
 
   ObservableList<String> getStyleClass();

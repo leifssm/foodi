@@ -1,7 +1,7 @@
 package no.ntnu.idatt1002.view.components.button;
 
 import javafx.scene.control.CheckBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
  * Class for creating a standard styled checkbox.
@@ -9,7 +9,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @version 1.0
  * @author Leif Mørstad
  */
-public class StandardCheckBox extends CheckBox implements CssUtils {
+public class StandardCheckBox extends CheckBox implements ComponentUtils {
   /**
    * Constructor for the StandardCheckBox class.
    *

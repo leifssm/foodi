@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.Paginator;
 import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
  * Class for displaying a list of ingredients.
@@ -16,7 +17,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class InventoryList extends VBox implements CssUtils {
+public class InventoryList extends VBox implements ComponentUtils {
   private final Paginator<InventoryItem> items = new Paginator<>();
 
   private final GridPane gridPane;

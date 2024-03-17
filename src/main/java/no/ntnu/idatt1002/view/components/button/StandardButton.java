@@ -1,7 +1,7 @@
 package no.ntnu.idatt1002.view.components.button;
 
 import javafx.scene.control.Button;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.1
  * @author Leif Mørstad
  */
-public class StandardButton extends Button implements CssUtils {
+public class StandardButton extends Button implements ComponentUtils {
   /**
    * Enum for the different button styles.
    */
