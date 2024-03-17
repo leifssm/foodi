@@ -63,7 +63,7 @@ public class StandardButton extends Button implements ComponentUtils {
    */
   public StandardButton(String text, @NotNull Runnable action, @NotNull Style style) {
     this(text, action);
-    addClass(style.className);
+    setType(style);
   }
 
   /**
