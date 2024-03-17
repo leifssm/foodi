@@ -1,0 +1,15 @@
+.shopping-list-category-group {
+  -fx-spacing: 5px;
+}
+
+.shopping-list-category-group > .label {
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+}
+
+.shopping-list-category-group .shopping-list-category-group-content {
+  -fx-background-color: #000000;
+  -fx-background-radius: 5px;
+  -fx-spacing: 5px;
+  -fx-padding: 5px 10px;
+}

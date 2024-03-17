@@ -32,7 +32,7 @@ public class Router extends BorderPane {
    * @param node The node to display when the route is active
    * @throws IllegalArgumentException If the route already exists
    */
-  public void addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
+  public Router addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
     if (routes.containsKey(path)) {
       throw new IllegalArgumentException("Route already exists");
     }
@@ -41,6 +41,8 @@ public class Router extends BorderPane {
     if (LocationHandler.isLocationFuzzy(path)) {
       setCenter(node);
     }
+
+    return this;
   }
 
   /**

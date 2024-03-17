@@ -8,7 +8,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.Paginator;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.testclasses.InventoryItem;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
