@@ -3,6 +3,7 @@ package no.ntnu.idatt1002.view.components;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  * @author Leif Mørstad
  */
-public class TitledPage extends BorderPane implements CssUtils {
 public class TitledPage extends BorderPane implements ComponentUtils {
+  private final Pane contentWrapper = new Pane();
+
   /**
    * Constructor for the TitledPage class.
    *
@@ -39,6 +41,7 @@ public class TitledPage extends BorderPane implements ComponentUtils {
     }
 
     setTop(wrapper);
+    setCenter(contentWrapper);
   }
 
   /**
@@ -56,6 +59,7 @@ public class TitledPage extends BorderPane implements ComponentUtils {
    * @param content The content to set
    */
   public void setContent(Node content) {
-    setCenter(content);
+    contentWrapper.getChildren().clear();
+    contentWrapper.getChildren().add(content);
   }
 }
