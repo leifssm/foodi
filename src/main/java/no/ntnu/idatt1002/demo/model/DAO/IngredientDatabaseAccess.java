@@ -1,8 +1,10 @@
 package no.ntnu.idatt1002.demo.model.DAO;
 
-import no.ntnu.idatt1002.demo.model.Ingredient;
+import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 
 import java.sql.*;
+
+import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
 /**
  * This class is responsible for handling the interaction between
@@ -13,9 +15,7 @@ import java.sql.*;
  */
 
 public class IngredientDatabaseAccess {
-  private static final String DB_URL = "jdbc:h2:~/test";
-  private static final String USER = "sa";
-  private static final String PASS = "";
+
 
   public void save(Ingredient obj) throws SQLException {
     String checkSql = "SELECT COUNT(*) FROM ingredient WHERE id = ?";
