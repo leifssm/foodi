@@ -7,9 +7,10 @@ import java.sql.*;
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
 /**
- * This class is responsible for accessing the ingredient database.
+ * This class is responsible for handling the interaction between
+ * the Ingredient class and the Database.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 
