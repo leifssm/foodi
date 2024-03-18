@@ -1,6 +1,6 @@
 package no.ntnu.idatt1002.demo.util;
 
-import no.ntnu.idatt1002.demo.model.Recipe;
+import no.ntnu.idatt1002.demo.model.objects.Recipe;
 import no.ntnu.idatt1002.demo.model.repository.Database;
 import no.ntnu.idatt1002.demo.model.DAO.RecipeDatabaseAccess;
 import org.junit.jupiter.api.BeforeAll;

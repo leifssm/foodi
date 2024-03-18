@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo.model;
+package no.ntnu.idatt1002.demo.model.objects;
 
 /**
  * This class represents the recipe_ingredient object. Its responsibility
