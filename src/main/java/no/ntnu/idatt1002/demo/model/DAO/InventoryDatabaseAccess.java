@@ -5,6 +5,8 @@ import no.ntnu.idatt1002.demo.model.objects.Inventory;
 import no.ntnu.idatt1002.demo.model.objects.User;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
@@ -124,6 +126,26 @@ public class InventoryDatabaseAccess {
                 return new Inventory(rs.getInt("id"), obj2.getId(), rs.getInt("amount"), rs.getDate("expiration_date"), obj3.getUserId());
             }
 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    public Map<Integer, Double> getTotalAmountPerIngredient() {
+        String sql = "SELECT ingredient_id, SUM(amount) FROM inventory GROUP BY ingredient_id";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            Map<Integer, Double> ingredientAmountMap = new HashMap<>();
+            while (rs.next()) {
+                ingredientAmountMap.put(rs.getInt(1), rs.getDouble(2));
+            }
+
+            return ingredientAmountMap;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

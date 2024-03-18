@@ -6,12 +6,11 @@ import no.ntnu.idatt1002.demo.model.DAO.UserDatabaseAccess;
 import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.ShoppingList;
 import no.ntnu.idatt1002.demo.model.objects.User;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,40 +64,69 @@ public class ShoppingListTest {
 
 
         shoppingListDAO = new ShoppingListDAO();
-        shoppingListDAO.save(shoppingList_item1);
-        shoppingListDAO.save(shoppingList_item2);
-
 
     }
+    @Nested
+    @DisplayName("Testing ShoppingListDAO")
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class ShoppingListDAOTest {
 
-    @Test
-    public void DeleteShoppingList() {
+        @Test
+        @Order(1)
+        public void saveShoppingList() throws SQLException {
 
-        //number of shopping list items before deleting with sql query
+            Map<Integer, Double> shoppingList = new HashMap<>();
+            shoppingList.put(5, 2.0);
+            shoppingList.put(6, 3.0);
+            shoppingListDAO.save(shoppingList, user1.getUserId(), 1);
 
-        String number_of_entries = "SELECT COUNT(*) FROM shopping_list";
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(number_of_entries);
-            rs.next();
-            int number_of_entries_before_deletion = rs.getInt(1);
-            assertEquals(2, number_of_entries_before_deletion);
-            shoppingListDAO.delete(shoppingList_item2);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            String sql = "SELECT * FROM shopping_list WHERE user_id = ?";
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, user1.getUserId());
+                ResultSet rs = statement.executeQuery();
+                rs.next();
+                assertEquals(5, rs.getInt("ingredient_id"));
+                assertEquals(2.0, rs.getDouble("amount"));
+                rs.next();
+                assertEquals(6, rs.getInt("ingredient_id"));
+                assertEquals(3.0, rs.getDouble("amount"));
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
         }
 
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(number_of_entries);
-            rs.next();
-            int number_of_entries_after_deletion = rs.getInt(1);
-            assertEquals(1, number_of_entries_after_deletion);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        @Test
+        @Order(2)
+        public void DeleteShoppingList() {
 
+            //number of shopping list items before deleting with sql query
+
+            String number_of_entries = "SELECT COUNT(*) FROM shopping_list";
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(number_of_entries);
+                rs.next();
+                int number_of_entries_before_deletion = rs.getInt(1);
+                assertEquals(2, number_of_entries_before_deletion);
+                shoppingListDAO.deleteAllForUser(user1.getUserId());
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(number_of_entries);
+                rs.next();
+                int number_of_entries_after_deletion = rs.getInt(1);
+                assertEquals(1, number_of_entries_after_deletion);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
     }
+
 
 
 }
