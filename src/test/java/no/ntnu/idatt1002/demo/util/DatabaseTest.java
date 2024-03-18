@@ -18,7 +18,7 @@ public class DatabaseTest {
       public void setUp() {
             database = new Database();
             String deleteInventorySql = "DELETE FROM inventory";
-            String deleteShoppingListSql = "DROP TABLE shopping_list";
+            String deleteShoppingListSql = "DELETE FROM shopping_list";
             String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
             String deleteIngredientSql = "DELETE FROM ingredient";
             String deleteRecipeSql = "DELETE FROM recipe";
