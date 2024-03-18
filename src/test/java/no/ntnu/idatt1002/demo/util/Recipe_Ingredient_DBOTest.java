@@ -1,13 +1,12 @@
 package no.ntnu.idatt1002.demo.util;
 
 import no.ntnu.idatt1002.demo.model.DAO.Recipe_Ingredient_DBAccess;
-import no.ntnu.idatt1002.demo.model.Recipe_Ingredient;
-import no.ntnu.idatt1002.demo.model.Recipe;
+import no.ntnu.idatt1002.demo.model.objects.Recipe_Ingredient;
+import no.ntnu.idatt1002.demo.model.objects.Recipe;
 import no.ntnu.idatt1002.demo.model.DAO.RecipeDatabaseAccess;
-import no.ntnu.idatt1002.demo.model.Ingredient;
+import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
 import no.ntnu.idatt1002.demo.model.repository.Database;
-import no.ntnu.idatt1002.demo.model.DAO.RecipeDatabaseAccess;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

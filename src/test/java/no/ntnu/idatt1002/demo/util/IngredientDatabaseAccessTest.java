@@ -1,8 +1,9 @@
 package no.ntnu.idatt1002.demo.util;
 
+import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.repository.Database;
 import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
-import no.ntnu.idatt1002.demo.model.Ingredient;
+
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
