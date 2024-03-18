@@ -5,6 +5,7 @@ import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1002.view.components.sidebar.SideBar;
 import no.ntnu.idatt1002.view.location.Router;
 import no.ntnu.idatt1002.view.utils.LoadUtils;
+import no.ntnu.idatt1002.view.views.CookbookGrid;
 import no.ntnu.idatt1002.view.views.Inventory;
 
 /**
@@ -22,6 +23,7 @@ public class Root extends BorderPane {
 
     Router router = new Router();
     router.addRoute("inventory", new Inventory());
+    router.addRoute("cookbook-grid", new CookbookGrid());
     // add more routes here
 
     setCenter(router);
