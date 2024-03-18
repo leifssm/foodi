@@ -23,16 +23,18 @@ public class ShoppingListDAO {
             System.out.println("Error when trying to delete existing shopping list for user " + userId + ": " + e.getMessage());
         }
 
-        String insertSql = "INSERT INTO shopping_list (id, ingredient_id, amount, user_id) VALUES (?, ?, ?, ?)";
+        String insertSql = "INSERT INTO shopping_list (SHOPPINGLIST_ID, ITEM_ID, INGREDIENT_ID, AMOUNT, USER_ID) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement insertPstmt = conn.prepareStatement(insertSql)) {
 
+            int item_nr = 1;
             for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
                 insertPstmt.setInt(1, listId);
-                insertPstmt.setInt(2, entry.getKey());
-                insertPstmt.setDouble(3, entry.getValue());
-                insertPstmt.setInt(4, userId);
+                insertPstmt.setInt(2, item_nr++);
+                insertPstmt.setInt(3, entry.getKey());
+                insertPstmt.setDouble(4, entry.getValue());
+                insertPstmt.setInt(5, userId);
                 insertPstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -78,6 +80,8 @@ public class ShoppingListDAO {
         }
 
     }
+
+
 
 
 }

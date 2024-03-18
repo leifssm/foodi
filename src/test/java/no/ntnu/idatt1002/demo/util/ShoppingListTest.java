@@ -58,9 +58,9 @@ public class ShoppingListTest {
         userDA.save(user1);
         userDA.save(user2);
 
-        shoppingList_item1 = new ShoppingList(1, 5, 2, 4);
+        shoppingList_item1 = new ShoppingList(1, 1,5, 2, 4);
 
-        shoppingList_item2 = new ShoppingList(2, 6, 3, 5);
+        shoppingList_item2 = new ShoppingList(2, 2, 6, 3, 5);
 
 
         shoppingListDAO = new ShoppingListDAO();
@@ -97,7 +97,30 @@ public class ShoppingListTest {
         }
 
         @Test
-        @Order(2)
+        public void showShoppingList() {
+            String sqlquery = "SELECT * FROM shopping_list WHERE user_id = ?";
+
+            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+                PreparedStatement statement = connection.prepareStatement(sqlquery);
+                statement.setInt(1, user1.getUserId()); // replace user1.getUserId() with the actual user id
+                ResultSet rs = statement.executeQuery();
+
+                while(rs.next()) {
+                    int id = rs.getInt("shoppinglist_id");
+                    int itemId = rs.getInt("item_id");
+                    int ingredientId = rs.getInt("ingredient_id");
+                    double amount = rs.getDouble("amount");
+                    int userId = rs.getInt("user_id");
+                    System.out.println("Shoppinglist_id: " + id + " Item_id: " + itemId + " Ingredient_id: " + ingredientId + " Amount: " + amount + " User_id: " + userId);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+
+        @Test
+        @Order(3)
         public void DeleteShoppingList() {
 
             //number of shopping list items before deleting with sql query
@@ -119,12 +142,14 @@ public class ShoppingListTest {
                 ResultSet rs = statement.executeQuery(number_of_entries);
                 rs.next();
                 int number_of_entries_after_deletion = rs.getInt(1);
-                assertEquals(1, number_of_entries_after_deletion);
+                assertEquals(0, number_of_entries_after_deletion);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
 
         }
+
+
     }
 
 

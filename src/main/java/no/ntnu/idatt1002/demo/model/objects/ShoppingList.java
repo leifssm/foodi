@@ -3,14 +3,17 @@ package no.ntnu.idatt1002.demo.model.objects;
 public class ShoppingList {
 
     private int shoppingListId;
+
+    private int itemId;
     private int ingredientId;
-    private int amount;
+    private double amount;
     private int userId;
 
     // evt. is bought, for å kunne autoslette, når den er true, sånn når noen velger remove item, så endrer den til true, og sånn at den fjernes fra listen
 
-    public ShoppingList(int shoppingListId, int ingredientId, int amount, int userId) {
+    public ShoppingList(int shoppingListId, int itemId, int ingredientId, int amount, int userId) {
         this.shoppingListId = shoppingListId;
+        this.itemId = itemId;
         this.ingredientId = ingredientId;
         this.amount = amount;
         this.userId = userId;
@@ -24,7 +27,7 @@ public class ShoppingList {
         return ingredientId;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
