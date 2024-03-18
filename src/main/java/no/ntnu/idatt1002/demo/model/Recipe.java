@@ -1,11 +1,9 @@
 package no.ntnu.idatt1002.demo.model;
 
-import java.time.Duration;
-
 /**
  * This class represents a recipe.
  *
- * @version 0.1.0
+ * @version 0.3.0
  * @author Snake727
  */
 public class Recipe {
@@ -13,13 +11,14 @@ public class Recipe {
   private String name;
   private String description;
   private Difficulty difficulty;
-  private Duration duration;
+  private int duration;
 
-  public Recipe(int id, String name, String description, Difficulty difficulty, Duration duration) {
+  public Recipe(int id, String name, String description, Difficulty difficulty, int duration) {
     this.id = id;
     setName(name);
     setDescription(description);
     setDifficulty(difficulty);
+    // Duration is in minutes
     setDuration(duration);
   }
 
@@ -35,7 +34,11 @@ public class Recipe {
     return difficulty;
   }
 
-  public Duration getDuration() {
+  /**
+   * Get the duration of the recipe. The number represents the duration in minutes.
+   * @return
+   */
+  public int getDuration() {
     return duration;
   }
 
@@ -55,11 +58,28 @@ public class Recipe {
     this.difficulty = difficulty;
   }
 
-  public void setDuration(Duration duration) {
+  /**
+   * Set the duration of the recipe. The number represents the duration in minutes.
+   *
+   * @param duration
+   */
+
+  public void setDuration(int duration) {
     this.duration = duration;
   }
 
   public enum Difficulty {
     EASY, MEDIUM, HARD
+  }
+
+  @Override
+  public String toString() {
+    return "Recipe{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", difficulty=" + difficulty +
+        ", duration=" + duration +
+        '}';
   }
 }

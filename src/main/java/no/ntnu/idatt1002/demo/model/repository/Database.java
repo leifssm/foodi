@@ -6,7 +6,7 @@ import java.sql.*;
  * This class is responsible for creating and initializing the database.
  * It also checks if the database already exists, and if it does, it will not create a new one.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 
@@ -66,7 +66,7 @@ public class Database {
           "name VARCHAR NOT NULL," +
           "description VARCHAR," +
           "difficulty VARCHAR," +
-          "CHECK (difficulty IN ('Easy', 'Medium', 'Hard'))," +
+          "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
           "duration INT);");
 
       // Recipe Ingredient Table
