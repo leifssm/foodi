@@ -4,7 +4,7 @@ package no.ntnu.idatt1002.demo.model;
  * This class represents the recipe_ingredient object. Its responsibility
  * is to keep track of the ingredients and their amounts in a recipe.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 public class Recipe_Ingredient {
@@ -28,5 +28,14 @@ public class Recipe_Ingredient {
 
   public double getAmount() {
     return amount;
+  }
+
+  @Override
+  public String toString() {
+    return "Recipe_Ingredient{" +
+            "recipe_id=" + recipe_id +
+            ", ingredient_id=" + ingredient_id +
+            ", amount=" + amount +
+            '}';
   }
 }

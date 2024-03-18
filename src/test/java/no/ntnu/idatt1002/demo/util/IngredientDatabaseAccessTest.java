@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.demo.util;
 
+import no.ntnu.idatt1002.demo.model.repository.Database;
 import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
 import no.ntnu.idatt1002.demo.model.Ingredient;
 import org.junit.jupiter.api.*;
@@ -16,7 +17,8 @@ public class IngredientDatabaseAccessTest {
   @BeforeAll
   public static void setUp() throws SQLException {
     // Initialize the database if not already initialized
-
+    Database database = new Database();
+    database.initializeDatabase();
     // Initialize a new IngredientDatabaseAccess object and two Ingredient objects
     ingredientDA = new IngredientDatabaseAccess();
     testIngredient1 = new Ingredient(5, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
