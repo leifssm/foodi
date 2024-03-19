@@ -80,7 +80,7 @@ public class RecipeCard extends StackPane implements CssUtils {
     setOnMousePressed(event -> clickedTimeline.play());
 
     // On click
-    setOnMouseClicked(event -> LocationHandler.createSetter("inventory").run());
+    this.setOnMouseClicked(event -> LocationHandler.setLocation("inventory"));
 
     // Create a clip for the rounded corners
     Rectangle clip = new Rectangle();
