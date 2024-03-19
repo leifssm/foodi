@@ -8,7 +8,8 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 /**
  * A row of recipe cards.
  *
- * <p>This class is a custom component for displaying a row of recipe cards. It is used in the cookbook grid
+ * <p>This class is a custom component for displaying a row of recipe cards.
+ * It is used in the cookbook grid view.</p>
  */
 public class RecipeCardRow extends VBox implements CssUtils {
 

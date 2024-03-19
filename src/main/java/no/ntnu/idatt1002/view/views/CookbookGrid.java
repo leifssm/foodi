@@ -10,7 +10,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 /**
  * The cookbook grid view.
  *
- * <p> This class is a custom component for displaying the cookbook in grid view.
+ * <p> This class is a custom component for displaying the cookbook in grid view. </p>
  */
 public class CookbookGrid  extends TitledPage implements CssUtils {
 

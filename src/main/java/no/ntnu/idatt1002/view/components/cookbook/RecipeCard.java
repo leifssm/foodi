@@ -17,7 +17,8 @@ import no.ntnu.idatt1002.view.utils.LoadUtils;
 /**
  * A recipe card component.
  *
- * <p>This class is a custom component for displaying a recipe card. It is used in the cookbook grid
+ * <p>This class is a custom component for displaying a recipe card.
+ * It is used in the cookbook grid view. </p>
  */
 
 public class RecipeCard extends StackPane implements CssUtils {
@@ -35,16 +36,15 @@ public class RecipeCard extends StackPane implements CssUtils {
     addStylesheet("components/cookbook-grid/recipe-card");
     addClass("recipe-card");
 
-    this.cursorProperty().setValue(javafx.scene.Cursor.HAND);
+    cursorProperty().setValue(javafx.scene.Cursor.HAND);
 
     // Load the image and create an ImageView for it
     String imageUrl = LoadUtils.getImage(imagePath);
     assert imageUrl != null : "Image not found: " + imagePath;
     ImageView backgroundImage = new ImageView(imageUrl);
-    backgroundImage.getStyleClass().add("recipe-card-image");
     backgroundImage.setPreserveRatio(true);
-    backgroundImage.fitWidthProperty().bind(this.widthProperty());
-    backgroundImage.fitHeightProperty().bind(this.heightProperty());
+    backgroundImage.fitWidthProperty().bind(widthProperty());
+    backgroundImage.fitHeightProperty().bind(heightProperty());
 
     // Initial ColorAdjust effect with no brightness adjustment
     ColorAdjust colorAdjust = new ColorAdjust();
@@ -68,7 +68,7 @@ public class RecipeCard extends StackPane implements CssUtils {
         new KeyFrame(Duration.seconds(0.03), new KeyValue(this.scaleYProperty(), 0.97)));
 
     // Listener to trigger animation on hover
-    this.hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
+    hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
       if (isNowHovered) {
         fadeInTimeline.play();
       } else {
@@ -77,14 +77,10 @@ public class RecipeCard extends StackPane implements CssUtils {
     });
 
     // On mouse down
-    this.setOnMousePressed(event -> {
-      clickedTimeline.play();
-    });
+    setOnMousePressed(event -> clickedTimeline.play());
 
     // On click
-    this.setOnMouseClicked(event -> {
-      LocationHandler.createSetter("inventory").run();
-    });
+    setOnMouseClicked(event -> LocationHandler.createSetter("inventory").run());
 
     // Create a clip for the rounded corners
     Rectangle clip = new Rectangle();
@@ -92,7 +88,7 @@ public class RecipeCard extends StackPane implements CssUtils {
     clip.setArcHeight(5);
     clip.widthProperty().bind(this.widthProperty());
     clip.heightProperty().bind(this.heightProperty());
-    this.setClip(clip);
+    setClip(clip);
 
     // Create a container for the text and other content
     VBox contentBox = new VBox();
@@ -107,7 +103,7 @@ public class RecipeCard extends StackPane implements CssUtils {
     contentBox.getChildren().add(recipeDuration);
 
     // First, add the image to the stack, then the content on top
-    this.getChildren().addAll(backgroundImage, contentBox);
+    getChildren().addAll(backgroundImage, contentBox);
   }
 }
 

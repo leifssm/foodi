@@ -4,11 +4,11 @@
   -fx-base: transparent;
   -fx-background-color: transparent;
   -fx-font-family: "Fira Code";
+  -fx-text-fill: white;
 }
 
 .root * {
   -fx-border-width: 0;
-  -fx-text-fill: white;
 }
 
 .main {
