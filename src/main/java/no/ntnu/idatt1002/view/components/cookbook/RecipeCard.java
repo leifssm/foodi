@@ -14,8 +14,22 @@ import no.ntnu.idatt1002.view.location.LocationHandler;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 import no.ntnu.idatt1002.view.utils.LoadUtils;
 
+/**
+ * A recipe card component.
+ *
+ * <p>This class is a custom component for displaying a recipe card. It is used in the cookbook grid
+ */
+
 public class RecipeCard extends StackPane implements CssUtils {
 
+
+  /**
+   * The constructor of the recipe card component.
+   *
+   * @param title The title of the recipe
+   * @param duration The duration of the recipe
+   * @param imagePath The path to the image of the recipe
+   */
   public RecipeCard(String title, String duration, String imagePath) {
     super();
     addStylesheet("components/cookbook-grid/recipe-card");
@@ -46,6 +60,8 @@ public class RecipeCard extends StackPane implements CssUtils {
         new KeyFrame(Duration.seconds(0.07), new KeyValue(colorAdjust.brightnessProperty(), -0.5)),
         new KeyFrame(Duration.seconds(0.07), new KeyValue(this.scaleXProperty(), 1)),
         new KeyFrame(Duration.seconds(0.07), new KeyValue(this.scaleYProperty(), 1)));
+
+    // Timeline for animating brightness and scale change on click
     Timeline clickedTimeline = new Timeline(
         new KeyFrame(Duration.seconds(0.03), new KeyValue(colorAdjust.brightnessProperty(), -0.6)),
         new KeyFrame(Duration.seconds(0.03), new KeyValue(this.scaleXProperty(), 0.97)),
@@ -60,18 +76,19 @@ public class RecipeCard extends StackPane implements CssUtils {
       }
     });
 
-    // On mouse down, darken the image
+    // On mouse down
     this.setOnMousePressed(event -> {
       clickedTimeline.play();
     });
 
-    // On click, open the recipe
+    // On click
     this.setOnMouseClicked(event -> {
       LocationHandler.createSetter("inventory").run();
     });
 
+    // Create a clip for the rounded corners
     Rectangle clip = new Rectangle();
-    clip.setArcWidth(5); // Corner radius
+    clip.setArcWidth(5);
     clip.setArcHeight(5);
     clip.widthProperty().bind(this.widthProperty());
     clip.heightProperty().bind(this.heightProperty());

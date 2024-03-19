@@ -7,7 +7,16 @@ import no.ntnu.idatt1002.view.components.cookbook.RecipeCard;
 import no.ntnu.idatt1002.view.components.cookbook.RecipeCardRow;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 
+/**
+ * The cookbook grid view.
+ *
+ * <p> This class is a custom component for displaying the cookbook in grid view.
+ */
 public class CookbookGrid  extends TitledPage implements CssUtils {
+
+  /**
+   * The constructor of the cookbook grid view.
+   */
   public CookbookGrid() {
     super("Cookbook");
     addStylesheet("components/cookbook-grid/cookbook-grid");
@@ -49,11 +58,10 @@ public class CookbookGrid  extends TitledPage implements CssUtils {
     ScrollPane scrollPane = new ScrollPane();
     scrollPane.setContent(recipeCardColumn);
     scrollPane.getStyleClass().add("cookbook-grid-scroll");
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Vertical scroll as needed
-    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Never show horizontal scroll
-    scrollPane.setFitToWidth(true); // Fit the width of content to the width of scroll pane
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    scrollPane.setFitToWidth(true);
 
-    // Now, set the scrollPane as the content of your page instead of recipeCardColumn directly
     setContent(scrollPane);
   }
 }
