@@ -58,8 +58,6 @@ public class CookbookGrid  extends TitledPage implements CssUtils {
     ScrollPane scrollPane = new ScrollPane();
     scrollPane.setContent(recipeCardColumn);
     scrollPane.getStyleClass().add("cookbook-grid-scroll");
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     scrollPane.setFitToWidth(true);
 
     setContent(scrollPane);
