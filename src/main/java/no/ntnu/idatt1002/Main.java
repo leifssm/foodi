@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class Main extends Application {
     @Override
     public void start(@NotNull Stage stage) {
-        FontLoader.loadFontsFromDirectory("src/main/resources/no/ntnu/idatt1002/view/fonts/Fira_Sans/");
+        FontLoader.loadFontsFromDirectory("fira_sans_otf");
 
         Root root = new Root();
         Scene scene = new Scene(root, 800, 600);

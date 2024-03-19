@@ -5,6 +5,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.utils.CssUtils;
 
+/**
+ * Class for creating a profile item.
+ * A profile item is a square button with a color and a label with a name beneath.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
 public class ProfileItem extends VBox implements CssUtils {
 
     public ProfileItem(String name, String color) {

@@ -20,7 +20,7 @@ public class SideBar extends VBox implements CssUtils {
         super();
         addStylesheet("components/sidebar");
         addClass("sidebar");
-
+        
         String image = LoadUtils.getImage("foodi.png");
         if (image != null) {
             ImageView logo = new ImageView(image);
