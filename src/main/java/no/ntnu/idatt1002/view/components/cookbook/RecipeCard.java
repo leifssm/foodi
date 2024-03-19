@@ -39,7 +39,7 @@ public class RecipeCard extends StackPane implements CssUtils {
 
     // Load the image and create an ImageView for it
     String imageUrl = LoadUtils.getImage(imagePath);
-    assert imageUrl != null;
+    assert imageUrl != null : "Image not found: " + imagePath;
     ImageView backgroundImage = new ImageView(imageUrl);
     backgroundImage.getStyleClass().add("recipe-card-image");
     backgroundImage.setPreserveRatio(true);
