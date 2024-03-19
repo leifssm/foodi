@@ -12,21 +12,25 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class ProfileItem extends VBox implements CssUtils {
-  public ProfileItem(String name, String color, Runnable onClick) {
+public class AddProfileButton extends VBox implements CssUtils {
+  public AddProfileButton(Runnable onClick) {
     super();
-    addStylesheet("components/profiles/profile-item");
-    addClass("profile-item");
 
-    // square button with color and no text
+    addStylesheet("components/profiles/profile-item");
+    addStylesheet("components/profiles/add-profile-button");
+    addClass("profile-item");
+    addClass("add-profile-button");
+
     Button button = new Button();
-    button.setStyle("-fx-background-color: " + color + ";");
+
+    Label plusIcon = new Label("+");
+    button.setGraphic(plusIcon);
+
     button.setOnAction(e -> onClick.run());
 
-    // label with name
-    Label label = new Label(name);
-
-    // add button and label to the profile item
-    getChildren().addAll(button, label);
+    getChildren().add(button);
+    getChildren().add(new Label(" "));
   }
+
+
 }

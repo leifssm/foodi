@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.view.Root;
-import no.ntnu.idatt1002.view.utils.FontLoader;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class Main extends Application {
     @Override
     public void start(@NotNull Stage stage) {
-        FontLoader.loadFontsFromDirectory("fira_sans_otf");
+//        FontLoader.loadFontsFromDirectory("fira_sans_otf");
 
         Root root = new Root();
         Scene scene = new Scene(root, 800, 600);

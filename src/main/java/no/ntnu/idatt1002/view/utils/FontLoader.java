@@ -13,12 +13,12 @@ import java.net.URI;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class FontLoader {
+public final class FontLoader {
 
     private static final int DEFAULT_FONT_SIZE = 12;
 
     private FontLoader() {
-        throw new IllegalStateException("Utility class");
+        throw new AssertionError("Utility class");
     }
 
     /**

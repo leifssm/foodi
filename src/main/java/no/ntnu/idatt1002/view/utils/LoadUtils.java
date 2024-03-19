@@ -16,9 +16,9 @@ import java.util.Objects;
  * @author Leif Mørstad
  * @version 1.1
  */
-public class LoadUtils {
+public final class LoadUtils {
     private LoadUtils() {
-        throw new IllegalStateException("Utility class");
+        throw new AssertionError("Utility class");
     }
 
     /**
