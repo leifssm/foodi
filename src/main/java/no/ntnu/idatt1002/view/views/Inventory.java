@@ -35,6 +35,6 @@ public class Inventory extends TitledPage implements ComponentUtils {
     topBar.setRight(actions);
     VBox content = new VBox(topBar, new InventoryList());
 
-    setContent(content);
+    setContent(content, true);
   }
 }

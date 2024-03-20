@@ -11,12 +11,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Class for creating a standard titled page.
  *
- * @version 1.0
+ * @version 2.0
  * @author Leif Mørstad
  */
 public class TitledPage extends BorderPane implements ComponentUtils {
-  private final Pane contentWrapper = new Pane();
-
   /**
    * Constructor for the TitledPage class.
    *
@@ -41,7 +39,6 @@ public class TitledPage extends BorderPane implements ComponentUtils {
     }
 
     setTop(wrapper);
-    setCenter(contentWrapper);
   }
 
   /**
@@ -58,8 +55,14 @@ public class TitledPage extends BorderPane implements ComponentUtils {
    *
    * @param content The content to set
    */
-  public void setContent(Node content) {
-    contentWrapper.getChildren().clear();
-    contentWrapper.getChildren().add(content);
+  public void setContent(Node content, boolean stretch) {
+    if (stretch) {
+      setCenter(content);
+    } else {
+      Pane contentWrapper = new Pane();
+      contentWrapper.getChildren().add(content);
+      setCenter(contentWrapper);
+    }
+
   }
 }

@@ -48,6 +48,6 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
         addedRecipes
     );
 
-    setContent(wrapper);
+    setContent(wrapper, true);
   }
 }
