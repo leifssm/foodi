@@ -13,7 +13,7 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class Recipe_Ingredient_DBAccess {
+public class RecipeIngredientDAO {
   private static final String DB_URL = "jdbc:h2:~/test";
   private static final String USER = "sa";
   private static final String PASS = "";
@@ -106,7 +106,7 @@ public class Recipe_Ingredient_DBAccess {
    * @param recipeId The ID of the recipe for which to retrieve the ingredients.
    * @return A map where the key is the ingredient ID and the value is the amount required.
    */
-  public Map<Integer, Double> getRequiredIngredientsForRecipe(int recipeId) {
+  public Map<Integer, Double> getRequiredAmountOfIngredientBasedOnChosenRecipe(int recipeId) {
     Map<Integer, Double> requiredIngredients = new HashMap<>();
 
     String sql = "SELECT ingredient_id, amount FROM recipe_ingredient WHERE recipe_id = ?";

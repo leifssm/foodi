@@ -1,17 +1,21 @@
 package no.ntnu.idatt1002.demo.util;
 
-import no.ntnu.idatt1002.demo.model.DAO.Recipe_Ingredient_DBAccess;
+import no.ntnu.idatt1002.demo.model.DAO.RecipeIngredientDAO;
 import no.ntnu.idatt1002.demo.model.objects.Recipe_Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.Recipe;
-import no.ntnu.idatt1002.demo.model.DAO.RecipeDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.RecipeDAO;
 import no.ntnu.idatt1002.demo.model.objects.Ingredient;
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
 import no.ntnu.idatt1002.demo.model.repository.Database;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -22,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 public class Recipe_Ingredient_DBOTest {
-  private static Recipe_Ingredient_DBAccess recipe_ingredient_dbAccess;
-  private static RecipeDatabaseAccess recipeDatabaseAccess;
-  private static IngredientDatabaseAccess ingredientDatabaseAccess;
+  private static RecipeIngredientDAO recipe_ingredient_DAO;
+  private static RecipeDAO recipeDAO;
+  private static IngredientDAO ingredientDAO;
   private static Recipe testRecipe;
   private static Recipe testRecipe2;
   private static Recipe_Ingredient testRecipe_Ingredient;
@@ -34,10 +38,33 @@ public class Recipe_Ingredient_DBOTest {
 
   @BeforeAll
   public static void setUp() throws SQLException {
+
+    String deleteInventorySql = "DELETE FROM inventory";
+    String deleteShoppingListSql = "DELETE FROM shopping_list";
+    String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+    String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
+    String deleteIngredientSql = "DELETE FROM ingredient";
+    String deleteRecipeSql = "DELETE FROM recipe";
+    ;
+
+
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+      Statement statement = connection.createStatement();
+      statement.executeUpdate(deleteInventorySql);
+      statement.executeUpdate(deleteShoppingListSql);
+      statement.executeUpdate(deleteUserSql);
+      statement.executeUpdate(deleteRecipe_IngredientSql);
+      statement.executeUpdate(deleteIngredientSql);
+      statement.executeUpdate(deleteRecipeSql);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+
     // Create the necessary database access objects
-    recipe_ingredient_dbAccess = new Recipe_Ingredient_DBAccess();
-    recipeDatabaseAccess = new RecipeDatabaseAccess();
-    ingredientDatabaseAccess = new IngredientDatabaseAccess();
+    recipe_ingredient_DAO = new RecipeIngredientDAO();
+    recipeDAO = new RecipeDAO();
+    ingredientDAO = new IngredientDAO();
 
     // Initialize the database if not already initialized
     Database database = new Database();
@@ -64,29 +91,29 @@ public class Recipe_Ingredient_DBOTest {
    */
   public void testSave() throws SQLException {
     // Save the Recipe and Ingredient objects to the database with IDs 1
-    recipeDatabaseAccess.save(testRecipe);
-    ingredientDatabaseAccess.save(testIngredient);
+    recipeDAO.save(testRecipe);
+    ingredientDAO.save(testIngredient);
 
     // Save the Recipe and Ingredient objects to the database with IDs 2
-    recipeDatabaseAccess.save(testRecipe2);
-    ingredientDatabaseAccess.save(testIngredient2);
+    recipeDAO.save(testRecipe2);
+    ingredientDAO.save(testIngredient2);
 
     // Test the first Recipe_Ingredient object
-    recipe_ingredient_dbAccess.save(testRecipe_Ingredient);
-    Recipe_Ingredient savedRecipe_Ingredient = recipe_ingredient_dbAccess.retrieve(testRecipe_Ingredient);
+    recipe_ingredient_DAO.save(testRecipe_Ingredient);
+    Recipe_Ingredient savedRecipe_Ingredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
     assertEquals(testRecipe_Ingredient.toString(), savedRecipe_Ingredient.toString());
 
     // Test the second Recipe_Ingredient object
-    recipe_ingredient_dbAccess.save(testRecipe_Ingredient2);
-    Recipe_Ingredient savedRecipe_Ingredient2 = recipe_ingredient_dbAccess.retrieve(testRecipe_Ingredient2);
+    recipe_ingredient_DAO.save(testRecipe_Ingredient2);
+    Recipe_Ingredient savedRecipe_Ingredient2 = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient2);
     assertEquals(testRecipe_Ingredient2.toString(), savedRecipe_Ingredient2.toString());
 
     // Delete the test data from the database
-    recipe_ingredient_dbAccess.delete(testRecipe_Ingredient);
-    recipe_ingredient_dbAccess.delete(testRecipe_Ingredient2);
-    recipeDatabaseAccess.delete(testRecipe);
-    recipeDatabaseAccess.delete(testRecipe2);
-    ingredientDatabaseAccess.delete(testIngredient);
-    ingredientDatabaseAccess.delete(testIngredient2);
+    recipe_ingredient_DAO.delete(testRecipe_Ingredient);
+    recipe_ingredient_DAO.delete(testRecipe_Ingredient2);
+    recipeDAO.delete(testRecipe);
+    recipeDAO.delete(testRecipe2);
+    ingredientDAO.delete(testIngredient);
+    ingredientDAO.delete(testIngredient2);
   }
 }

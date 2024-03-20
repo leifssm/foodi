@@ -14,7 +14,7 @@ import static no.ntnu.idatt1002.demo.model.repository.Database.*;
  * @author Snake727
  */
 
-public class IngredientDatabaseAccess {
+public class IngredientDAO {
 
 
   public void save(Ingredient obj) throws SQLException {
