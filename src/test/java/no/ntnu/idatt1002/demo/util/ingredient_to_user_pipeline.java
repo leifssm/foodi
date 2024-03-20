@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.*;
 import java.time.LocalDate;
 
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
-import no.ntnu.idatt1002.demo.model.DAO.InventoryDatabaseAccess;
-import no.ntnu.idatt1002.demo.model.DAO.UserDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
+import no.ntnu.idatt1002.demo.model.DAO.InventoryDAO;
+import no.ntnu.idatt1002.demo.model.DAO.UserDAO;
 import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.Inventory;
 import no.ntnu.idatt1002.demo.model.objects.User;
@@ -18,8 +18,8 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene
 public class ingredient_to_user_pipeline {
 
-    private static UserDatabaseAccess userDA;
-    private static InventoryDatabaseAccess inventoryDA;
+    private static UserDAO userDA;
+    private static InventoryDAO inventoryDA;
 
     private static Inventory inventory1;
 
@@ -27,7 +27,7 @@ public class ingredient_to_user_pipeline {
 
     private static Inventory inventory3;
 
-    private static IngredientDatabaseAccess ingredientDA;
+    private static IngredientDAO ingredientDA;
 
     private static Ingredient testIngredient1;
     private static Ingredient testIngredient2;
@@ -39,7 +39,10 @@ public class ingredient_to_user_pipeline {
         String deleteInventorySql = "DELETE FROM inventory";
         String deleteShoppingListSql = "DELETE FROM shopping_list";
         String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+        String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
         String deleteIngredientSql = "DELETE FROM ingredient";
+        String deleteRecipeSql = "DELETE FROM recipe";
+        ;
 
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
@@ -47,7 +50,9 @@ public class ingredient_to_user_pipeline {
             statement.executeUpdate(deleteInventorySql);
             statement.executeUpdate(deleteShoppingListSql);
             statement.executeUpdate(deleteUserSql);
+            statement.executeUpdate(deleteRecipe_IngredientSql);
             statement.executeUpdate(deleteIngredientSql);
+            statement.executeUpdate(deleteRecipeSql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -56,10 +61,10 @@ public class ingredient_to_user_pipeline {
 
         // clean sheet
 
-        userDA = new UserDatabaseAccess();
+        userDA = new UserDAO();
         testUser = new User(25, "Ola");
 
-        ingredientDA = new IngredientDatabaseAccess();
+        ingredientDA = new IngredientDAO();
         testIngredient1 = new Ingredient(1, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
         testIngredient2 = new Ingredient(2, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
 
@@ -71,7 +76,7 @@ public class ingredient_to_user_pipeline {
 
 
         //når de initialiseres, bør fremmednøkkelverdiene være null og så senere, bli tilegnet, gjennom save metoden
-        inventoryDA = new InventoryDatabaseAccess();
+        inventoryDA = new InventoryDAO();
         inventory1 = new Inventory(1, NULL, 7, sqlDate, NULL);
         inventory2 = new Inventory(2, NULL, 2, sqlDate, NULL);
         inventory3 = new Inventory(3, NULL, 23, sqlDate, NULL);

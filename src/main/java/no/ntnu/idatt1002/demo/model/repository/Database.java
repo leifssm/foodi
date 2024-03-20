@@ -80,11 +80,12 @@ public class Database {
 
       // Inventory Table
       stmt.execute("CREATE TABLE IF NOT EXISTS inventory (" +
-          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "id INT AUTO_INCREMENT," +
           "ingredient_id INT," +
           "amount DOUBLE," +
           "expiration_date DATE," +
           "user_id INT," +
+          "PRIMARY KEY (id, ingredient_id)," +
           "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)," +
           "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
 

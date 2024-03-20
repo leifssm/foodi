@@ -2,12 +2,16 @@ package no.ntnu.idatt1002.demo.util;
 
 import no.ntnu.idatt1002.demo.model.objects.Recipe;
 import no.ntnu.idatt1002.demo.model.repository.Database;
-import no.ntnu.idatt1002.demo.model.DAO.RecipeDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.RecipeDAO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
+import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -18,18 +22,39 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 public class RecipeDBOTest {
-  private static RecipeDatabaseAccess recipeDatabaseAccess;
+  private static RecipeDAO recipeDAO;
   private static Recipe testRecipe;
   private static Recipe testRecipe2;
 
   @BeforeAll
   public static void setUp() throws SQLException {
     // Create a new RecipeDatabaseAccess object
-    recipeDatabaseAccess = new RecipeDatabaseAccess();
+    recipeDAO = new RecipeDAO();
 
     // Initialize the database if not already initialized
     Database database = new Database();
     database.initializeDatabase();
+
+    String deleteInventorySql = "DELETE FROM inventory";
+    String deleteShoppingListSql = "DELETE FROM shopping_list";
+    String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+    String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
+    String deleteIngredientSql = "DELETE FROM ingredient";
+    String deleteRecipeSql = "DELETE FROM recipe";
+    ;
+
+
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+      Statement statement = connection.createStatement();
+      statement.executeUpdate(deleteInventorySql);
+      statement.executeUpdate(deleteShoppingListSql);
+      statement.executeUpdate(deleteUserSql);
+      statement.executeUpdate(deleteRecipe_IngredientSql);
+      statement.executeUpdate(deleteIngredientSql);
+      statement.executeUpdate(deleteRecipeSql);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
 
     // Create new Recipe objects
     testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
@@ -38,19 +63,19 @@ public class RecipeDBOTest {
 
   @Test
   public void testSave() throws SQLException {
-    recipeDatabaseAccess.save(testRecipe);
-    Recipe savedRecipe = recipeDatabaseAccess.retrieve(testRecipe);
+    recipeDAO.save(testRecipe);
+    Recipe savedRecipe = recipeDAO.retrieve(testRecipe);
     assertEquals(testRecipe.toString(), savedRecipe.toString());
-    recipeDatabaseAccess.delete(testRecipe);
+    recipeDAO.delete(testRecipe);
   }
 
   @Test
   public void testRetrieve() {
     try {
-      recipeDatabaseAccess.save(testRecipe2);
-      Recipe savedRecipe = recipeDatabaseAccess.retrieve(testRecipe2);
+      recipeDAO.save(testRecipe2);
+      Recipe savedRecipe = recipeDAO.retrieve(testRecipe2);
       assertEquals(testRecipe2.toString(), savedRecipe.toString());
-      recipeDatabaseAccess.delete(testRecipe2);
+      recipeDAO.delete(testRecipe2);
     } catch (SQLException e) {
       e.printStackTrace();
     }

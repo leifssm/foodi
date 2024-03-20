@@ -17,8 +17,8 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene
 public class ingredient_to_shopping_list_pipeline {
 
-    private static UserDatabaseAccess userDA;
-    private static InventoryDatabaseAccess inventoryDA;
+    private static UserDAO userDA;
+    private static InventoryDAO inventoryDA;
 
     private static Inventory inventory1;
 
@@ -26,7 +26,9 @@ public class ingredient_to_shopping_list_pipeline {
 
     private static Inventory inventory3;
 
-    private static IngredientDatabaseAccess ingredientDA;
+    private static Inventory inventory4;
+
+    private static IngredientDAO ingredientDA;
 
     private static Ingredient testIngredient1;
     private static Ingredient testIngredient2;
@@ -36,11 +38,11 @@ public class ingredient_to_shopping_list_pipeline {
 
     //recipe og recipe_ingredient
 
-    private static RecipeDatabaseAccess recipeDatabaseAccess;
+    private static RecipeDAO recipeDAO;
     private static Recipe testRecipe;
     private static Recipe testRecipe2;
 
-    private static Recipe_Ingredient_DBAccess recipe_ingredient_dbAccess;
+    private static RecipeIngredientDAO recipe_ingredient_DAO;
 
     private static Recipe_Ingredient testRecipe_Ingredient;
     private static Recipe_Ingredient testRecipe_Ingredient2;
@@ -54,9 +56,10 @@ public class ingredient_to_shopping_list_pipeline {
         String deleteInventorySql = "DELETE FROM inventory";
         String deleteShoppingListSql = "DELETE FROM shopping_list";
         String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+        String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
         String deleteIngredientSql = "DELETE FROM ingredient";
         String deleteRecipeSql = "DELETE FROM recipe";
-        String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
+        ;
 
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
@@ -64,9 +67,9 @@ public class ingredient_to_shopping_list_pipeline {
             statement.executeUpdate(deleteInventorySql);
             statement.executeUpdate(deleteShoppingListSql);
             statement.executeUpdate(deleteUserSql);
+            statement.executeUpdate(deleteRecipe_IngredientSql);
             statement.executeUpdate(deleteIngredientSql);
             statement.executeUpdate(deleteRecipeSql);
-            statement.executeUpdate(deleteRecipe_IngredientSql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -75,11 +78,11 @@ public class ingredient_to_shopping_list_pipeline {
 
         // clean sheet
 
-        userDA = new UserDatabaseAccess();
+        userDA = new UserDAO();
         testUser = new User(25, "Ola");
 
-        ingredientDA = new IngredientDatabaseAccess();
-        testIngredient1 = new Ingredient(1, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
+        ingredientDA = new IngredientDAO();
+        testIngredient1 = new Ingredient(1, "Egg", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.MEAT);
         testIngredient2 = new Ingredient(2, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
 
         // Konverter strengen til et LocalDate-objekt
@@ -90,10 +93,11 @@ public class ingredient_to_shopping_list_pipeline {
 
 
         //når de initialiseres, bør fremmednøkkelverdiene være null og så senere, bli tilegnet, gjennom save metoden
-        inventoryDA = new InventoryDatabaseAccess();
+        inventoryDA = new InventoryDAO();
         inventory1 = new Inventory(1, NULL, 7, sqlDate, NULL);
         inventory2 = new Inventory(2, NULL, 2, sqlDate, NULL);
         inventory3 = new Inventory(3, NULL, 23, sqlDate, NULL);
+        inventory4 = new Inventory(1, NULL, 5, sqlDate, NULL);
 
         // save the user, ingredients and inventory - indirectly testing the save method
         // in the user, ingredient and inventory DAO classes
@@ -106,25 +110,26 @@ public class ingredient_to_shopping_list_pipeline {
         inventoryDA.save(inventory1, testIngredient1, testUser);
         inventoryDA.save(inventory2, testIngredient2, testUser);
         inventoryDA.save(inventory3, testIngredient1, testUser);
+        inventoryDA.save(inventory4, testIngredient1, testUser);  //samme ingrediens og id som i inventory 1, bare med annerledes megnde, bør resultere i bare 1 tuppel, hvor mengden er 12
 
 
         //recipe og recipe_ingredient
 
-        recipeDatabaseAccess = new RecipeDatabaseAccess();
+        recipeDAO = new RecipeDAO();
 
         testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
-        testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY, 45);
+        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY, 30);
 
-        recipe_ingredient_dbAccess = new Recipe_Ingredient_DBAccess();
+        recipe_ingredient_DAO = new RecipeIngredientDAO();
 
-        testRecipe_Ingredient = new Recipe_Ingredient(1, 1, 2.0);
+        testRecipe_Ingredient = new Recipe_Ingredient(1, 1, 35.0);
         testRecipe_Ingredient2 = new Recipe_Ingredient(2, 2, 3.0);
 
-        recipeDatabaseAccess.save(testRecipe);
-        recipeDatabaseAccess.save(testRecipe2);
+        recipeDAO.save(testRecipe);
+        recipeDAO.save(testRecipe2);
 
-        recipe_ingredient_dbAccess.save(testRecipe_Ingredient);
-        recipe_ingredient_dbAccess.save(testRecipe_Ingredient2);
+        recipe_ingredient_DAO.save(testRecipe_Ingredient);
+        recipe_ingredient_DAO.save(testRecipe_Ingredient2);
 
 
         //shopping list
@@ -212,7 +217,7 @@ public class ingredient_to_shopping_list_pipeline {
         @Test
         @Order(1)
         public void deleteAllOfIngredient() {
-            inventoryDA.delete_ingredient(1, 1);
+            inventoryDA.delete_ingredient(2, 2);
             String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
                 Statement statement = connection.createStatement();
@@ -237,7 +242,7 @@ public class ingredient_to_shopping_list_pipeline {
                     int id = rs.getInt("id");
                     int amount = rs.getInt("amount");
                     if (id == 1){
-                        assertEquals(24, amount);
+                        assertEquals(12, amount);
                     }
                 }
             } catch (SQLException e) {
@@ -255,7 +260,7 @@ public class ingredient_to_shopping_list_pipeline {
                 ResultSet resultSet = statement.executeQuery(number_of_entries_inventory);
                 resultSet.next();
                 int number_of_entries = resultSet.getInt(1);
-                assertEquals(1, number_of_entries);
+                assertEquals(2, number_of_entries);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -401,16 +406,27 @@ public class ingredient_to_shopping_list_pipeline {
     class ShoppingListTest{
 
         @Test
+        @Order(1)
         public void generateShoppingListBasedOnInventoryAndRecipes() throws SQLException {
 
+
+            int recipeId = testRecipe.getId();
+            int inventoryId = inventory3.getInventoryId();
+
             // Assuming we have a method in inventoryDA to get the total amount of each ingredient in inventory
-            Map<Integer, Double> currentInventory = inventoryDA.getTotalAmountPerIngredient();
+            Map<Integer, Double> currentInventory = inventoryDA.getTotalAmountPerIngredient(inventoryId);
+
+            System.out.println(currentInventory);
+
 
             // And assuming we have a method in recipe_ingredient_dbAccess to get required ingredients for a recipe
-            Map<Integer, Double> requiredIngredientsForRecipe = recipe_ingredient_dbAccess.getRequiredIngredientsForRecipe(testRecipe.getId());
+            Map<Integer, Double> requiredIngredientsForRecipe = recipe_ingredient_DAO.getRequiredAmountOfIngredientBasedOnChosenRecipe(recipeId);
+            System.out.println((requiredIngredientsForRecipe));
 
-            // Create a shopping list map to hold ingredient IDs and amounts needed
-            Map<Integer, Double> shoppingList = new HashMap<>();
+
+
+      // Create a shopping list map to hold ingredient IDs and amounts needed
+      Map<Integer, Double> shoppingList = new HashMap<>();
 
             // Compare required ingredients with inventory
             for (Map.Entry<Integer, Double> entry : requiredIngredientsForRecipe.entrySet()) {
@@ -420,8 +436,20 @@ public class ingredient_to_shopping_list_pipeline {
 
                 if (currentAmount < requiredAmount) {
                     shoppingList.put(ingredientId, requiredAmount - currentAmount);
+                    //int changed_amount = (int) (currentAmount - requiredAmount);
+                    //inventoryDA.update_amount_of_ingredient(inventory3, changed_amount, ingredientId);
                 }
+
+
+
             }
+            //print out shopping list content
+
+            for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
+                System.out.println("Ingredient ID: " + entry.getKey() + " Amount: " + entry.getValue());
+            }
+
+            System.out.println(shoppingList);
 
             // Assuming we have a method to save shopping list in ShoppingListDatabaseAccess
             shoppingListDAO.save(shoppingList, testUser.getUserId(), 1);

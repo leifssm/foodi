@@ -20,9 +20,10 @@ public class DatabaseTest {
             String deleteInventorySql = "DELETE FROM inventory";
             String deleteShoppingListSql = "DELETE FROM shopping_list";
             String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+            String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
             String deleteIngredientSql = "DELETE FROM ingredient";
             String deleteRecipeSql = "DELETE FROM recipe";
-            String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
+;
 
 
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
@@ -30,9 +31,9 @@ public class DatabaseTest {
                   statement.executeUpdate(deleteInventorySql);
                   statement.executeUpdate(deleteShoppingListSql);
                   statement.executeUpdate(deleteUserSql);
+                  statement.executeUpdate(deleteRecipe_IngredientSql);
                   statement.executeUpdate(deleteIngredientSql);
                   statement.executeUpdate(deleteRecipeSql);
-                  statement.executeUpdate(deleteRecipe_IngredientSql);
             } catch (SQLException e) {
                   System.out.println(e.getMessage());
             }

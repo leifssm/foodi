@@ -1,8 +1,8 @@
 package no.ntnu.idatt1002.demo.util;
 
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
 import no.ntnu.idatt1002.demo.model.DAO.ShoppingListDAO;
-import no.ntnu.idatt1002.demo.model.DAO.UserDatabaseAccess;
+import no.ntnu.idatt1002.demo.model.DAO.UserDAO;
 import no.ntnu.idatt1002.demo.model.objects.Ingredient;
 import no.ntnu.idatt1002.demo.model.objects.ShoppingList;
 import no.ntnu.idatt1002.demo.model.objects.User;
@@ -23,9 +23,9 @@ public class ShoppingListTest {
 
     private static ShoppingList shoppingList_item2;
 
-    private static IngredientDatabaseAccess ingredientDA;
+    private static IngredientDAO ingredientDA;
 
-    private static UserDatabaseAccess userDA;
+    private static UserDAO userDA;
 
 
     private static User user1;
@@ -38,6 +38,8 @@ public class ShoppingListTest {
     @BeforeAll
     public static void setUp() throws SQLException {
 
+
+
         String sql = "DELETE FROM shopping_list";
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
             Statement statement = connection.createStatement();
@@ -46,7 +48,7 @@ public class ShoppingListTest {
             System.out.println(e.getMessage());
         }
 
-        ingredientDA = new IngredientDatabaseAccess();
+        ingredientDA = new IngredientDAO();
         ingredient1 = new Ingredient(5, "Kahawa Bønner", Ingredient.IngredientUnit.LITER, Ingredient.IngredientCategory.GRAIN);
         ingredient2 = new Ingredient(6, "Melk", Ingredient.IngredientUnit.LITER, Ingredient.IngredientCategory.DAIRY);
         ingredientDA.save(ingredient1);
@@ -54,7 +56,7 @@ public class ShoppingListTest {
 
         user1 = new User(4, "Kari");
         user2 = new User(5, "Per");
-        userDA = new UserDatabaseAccess();
+        userDA = new UserDAO();
         userDA.save(user1);
         userDA.save(user2);
 
