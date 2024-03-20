@@ -1,10 +1,10 @@
 package no.ntnu.idatt1002.view;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1002.view.components.sidebar.SideBar;
 import no.ntnu.idatt1002.view.location.Router;
 import no.ntnu.idatt1002.view.utils.LoadUtils;
+import no.ntnu.idatt1002.view.views.CookbookGrid;
 import no.ntnu.idatt1002.view.views.Inventory;
 import no.ntnu.idatt1002.view.views.ShoppingList;
 
@@ -23,8 +23,9 @@ public class Root extends BorderPane {
 
     Router router = new Router()
         .addRoute("inventory", new Inventory())
-        .addRoute("shopping-list", new ShoppingList());
-        // add more routes here
+        .addRoute("shopping-list", new ShoppingList())
+        .addRoute("cookbook-grid", new CookbookGrid());
+    // add more routes here
 
     setCenter(router);
   }

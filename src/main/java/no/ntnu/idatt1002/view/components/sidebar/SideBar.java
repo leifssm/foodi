@@ -38,7 +38,7 @@ public class SideBar extends VBox implements ComponentUtils {
       ),
       new SideBarItem(
           "Cookbook",
-          "cookbook",
+          "cookbook-grid",
           new SideBarSubItem("Add item", "cookbook/add")
       ),
       new SideBarItem(
