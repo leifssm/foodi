@@ -5,11 +5,14 @@ import no.ntnu.idatt1002.demo.model.objects.Inventory;
 import no.ntnu.idatt1002.demo.model.objects.User;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
-public class InventoryDatabaseAccess {
+public class InventoryDAO {
 
+    /*
     //putt inn Save Ingredient obj and User obj, as parameters, to not need to hardcode the user_id and ingredient_id
     public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ?";
@@ -42,6 +45,52 @@ public class InventoryDatabaseAccess {
 
 
     }
+
+
+    */
+
+
+    public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
+        String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ? AND ingredient_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
+
+            pstmt.setInt(1, obj.getInventoryId());
+            pstmt.setInt(2, obj2.getId());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                // If the ingredient already exists in the inventory, update the amount
+                String updateSql = "UPDATE inventory SET amount = amount + ? WHERE id = ? AND ingredient_id = ?";
+
+                try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
+                    pstmt2.setInt(1, obj.getAmount());
+                    pstmt2.setInt(2, obj.getInventoryId());
+                    pstmt2.setInt(3, obj2.getId());
+                    pstmt2.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                // If the ingredient does not exist in the inventory, insert a new record
+                String insertSql = "INSERT INTO inventory (id, ingredient_id, amount, EXPIRATION_DATE, user_id) VALUES (?, ?, ?, ?, ?)";
+
+                try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
+                    pstmt2.setInt(1, obj.getInventoryId());
+                    pstmt2.setInt(2, obj2.getId());
+                    pstmt2.setInt(3, obj.getAmount());
+                    pstmt2.setDate(4, (Date) obj.getExperationDate());
+                    pstmt2.setInt(5, obj3.getUserId());
+                    pstmt2.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+
+        }
+    }
+
 
 
     public void update_amount_of_ingredient(Inventory obj, int amount, int ingredient_id) {
@@ -124,6 +173,28 @@ public class InventoryDatabaseAccess {
                 return new Inventory(rs.getInt("id"), obj2.getId(), rs.getInt("amount"), rs.getDate("expiration_date"), obj3.getUserId());
             }
 
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
+    public Map<Integer, Double> getTotalAmountPerIngredient(int inventory_id) {
+        String sql = "SELECT ingredient_id, SUM(amount) FROM inventory WHERE INVENTORY.ID = ? GROUP BY ingredient_id";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, inventory_id);
+            ResultSet rs = pstmt.executeQuery();
+
+            Map<Integer, Double> ingredientAmountMap = new HashMap<>();
+            while (rs.next()) {
+                ingredientAmountMap.put(rs.getInt(1), rs.getDouble(2));
+            }
+
+            return ingredientAmountMap;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -1,6 +1,8 @@
 package no.ntnu.idatt1002.demo.model.DAO;
 
 import no.ntnu.idatt1002.demo.model.objects.Recipe_Ingredient;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.sql.*;
 
@@ -11,7 +13,7 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class Recipe_Ingredient_DBAccess {
+public class RecipeIngredientDAO {
   private static final String DB_URL = "jdbc:h2:~/test";
   private static final String USER = "sa";
   private static final String PASS = "";
@@ -97,4 +99,35 @@ public class Recipe_Ingredient_DBAccess {
 
     return null;
   }
+
+  /**
+   * Retrieves the required ingredients for a specific recipe.
+   *
+   * @param recipeId The ID of the recipe for which to retrieve the ingredients.
+   * @return A map where the key is the ingredient ID and the value is the amount required.
+   */
+  public Map<Integer, Double> getRequiredAmountOfIngredientBasedOnChosenRecipe(int recipeId) {
+    Map<Integer, Double> requiredIngredients = new HashMap<>();
+
+    String sql = "SELECT ingredient_id, amount FROM recipe_ingredient WHERE recipe_id = ?";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setInt(1, recipeId);
+      ResultSet rs = pstmt.executeQuery();
+
+      while (rs.next()) {
+        int ingredientId = rs.getInt("ingredient_id");
+        double amount = rs.getDouble("amount");
+        requiredIngredients.put(ingredientId, amount);
+      }
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    return requiredIngredients;
+  }
+
+
 }

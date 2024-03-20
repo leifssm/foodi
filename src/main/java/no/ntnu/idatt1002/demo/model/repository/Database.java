@@ -80,22 +80,26 @@ public class Database {
 
       // Inventory Table
       stmt.execute("CREATE TABLE IF NOT EXISTS inventory (" +
-          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "id INT AUTO_INCREMENT," +
           "ingredient_id INT," +
           "amount DOUBLE," +
           "expiration_date DATE," +
           "user_id INT," +
+          "PRIMARY KEY (id, ingredient_id)," +
           "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)," +
           "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
 
       // Shopping List Table
-      stmt.execute("CREATE TABLE IF NOT EXISTS shopping_list (" +
-          "id INT AUTO_INCREMENT PRIMARY KEY," +
-          "ingredient_id INT," +
-          "amount DOUBLE," +
-          "user_id INT," +
-          "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id)," +
-          "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
+      stmt.execute(
+          "CREATE TABLE IF NOT EXISTS shopping_list ("
+              + "shoppinglist_id INT,"
+              + "item_id INT AUTO_INCREMENT,"
+              + "ingredient_id INT,"
+              + "amount DOUBLE,"
+              + "user_id INT,"
+              + "PRIMARY KEY (shoppinglist_id, item_id),"
+              + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
+              + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
 
       System.out.println("Tables created successfully.");
     }

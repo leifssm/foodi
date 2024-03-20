@@ -5,7 +5,7 @@ import java.sql.*;
 
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 
-public class UserDatabaseAccess {
+public class UserDAO {
 
 
     public void save (User obj) throws SQLException {

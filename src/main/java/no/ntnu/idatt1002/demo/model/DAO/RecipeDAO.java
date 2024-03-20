@@ -11,7 +11,7 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class RecipeDatabaseAccess {
+public class RecipeDAO {
   private static final String DB_URL = "jdbc:h2:~/test";
   private static final String USER = "sa";
   private static final String PASS = "";

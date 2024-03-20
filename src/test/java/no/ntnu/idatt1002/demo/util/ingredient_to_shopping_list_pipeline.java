@@ -3,20 +3,19 @@ package no.ntnu.idatt1002.demo.util;
 import static java.sql.Types.NULL;
 import static no.ntnu.idatt1002.demo.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
-import no.ntnu.idatt1002.demo.model.DAO.InventoryDAO;
-import no.ntnu.idatt1002.demo.model.DAO.UserDAO;
-import no.ntnu.idatt1002.demo.model.objects.Ingredient;
-import no.ntnu.idatt1002.demo.model.objects.Inventory;
-import no.ntnu.idatt1002.demo.model.objects.User;
+import no.ntnu.idatt1002.demo.model.DAO.*;
+import no.ntnu.idatt1002.demo.model.objects.*;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene
-public class ingredient_to_user_pipeline {
+public class ingredient_to_shopping_list_pipeline {
 
     private static UserDAO userDA;
     private static InventoryDAO inventoryDA;
@@ -27,12 +26,30 @@ public class ingredient_to_user_pipeline {
 
     private static Inventory inventory3;
 
+    private static Inventory inventory4;
+
     private static IngredientDAO ingredientDA;
 
     private static Ingredient testIngredient1;
     private static Ingredient testIngredient2;
 
     private static User testUser;
+
+
+    //recipe og recipe_ingredient
+
+    private static RecipeDAO recipeDAO;
+    private static Recipe testRecipe;
+    private static Recipe testRecipe2;
+
+    private static RecipeIngredientDAO recipe_ingredient_DAO;
+
+    private static Recipe_Ingredient testRecipe_Ingredient;
+    private static Recipe_Ingredient testRecipe_Ingredient2;
+
+    //shopping list
+
+    private static ShoppingListDAO shoppingListDAO;
 
     @BeforeAll
     public static void setUp() throws SQLException {
@@ -65,7 +82,7 @@ public class ingredient_to_user_pipeline {
         testUser = new User(25, "Ola");
 
         ingredientDA = new IngredientDAO();
-        testIngredient1 = new Ingredient(1, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
+        testIngredient1 = new Ingredient(1, "Egg", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.MEAT);
         testIngredient2 = new Ingredient(2, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
 
         // Konverter strengen til et LocalDate-objekt
@@ -80,6 +97,7 @@ public class ingredient_to_user_pipeline {
         inventory1 = new Inventory(1, NULL, 7, sqlDate, NULL);
         inventory2 = new Inventory(2, NULL, 2, sqlDate, NULL);
         inventory3 = new Inventory(3, NULL, 23, sqlDate, NULL);
+        inventory4 = new Inventory(1, NULL, 5, sqlDate, NULL);
 
         // save the user, ingredients and inventory - indirectly testing the save method
         // in the user, ingredient and inventory DAO classes
@@ -92,6 +110,30 @@ public class ingredient_to_user_pipeline {
         inventoryDA.save(inventory1, testIngredient1, testUser);
         inventoryDA.save(inventory2, testIngredient2, testUser);
         inventoryDA.save(inventory3, testIngredient1, testUser);
+        inventoryDA.save(inventory4, testIngredient1, testUser);  //samme ingrediens og id som i inventory 1, bare med annerledes megnde, bør resultere i bare 1 tuppel, hvor mengden er 12
+
+
+        //recipe og recipe_ingredient
+
+        recipeDAO = new RecipeDAO();
+
+        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
+        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY, 30);
+
+        recipe_ingredient_DAO = new RecipeIngredientDAO();
+
+        testRecipe_Ingredient = new Recipe_Ingredient(1, 1, 35.0);
+        testRecipe_Ingredient2 = new Recipe_Ingredient(2, 2, 3.0);
+
+        recipeDAO.save(testRecipe);
+        recipeDAO.save(testRecipe2);
+
+        recipe_ingredient_DAO.save(testRecipe_Ingredient);
+        recipe_ingredient_DAO.save(testRecipe_Ingredient2);
+
+
+        //shopping list
+        shoppingListDAO = new ShoppingListDAO();
 
     }
 
@@ -175,7 +217,7 @@ public class ingredient_to_user_pipeline {
         @Test
         @Order(1)
         public void deleteAllOfIngredient() {
-            inventoryDA.delete_ingredient(1, 1);
+            inventoryDA.delete_ingredient(2, 2);
             String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
                 Statement statement = connection.createStatement();
@@ -200,7 +242,7 @@ public class ingredient_to_user_pipeline {
                     int id = rs.getInt("id");
                     int amount = rs.getInt("amount");
                     if (id == 1){
-                        assertEquals(24, amount);
+                        assertEquals(12, amount);
                     }
                 }
             } catch (SQLException e) {
@@ -218,7 +260,7 @@ public class ingredient_to_user_pipeline {
                 ResultSet resultSet = statement.executeQuery(number_of_entries_inventory);
                 resultSet.next();
                 int number_of_entries = resultSet.getInt(1);
-                assertEquals(1, number_of_entries);
+                assertEquals(2, number_of_entries);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -357,6 +399,74 @@ public class ingredient_to_user_pipeline {
         }
 
     }
+
+    @Nested
+    @DisplayName("Shopping List Tests")
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class ShoppingListTest{
+
+        @Test
+        @Order(1)
+        public void generateShoppingListBasedOnInventoryAndRecipes() throws SQLException {
+
+
+            int recipeId = testRecipe.getId();
+            int inventoryId = inventory3.getInventoryId();
+
+            // Assuming we have a method in inventoryDA to get the total amount of each ingredient in inventory
+            Map<Integer, Double> currentInventory = inventoryDA.getTotalAmountPerIngredient(inventoryId);
+
+            System.out.println(currentInventory);
+
+
+            // And assuming we have a method in recipe_ingredient_dbAccess to get required ingredients for a recipe
+            Map<Integer, Double> requiredIngredientsForRecipe = recipe_ingredient_DAO.getRequiredAmountOfIngredientBasedOnChosenRecipe(recipeId);
+            System.out.println((requiredIngredientsForRecipe));
+
+
+
+      // Create a shopping list map to hold ingredient IDs and amounts needed
+      Map<Integer, Double> shoppingList = new HashMap<>();
+
+            // Compare required ingredients with inventory
+            for (Map.Entry<Integer, Double> entry : requiredIngredientsForRecipe.entrySet()) {
+                int ingredientId = entry.getKey();
+                double requiredAmount = entry.getValue();
+                double currentAmount = currentInventory.getOrDefault(ingredientId, 0.0);
+
+                if (currentAmount < requiredAmount) {
+                    shoppingList.put(ingredientId, requiredAmount - currentAmount);
+                    //int changed_amount = (int) (currentAmount - requiredAmount);
+                    //inventoryDA.update_amount_of_ingredient(inventory3, changed_amount, ingredientId);
+                }
+
+
+
+            }
+            //print out shopping list content
+
+            for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
+                System.out.println("Ingredient ID: " + entry.getKey() + " Amount: " + entry.getValue());
+            }
+
+            System.out.println(shoppingList);
+
+            // Assuming we have a method to save shopping list in ShoppingListDatabaseAccess
+            shoppingListDAO.save(shoppingList, testUser.getUserId(), 1);
+
+            // Verify the shopping list is saved correctly
+            Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.getUserId());
+            assertEquals(shoppingList.size(), retrievedShoppingList.size());
+            for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
+                assertTrue(retrievedShoppingList.containsKey(entry.getKey()));
+                assertEquals(entry.getValue(), retrievedShoppingList.get(entry.getKey()), 0.01);
+            }
+        }
+
+    }
+
+
+
 
 
 
