@@ -4,9 +4,21 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.testclasses.Recipe;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * A component for displaying all the different added recipes vertically.
+ *
+ * @version 1.0
+ * @author Leif Mørstad
+ */
 public class AddedRecipes extends VBox implements ComponentUtils {
-  public AddedRecipes(Recipe[] recipes) {
+  /**
+   * Constructor for the AddedRecipes class.
+   *
+   * @param recipes An array of recipes to display
+   */
+  public AddedRecipes(Recipe @NotNull [] recipes) {
     super();
     addStylesheet("components/shopping-list/added-recipes");
     addClass("added-recipes");

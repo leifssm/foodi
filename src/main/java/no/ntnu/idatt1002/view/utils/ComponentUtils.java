@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ComponentUtils {
   ObservableList<String> getStylesheets();
+
   ObservableList<String> getStyleClass();
 
   /**

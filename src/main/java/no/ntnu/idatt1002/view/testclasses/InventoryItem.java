@@ -1,9 +1,8 @@
 package no.ntnu.idatt1002.view.testclasses;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 import java.util.function.Function;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Temp data class, will be replaced with actual data from the database.
@@ -19,7 +18,10 @@ public class InventoryItem {
   public InventoryItem() {
     this.type = "🍗";
     this.name = "Chicken";
-    this.expiryDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14 - (int) (1000 * 60 * 60 * 24 * 16 * Math.random()));
+    this.expiryDate = new Date(
+        System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14
+            - (int) (1000 * 60 * 60 * 24 * 16 * Math.random())
+    );
     this.category = new Random().nextInt(4) < 2 ? "Meat" : "Dairy";
     this.quantity = "100";
     this.unit = "g";
@@ -50,7 +52,12 @@ public class InventoryItem {
   }
 
 
-  public static GroupedInventoryItems groupItemsBy(InventoryItem[] items, String sortedBy, Function<InventoryItem, String> nameGetter) {
+  public static GroupedInventoryItems groupItemsBy(
+      InventoryItem[] items,
+      String sortedBy,
+      Function<InventoryItem,
+      String> nameGetter
+  ) {
     InventoryItem[] sortedItems = Arrays.copyOf(items, items.length);
     Comparator<InventoryItem> comparator = Comparator.comparing(nameGetter);
     Arrays.sort(sortedItems, comparator);
@@ -97,7 +104,10 @@ public class InventoryItem {
   public static final class GroupedInventoryItems {
     private final String groupedBy;
     private final InventoryItemGroup[] groups;
-    public GroupedInventoryItems(@NotNull String groupedBy, @NotNull InventoryItemGroup @NotNull ... groups) {
+    public GroupedInventoryItems(
+        @NotNull String groupedBy,
+        @NotNull InventoryItemGroup @NotNull ... groups
+    ) {
       this.groupedBy = groupedBy;
       this.groups = groups;
     }

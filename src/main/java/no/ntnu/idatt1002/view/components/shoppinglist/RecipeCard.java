@@ -2,14 +2,30 @@ package no.ntnu.idatt1002.view.components.shoppinglist;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.view.components.button.StandardButton;
 import no.ntnu.idatt1002.view.testclasses.InventoryItem;
 import no.ntnu.idatt1002.view.testclasses.Recipe;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A component for displaying a summary of a recipe. Used by {@link AddedRecipes}.
+ *
+ * @version 1.0
+ * @see AddedRecipes
+ * @see Recipe
+ * @author Leif Mørstad
+ */
 public class RecipeCard extends BorderPane implements ComponentUtils {
+  /**
+   * Constructor for the RecipeCard class.
+   *
+   * @param recipe The recipe to display
+   */
   public RecipeCard(@NotNull Recipe recipe) {
     super();
     addStylesheet("components/shopping-list/recipe-card");
@@ -22,7 +38,11 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     setRight(
         new HBox(
           new RecipeServings(recipe.getServings()),
-          new StandardButton("X", () -> System.out.println("Remove recipe"), StandardButton.Style.ERROR)
+          new StandardButton(
+              "X",
+              () -> System.out.println("Remove recipe"),
+              StandardButton.Style.ERROR
+          )
         )
     );
 

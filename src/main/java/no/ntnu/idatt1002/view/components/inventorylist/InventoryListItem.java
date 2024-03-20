@@ -27,7 +27,10 @@ class InventoryListItem {
    * @param mainItem The main item to display
    * @param items The sub items to display, if any
    */
-  public InventoryListItem(@NotNull InventoryItem mainItem, @NotNull InventoryItem @NotNull ... items) {
+  public InventoryListItem(
+      @NotNull InventoryItem mainItem,
+      @NotNull InventoryItem @NotNull ... items
+  ) {
     this.subItems = new InventoryListSubItem[items.length];
 
     for (int i = 0; i < items.length; i++) {

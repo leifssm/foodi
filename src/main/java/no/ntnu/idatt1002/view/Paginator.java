@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
  * A class for handling a large list of items, and separating them into chunks.
  *
  * @version 1.0
- * @param <Type> The type of the items to paginate
+ * @param <T> The type of the items to paginate
  */
-public class Paginator<Type> {
-  private ArrayList<Type> items;
+public class Paginator<T> {
+  private ArrayList<T> items;
   private int itemsPerPage;
   private int currentPage;
 
@@ -20,7 +20,7 @@ public class Paginator<Type> {
    * @param items The items to paginate
    * @param itemsPerPage The number of items per page
    */
-  public Paginator(@NotNull ArrayList<Type> items, int itemsPerPage) {
+  public Paginator(@NotNull ArrayList<T> items, int itemsPerPage) {
     this.items = items;
     this.itemsPerPage = itemsPerPage;
     this.currentPage = 0;
@@ -31,7 +31,7 @@ public class Paginator<Type> {
    *
    * @param items The items to paginate
    */
-  public Paginator(@NotNull ArrayList<Type> items) {
+  public Paginator(@NotNull ArrayList<T> items) {
     this(items, 10);
   }
 
@@ -47,7 +47,7 @@ public class Paginator<Type> {
    *
    * @param item The item to add
    */
-  public void addItem(@NotNull Type item) {
+  public void addItem(@NotNull T item) {
     items.add(item);
   }
 
@@ -57,8 +57,8 @@ public class Paginator<Type> {
    * @param items The items to add
    */
   @SafeVarargs
-  public final void addItems(Type @NotNull ... items) {
-    for (Type item : items) {
+  public final void addItems(T @NotNull ... items) {
+    for (T item : items) {
       addItem(item);
     }
   }
@@ -66,7 +66,7 @@ public class Paginator<Type> {
   /**
    * Returns the current page of items.
    */
-  public ArrayList<Type> getCurrentPage() {
+  public ArrayList<T> getCurrentPage() {
     int start = currentPage * itemsPerPage;
     int end = Math.min(start + itemsPerPage, getTotalItems());
 
@@ -113,7 +113,7 @@ public class Paginator<Type> {
    *
    * @param items The items to set
    */
-  public void setItems(@NotNull ArrayList<Type> items) {
+  public void setItems(@NotNull ArrayList<T> items) {
     this.items = items;
   }
 

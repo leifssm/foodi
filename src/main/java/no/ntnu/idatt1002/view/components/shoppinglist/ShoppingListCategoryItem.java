@@ -4,9 +4,19 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import no.ntnu.idatt1002.view.testclasses.InventoryItem;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * A class to display a single item in a category in the shopping list. To be used in the
+ * {@link ShoppingListCategoryGroup}.
+ */
 class ShoppingListCategoryItem extends BorderPane implements ComponentUtils {
-  public ShoppingListCategoryItem(InventoryItem item) {
+  /**
+   * Constructor for the ShoppingListCategoryItem class.
+   *
+   * @param item The item to display
+   */
+  public ShoppingListCategoryItem(@NotNull InventoryItem item) {
     super();
     addStylesheet("components/shopping-list/shopping-list-category-item");
     addClass("shopping-list-category-item");
@@ -36,7 +46,15 @@ class ShoppingListCategoryItem extends BorderPane implements ComponentUtils {
     setRight(colorsNodes);
   }
 
+  /**
+   * A class to display a circle with a given color. Represents which recipes the item is used in.
+   */
   private static class ShoppingListCategoryItemColor extends Pane {
+    /**
+     * Constructor for the ShoppingListCategoryItemColor class.
+     *
+     * @param color a hex color code to display, e.g. "#FF0000"
+     */
     public ShoppingListCategoryItemColor(String color) {
       super();
       getStyleClass().add("shopping-list-category-item-color");

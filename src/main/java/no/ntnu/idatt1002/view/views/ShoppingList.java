@@ -1,15 +1,23 @@
 package no.ntnu.idatt1002.view.views;
 
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import no.ntnu.idatt1002.view.components.TitledPage;
 import no.ntnu.idatt1002.view.components.shoppinglist.AddedRecipes;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
 import no.ntnu.idatt1002.view.components.shoppinglist.ShoppingListWrapper;
+import no.ntnu.idatt1002.view.testclasses.InventoryItem;
 import no.ntnu.idatt1002.view.testclasses.Recipe;
 import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
+/**
+ * Class for displaying the shopping list page.
+ *
+ * @version 1.0
+ * @author Leif Mørstad
+ */
 public class ShoppingList extends TitledPage implements ComponentUtils {
+  /**
+   * Constructor for the ShoppingList class.
+   */
   public ShoppingList() {
     super(
         "Shopping List",
@@ -18,6 +26,7 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
     addStylesheet("components/shopping-list/shopping-list");
     addClass("shopping-list");
 
+    // Temp test data
     ShoppingListWrapper shoppingList = new ShoppingListWrapper(
         new InventoryItem(),
         new InventoryItem(),
@@ -30,6 +39,7 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
     );
 
     AddedRecipes addedRecipes = new AddedRecipes(
+        // Temp test data
         new Recipe[]{
             new Recipe("Pizza", 4, new InventoryItem[] {
                 new InventoryItem(),

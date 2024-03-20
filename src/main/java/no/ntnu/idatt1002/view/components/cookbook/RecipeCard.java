@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import no.ntnu.idatt1002.view.location.LocationHandler;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1002.view.utils.ComponentUtils;
 import no.ntnu.idatt1002.view.utils.LoadUtils;
 
 /**
@@ -21,7 +21,7 @@ import no.ntnu.idatt1002.view.utils.LoadUtils;
  * It is used in the cookbook grid view. </p>
  */
 
-public class RecipeCard extends StackPane implements CssUtils {
+public class RecipeCard extends StackPane implements ComponentUtils {
 
 
   /**
@@ -40,7 +40,9 @@ public class RecipeCard extends StackPane implements CssUtils {
 
     // Load the image and create an ImageView for it
     String imageUrl = LoadUtils.getImage(imagePath);
-    if (imageUrl == null) throw new AssertionError("Image not found: " + imagePath);
+    if (imageUrl == null) {
+      throw new AssertionError("Image not found: " + imagePath);
+    }
 
     ImageView backgroundImage = new ImageView(imageUrl);
     backgroundImage.setPreserveRatio(true);

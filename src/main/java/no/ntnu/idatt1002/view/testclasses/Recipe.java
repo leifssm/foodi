@@ -1,5 +1,8 @@
 package no.ntnu.idatt1002.view.testclasses;
 
+/**
+ * temp data class, will be replaced with actual data from the database.
+ */
 public class Recipe {
   private final String name;
   private final int servings;
