@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.view.views;
 
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import no.ntnu.idatt1002.view.components.TitledPage;
 import no.ntnu.idatt1002.view.components.shoppinglist.AddedRecipes;
@@ -43,10 +44,10 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
         }
     );
 
-    HBox wrapper = new HBox(
-        shoppingList,
-        addedRecipes
-    );
+    BorderPane wrapper = new BorderPane();
+    wrapper.getStyleClass().add("shopping-list-content-wrapper");
+    wrapper.setLeft(shoppingList);
+    wrapper.setRight(addedRecipes);
 
     setContent(wrapper, true);
   }
