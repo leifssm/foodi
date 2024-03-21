@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.controller;
+package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
