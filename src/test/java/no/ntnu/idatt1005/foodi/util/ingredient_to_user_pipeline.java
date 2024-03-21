@@ -1,18 +1,18 @@
-package no.ntnu.idatt1002.demo.util;
+package no.ntnu.idatt1005.foodi.util;
 
 import static java.sql.Types.NULL;
-import static no.ntnu.idatt1002.demo.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.*;
 import java.time.LocalDate;
 
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
-import no.ntnu.idatt1002.demo.model.DAO.InventoryDAO;
-import no.ntnu.idatt1002.demo.model.DAO.UserDAO;
-import no.ntnu.idatt1002.demo.model.objects.Ingredient;
-import no.ntnu.idatt1002.demo.model.objects.Inventory;
-import no.ntnu.idatt1002.demo.model.objects.User;
+import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.InventoryDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Inventory;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene

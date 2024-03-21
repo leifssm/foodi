@@ -1,8 +1,8 @@
-package no.ntnu.idatt1002.demo.util;
+package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1002.demo.model.objects.Ingredient;
-import no.ntnu.idatt1002.demo.model.repository.Database;
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
+import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 
 import org.junit.jupiter.api.*;
 
@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static no.ntnu.idatt1002.demo.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IngredientDAOTest {

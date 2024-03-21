@@ -1,6 +1,6 @@
-package no.ntnu.idatt1002.demo.model.DAO;
+package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1002.demo.model.objects.Recipe_Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe_Ingredient;
 import java.util.HashMap;
 import java.util.Map;
 

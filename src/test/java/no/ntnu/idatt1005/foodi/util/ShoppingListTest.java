@@ -1,18 +1,18 @@
-package no.ntnu.idatt1002.demo.util;
+package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1002.demo.model.DAO.IngredientDAO;
-import no.ntnu.idatt1002.demo.model.DAO.ShoppingListDAO;
-import no.ntnu.idatt1002.demo.model.DAO.UserDAO;
-import no.ntnu.idatt1002.demo.model.objects.Ingredient;
-import no.ntnu.idatt1002.demo.model.objects.ShoppingList;
-import no.ntnu.idatt1002.demo.model.objects.User;
+import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1002.demo.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
