@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo.model.repository;
+package no.ntnu.idatt1005.foodi.model.repository;
 
 import java.sql.*;
 

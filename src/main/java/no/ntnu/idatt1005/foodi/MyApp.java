@@ -1,6 +1,6 @@
-package no.ntnu.idatt1002.demo;
+package no.ntnu.idatt1005.foodi;
 
-import no.ntnu.idatt1002.demo.view.MyWindow;
+import no.ntnu.idatt1005.foodi.view.MyWindow;
 
 /**
  * Use this class to start the application
