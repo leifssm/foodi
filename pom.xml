@@ -15,7 +15,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
-        <javafx.version>17.0.1</javafx.version>
+        <javafx.version>21.0.2</javafx.version>
     </properties>
 
     <repositories>
@@ -118,12 +118,10 @@
             <version>2.2.224</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.2.224</version>
-            <scope>runtime</scope>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>24.0.1</version>
         </dependency>
     </dependencies>
 
@@ -166,7 +164,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        no.ntnu.idatt1002.demo.MyApp
+                                        no.ntnu.idatt1005.foodi.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -186,7 +184,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>no.ntnu.idatt1005.Main</mainClass>
+                            <mainClass>no.ntnu.idatt1005.foodi.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
