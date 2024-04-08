@@ -28,8 +28,7 @@ public class AddProfileButton extends VBox implements CssUtils {
 
     button.setOnAction(e -> onClick.run());
 
-    getChildren().add(button);
-    getChildren().add(new Label(" "));
+    getChildren().addAll(button, new Label(" "));
   }
 
 
