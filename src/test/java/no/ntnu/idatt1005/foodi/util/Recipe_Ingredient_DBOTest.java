@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeIngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Recipe_Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.RecipeIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
@@ -31,8 +31,8 @@ public class Recipe_Ingredient_DBOTest {
   private static IngredientDAO ingredientDAO;
   private static Recipe testRecipe;
   private static Recipe testRecipe2;
-  private static Recipe_Ingredient testRecipe_Ingredient;
-  private static Recipe_Ingredient testRecipe_Ingredient2;
+  private static RecipeIngredient testRecipe_Ingredient;
+  private static RecipeIngredient testRecipe_Ingredient2;
   private static Ingredient testIngredient;
   private static Ingredient testIngredient2;
 
@@ -75,8 +75,8 @@ public class Recipe_Ingredient_DBOTest {
     testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY, 45);
 
     // Create new Recipe_Ingredient objects
-    testRecipe_Ingredient = new Recipe_Ingredient(1, 1, 2.0);
-    testRecipe_Ingredient2 = new Recipe_Ingredient(2, 2, 3.0);
+    testRecipe_Ingredient = new RecipeIngredient(1, 1, 2.0);
+    testRecipe_Ingredient2 = new RecipeIngredient(2, 2, 3.0);
 
     // Create new Ingredient objects
     testIngredient = new Ingredient(1, "Pasta", Ingredient.IngredientUnit.GRAM, Ingredient.IngredientCategory.GRAIN);
@@ -100,12 +100,12 @@ public class Recipe_Ingredient_DBOTest {
 
     // Test the first Recipe_Ingredient object
     recipe_ingredient_DAO.save(testRecipe_Ingredient);
-    Recipe_Ingredient savedRecipe_Ingredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
+    RecipeIngredient savedRecipe_Ingredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
     assertEquals(testRecipe_Ingredient.toString(), savedRecipe_Ingredient.toString());
 
     // Test the second Recipe_Ingredient object
     recipe_ingredient_DAO.save(testRecipe_Ingredient2);
-    Recipe_Ingredient savedRecipe_Ingredient2 = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient2);
+    RecipeIngredient savedRecipe_Ingredient2 = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient2);
     assertEquals(testRecipe_Ingredient2.toString(), savedRecipe_Ingredient2.toString());
 
     // Delete the test data from the database

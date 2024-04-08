@@ -7,12 +7,12 @@ package no.ntnu.idatt1005.foodi.model.objects;
  * @version 0.2.0
  * @author Snake727
  */
-public class Recipe_Ingredient {
+public class RecipeIngredient {
   private int recipe_id;
   private int ingredient_id;
   private double amount;
 
-  public Recipe_Ingredient(int recipe_id, int ingredient_id, double amount) {
+  public RecipeIngredient(int recipe_id, int ingredient_id, double amount) {
     this.recipe_id = recipe_id;
     this.ingredient_id = ingredient_id;
     this.amount = amount;

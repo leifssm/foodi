@@ -4,6 +4,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * This class is responsible for handling the usage of
@@ -20,14 +21,15 @@ public class ShoppingListController {
     shoppingListDAO = new ShoppingListDAO();
   }
 
-  public void save(ShoppingList shoppingList) {
+  public void save(Map<Integer, Double> shoppingList, int userId, int listId) {
     try {
-      shoppingListDAO.save(shoppingList);
+      shoppingListDAO.save(shoppingList, userId, listId);
     } catch (SQLException e) {
       e.printStackTrace();
     }
   }
 
+  /* legger til metoder for det senere, etter start av mvp-sikring (kobling av frontend og backend)
   public ShoppingList retrieve(ShoppingList shoppingList) {
       return shoppingListDAO.retrieve(shoppingList);
   }
@@ -35,4 +37,6 @@ public class ShoppingListController {
   public void delete(ShoppingList shoppingList) {
       shoppingListDAO.delete(shoppingList);
   }
+  */
+
 }

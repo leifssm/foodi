@@ -44,8 +44,8 @@ public class ingredient_to_shopping_list_pipeline {
 
     private static RecipeIngredientDAO recipe_ingredient_DAO;
 
-    private static Recipe_Ingredient testRecipe_Ingredient;
-    private static Recipe_Ingredient testRecipe_Ingredient2;
+    private static RecipeIngredient testRecipe_Ingredient;
+    private static RecipeIngredient testRecipe_Ingredient2;
 
     //shopping list
 
@@ -122,8 +122,8 @@ public class ingredient_to_shopping_list_pipeline {
 
         recipe_ingredient_DAO = new RecipeIngredientDAO();
 
-        testRecipe_Ingredient = new Recipe_Ingredient(1, 1, 35.0);
-        testRecipe_Ingredient2 = new Recipe_Ingredient(2, 2, 3.0);
+    testRecipe_Ingredient = new RecipeIngredient(1, 1, 35.0);
+    testRecipe_Ingredient2 = new RecipeIngredient(2, 2, 3.0);
 
         recipeDAO.save(testRecipe);
         recipeDAO.save(testRecipe2);
