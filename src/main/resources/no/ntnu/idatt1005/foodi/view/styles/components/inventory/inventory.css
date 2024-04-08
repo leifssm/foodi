@@ -1,0 +1,7 @@
+.inventory-top-bar {
+  -fx-padding: 0 0 10px 0;
+}
+
+.inventory-actions {
+  -fx-spacing: 10px;
+}

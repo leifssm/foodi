@@ -1,0 +1,20 @@
+.std-checkbox .box {
+  -fx-background-color: transparent;
+  -fx-background-radius: 2px;
+  -fx-border-width: 2px;
+  -fx-border-color: white;
+  -fx-border-radius: 2px;
+}
+
+.std-checkbox:focused .box {
+  -fx-background-color: transparent;
+}
+
+.std-checkbox:selected .mark {
+  -fx-background-color: white;
+}
+
+.std-checkbox:selected .box, .std-checkbox:indeterminate .box {
+  -fx-border-color: #f44949;
+  -fx-background-color: #f44949;
+}
