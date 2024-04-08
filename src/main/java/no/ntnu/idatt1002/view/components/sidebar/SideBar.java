@@ -26,30 +26,38 @@ public class SideBar extends VBox implements CssUtils {
       logo.getStyleClass().add("sidebar-logo");
       logo.setPreserveRatio(true);
       logo.setFitWidth(100);
+
+      // Set margin for the logo (impossible to do with CSS)
+      VBox.setMargin(logo, new javafx.geometry.Insets(10, 0, 10, 0));
+
       getChildren().add(logo);
     }
 
     getChildren().addAll(
-      new SideBarItem(
-          "Inventory",
-          "inventory",
-          new SideBarSubItem("Add item", "inventory/add"),
-          new SideBarSubItem("Add item", "inventory/add")
-      ),
-      new SideBarItem(
-          "Cookbook",
-          "cookbook-grid",
-          new SideBarSubItem("Add item", "cookbook/add")
-      ),
-      new SideBarItem(
-          "Shopping List",
-          "shopping-list",
-          new SideBarSubItem("Add item", "shopping-list/add")
-      ),
-      new SideBarItem(
-          "About",
-          "about"
-      )
+            new SideBarItem(
+                    "Profiles",
+                    "profiles"
+            ),
+            new SideBarItem(
+                    "Inventory",
+                    "inventory",
+                    new SideBarSubItem("Add item", "inventory/add"),
+                    new SideBarSubItem("Add item", "inventory/add")
+            ),
+            new SideBarItem(
+                    "Cookbook",
+                    "cookbook-grid",
+                    new SideBarSubItem("Add item", "cookbook/add")
+            ),
+            new SideBarItem(
+                    "Shopping List",
+                    "shopping-list",
+                    new SideBarSubItem("Add item", "shopping-list/add")
+            ),
+            new SideBarItem(
+                    "About",
+                    "about"
+            )
     );
   }
 }
