@@ -14,47 +14,48 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  */
 public class TitledPage extends BorderPane implements CssUtils {
-    /**
-     * Constructor for the TitledPage class.
-     *
-     * @param title    The title of the page
-     * @param subtitle The subtitle of the page
-     */
-    public TitledPage(@NotNull String title, String subtitle) {
-        super();
-        addStylesheet("components/titled-page");
-        addClass("titled-page");
 
-        VBox wrapper = new VBox();
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title The title of the page
+   */
+  public TitledPage(@NotNull String title) {
+    this(title, null);
+  }
 
-        Label titleLabel = new Label(title);
-        titleLabel.getStyleClass().add("title");
-        wrapper.getChildren().add(titleLabel);
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title    The title of the page
+   * @param subtitle The subtitle of the page
+   */
+  public TitledPage(@NotNull String title, String subtitle) {
+    super();
+    addStylesheet("components/titled-page");
+    addClass("titled-page");
 
-        if (subtitle != null) {
-            Label subtitleLabel = new Label(subtitle);
-            subtitleLabel.getStyleClass().add("subtitle");
-            wrapper.getChildren().add(subtitleLabel);
-        }
+    VBox wrapper = new VBox();
 
-        setTop(wrapper);
+    Label titleLabel = new Label(title);
+    titleLabel.getStyleClass().add("title");
+    wrapper.getChildren().add(titleLabel);
+
+    if (subtitle != null) {
+      Label subtitleLabel = new Label(subtitle);
+      subtitleLabel.getStyleClass().add("subtitle");
+      wrapper.getChildren().add(subtitleLabel);
     }
 
-    /**
-     * Constructor for the TitledPage class.
-     *
-     * @param title The title of the page
-     */
-    public TitledPage(@NotNull String title) {
-        this(title, null);
-    }
+    setTop(wrapper);
+  }
 
-    /**
-     * Sets the content of the page.
-     *
-     * @param content The content to set
-     */
-    public void setContent(Node content) {
-        setCenter(content);
-    }
+  /**
+   * Sets the content of the page.
+   *
+   * @param content The content to set
+   */
+  public void setContent(Node content) {
+    setCenter(content);
+  }
 }

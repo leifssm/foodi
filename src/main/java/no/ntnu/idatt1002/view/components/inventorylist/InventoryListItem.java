@@ -11,24 +11,25 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Class for creating a standard inventory list item.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListItem {
+
   private final Node[] mainItems;
   private final InventoryListSubItem[] subItems;
-
-  private final StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
 
   /**
    * Constructor for the InventoryListItem class.
    *
    * @param mainItem The main item to display
-   * @param items The sub items to display, if any
+   * @param items    The sub items to display, if any
    */
-  public InventoryListItem(@NotNull InventoryItem mainItem, @NotNull InventoryItem @NotNull ... items) {
+  public InventoryListItem(@NotNull InventoryItem mainItem,
+      @NotNull InventoryItem @NotNull ... items) {
     this.subItems = new InventoryListSubItem[items.length];
 
+    StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
     for (int i = 0; i < items.length; i++) {
       InventoryListSubItem subItem = new InventoryListSubItem(items[i]);
       subItems[i] = subItem;

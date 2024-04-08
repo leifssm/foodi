@@ -1,6 +1,6 @@
 package no.ntnu.idatt1002.view.components.inventorylist;
 
-import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -17,6 +17,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @version 1.0
  */
 public class InventoryList extends VBox implements CssUtils {
+
   private final Paginator<InventoryItem> items = new Paginator<>();
 
   private final GridPane gridPane;
@@ -103,26 +104,13 @@ public class InventoryList extends VBox implements CssUtils {
     render();
   }
 
-  public Paginator<InventoryItem> getItems() {
-    return items;
-  }
-
-  /**
-   * Removes all the displayed cells from view.
-   */
-  public void clearCells() {
-    gridPane.getChildren().removeIf(node ->
-        GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
-    );
-  }
-
   /**
    * Clears the current cells and displays all stored cells to the view.
    */
   public void render() {
     clearCells();
 
-    ArrayList<InventoryItem> currentPage = items.getCurrentPage();
+    List<InventoryItem> currentPage = items.getCurrentPage();
     int rowNum = 2;
     for (InventoryItem item : currentPage) {
       InventoryListItem rows = new InventoryListItem(item, item, item);
@@ -135,5 +123,18 @@ public class InventoryList extends VBox implements CssUtils {
         GridPane.setColumnIndex(subRowItems[0], 1);
       }
     }
+  }
+
+  /**
+   * Removes all the displayed cells from view.
+   */
+  public void clearCells() {
+    gridPane.getChildren().removeIf(node ->
+        GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
+    );
+  }
+
+  public Paginator<InventoryItem> getItems() {
+    return items;
   }
 }

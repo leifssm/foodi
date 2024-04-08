@@ -1,19 +1,22 @@
 package no.ntnu.idatt1002.view.utils;
 
+import java.util.Random;
+
 /**
+ * Class for generating random colors.
+ *
  * @author Henrik Kvamme
- * <p>
- * Class for generating random colors
  */
 public class ColorUtils {
-  private static final java.util.Random random = new java.util.Random();
+
+  private static final Random random = new java.util.Random();
 
   private ColorUtils() {
     throw new IllegalStateException("Utility class");
   }
 
   /**
-   * Method for generating a random color
+   * Method for generating a random color.
    *
    * @return a random color as a string hex code
    */

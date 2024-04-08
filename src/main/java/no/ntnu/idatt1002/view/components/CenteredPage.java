@@ -11,21 +11,22 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @version 1.0
  */
 public class CenteredPage extends BorderPane implements CssUtils {
-    /**
-     * Constructor for the CenteredPage class.
-     */
-    public CenteredPage() {
-        super();
-        addStylesheet("components/centered-page");
-        addClass("centered-page");
-    }
 
-    /**
-     * Sets the content of the page. The content will be centered.
-     *
-     * @param content The content to set.
-     */
-    public void setContent(Node content) {
-        setCenter(content);
-    }
+  /**
+   * Constructor for the CenteredPage class.
+   */
+  public CenteredPage() {
+    super();
+    addStylesheet("components/centered-page");
+    addClass("centered-page");
+  }
+
+  /**
+   * Sets the content of the page. The content will be centered.
+   *
+   * @param content The content to set.
+   */
+  public void setContent(Node content) {
+    setCenter(content);
+  }
 }

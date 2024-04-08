@@ -11,10 +11,11 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 /**
  * Class for displaying the inventory page.
  *
- * @version 1.2
  * @author Leif Mørstad
+ * @version 1.2
  */
 public class Inventory extends TitledPage implements CssUtils {
+
   /**
    * Constructor for the Inventory class.
    */

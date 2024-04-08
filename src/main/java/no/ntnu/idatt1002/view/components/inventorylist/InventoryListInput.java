@@ -6,10 +6,11 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 /**
  * A class for displaying the input field for the inventory list.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListInput extends TextField implements CssUtils {
+
   /**
    * Constructor for the InventoryListInput class.
    */

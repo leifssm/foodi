@@ -27,8 +27,8 @@ public class RecipeCard extends StackPane implements CssUtils {
   /**
    * The constructor of the recipe card component.
    *
-   * @param title The title of the recipe
-   * @param duration The duration of the recipe
+   * @param title     The title of the recipe
+   * @param duration  The duration of the recipe
    * @param imagePath The path to the image of the recipe
    */
   public RecipeCard(String title, String duration, String imagePath) {
@@ -40,7 +40,9 @@ public class RecipeCard extends StackPane implements CssUtils {
 
     // Load the image and create an ImageView for it
     String imageUrl = LoadUtils.getImage(imagePath);
-    if (imageUrl == null) throw new AssertionError("Image not found: " + imagePath);
+    if (imageUrl == null) {
+      throw new AssertionError("Image not found: " + imagePath);
+    }
 
     ImageView backgroundImage = new ImageView(imageUrl);
     backgroundImage.setPreserveRatio(true);

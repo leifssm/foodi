@@ -12,6 +12,7 @@ import no.ntnu.idatt1002.view.views.Profiles;
  * Class that creates the main view of the application.
  */
 public class Root extends BorderPane {
+
   /**
    * Constructor for the Root class.
    */

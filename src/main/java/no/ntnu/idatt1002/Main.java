@@ -13,22 +13,23 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  */
 public class Main extends Application {
-    @Override
-    public void start(@NotNull Stage stage) {
-//        FontLoader.loadFontsFromDirectory("fira_sans_otf");
 
-        Root root = new Root();
-        Scene scene = new Scene(root, 800, 600);
+  /**
+   * Main method for the application. Launches the application
+   */
+  public static void main(String[] args) {
+    launch();
+  }
 
-        stage.setTitle("Foodi");
-        stage.setScene(scene);
-        stage.show();
-    }
+  @Override
+  public void start(@NotNull Stage stage) {
+    // FontLoader.loadFontsFromDirectory("fira_sans_otf");
 
-    /**
-     * Main method for the application. Launches the application
-     */
-    public static void main(String[] args) {
-        launch();
-    }
+    Root root = new Root();
+    Scene scene = new Scene(root, 800, 600);
+
+    stage.setTitle("Foodi");
+    stage.setScene(scene);
+    stage.show();
+  }
 }
