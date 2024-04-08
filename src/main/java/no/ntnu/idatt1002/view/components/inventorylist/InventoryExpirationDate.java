@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A class for displaying the expiration date of an inventory item.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryExpirationDate extends TextFlow implements CssUtils {
+
   /**
    * Constructor for the InventoryExpirationDate class.
    *

@@ -6,10 +6,18 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
 /**
  * Class for creating a standard styled checkbox.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 public class StandardCheckBox extends CheckBox implements CssUtils {
+
+  /**
+   * Constructor for the StandardCheckBox class. Defaults the checkbox to be unselected.
+   */
+  public StandardCheckBox() {
+    this(false);
+  }
+
   /**
    * Constructor for the StandardCheckBox class.
    *
@@ -20,13 +28,6 @@ public class StandardCheckBox extends CheckBox implements CssUtils {
     setSelected(active);
     addStylesheet("components/button/std-checkbox");
     addClass("std-checkbox");
-  }
-
-  /**
-   * Constructor for the StandardCheckBox class. Defaults the checkbox to be unselected.
-   */
-  public StandardCheckBox() {
-    this(false);
   }
 
   /**

@@ -10,9 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.1
  */
 public interface CssUtils {
-  ObservableList<String> getStylesheets();
-
-  ObservableList<String> getStyleClass();
 
   /**
    * Adds a stylesheet dependency to the element.
@@ -29,6 +26,8 @@ public interface CssUtils {
     getStylesheets().add(url);
   }
 
+  ObservableList<String> getStylesheets();
+
   /**
    * Adds a class name to the elements' css class list.
    *
@@ -37,6 +36,8 @@ public interface CssUtils {
   default void addClass(@NotNull String className) {
     getStyleClass().add(className);
   }
+
+  ObservableList<String> getStyleClass();
 
   /**
    * Adds a class name to the elements' css class list.

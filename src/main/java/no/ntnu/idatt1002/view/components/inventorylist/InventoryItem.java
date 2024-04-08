@@ -6,6 +6,7 @@ import java.util.Date;
  * Temp data class, will be replaced with actual data from the database.
  */
 public class InventoryItem {
+
   private final String type;
   private final String name;
   private final Date expiryDate;
@@ -16,7 +17,9 @@ public class InventoryItem {
   public InventoryItem() {
     this.type = "🍗";
     this.name = "Chicken";
-    this.expiryDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14 - (int) (1000 * 60 * 60 * 24 * 16 * Math.random()));
+    this.expiryDate = new Date(
+        System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 14 - (int) (1000 * 60 * 60 * 24 * 16
+            * Math.random()));
     this.category = "Meat";
     this.quantity = "100";
     this.unit = "g";

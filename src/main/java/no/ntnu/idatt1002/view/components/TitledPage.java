@@ -10,14 +10,24 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Class for creating a standard titled page.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 public class TitledPage extends BorderPane implements CssUtils {
+
   /**
    * Constructor for the TitledPage class.
    *
    * @param title The title of the page
+   */
+  public TitledPage(@NotNull String title) {
+    this(title, null);
+  }
+
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title    The title of the page
    * @param subtitle The subtitle of the page
    */
   public TitledPage(@NotNull String title, String subtitle) {
@@ -38,15 +48,6 @@ public class TitledPage extends BorderPane implements CssUtils {
     }
 
     setTop(wrapper);
-  }
-
-  /**
-   * Constructor for the TitledPage class.
-   *
-   * @param title The title of the page
-   */
-  public TitledPage(@NotNull String title) {
-    this(title, null);
   }
 
   /**

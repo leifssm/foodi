@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A class for displaying the sub items in the inventory list.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListSubItem {
+
   private final Node[] nodes;
   private final StandardCheckBox select = new StandardCheckBox();
 
