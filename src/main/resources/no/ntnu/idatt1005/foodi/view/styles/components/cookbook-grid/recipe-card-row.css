@@ -1,0 +1,15 @@
+.recipe-card-row-title {
+  -fx-font-size: 20;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+  -fx-padding: 0px 0px 0px 5px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 5, 0.0, 0, 1);
+}
+
+.recipe-card-row-content {
+  -fx-font-size: 14;
+  -fx-text-fill: #b4b4b4;
+  -fx-padding: 0px 0px 10px 5px;
+  -fx-spacing: 10px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 5, 0.0, 0, 1);
+}

@@ -1,0 +1,9 @@
+.inventory-list-input {
+  -fx-background-color: #262626;
+  -fx-text-fill: #b4b4b4;
+  -fx-alignment: center;
+  -fx-border-color: transparent;
+  -fx-border-radius: 5px;
+  -fx-font-weight: bold;
+  -fx-padding: 0;
+}

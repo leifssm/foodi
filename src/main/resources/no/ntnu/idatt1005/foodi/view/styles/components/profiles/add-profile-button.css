@@ -1,0 +1,23 @@
+.add-profile-button Button {
+  -fx-background-color: transparent;
+
+  /* Border */
+  -fx-border-color: white;
+  -fx-border-style: dashed;
+  -fx-stroke-dash-array: 12;
+  -fx-border-width: 2;
+  -fx-border-radius: 5;
+}
+
+
+.add-profile-button Button Label {
+  -fx-font-size: 26px;
+  -fx-text-fill: white;
+  -fx-text-alignment: center;
+}
+
+.add-profile-button Button:hover Label {
+  -fx-font-size: 36px;
+  -fx-text-fill: white;
+  -fx-text-alignment: center;
+}

@@ -1,0 +1,27 @@
+.profile-item {
+  -fx-alignment: center;
+  -fx-min-width: 100px;
+}
+
+.profile-item Button {
+  -fx-background-radius: 5px;
+  -fx-cursor: hand;
+  -fx-min-width: 100px;
+  -fx-min-height: 100px;
+  -fx-opacity: 0.9;
+}
+
+.profile-item Button:hover {
+  -fx-min-width: 110px;
+  -fx-min-height: 110px;
+  -fx-opacity: 1;
+}
+
+.profile-item Label {
+  -fx-font-family: "Fira Code";
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+  -fx-padding: 10px 0;
+  -fx-text-alignment: center;
+}
