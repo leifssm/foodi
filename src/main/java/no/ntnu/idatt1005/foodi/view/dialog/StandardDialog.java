@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.dialog;
+package no.ntnu.idatt1005.foodi.view.dialog;
 
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar;
@@ -6,14 +6,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import no.ntnu.idatt1002.view.utils.DialogCssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.DialogCssUtils;
 
 /**
  * Class for creating a dialog for adding a new user.
  *
  * @author Henrik Kvamme
  */
-public class StandardDialog extends Dialog<Void> implements DialogCssUtils {
+public class StandardDialog extends Dialog<Void> implements
+    DialogCssUtils {
 
   /**
    * Constructor for the NewUserDialog class.

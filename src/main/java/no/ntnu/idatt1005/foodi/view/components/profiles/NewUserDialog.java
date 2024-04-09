@@ -1,8 +1,8 @@
-package no.ntnu.idatt1002.view.components.profiles;
+package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import no.ntnu.idatt1002.view.components.dialog.StandardDialog;
+import no.ntnu.idatt1005.foodi.view.dialog.StandardDialog;
 
 /**
  * Class for creating a dialog for adding a new user.
