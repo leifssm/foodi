@@ -3,14 +3,13 @@ package no.ntnu.idatt1002.view.components.profiles;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import no.ntnu.idatt1002.view.components.dialog.StandardDialog;
-import no.ntnu.idatt1002.view.utils.DialogCssUtils;
 
 /**
  * Class for creating a dialog for adding a new user.
  *
  * @author Henrik Kvamme
  */
-public class NewUserDialog extends StandardDialog implements DialogCssUtils {
+public class NewUserDialog extends StandardDialog {
 
   private final TextField nameField;
 
@@ -19,9 +18,6 @@ public class NewUserDialog extends StandardDialog implements DialogCssUtils {
    */
   public NewUserDialog() {
     super();
-    addStylesheet("components/profiles/new-user-dialog");
-    addClass("new-user-dialog");
-
     setTitle("Add new user");
     setHeaderText("Enter the name of the new user");
 
@@ -48,7 +44,7 @@ public class NewUserDialog extends StandardDialog implements DialogCssUtils {
           return null;
         }
 
-        addUser(name);
+        addUser(name.toLowerCase());
       }
 
       nameField.clear();
@@ -75,6 +71,7 @@ public class NewUserDialog extends StandardDialog implements DialogCssUtils {
   }
 
   private void addUser(String name) {
+    // TODO: Replace with controller
     System.out.println("Adding user with name: " + name);
   }
 }
