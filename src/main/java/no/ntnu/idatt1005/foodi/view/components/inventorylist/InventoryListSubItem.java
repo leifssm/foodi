@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ class InventoryListSubItem {
    *
    * @param item The inventory item to display
    */
-  public InventoryListSubItem(@NotNull InventoryItem item) {
+  public InventoryListSubItem(@NotNull Ingredient item) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");

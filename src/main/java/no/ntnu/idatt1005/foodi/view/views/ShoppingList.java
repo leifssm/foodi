@@ -1,12 +1,10 @@
-package no.ntnu.idatt1002.view.views;
+package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.scene.layout.BorderPane;
-import no.ntnu.idatt1002.view.components.TitledPage;
-import no.ntnu.idatt1002.view.components.shoppinglist.AddedRecipes;
-import no.ntnu.idatt1002.view.components.shoppinglist.ShoppingListWrapper;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
-import no.ntnu.idatt1002.view.testclasses.Recipe;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.components.TitledPage;
+import no.ntnu.idatt1005.foodi.view.components.shoppinglist.AddedRecipes;
+import no.ntnu.idatt1005.foodi.view.components.shoppinglist.ShoppingListWrapper;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for displaying the shopping list page.

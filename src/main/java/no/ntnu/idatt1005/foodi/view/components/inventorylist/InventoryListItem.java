@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
@@ -26,8 +27,8 @@ class InventoryListItem {
    * @param items    The sub items to display, if any
    */
   public InventoryListItem(
-      @NotNull InventoryItem mainItem,
-      @NotNull InventoryItem @NotNull ... items
+      @NotNull Ingredient mainItem,
+      @NotNull Ingredient @NotNull ... items
   ) {
     this.subItems = new InventoryListSubItem[items.length];
 
@@ -57,7 +58,7 @@ class InventoryListItem {
 
     Label category = new Label(mainItem.getCategory());
 
-    Label quantity = new Label(mainItem.getQuantity());
+    Label quantity = new Label(mainItem.get());
     quantity.getStyleClass().add("center");
 
     Label unit = new Label(mainItem.getUnit());

@@ -1,14 +1,16 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
-import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.view.Paginator;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+
+import java.util.List;
 
 /**
  * Class for displaying a list of ingredients.
@@ -17,7 +19,7 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @version 1.0
  */
 public class InventoryList extends VBox implements ComponentUtils {
-  private final Paginator<InventoryItem> items = new Paginator<>();
+  private final Paginator<Ingredient> items = new Paginator<>();
 
   private final GridPane gridPane;
 
@@ -85,21 +87,6 @@ public class InventoryList extends VBox implements ComponentUtils {
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
 
-    items.addItems(
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem()
-    );
     render();
   }
 
@@ -109,9 +96,9 @@ public class InventoryList extends VBox implements ComponentUtils {
   public void render() {
     clearCells();
 
-    List<InventoryItem> currentPage = items.getCurrentPage();
+    List<Ingredient> currentPage = items.getCurrentPage();
     int rowNum = 2;
-    for (InventoryItem item : currentPage) {
+    for (Ingredient item : currentPage) {
       InventoryListItem rows = new InventoryListItem(item, item, item);
       gridPane.addRow(rowNum++, rows.getMainItems());
 
@@ -133,7 +120,7 @@ public class InventoryList extends VBox implements ComponentUtils {
     );
   }
 
-  public Paginator<InventoryItem> getItems() {
+  public Paginator<Ingredient> getItems() {
     return items;
   }
 }

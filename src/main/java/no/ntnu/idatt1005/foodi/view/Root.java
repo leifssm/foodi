@@ -7,6 +7,7 @@ import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
 import no.ntnu.idatt1005.foodi.view.views.Inventory;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
+import no.ntnu.idatt1005.foodi.view.views.ShoppingList;
 
 /**
  * Class that creates the main view of the application.

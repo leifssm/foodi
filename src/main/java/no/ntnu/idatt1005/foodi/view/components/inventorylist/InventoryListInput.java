@@ -9,7 +9,7 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @author Leif Mørstad
  * @version 1.0
  */
-class InventoryListInput extends TextField implements CssUtils {
+class InventoryListInput extends TextField implements ComponentUtils {
 
   /**
    * Constructor for the InventoryListInput class.

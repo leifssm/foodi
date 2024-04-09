@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.shoppinglist;
+package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -6,10 +6,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.components.button.StandardButton;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
-import no.ntnu.idatt1002.view.testclasses.Recipe;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -37,7 +37,7 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     setCenter(title);
     setRight(
         new HBox(
-          new RecipeServings(recipe.getServings()),
+          new RecipeServings(4), // TODO: Add dynamic servings
           new StandardButton(
               "X",
               () -> System.out.println("Remove recipe"),
@@ -58,8 +58,9 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
 
     VBox ingredients = new VBox();
     ingredients.getStyleClass().add("ingredients");
+
     for (InventoryItem item : recipe.getIngredients()) {
-      ingredients.getChildren().add(new Ingredient(item));
+      ingredients.getChildren().add(new IngredientItem(item));
     }
 
     ingredientsWrapper.setCenter(ingredients);
@@ -75,8 +76,8 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     }
   }
 
-  private static class Ingredient extends StackPane implements ComponentUtils {
-    public Ingredient(@NotNull InventoryItem item) {
+  private static class IngredientItem extends StackPane implements ComponentUtils {
+    public IngredientItem(@NotNull Ingredient item) {
       super();
       addClasses("ingredient");
 

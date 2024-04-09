@@ -1,9 +1,8 @@
-package no.ntnu.idatt1002.view.components.shoppinglist;
+package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

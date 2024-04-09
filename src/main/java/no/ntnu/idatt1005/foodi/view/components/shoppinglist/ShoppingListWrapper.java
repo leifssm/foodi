@@ -1,11 +1,10 @@
-package no.ntnu.idatt1002.view.components.shoppinglist;
+package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1002.view.components.button.DoubleButton;
-import no.ntnu.idatt1002.view.components.button.StandardButton;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem.*;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
 
 /**
  * Class representing several groups of items in the shopping list, with buttons to either remove or
@@ -20,7 +19,7 @@ public class ShoppingListWrapper extends VBox implements ComponentUtils {
    *
    * @param items The items to display
    */
-  public ShoppingListWrapper(InventoryItem... items) {
+  public ShoppingListWrapper(Ingredient... items) {
     super();
     addStylesheet("components/shopping-list/shopping-list-wrapper");
     addClass("shopping-list-wrapper");

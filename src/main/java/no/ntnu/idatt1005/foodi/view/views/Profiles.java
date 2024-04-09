@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
 import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class Profiles extends CenteredPage implements CssUtils {
+public class Profiles extends CenteredPage implements ComponentUtils {
 
   /**
    * Constructor for the Profiles class.

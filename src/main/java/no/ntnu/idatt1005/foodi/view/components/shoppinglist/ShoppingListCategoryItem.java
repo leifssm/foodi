@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002.view.components.shoppinglist;
+package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,7 +16,7 @@ class ShoppingListCategoryItem extends BorderPane implements ComponentUtils {
    *
    * @param item The item to display
    */
-  public ShoppingListCategoryItem(@NotNull InventoryItem item) {
+  public ShoppingListCategoryItem(@NotNull Ingredient item) {
     super();
     addStylesheet("components/shopping-list/shopping-list-category-item");
     addClass("shopping-list-category-item");
