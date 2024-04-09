@@ -1,9 +1,10 @@
-package no.ntnu.idatt1002.view.components.sidebar;
+package no.ntnu.idatt1005.foodi.view.components.sidebar;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
-import no.ntnu.idatt1002.view.utils.LoadUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 /**
  * A simple sidebar component.
@@ -12,6 +13,7 @@ import no.ntnu.idatt1002.view.utils.LoadUtils;
  * @version 1.0
  */
 public class SideBar extends VBox implements ComponentUtils {
+
   /**
    * The constructor of the sidebar component.
    */
@@ -26,30 +28,38 @@ public class SideBar extends VBox implements ComponentUtils {
       logo.getStyleClass().add("sidebar-logo");
       logo.setPreserveRatio(true);
       logo.setFitWidth(100);
+
+      // Set margin for the logo (impossible to do with CSS)
+      VBox.setMargin(logo, new Insets(10, 0, 10, 0));
+
       getChildren().add(logo);
     }
 
     getChildren().addAll(
-      new SideBarItem(
-          "Inventory",
-          "inventory",
-          new SideBarSubItem("Add item", "inventory/add"),
-          new SideBarSubItem("Add item", "inventory/add")
-      ),
-      new SideBarItem(
-          "Cookbook",
-          "cookbook-grid",
-          new SideBarSubItem("Add item", "cookbook/add")
-      ),
-      new SideBarItem(
-          "Shopping List",
-          "shopping-list",
-          new SideBarSubItem("Add item", "shopping-list/add")
-      ),
-      new SideBarItem(
-          "About",
-          "about"
-      )
+        new SideBarItem(
+            "Profiles",
+            "profiles"
+        ),
+        new SideBarItem(
+            "Inventory",
+            "inventory",
+            new SideBarSubItem("Add item", "inventory/add"),
+            new SideBarSubItem("Add item", "inventory/add")
+        ),
+        new SideBarItem(
+            "Cookbook",
+            "cookbook-grid",
+            new SideBarSubItem("Add item", "cookbook/add")
+        ),
+        new SideBarItem(
+            "Shopping List",
+            "shopping-list",
+            new SideBarSubItem("Add item", "shopping-list/add")
+        ),
+        new SideBarItem(
+            "About",
+            "about"
+        )
     );
   }
 }

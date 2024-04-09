@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002.view.components.cookbook;
+package no.ntnu.idatt1005.foodi.view.components.cookbook;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * A row of recipe cards.
@@ -16,7 +16,7 @@ public class RecipeCardRow extends VBox implements ComponentUtils {
   /**
    * The constructor of the recipe card row component.
    *
-   * @param title The title of the row
+   * @param title   The title of the row
    * @param recipes The recipes to display in the row
    */
   public RecipeCardRow(String title, RecipeCard[] recipes) {

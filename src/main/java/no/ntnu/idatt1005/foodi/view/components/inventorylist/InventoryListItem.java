@@ -1,31 +1,29 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import no.ntnu.idatt1002.view.components.button.DropdownButton;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBoxHandler;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
+import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for creating a standard inventory list item.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListItem {
+
   private final Node[] mainItems;
   private final InventoryListSubItem[] subItems;
-
-  private final StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
 
   /**
    * Constructor for the InventoryListItem class.
    *
    * @param mainItem The main item to display
-   * @param items The sub items to display, if any
+   * @param items    The sub items to display, if any
    */
   public InventoryListItem(
       @NotNull InventoryItem mainItem,
@@ -33,6 +31,7 @@ class InventoryListItem {
   ) {
     this.subItems = new InventoryListSubItem[items.length];
 
+    StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
     for (int i = 0; i < items.length; i++) {
       InventoryListSubItem subItem = new InventoryListSubItem(items[i]);
       subItems[i] = subItem;

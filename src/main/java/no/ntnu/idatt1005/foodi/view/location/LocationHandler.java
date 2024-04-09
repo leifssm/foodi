@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.location;
+package no.ntnu.idatt1005.foodi.view.location;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,41 +7,21 @@ import javafx.beans.value.ChangeListener;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A class that handles the navigation of the application, which other classes can either change
- * or subscribe to.
+ * A class that handles the navigation of the application, which other classes can either change or
+ * subscribe to.
  *
- * @version 1.0
  * @author Leif Mørstad
- *
+ * @version 1.0
  * @see Router
  */
 public class LocationHandler {
+
   /**
    * The current location of the application.
    */
   private static final SimpleStringProperty location = new SimpleStringProperty(
       "shopping-list"
   );
-
-  /**
-   * Get the current location of the application.
-   *
-   * @return the current location
-   */
-  public static String getLocation() {
-    return LocationHandler.location.get();
-  }
-
-  /**
-   * Sets the location of the application and notifies all listeners. The syntax of the location
-   * follows the format of a standard URL, e.g. "inventory/items/bread"
-   *
-   * @param location the new location
-   */
-  public static void setLocation(@NotNull String location) {
-    System.out.println("Setting location to " + location);
-    LocationHandler.location.set(location);
-  }
 
   /**
    * A shorthand for creating a setter for changing location.
@@ -51,13 +31,6 @@ public class LocationHandler {
    */
   public static Runnable createSetter(@NotNull String location) {
     return () -> LocationHandler.setLocation(location);
-  }
-
-  /**
-   * A listener for changes in the location.
-   */
-  public interface LocationListener {
-    void locationChanged(@NotNull String location);
   }
 
   /**
@@ -84,6 +57,26 @@ public class LocationHandler {
    */
   public static void addendLocation(@NotNull String location) {
     LocationHandler.setLocation(LocationHandler.getLocation() + '/' + location);
+  }
+
+  /**
+   * Get the current location of the application.
+   *
+   * @return the current location
+   */
+  public static String getLocation() {
+    return LocationHandler.location.get();
+  }
+
+  /**
+   * Sets the location of the application and notifies all listeners. The syntax of the location
+   * follows the format of a standard URL, e.g. "inventory/items/bread"
+   *
+   * @param location the new location
+   */
+  public static void setLocation(@NotNull String location) {
+    System.out.println("Setting location to " + location);
+    LocationHandler.location.set(location);
   }
 
   /**
@@ -118,5 +111,13 @@ public class LocationHandler {
    */
   public static boolean isLocationFuzzy(@NotNull String location) {
     return LocationHandler.getLocation().startsWith(location);
+  }
+
+  /**
+   * A listener for changes in the location.
+   */
+  public interface LocationListener {
+
+    void locationChanged(@NotNull String location);
   }
 }

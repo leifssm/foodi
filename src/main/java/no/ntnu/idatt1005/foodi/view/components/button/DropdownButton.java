@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,20 +9,28 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.1
  */
 public class DropdownButton extends StandardButton {
-  /**
-   * Functional interface for the action of the dropdown button which takes one boolean parameter.
-   */
-  public interface DropdownToggle {
-    void toggle(boolean expanded);
-  }
 
+  private final DropdownToggle mainAction;
   private String expandedText = "▲";
 
   private String collapsedText = "▼";
 
   private boolean expanded = false;
 
-  private final DropdownToggle mainAction;
+  /**
+   * Constructor for the dropdown button, with the option to set the text shown when the dropdown is
+   * expanded or collapsed.
+   *
+   * @param expandedText  The text to be shown when the dropdown is expanded
+   * @param collapsedText The text to be shown when the dropdown is collapsed
+   * @param action        The action to be performed when the button is clicked
+   */
+  public DropdownButton(String expandedText, String collapsedText, @NotNull DropdownToggle action) {
+    this(action);
+    this.expandedText = expandedText;
+    this.collapsedText = collapsedText;
+    updateText();
+  }
 
   /**
    * Constructor for the dropdown button.
@@ -39,18 +47,14 @@ public class DropdownButton extends StandardButton {
   }
 
   /**
-   * Constructor for the dropdown button, with the option to set the text shown when the dropdown
-   * is expanded or collapsed.
-   *
-   * @param expandedText The text to be shown when the dropdown is expanded
-   * @param collapsedText The text to be shown when the dropdown is collapsed
-   * @param action The action to be performed when the button is clicked
+   * Updates the text of the button to match the current state.
    */
-  public DropdownButton(String expandedText, String collapsedText, @NotNull DropdownToggle action) {
-    this(action);
-    this.expandedText = expandedText;
-    this.collapsedText = collapsedText;
-    updateText();
+  private void updateText() {
+    setText(expanded ? expandedText : collapsedText);
+  }
+
+  public String getExpandedText() {
+    return expandedText;
   }
 
   /**
@@ -61,6 +65,10 @@ public class DropdownButton extends StandardButton {
     updateText();
   }
 
+  public String getCollapsedText() {
+    return collapsedText;
+  }
+
   /**
    * Sets the text to be shown when the dropdown is collapsed.
    */
@@ -69,12 +77,11 @@ public class DropdownButton extends StandardButton {
     updateText();
   }
 
-  public String getExpandedText() {
-    return expandedText;
-  }
-
-  public String getCollapsedText() {
-    return collapsedText;
+  /**
+   * Returns whether the dropdown button is expanded or not.
+   */
+  public boolean getIsExpanded() {
+    return expanded;
   }
 
   /**
@@ -93,16 +100,10 @@ public class DropdownButton extends StandardButton {
   }
 
   /**
-   * Updates the text of the button to match the current state.
+   * Functional interface for the action of the dropdown button which takes one boolean parameter.
    */
-  private void updateText() {
-    setText(expanded ? expandedText : collapsedText);
-  }
+  public interface DropdownToggle {
 
-  /**
-   * Returns whether the dropdown button is expanded or not.
-   */
-  public boolean getIsExpanded() {
-    return expanded;
+    void toggle(boolean expanded);
   }
 }

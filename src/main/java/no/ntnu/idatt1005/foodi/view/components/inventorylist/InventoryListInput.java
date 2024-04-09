@@ -1,15 +1,16 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import javafx.scene.control.TextField;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * A class for displaying the input field for the inventory list.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
-class InventoryListInput extends TextField implements ComponentUtils {
+class InventoryListInput extends TextField implements CssUtils {
+
   /**
    * Constructor for the InventoryListInput class.
    */

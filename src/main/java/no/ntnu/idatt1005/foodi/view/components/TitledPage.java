@@ -1,24 +1,33 @@
-package no.ntnu.idatt1002.view.components;
+package no.ntnu.idatt1005.foodi.view.components;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for creating a standard titled page.
  *
- * @version 2.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 public class TitledPage extends BorderPane implements ComponentUtils {
+
   /**
    * Constructor for the TitledPage class.
    *
    * @param title The title of the page
+   */
+  public TitledPage(@NotNull String title) {
+    this(title, null);
+  }
+
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title    The title of the page
    * @param subtitle The subtitle of the page
    */
   public TitledPage(@NotNull String title, String subtitle) {
@@ -39,15 +48,6 @@ public class TitledPage extends BorderPane implements ComponentUtils {
     }
 
     setTop(wrapper);
-  }
-
-  /**
-   * Constructor for the TitledPage class.
-   *
-   * @param title The title of the page
-   */
-  public TitledPage(@NotNull String title) {
-    this(title, null);
   }
 
   /**

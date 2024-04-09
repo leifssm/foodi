@@ -1,39 +1,20 @@
-package no.ntnu.idatt1002.view;
+package no.ntnu.idatt1005.foodi.view;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class for handling a large list of items, and separating them into chunks.
  *
- * @version 1.0
  * @param <T> The type of the items to paginate
+ * @version 1.0
  */
 public class Paginator<T> {
+
   private ArrayList<T> items;
   private int itemsPerPage;
   private int currentPage;
-
-  /**
-   * Creates a Paginator instance, initialized with the given items and chunk size.
-   *
-   * @param items The items to paginate
-   * @param itemsPerPage The number of items per page
-   */
-  public Paginator(@NotNull ArrayList<T> items, int itemsPerPage) {
-    this.items = items;
-    this.itemsPerPage = itemsPerPage;
-    this.currentPage = 0;
-  }
-
-  /**
-   * Creates a Paginator instance, initialized with the given items and a default chunk size of 10.
-   *
-   * @param items The items to paginate
-   */
-  public Paginator(@NotNull ArrayList<T> items) {
-    this(items, 10);
-  }
 
   /**
    * Creates an empty Paginator instance with a default chunk size of 10.
@@ -43,12 +24,24 @@ public class Paginator<T> {
   }
 
   /**
-   * Adds an item to the paginator.
+   * Creates a Paginator instance, initialized with the given items and a default chunk size of 10.
    *
-   * @param item The item to add
+   * @param items The items to paginate
    */
-  public void addItem(@NotNull T item) {
-    items.add(item);
+  public Paginator(@NotNull List<T> items) {
+    this(new ArrayList<>(items), 10);
+  }
+
+  /**
+   * Creates a Paginator instance, initialized with the given items and chunk size.
+   *
+   * @param items        The items to paginate
+   * @param itemsPerPage The number of items per page
+   */
+  public Paginator(@NotNull List<T> items, int itemsPerPage) {
+    this.items = new ArrayList<>(items);
+    this.itemsPerPage = itemsPerPage;
+    this.currentPage = 0;
   }
 
   /**
@@ -64,9 +57,18 @@ public class Paginator<T> {
   }
 
   /**
+   * Adds an item to the paginator.
+   *
+   * @param item The item to add
+   */
+  public void addItem(@NotNull T item) {
+    items.add(item);
+  }
+
+  /**
    * Returns the current page of items.
    */
-  public ArrayList<T> getCurrentPage() {
+  public List<T> getCurrentPage() {
     int start = currentPage * itemsPerPage;
     int end = Math.min(start + itemsPerPage, getTotalItems());
 
@@ -74,24 +76,8 @@ public class Paginator<T> {
     return new ArrayList<>(items.subList(start, end));
   }
 
-  public int getCurrentPageNumber() {
-    return currentPage;
-  }
-
   public int getTotalItems() {
     return items.size();
-  }
-
-  public int getTotalPages() {
-    return (int) Math.ceil((double) getTotalItems() / itemsPerPage);
-  }
-
-  public int getItemsPerPage() {
-    return itemsPerPage;
-  }
-
-  public void setItemsPerPage(int itemsPerPage) {
-    this.itemsPerPage = itemsPerPage;
   }
 
   /**
@@ -108,6 +94,22 @@ public class Paginator<T> {
     this.currentPage = currentPage;
   }
 
+  public int getTotalPages() {
+    return (int) Math.ceil((double) getTotalItems() / itemsPerPage);
+  }
+
+  public int getCurrentPageNumber() {
+    return currentPage;
+  }
+
+  public int getItemsPerPage() {
+    return itemsPerPage;
+  }
+
+  public void setItemsPerPage(int itemsPerPage) {
+    this.itemsPerPage = itemsPerPage;
+  }
+
   /**
    * Overrides the current items with the given items.
    *
@@ -115,20 +117,6 @@ public class Paginator<T> {
    */
   public void setItems(@NotNull ArrayList<T> items) {
     this.items = items;
-  }
-
-  /**
-   * Returns whether there is a next page.
-   */
-  public boolean hasNextPage() {
-    return currentPage < getTotalPages();
-  }
-
-  /**
-   * Returns whether there is a previous page.
-   */
-  public boolean hasPreviousPage() {
-    return currentPage > 0;
   }
 
   /**
@@ -141,11 +129,25 @@ public class Paginator<T> {
   }
 
   /**
+   * Returns whether there is a previous page.
+   */
+  public boolean hasPreviousPage() {
+    return currentPage > 0;
+  }
+
+  /**
    * Moves to the next page if there is one.
    */
   public void nextPage() {
     if (hasNextPage()) {
       currentPage++;
     }
+  }
+
+  /**
+   * Returns whether there is a next page.
+   */
+  public boolean hasNextPage() {
+    return currentPage < getTotalPages();
   }
 }

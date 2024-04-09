@@ -1,20 +1,20 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
-import no.ntnu.idatt1002.view.testclasses.InventoryItem;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class for displaying the sub items in the inventory list.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListSubItem {
+
   private final Node[] nodes;
   private final StandardCheckBox select = new StandardCheckBox();
 

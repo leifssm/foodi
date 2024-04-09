@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import java.util.Arrays;
 import javafx.event.ActionEvent;
@@ -10,13 +10,21 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Class for handling a group of checkboxes, and a main checkbox that controls them.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  * @see StandardCheckBox
  */
 public class StandardCheckBoxHandler {
+
   private @Nullable StandardCheckBox mainCheckBox = null;
   private @NotNull StandardCheckBox[] checkBoxes;
+
+  /**
+   * Constructor for the StandardCheckBoxHandler class.
+   */
+  public StandardCheckBoxHandler() {
+    this(new StandardCheckBox[0]);
+  }
 
   /**
    * Constructor for the StandardCheckBoxHandler class.
@@ -25,13 +33,6 @@ public class StandardCheckBoxHandler {
    */
   public StandardCheckBoxHandler(@NotNull StandardCheckBox @NotNull ... checkBoxes) {
     this.checkBoxes = checkBoxes;
-  }
-
-  /**
-   * Constructor for the StandardCheckBoxHandler class.
-   */
-  public StandardCheckBoxHandler() {
-    this(new StandardCheckBox[0]);
   }
 
   /**
@@ -48,7 +49,7 @@ public class StandardCheckBoxHandler {
    * Appends an event to a checkbox.
    *
    * @param checkBox The checkbox to append the event to
-   * @param event The event to append
+   * @param event    The event to append
    */
   private static void appendEvent(@NotNull StandardCheckBox checkBox, @NotNull Runnable event) {
     EventHandler<ActionEvent> oldEvent = checkBox.getOnAction();
@@ -60,42 +61,6 @@ public class StandardCheckBoxHandler {
         event.run();
       });
     }
-  }
-
-  /**
-   * Binds a checkbox to the handler.
-   *
-   * @param checkBox The checkbox to bind
-   */
-  public void bindCheckBox(@NotNull StandardCheckBox checkBox) {
-    appendEvent(checkBox, this::updateMain);
-
-    StandardCheckBox[] newCheckBoxes = Arrays.copyOf(checkBoxes, checkBoxes.length + 1);
-    newCheckBoxes[checkBoxes.length] = checkBox;
-
-    checkBoxes = newCheckBoxes;
-  }
-
-  /**
-   * Returns the state of the main checkbox.
-   *
-   * @return Either "all", "some" or "none"
-   */
-  public @MagicConstant String getMainCheckBoxState() {
-    if (checkBoxes.length == 0) {
-      return "none";
-    }
-
-    boolean allSelected = checkBoxes[0].isSelected();
-    boolean state;
-    for (int i = 1; i < checkBoxes.length; i++) {
-      state = checkBoxes[i].isSelected();
-
-      if (state != allSelected) {
-        return "some";
-      }
-    }
-    return allSelected ? "all" : "none";
   }
 
   /**
@@ -134,5 +99,41 @@ public class StandardCheckBoxHandler {
       default:
         throw new IllegalStateException("Unexpected value: " + state);
     }
+  }
+
+  /**
+   * Returns the state of the main checkbox.
+   *
+   * @return Either "all", "some" or "none"
+   */
+  public @MagicConstant String getMainCheckBoxState() {
+    if (checkBoxes.length == 0) {
+      return "none";
+    }
+
+    boolean allSelected = checkBoxes[0].isSelected();
+    boolean state;
+    for (int i = 1; i < checkBoxes.length; i++) {
+      state = checkBoxes[i].isSelected();
+
+      if (state != allSelected) {
+        return "some";
+      }
+    }
+    return allSelected ? "all" : "none";
+  }
+
+  /**
+   * Binds a checkbox to the handler.
+   *
+   * @param checkBox The checkbox to bind
+   */
+  public void bindCheckBox(@NotNull StandardCheckBox checkBox) {
+    appendEvent(checkBox, this::updateMain);
+
+    StandardCheckBox[] newCheckBoxes = Arrays.copyOf(checkBoxes, checkBoxes.length + 1);
+    newCheckBoxes[checkBoxes.length] = checkBox;
+
+    checkBoxes = newCheckBoxes;
   }
 }

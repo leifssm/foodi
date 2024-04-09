@@ -1,18 +1,18 @@
-package no.ntnu.idatt1002.view.views;
+package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.components.TitledPage;
-import no.ntnu.idatt1002.view.components.button.StandardButton;
-import no.ntnu.idatt1002.view.components.inventorylist.InventoryList;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.components.TitledPage;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.inventorylist.InventoryList;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for displaying the inventory page.
  *
- * @version 1.2
  * @author Leif Mørstad
+ * @version 1.2
  */
 public class Inventory extends TitledPage implements ComponentUtils {
   /**
@@ -35,6 +35,6 @@ public class Inventory extends TitledPage implements ComponentUtils {
     topBar.setRight(actions);
     VBox content = new VBox(topBar, new InventoryList());
 
-    setContent(content, true);
+    setContent(content);
   }
 }

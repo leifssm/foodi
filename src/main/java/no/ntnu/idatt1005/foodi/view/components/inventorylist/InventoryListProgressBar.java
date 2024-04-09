@@ -1,18 +1,29 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.Date;
 import javafx.scene.control.ProgressBar;
-import no.ntnu.idatt1002.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A class for displaying the progress of an inventory item.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
+
   private boolean isFrozen = false;
+
+  /**
+   * Constructor for the InventoryListProgressBar class.
+   *
+   * @param expiry The expiration date of the inventory item
+   */
+  public InventoryListProgressBar(@NotNull Date expiry) {
+    this();
+    setExpiry(expiry);
+  }
 
   /**
    * Constructor for the InventoryListProgressBar class.
@@ -23,16 +34,6 @@ class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
     addClass("inventory-list-progress-bar");
 
     updateClasses();
-  }
-
-  /**
-   * Constructor for the InventoryListProgressBar class.
-   *
-   * @param expiry The expiration date of the inventory item
-   */
-  public InventoryListProgressBar(@NotNull Date expiry) {
-    this();
-    setExpiry(expiry);
   }
 
   /**
@@ -53,16 +54,6 @@ class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
   }
 
   /**
-   * Sets whether the inventory item is frozen and updates its color.
-   *
-   * @param isFrozen Whether the inventory item is frozen
-   */
-  public void setIsFrozen(boolean isFrozen) {
-    this.isFrozen = isFrozen;
-    updateClasses();
-  }
-
-  /**
    * Updates the color of the progress bar based on its progress and whether it is frozen.
    */
   private void updateClasses() {
@@ -79,5 +70,15 @@ class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
     } else {
       getStyleClass().add("green");
     }
+  }
+
+  /**
+   * Sets whether the inventory item is frozen and updates its color.
+   *
+   * @param isFrozen Whether the inventory item is frozen
+   */
+  public void setIsFrozen(boolean isFrozen) {
+    this.isFrozen = isFrozen;
+    updateClasses();
   }
 }
