@@ -1,7 +1,7 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import javafx.scene.control.CheckBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for creating a standard styled checkbox.

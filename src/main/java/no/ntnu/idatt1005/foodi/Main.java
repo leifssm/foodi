@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002;
+package no.ntnu.idatt1005.foodi;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import no.ntnu.idatt1002.view.Root;
+import no.ntnu.idatt1005.foodi.view.Root;
 import org.jetbrains.annotations.NotNull;
 
 /**

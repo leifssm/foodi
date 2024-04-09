@@ -1,8 +1,8 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.Date;
 import javafx.scene.control.ProgressBar;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

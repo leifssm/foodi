@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.location;
+package no.ntnu.idatt1005.foodi.view.location;
 
 import java.util.HashMap;
 import javafx.scene.Node;

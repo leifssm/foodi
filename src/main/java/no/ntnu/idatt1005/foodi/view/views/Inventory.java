@@ -1,12 +1,12 @@
-package no.ntnu.idatt1002.view.views;
+package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.components.TitledPage;
-import no.ntnu.idatt1002.view.components.button.StandardButton;
-import no.ntnu.idatt1002.view.components.inventorylist.InventoryList;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.components.TitledPage;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.inventorylist.InventoryList;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for displaying the inventory page.

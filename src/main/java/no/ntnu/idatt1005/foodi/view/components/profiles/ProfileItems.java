@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002.view.components.profiles;
+package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import java.util.List;
 import javafx.scene.layout.HBox;
-import no.ntnu.idatt1002.view.utils.ColorUtils;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for creating a horizontal list of {@link ProfileItem}. Extends {@link HBox} and implements

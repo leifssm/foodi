@@ -1,10 +1,10 @@
-package no.ntnu.idatt1002.view.components.sidebar;
+package no.ntnu.idatt1005.foodi.view.components.sidebar;
 
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
-import no.ntnu.idatt1002.view.utils.LoadUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 /**
  * A simple sidebar component.

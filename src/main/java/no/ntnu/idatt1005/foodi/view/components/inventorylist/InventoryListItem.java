@@ -1,11 +1,11 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import no.ntnu.idatt1002.view.components.button.DropdownButton;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBoxHandler;
+import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
 import org.jetbrains.annotations.NotNull;
 
 /**

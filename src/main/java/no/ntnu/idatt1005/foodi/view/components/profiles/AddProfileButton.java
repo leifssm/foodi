@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002.view.components.profiles;
+package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for creating a profile item. A profile item is a square button with a color and a label

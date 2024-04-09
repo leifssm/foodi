@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import org.jetbrains.annotations.NotNull;
 

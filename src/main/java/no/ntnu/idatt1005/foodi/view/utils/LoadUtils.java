@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.utils;
+package no.ntnu.idatt1005.foodi.view.utils;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.List;
 import javafx.scene.Node;
@@ -7,8 +7,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.Paginator;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.Paginator;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for displaying a list of ingredients.

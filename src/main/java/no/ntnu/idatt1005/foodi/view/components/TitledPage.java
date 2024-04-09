@@ -1,10 +1,10 @@
-package no.ntnu.idatt1002.view.components;
+package no.ntnu.idatt1005.foodi.view.components;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.cookbook;
+package no.ntnu.idatt1005.foodi.view.components.cookbook;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -10,9 +10,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import no.ntnu.idatt1002.view.location.LocationHandler;
-import no.ntnu.idatt1002.view.utils.CssUtils;
-import no.ntnu.idatt1002.view.utils.LoadUtils;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 /**
  * A recipe card component.

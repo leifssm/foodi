@@ -1,12 +1,12 @@
-package no.ntnu.idatt1002.view;
+package no.ntnu.idatt1005.foodi.view;
 
 import javafx.scene.layout.BorderPane;
-import no.ntnu.idatt1002.view.components.sidebar.SideBar;
-import no.ntnu.idatt1002.view.location.Router;
-import no.ntnu.idatt1002.view.utils.LoadUtils;
-import no.ntnu.idatt1002.view.views.CookbookGrid;
-import no.ntnu.idatt1002.view.views.Inventory;
-import no.ntnu.idatt1002.view.views.Profiles;
+import no.ntnu.idatt1005.foodi.view.components.sidebar.SideBar;
+import no.ntnu.idatt1005.foodi.view.location.Router;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
+import no.ntnu.idatt1005.foodi.view.views.Inventory;
+import no.ntnu.idatt1005.foodi.view.views.Profiles;
 
 /**
  * Class that creates the main view of the application.

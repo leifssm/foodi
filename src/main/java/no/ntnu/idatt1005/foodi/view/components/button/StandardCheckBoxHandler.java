@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import java.util.Arrays;
 import javafx.event.ActionEvent;
