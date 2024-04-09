@@ -8,12 +8,6 @@ import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
 import org.jetbrains.annotations.NotNull;
 
 class SideBarItem extends BorderPane {
-  public SideBarItem(@NotNull String text, @NotNull String location) {
-    super();
-    StandardButton button = new StandardButton(text, LocationHandler.createSetter(location));
-    button.addClass("sidebar-button");
-    setCenter(button);
-  }
 
   public SideBarItem(
       @NotNull String text,
@@ -33,5 +27,12 @@ class SideBarItem extends BorderPane {
     });
     dropdownButton.addClass("sidebar-dropdown-button");
     setRight(dropdownButton);
+  }
+
+  public SideBarItem(@NotNull String text, @NotNull String location) {
+    super();
+    StandardButton button = new StandardButton(text, LocationHandler.createSetter(location));
+    button.addClass("sidebar-button");
+    setCenter(button);
   }
 }

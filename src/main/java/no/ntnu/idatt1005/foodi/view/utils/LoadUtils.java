@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.utils;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 import javafx.fxml.FXMLLoader;
@@ -14,25 +15,10 @@ import org.jetbrains.annotations.Nullable;
  * @author Leif Mørstad
  * @version 1.1
  */
-public class LoadUtils {
-  /**
-   * Gets a valid a resource url from the resources folder, or returns null and prints an error
-   * message if the resource is not found.
-   *
-   * @param path the path to the resource
-   * @param errorMessage the error message to print if the resource is not found
-   * @return the resource url, or null if the resource is not found
-   */
-  private static @Nullable URL getResource(@NotNull String path, @NotNull String errorMessage) {
-    try {
-      return Objects.requireNonNull(
-          LoadUtils.class.getResource("../" + path),
-          "Could not find resource: " + path
-      );
-    } catch (NullPointerException e) {
-      System.out.println(errorMessage + ": " + e.getMessage());
-      return null;
-    }
+public final class LoadUtils {
+
+  private LoadUtils() {
+    throw new AssertionError("Utility class");
   }
 
   /**
@@ -43,7 +29,7 @@ public class LoadUtils {
    * @return the string url to the image, or null if the image is not found
    */
   public static @Nullable String getImage(@NotNull String path) {
-    URL resource = getResource(
+    URL resource = getResourceUrl(
         "images/" + path,
         "Error loading image"
     );
@@ -56,6 +42,60 @@ public class LoadUtils {
   }
 
   /**
+   * Gets a valid a resource url from the resources folder, or returns null and prints an error
+   * message if the resource is not found.
+   *
+   * @param path         the path to the resource
+   * @param errorMessage the error message to print if the resource is not found
+   * @return the resource url, or null if the resource is not found
+   */
+  private static @Nullable URL getResourceUrl(@NotNull String path, @NotNull String errorMessage) {
+    try {
+      return Objects.requireNonNull(
+          LoadUtils.class.getResource("../" + path),
+          "Could not find resource: " + path
+      );
+    } catch (NullPointerException e) {
+      System.out.println(errorMessage + ": " + e.getMessage());
+      return null;
+    }
+  }
+
+  /**
+   * Gets the url of a font from the resources folder, or returns null and prints an error message
+   * if the font is not found.
+   *
+   * @param path the path to the font from view/fonts/*
+   * @return the string url to the font, or null if the font is not found
+   */
+  public static URI getFontDirectoryUri(@NotNull String path) {
+    URI resource = getResourceUri(
+        "fonts/" + path,
+        "Error loading font"
+    );
+
+    if (resource == null) {
+      throw new IllegalArgumentException("Could not find font directory: " + path);
+    }
+
+    return resource;
+  }
+
+  private static @Nullable URI getResourceUri(@NotNull String path, @NotNull String errorMessage) {
+    URL resource = getResourceUrl(path, errorMessage);
+    if (resource == null) {
+      return null;
+    }
+
+    try {
+      return resource.toURI();
+    } catch (Exception e) {
+      System.out.println(errorMessage + ": " + e.getMessage());
+      return null;
+    }
+  }
+
+  /**
    * Gets the url of a stylesheet from the resources folder, or returns null and prints an error
    * message if the stylesheet is not found.
    *
@@ -63,7 +103,7 @@ public class LoadUtils {
    * @return the string url to the stylesheet, or null if the stylesheet is not found
    */
   public static @Nullable String getStylesheet(@NotNull String path) {
-    URL resource = getResource(
+    URL resource = getResourceUrl(
         "styles/" + path + ".css",
         "Error loading stylesheet"
     );
@@ -83,7 +123,7 @@ public class LoadUtils {
    * @return the parent node of the fxml file, or null if the fxml file is not found
    */
   public static @Nullable Parent loadFxml(@NotNull String path) {
-    URL resource = getResource(
+    URL resource = getResourceUrl(
         "views/" + path + ".fxml",
         "Error finding fxml file"
     );

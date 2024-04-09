@@ -1,12 +1,9 @@
 .sidebar {
+  -fx-background-color: black;
   -fx-alignment: top-center;
   -fx-padding: 10px;
   -fx-spacing: 2px;
   -fx-pref-width: 140px;
-}
-
-.sidebar-logo {
-  -fx-padding: 10px 0px 10px 0px;
 }
 
 .sidebar-button {

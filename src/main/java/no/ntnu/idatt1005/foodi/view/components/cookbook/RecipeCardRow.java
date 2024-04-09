@@ -16,7 +16,7 @@ public class RecipeCardRow extends VBox implements CssUtils {
   /**
    * The constructor of the recipe card row component.
    *
-   * @param title The title of the row
+   * @param title   The title of the row
    * @param recipes The recipes to display in the row
    */
   public RecipeCardRow(String title, RecipeCard[] recipes) {

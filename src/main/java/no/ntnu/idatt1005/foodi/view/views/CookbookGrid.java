@@ -12,7 +12,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  *
  * <p> This class is a custom component for displaying the cookbook in grid view. </p>
  */
-public class CookbookGrid  extends TitledPage implements CssUtils {
+public class CookbookGrid extends TitledPage implements CssUtils {
 
   /**
    * The constructor of the cookbook grid view.

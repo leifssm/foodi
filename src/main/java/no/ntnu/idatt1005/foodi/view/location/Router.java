@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0
  */
 public class Router extends BorderPane {
+
   /**
    * A map of routes and their corresponding nodes.
    */
@@ -23,24 +24,6 @@ public class Router extends BorderPane {
   public Router() {
     super();
     LocationHandler.subscribe(this::updateLocation);
-  }
-
-  /**
-   * Adds a route to the router, which is shown when the given route is active.
-   *
-   * @param path The path of the route
-   * @param node The node to display when the route is active
-   * @throws IllegalArgumentException If the route already exists
-   */
-  public void addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
-    if (routes.containsKey(path)) {
-      throw new IllegalArgumentException("Route already exists");
-    }
-    routes.put(path, node);
-
-    if (LocationHandler.isLocationFuzzy(path)) {
-      setCenter(node);
-    }
   }
 
   /**
@@ -60,5 +43,23 @@ public class Router extends BorderPane {
       }
     }
     setCenter(null);
+  }
+
+  /**
+   * Adds a route to the router, which is shown when the given route is active.
+   *
+   * @param path The path of the route
+   * @param node The node to display when the route is active
+   * @throws IllegalArgumentException If the route already exists
+   */
+  public void addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
+    if (routes.containsKey(path)) {
+      throw new IllegalArgumentException("Route already exists");
+    }
+    routes.put(path, node);
+
+    if (LocationHandler.isLocationFuzzy(path)) {
+      setCenter(node);
+    }
   }
 }

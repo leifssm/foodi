@@ -6,6 +6,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import org.jetbrains.annotations.NotNull;
 
 class SideBarSubItem extends StandardButton implements CssUtils {
+
   public SideBarSubItem(@NotNull String text, @NotNull String location) {
     super(text, LocationHandler.createSetter(location));
     addClass("sidebar-button");
