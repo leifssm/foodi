@@ -12,20 +12,16 @@
 
 .button {
   -fx-background-color: #16992B;
-  -fx-text-fill: #FFFFFF;
   -fx-font-weight: bold;
+  -fx-text-fill: #FFFFFF;
 }
 
 .button-ok {
   -fx-background-color: #16992B;
-  -fx-text-fill: #FFFFFF;
-  -fx-font-weight: bold;
 }
 
 .button-cancel {
   -fx-background-color: #FF0000;
-  -fx-text-fill: #FFFFFF;
-  -fx-font-weight: bold;
 }
 
 .std-dialog Label {
