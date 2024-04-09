@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components.profiles;
 
+import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import no.ntnu.idatt1005.foodi.view.dialog.StandardDialog;
@@ -31,7 +32,7 @@ public class NewUserDialog extends StandardDialog {
 
     setHandleResult();
 
-    javafx.application.Platform.runLater(nameField::requestFocus);
+    Platform.runLater(nameField::requestFocus);
   }
 
   private void setHandleResult() {
