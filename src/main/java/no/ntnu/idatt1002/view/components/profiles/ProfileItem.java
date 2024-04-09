@@ -21,7 +21,7 @@ public class ProfileItem extends VBox implements CssUtils {
    * @param color   The color of the profile
    * @param onClick The action to perform when the profile item is clicked
    */
-  public ProfileItem(String name, String color, Runnable onClick) {
+  public ProfileItem(final String name, final String color, final Runnable onClick) {
     super();
     addStylesheet("components/profiles/profile-item");
     addClass("profile-item");
@@ -31,8 +31,9 @@ public class ProfileItem extends VBox implements CssUtils {
     button.setStyle("-fx-background-color: " + color + ";");
     button.setOnAction(e -> onClick.run());
 
+    final String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1);
     // label with name
-    Label label = new Label(name);
+    Label label = new Label(capitalizedName);
 
     // add button and label to the profile item
     getChildren().addAll(button, label);
