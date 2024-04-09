@@ -37,5 +37,9 @@
   -fx-prompt-text-fill: #EFEFEF;
   -fx-background-color: #000000;
   -fx-text-fill: #E6E6E6;
-  -fx-padding: 20px 20px 20px 20px;
+  -fx-padding: 16px;
+}
+
+.text-field {
+  -fx-padding: 16;
 }
