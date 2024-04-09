@@ -4,7 +4,7 @@ import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 
 import java.sql.*;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
 
 /**
  * This class is responsible for handling the interaction between

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.repository;
+package no.ntnu.idatt1005.foodi.model.repository.Main;
 
 import java.sql.*;
 
@@ -11,8 +11,8 @@ import java.sql.*;
  */
 
 public class Database {
-  public static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
-  public static final String USER = "sa";
+  public static final String DB_URL = "jdbc:h2:~/main"; // This URL will create an H2 database in the user's home directory
+  public static final String USER = "main";
   public static final String PASS = "";
 
   /**
@@ -62,12 +62,14 @@ public class Database {
 
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe (" +
-          "id INT AUTO_INCREMENT PRIMARY KEY," +
-          "name VARCHAR NOT NULL," +
-          "description VARCHAR," +
-          "difficulty VARCHAR," +
-          "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
-          "duration INT);");
+              "id INT AUTO_INCREMENT PRIMARY KEY," +
+              "name VARCHAR NOT NULL," +
+              "description VARCHAR," +
+              "difficulty VARCHAR," +
+              "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
+              "dietary_tag VARCHAR," +
+              "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE'))," +
+              "duration INT);");
 
       // Recipe Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe_ingredient (" +

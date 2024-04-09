@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

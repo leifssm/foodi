@@ -6,7 +6,7 @@ import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.repository.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

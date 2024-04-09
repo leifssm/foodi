@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import static java.sql.Types.NULL;
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

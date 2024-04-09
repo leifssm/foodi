@@ -12,13 +12,15 @@ public class Recipe {
   private String name;
   private String description;
   private Difficulty difficulty;
+  private DietaryTag dietaryTag;
   private int duration;
 
-  public Recipe(int id, String name, String description, Difficulty difficulty, int duration) {
+  public Recipe(int id, String name, String description, Difficulty difficulty, DietaryTag dietaryTag, int duration) {
     this.id = id;
     setName(name);
     setDescription(description);
     setDifficulty(difficulty);
+    setDietaryTag(dietaryTag);
     // Duration is in minutes
     setDuration(duration);
   }
@@ -68,6 +70,10 @@ public class Recipe {
     return description;
   }
 
+  public DietaryTag getDietaryTag() {
+    return dietaryTag;
+  }
+
   public void setName (String name) {
     this.name = name;
   }
@@ -92,6 +98,14 @@ public class Recipe {
 
   public enum Difficulty {
     EASY, MEDIUM, HARD
+  }
+
+  public void setDietaryTag(DietaryTag dietaryTag) {
+    this.dietaryTag = dietaryTag;
+  }
+
+  public enum DietaryTag {
+    VEGAN, VEGETARIAN, GLUTEN_FREE, DAIRY_FREE, NUT_FREE, EGG_FREE, SEA_FREE
   }
 
   @Override

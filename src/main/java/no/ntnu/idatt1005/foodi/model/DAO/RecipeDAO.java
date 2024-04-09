@@ -88,11 +88,12 @@ public class RecipeDAO {
 
       if (rs.next()) {
         return new Recipe(
-              rs.getInt("id"),
-              rs.getString("name"),
-              rs.getString("description"),
-              Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
-              rs.getInt("duration")
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+                Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+                rs.getInt("duration")
         );
       }
     } catch (SQLException e) {
