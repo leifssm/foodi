@@ -1,9 +1,10 @@
-package no.ntnu.idatt1002.view.views;
+package no.ntnu.idatt1005.foodi.view.views;
+
+import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
+import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 import java.util.List;
-import no.ntnu.idatt1002.view.components.CenteredPage;
-import no.ntnu.idatt1002.view.components.profiles.ProfileItems;
-import no.ntnu.idatt1002.view.utils.CssUtils;
 
 /**
  * Class for displaying the inventory page.

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo.view;
+package no.ntnu.idatt1005.foodi.view;
 
 import java.awt.*;
 import javax.swing.*;

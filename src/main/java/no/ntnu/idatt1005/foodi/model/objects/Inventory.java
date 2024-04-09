@@ -8,9 +8,9 @@ public class Inventory {
 
     private final int ingredientId;
 
-    private int amount;
+    private final int amount;
 
-    private Date experationDate;
+    private final Date experationDate;
 
     private final int userId;
 

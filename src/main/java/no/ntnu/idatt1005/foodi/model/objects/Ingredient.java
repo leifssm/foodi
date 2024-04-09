@@ -1,5 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.objects;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This class represents the ingredient object.
  *
@@ -36,12 +38,8 @@ public class Ingredient {
    * Sets the name of the ingredient.
    *
    * @param name the new name of the ingredient
-   * @throws IllegalArgumentException if name is null or empty
    */
-  public void setName(String name) {
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be null or empty");
-    }
+  public void setName(@NotNull String name) {
     this.name = name;
   }
 
@@ -58,12 +56,8 @@ public class Ingredient {
    * Sets the unit of the ingredient.
    *
    * @param unit the new unit of the ingredient
-   * @throws IllegalArgumentException if unit is null
    */
-  public void setUnit(IngredientUnit unit) {
-    if (unit == null) {
-      throw new IllegalArgumentException("Unit cannot be null");
-    }
+  public void setUnit(@NotNull IngredientUnit unit) {
     this.unit = unit;
   }
 
@@ -80,25 +74,32 @@ public class Ingredient {
    * Sets the category of the ingredient.
    *
    * @param category the new category of the ingredient
-   * @throws IllegalArgumentException if category is null
    */
-  public void setCategory(IngredientCategory category) {
-    if (category == null) {
-      throw new IllegalArgumentException("Category cannot be null");
-    }
+  public void setCategory(@NotNull IngredientCategory category) {
     this.category = category;
   }
 
 
+  /**
+   * This enum represents the different units an ingredient can have.
+   */
   public enum IngredientUnit {
     GRAM, KILOGRAM, LITER, MILLILITER, PIECE, POUNDS, OUNCE, GALLON, QUART, PINT, CUP, TABLESPOON, TEASPOON
   }
 
-  //evt. legge til legumes, nuts, seeds, oil, vinegar, alcohol, etc. - kort sagt revidering av kategorier
+  /**
+   * This enum represents the different categories an ingredient can have.
+   * This can be updated as needed.
+   */
   public enum IngredientCategory {
     DAIRY, MEAT, VEGETABLE, FRUIT, GRAIN, SPICE, SAUCE, SWEET, BEVERAGE
   }
 
+  /**
+   * Returns a string representation of the ingredient. This is useful for debugging.
+   *
+   * @return a string representation of the ingredient.
+   */
   @Override
   public String toString() {
     return "Ingredient{" +

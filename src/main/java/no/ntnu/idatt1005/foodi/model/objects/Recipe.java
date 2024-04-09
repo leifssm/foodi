@@ -1,13 +1,14 @@
 package no.ntnu.idatt1005.foodi.model.objects;
 
 /**
- * This class represents a recipe.
+ * This class represents a recipe. A recipe has a name, description, difficulty, and duration.
+ * The duration is in minutes.
  *
  * @version 0.3.0
  * @author Snake727
  */
 public class Recipe {
-  private int id;
+  private final int id;
   private String name;
   private String description;
   private Difficulty difficulty;
@@ -22,26 +23,47 @@ public class Recipe {
     setDuration(duration);
   }
 
+  /**
+   * Get the id of the recipe.
+   *
+   * @return the id of the recipe
+   */
   public int getId() {
     return id;
   }
 
+  /**
+   * Get the name of the recipe.
+   *
+   * @return the name of the recipe
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Get the difficulty of the recipe.
+   *
+   * @return the difficulty of the recipe
+   */
   public Difficulty getDifficulty() {
     return difficulty;
   }
 
   /**
    * Get the duration of the recipe. The number represents the duration in minutes.
-   * @return
+   *
+   * @return the duration of the recipe
    */
   public int getDuration() {
     return duration;
   }
 
+  /**
+   * Get the description of the recipe.
+   *
+   * @return the description of the recipe.
+   */
   public String getDescription() {
     return description;
   }

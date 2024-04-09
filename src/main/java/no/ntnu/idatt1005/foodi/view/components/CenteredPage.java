@@ -1,8 +1,8 @@
-package no.ntnu.idatt1002.view.components;
+package no.ntnu.idatt1005.foodi.view.components;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Extension of BorderPane that centers the content of the page.
