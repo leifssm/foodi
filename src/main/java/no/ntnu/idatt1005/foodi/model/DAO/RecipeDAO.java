@@ -92,6 +92,7 @@ public class RecipeDAO {
               rs.getString("name"),
               rs.getString("description"),
               Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+              Recipe.DietaryTag.valueOf(rs.getString("dietaryTag").toUpperCase()),
               rs.getInt("duration")
         );
       }

@@ -117,8 +117,8 @@ public class ingredient_to_shopping_list_pipeline {
 
         recipeDAO = new RecipeDAO();
 
-        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
-        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY, 30);
+        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE ,30);
+        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE,30);
 
         recipe_ingredient_DAO = new RecipeIngredientDAO();
 
