@@ -73,10 +73,6 @@ public class Recipe {
     return dietaryTag;
   }
 
-  public DietaryTag getDietaryTag() {
-    return dietaryTag;
-  }
-
   public void setName (String name) {
     this.name = name;
   }

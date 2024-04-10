@@ -68,7 +68,7 @@ public class DatabaseMain {
               "difficulty VARCHAR," +
               "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
               "dietary_tag VARCHAR," +
-              "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE'))," +
+              "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE'))," +
               "duration INT);");
 
       // Recipe Ingredient Table
