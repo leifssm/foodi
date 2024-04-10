@@ -10,7 +10,7 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class Database {
+public class DatabaseMain {
   public static final String DB_URL = "jdbc:h2:~/main"; // This URL will create an H2 database in the user's home directory
   public static final String USER = "main";
   public static final String PASS = "";
@@ -21,7 +21,7 @@ public class Database {
    *
    */
 
-  public void initializeDatabase() {
+  public void initializeDatabaseMain() {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
       if (!tablesExist(conn)) {
         System.out.println("Database does not exist. Creating a new one...");
@@ -58,7 +58,7 @@ public class Database {
           "unit VARCHAR," +
           "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON'))," +
           "category VARCHAR," +
-          "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE')));");
+          "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE', 'FISH', 'POULTRY', 'CRUSTACEAN')));");
 
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe (" +
@@ -109,8 +109,8 @@ public class Database {
 
   // Main method for testing purposes
   public static void main(String[] args){
-    Database dbInitializer = new Database();
-    dbInitializer.initializeDatabase();
+    DatabaseMain dbInitializer = new DatabaseMain();
+    dbInitializer.initializeDatabaseMain();
   }
 }
 

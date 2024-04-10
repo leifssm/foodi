@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import static java.sql.Types.NULL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,7 +55,7 @@ public class ingredient_to_shopping_list_pipeline {
     public static void setUp() throws SQLException {
         String deleteInventorySql = "DELETE FROM inventory";
         String deleteShoppingListSql = "DELETE FROM shopping_list";
-        String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+        String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
         String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
         String deleteIngredientSql = "DELETE FROM ingredient";
         String deleteRecipeSql = "DELETE FROM recipe";
@@ -117,8 +117,8 @@ public class ingredient_to_shopping_list_pipeline {
 
         recipeDAO = new RecipeDAO();
 
-        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
-        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY, 30);
+        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, Recipe.DietaryTag.VEGETARIAN, 30);
+        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.VEGETARIAN, 30);
 
         recipe_ingredient_DAO = new RecipeIngredientDAO();
 

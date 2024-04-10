@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class InventoryDAO {
 
@@ -130,7 +130,7 @@ public class InventoryDAO {
 
     //slette inventory
     public void delete_inventory(Inventory obj) {
-        String sql = "DELETE FROM inventory WHERE TEST.PUBLIC.INVENTORY.ID = ?";
+        String sql = "DELETE FROM inventory WHERE MAIN.PUBLIC.INVENTORY.ID = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

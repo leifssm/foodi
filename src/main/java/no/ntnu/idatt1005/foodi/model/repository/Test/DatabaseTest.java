@@ -1,4 +1,6 @@
 package no.ntnu.idatt1005.foodi.model.repository.Test;
+//Pensjonert kode
+import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 
 import java.sql.*;
 
@@ -10,7 +12,7 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class Database {
+public class DatabaseTest {
   public static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
   public static final String USER = "sa";
   public static final String PASS = "";
@@ -107,8 +109,8 @@ public class Database {
 
   // Main method for testing purposes
   public static void main(String[] args){
-    no.ntnu.idatt1005.foodi.model.repository.Main.Database dbInitializer = new no.ntnu.idatt1005.foodi.model.repository.Main.Database();
-    dbInitializer.initializeDatabase();
+    DatabaseMain dbInitializer = new DatabaseMain();
+    dbInitializer.initializeDatabaseMain();
   }
 }
 

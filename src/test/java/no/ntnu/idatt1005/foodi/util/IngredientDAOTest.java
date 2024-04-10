@@ -1,17 +1,18 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IngredientDAOTest {
@@ -22,12 +23,12 @@ public class IngredientDAOTest {
   @BeforeAll
   public static void setUp() throws SQLException {
     // Initialize the database if not already initialized
-    Database database = new Database();
-    database.initializeDatabase();
+    DatabaseMain databaseMain = new DatabaseMain();
+    databaseMain.initializeDatabaseMain();
 
     String deleteInventorySql = "DELETE FROM inventory";
     String deleteShoppingListSql = "DELETE FROM shopping_list";
-    String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+    String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
     String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
     String deleteIngredientSql = "DELETE FROM ingredient";
     String deleteRecipeSql = "DELETE FROM recipe";

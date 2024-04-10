@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.model.DAO;
 import no.ntnu.idatt1005.foodi.model.objects.RecipeIngredient;
 import java.util.HashMap;
 import java.util.Map;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*; // DB_URL, USER, PASS
 
 import java.sql.*;
 
@@ -14,9 +15,7 @@ import java.sql.*;
  */
 
 public class RecipeIngredientDAO {
-  private static final String DB_URL = "jdbc:h2:~/test";
-  private static final String USER = "sa";
-  private static final String PASS = "";
+
 
   public void save(RecipeIngredient obj) throws SQLException {
     String checkSql = "SELECT COUNT(*) FROM recipe_ingredient WHERE recipe_id = ? AND ingredient_id = ?";
