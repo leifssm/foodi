@@ -68,6 +68,7 @@ public class DatabaseTest {
           "name VARCHAR NOT NULL," +
           "description VARCHAR," +
           "difficulty VARCHAR," +
+          "dietaryTag VARCHAR, " +
           "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
           "duration INT);");
 

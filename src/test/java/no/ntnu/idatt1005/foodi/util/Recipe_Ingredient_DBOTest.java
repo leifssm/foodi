@@ -72,8 +72,8 @@ public class Recipe_Ingredient_DBOTest {
 
 
     // Create new Recipe objects
-    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, Recipe.DietaryTag.VEGETARIAN, 30);
-    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY, Recipe.DietaryTag.VEGETARIAN, 60);
+    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 30);
+    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 45);
 
     // Create new Recipe_Ingredient objects
     testRecipe_Ingredient = new RecipeIngredient(1, 1, 2.0);

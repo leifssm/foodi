@@ -69,6 +69,9 @@ public class Recipe {
   public String getDescription() {
     return description;
   }
+  public DietaryTag getDietaryTag() {
+    return dietaryTag;
+  }
 
   public DietaryTag getDietaryTag() {
     return dietaryTag;
@@ -85,6 +88,9 @@ public class Recipe {
   public void setDifficulty(Difficulty difficulty) {
     this.difficulty = difficulty;
   }
+  public void setDietaryTag(DietaryTag dietaryTag) {
+    this.dietaryTag = dietaryTag;
+  }
 
   /**
    * Set the duration of the recipe. The number represents the duration in minutes.
@@ -100,12 +106,8 @@ public class Recipe {
     EASY, MEDIUM, HARD
   }
 
-  public void setDietaryTag(DietaryTag dietaryTag) {
-    this.dietaryTag = dietaryTag;
-  }
-
   public enum DietaryTag {
-    VEGAN, VEGETARIAN, GLUTEN_FREE, DAIRY_FREE, NUT_FREE, EGG_FREE, SEA_FREE
+    VEGAN, VEGETARIAN, GLUTEN_FREE, DAIRY_FREE, NUT_FREE, EGG_FREE, SEA_FREE, NONE
   }
 
   @Override
