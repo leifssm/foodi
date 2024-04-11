@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import no.ntnu.idatt1005.foodi.model.objects.Recipe;
-
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*; // DB_URL, USER, PASS
 import java.sql.*;
 
 /**
@@ -12,9 +12,6 @@ import java.sql.*;
  */
 
 public class RecipeDAO {
-  private static final String DB_URL = "jdbc:h2:~/test";
-  private static final String USER = "sa";
-  private static final String PASS = "";
 
   public void save(Recipe obj) throws SQLException {
     String checkSql = "SELECT COUNT(*) FROM recipe WHERE id = ?";
@@ -30,7 +27,7 @@ public class RecipeDAO {
       }
     }
 
-    String insertSql = "INSERT INTO recipe (id, name, description, difficulty, duration) VALUES (?, ?, ?, ?, ?)";
+    String insertSql = "INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration) VALUES (?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
@@ -39,7 +36,8 @@ public class RecipeDAO {
       pstmt.setString(2, obj.getName());
       pstmt.setString(3, obj.getDescription());
       pstmt.setString(4, obj.getDifficulty().toString());
-      pstmt.setInt(5, obj.getDuration());
+      pstmt.setString(5, obj.getDietaryTag().toString()); // new field
+      pstmt.setInt(6, obj.getDuration());
       pstmt.executeUpdate();
 
     } catch (SQLException e) {
@@ -88,12 +86,12 @@ public class RecipeDAO {
 
       if (rs.next()) {
         return new Recipe(
-              rs.getInt("id"),
-              rs.getString("name"),
-              rs.getString("description"),
-              Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
-              Recipe.DietaryTag.valueOf(rs.getString("dietaryTag").toUpperCase()),
-              rs.getInt("duration")
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+                Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+                rs.getInt("duration")
         );
       }
     } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.repository;
+package no.ntnu.idatt1005.foodi.model.repository.Main;
 
 import java.sql.*;
 
@@ -10,9 +10,9 @@ import java.sql.*;
  * @author Snake727
  */
 
-public class Database {
-  public static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
-  public static final String USER = "sa";
+public class DatabaseMain {
+  public static final String DB_URL = "jdbc:h2:~/main"; // This URL will create an H2 database in the user's home directory
+  public static final String USER = "main";
   public static final String PASS = "";
 
   /**
@@ -21,7 +21,7 @@ public class Database {
    *
    */
 
-  public void initializeDatabase() {
+  public void initializeDatabaseMain() {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
       if (!tablesExist(conn)) {
         System.out.println("Database does not exist. Creating a new one...");
@@ -58,17 +58,18 @@ public class Database {
           "unit VARCHAR," +
           "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON'))," +
           "category VARCHAR," +
-          "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE')));");
+          "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE', 'FISH', 'POULTRY', 'CRUSTACEAN')));");
 
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe (" +
-          "id INT AUTO_INCREMENT PRIMARY KEY," +
-          "name VARCHAR NOT NULL," +
-          "description VARCHAR," +
-          "difficulty VARCHAR," +
-          "dietaryTag VARCHAR, " +
-          "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
-          "duration INT);");
+              "id INT AUTO_INCREMENT PRIMARY KEY," +
+              "name VARCHAR NOT NULL," +
+              "description VARCHAR," +
+              "difficulty VARCHAR," +
+              "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
+              "dietary_tag VARCHAR," +
+              "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE'))," +
+              "duration INT);");
 
       // Recipe Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe_ingredient (" +
@@ -108,8 +109,8 @@ public class Database {
 
   // Main method for testing purposes
   public static void main(String[] args){
-    Database dbInitializer = new Database();
-    dbInitializer.initializeDatabase();
+    DatabaseMain dbInitializer = new DatabaseMain();
+    dbInitializer.initializeDatabaseMain();
   }
 }
 

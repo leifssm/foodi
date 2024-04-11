@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import static java.sql.Types.NULL;
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,7 +55,7 @@ public class ingredient_to_shopping_list_pipeline {
     public static void setUp() throws SQLException {
         String deleteInventorySql = "DELETE FROM inventory";
         String deleteShoppingListSql = "DELETE FROM shopping_list";
-        String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+        String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
         String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
         String deleteIngredientSql = "DELETE FROM ingredient";
         String deleteRecipeSql = "DELETE FROM recipe";

@@ -1,12 +1,10 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
-
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class ShoppingListDAO {
 
