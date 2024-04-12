@@ -86,6 +86,7 @@ public class InventoryList extends VBox implements CssUtils {
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
 
+    /*
     items.addItems(
         new InventoryItem(),
         new InventoryItem(),
@@ -101,6 +102,13 @@ public class InventoryList extends VBox implements CssUtils {
         new InventoryItem(),
         new InventoryItem()
     );
+    */
+
+    render();
+  }
+
+  public void addItemToInventory(InventoryItem item) {
+    items.addItem(item);
     render();
   }
 

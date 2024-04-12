@@ -25,18 +25,20 @@ public class Inventory extends TitledPage implements CssUtils {
     addStylesheet("components/inventory/inventory");
     addClass("inventory");
 
+    InventoryList inventoryList = new InventoryList();
+
     BorderPane topBar = new BorderPane();
     topBar.getStyleClass().add("inventory-top-bar");
     topBar.setLeft(
-        new StandardButton("Add item", AddItemDialog::new).setType(StandardButton.Style.SUCCESS));
+            new StandardButton("Add item", () -> new AddItemDialog(inventoryList)).setType(StandardButton.Style.SUCCESS));
 
     HBox actions = new HBox(
-        new StandardButton("Freeze").setType(StandardButton.Style.PRIMARY),
-        new StandardButton("Delete").setType(StandardButton.Style.ERROR)
+            new StandardButton("Freeze").setType(StandardButton.Style.PRIMARY),
+            new StandardButton("Delete").setType(StandardButton.Style.ERROR)
     );
     actions.getStyleClass().add("inventory-actions");
     topBar.setRight(actions);
-    VBox content = new VBox(topBar, new InventoryList());
+    VBox content = new VBox(topBar, inventoryList);
 
     setContent(content);
   }
