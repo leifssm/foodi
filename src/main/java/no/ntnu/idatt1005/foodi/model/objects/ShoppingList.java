@@ -11,7 +11,7 @@ public class ShoppingList {
 
     // evt. is bought, for å kunne autoslette, når den er true, sånn når noen velger remove item, så endrer den til true, og sånn at den fjernes fra listen
 
-    public ShoppingList(int shoppingListId, int itemId, int ingredientId, int amount, int userId) {
+    public ShoppingList(int shoppingListId, int itemId, int ingredientId, double amount, int userId) {
         this.shoppingListId = shoppingListId;
         this.itemId = itemId;
         this.ingredientId = ingredientId;

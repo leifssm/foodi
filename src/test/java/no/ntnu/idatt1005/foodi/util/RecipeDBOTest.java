@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import no.ntnu.idatt1005.foodi.model.objects.Recipe;
-import no.ntnu.idatt1005.foodi.model.repository.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -32,12 +32,12 @@ public class RecipeDBOTest {
     recipeDAO = new RecipeDAO();
 
     // Initialize the database if not already initialized
-    Database database = new Database();
-    database.initializeDatabase();
+    DatabaseMain databaseMain = new DatabaseMain();
+    databaseMain.initializeDatabaseMain();
 
     String deleteInventorySql = "DELETE FROM inventory";
     String deleteShoppingListSql = "DELETE FROM shopping_list";
-    String deleteUserSql = "DELETE FROM TEST.PUBLIC.\"user\"";
+    String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
     String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
     String deleteIngredientSql = "DELETE FROM ingredient";
     String deleteRecipeSql = "DELETE FROM recipe";
@@ -57,8 +57,8 @@ public class RecipeDBOTest {
     }
 
     // Create new Recipe objects
-    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, 30);
-    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY, 45);
+    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, Recipe.DietaryTag.VEGETARIAN,30);
+    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY, Recipe.DietaryTag.VEGETARIAN, 45);
   }
 
   @Test

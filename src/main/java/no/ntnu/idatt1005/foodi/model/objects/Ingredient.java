@@ -92,7 +92,7 @@ public class Ingredient {
    * This can be updated as needed.
    */
   public enum IngredientCategory {
-    DAIRY, MEAT, VEGETABLE, FRUIT, GRAIN, SPICE, SAUCE, SWEET, BEVERAGE
+    DAIRY, MEAT, VEGETABLE, FRUIT, GRAIN, SPICE, SAUCE, SWEET, BEVERAGE, POULTRY, FISH, CRUSTACEAN
   }
 
   /**
