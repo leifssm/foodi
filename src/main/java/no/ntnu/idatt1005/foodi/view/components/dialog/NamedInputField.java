@@ -3,7 +3,6 @@ package no.ntnu.idatt1005.foodi.view.components.dialog;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 
 /**
@@ -12,7 +11,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class NamedInputField extends VBox implements CssUtils {
+public class NamedInputField extends VBox {
 
 
   /**
