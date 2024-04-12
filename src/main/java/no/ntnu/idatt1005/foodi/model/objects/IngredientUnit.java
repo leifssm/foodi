@@ -14,13 +14,13 @@ public enum IngredientUnit {
   MILLILITERS("ml"),
   PIECES("pcs");
 
-  private final String unitAbbreviation;
+  private final String unit;
 
   IngredientUnit(String unit) {
-    this.unitAbbreviation = unit;
+    this.unit = unit;
   }
 
-  public String getUnitAbbreviation() {
-    return unitAbbreviation;
+  public String getUnit() {
+    return unit;
   }
 }
