@@ -7,14 +7,26 @@ package no.ntnu.idatt1005.foodi.model.objects;
  * @version 1.0
  */
 public enum IngredientCategory {
-  MEAT,
-  FISH,
-  DAIRY,
-  VEGETABLES,
-  FRUITS,
-  GRAINS,
-  SPICES,
-  SWEETS,
-  BEVERAGES,
-  OTHER
+  DAIRY("Dairy"),
+  MEAT("Meat"),
+  VEGETABLE("Vegetable"),
+  FRUIT("Fruit"),
+  GRAIN("Grain"),
+  SPICE("Spice"),
+  SAUCE("Sauce"),
+  SWEET("Sweet"),
+  BEVERAGE("Beverage"),
+  POULTRY("Poultry"),
+  FISH("Fish"),
+  CRUSTACEAN("Crustacean");
+
+  private final String category;
+
+  IngredientCategory(String category) {
+    this.category = category;
+  }
+
+  public String getCategory() {
+    return category;
+  }
 }

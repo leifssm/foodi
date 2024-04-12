@@ -8,11 +8,19 @@ package no.ntnu.idatt1005.foodi.model.objects;
  * @version 1.0
  */
 public enum IngredientUnit {
-  GRAMS("g"),
-  KILOGRAMS("kg"),
-  LITERS("l"),
-  MILLILITERS("ml"),
-  PIECES("pcs");
+  GRAM("g"),
+  KILOGRAM("kg"),
+  LITER("l"),
+  MILLILITER("ml"),
+  PIECE("pcs"),
+  POUNDS("lbs"),
+  OUNCE("oz"),
+  GALLON("gal"),
+  QUART("qt"),
+  PINT("pt"),
+  CUP("cup"),
+  TABLESPOON("tbsp"),
+  TEASPOON("tsp");
 
   private final String unit;
 
