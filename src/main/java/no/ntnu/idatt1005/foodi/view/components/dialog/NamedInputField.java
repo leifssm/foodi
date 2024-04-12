@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.view.components;
+package no.ntnu.idatt1005.foodi.view.components.dialog;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;

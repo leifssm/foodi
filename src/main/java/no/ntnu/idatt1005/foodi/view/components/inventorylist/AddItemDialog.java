@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
-import no.ntnu.idatt1005.foodi.view.components.NamedInputField;
+import no.ntnu.idatt1005.foodi.view.components.dialog.NamedInputField;
 import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
 import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
 import org.jetbrains.annotations.NotNull;
