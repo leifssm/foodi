@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.components.dialog;
 
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class StandardDialog extends Dialog<Void> implements
     DialogCssUtils {
+
+  private ButtonType okButtonType;
 
   /**
    * Constructor for the NewUserDialog class.
@@ -45,24 +48,21 @@ public class StandardDialog extends Dialog<Void> implements
    * @param action The action to be performed
    */
   public void setOkAction(@NotNull final ResultHandler action) {
-    setResultConverter(buttonType -> {
-      if (isOkButton(buttonType)) {
-        try {
-          action.run();
-        } catch (ValidationException e) {
-          new InvalidInputDialog(e.getMessage()).showAndWait();
-        } catch (Exception e) {
-          new InvalidInputDialog("Unexpected error: " + e.getMessage()).showAndWait();
-          Logger.getLogger(getClass().getName()).severe(e.getMessage());
-        }
+    getOkButton().addEventFilter(ActionEvent.ACTION, event -> {
+      try {
+        action.run();
+      } catch (ValidationException e) {
+        new InvalidInputDialog(e.getMessage()).showAndWait();
+        event.consume();
+      } catch (Exception e) {
+        new InvalidInputDialog("Unexpected error: " + e.getMessage()).showAndWait();
+        Logger.getLogger(getClass().getName()).severe(e.getMessage());
       }
-      return null;
     });
-
   }
 
-  private boolean isOkButton(ButtonType buttonType1) {
-    return buttonType1.getButtonData() == ButtonType.OK.getButtonData();
+  private Node getOkButton() {
+    return getDialogPane().lookupButton(okButtonType);
   }
 
   public void addOkButton() {
@@ -73,10 +73,9 @@ public class StandardDialog extends Dialog<Void> implements
    * Adds an OK button to the dialog.
    */
   public void addOkButton(String text) {
-    ButtonType okButtonType = new ButtonType(text, ButtonBar.ButtonData.OK_DONE);
+    okButtonType = new ButtonType(text, ButtonBar.ButtonData.OK_DONE);
     getDialogPane().getButtonTypes().add(okButtonType);
-    Node okButton = getDialogPane().lookupButton(okButtonType);
-    okButton.getStyleClass().add("button-ok");
+    getOkButton().getStyleClass().add("button-ok");
   }
 
   /**
