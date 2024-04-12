@@ -18,20 +18,21 @@ import java.util.Date;
  */
 
 public class ItemController {
-  private IngredientDAO ingredientDAO;
-  private UserDAO userDAO; // antar at du har en UserDAO klasse
-
+  private IngredientDAO ingredientDAO = new IngredientDAO();
+  private UserDAO userDAO;
+  private InventoryDAO inventoryDAO = new InventoryDAO();
+  static int IngredientIdFillerValue;
 
   public ItemController() {
-    ingredientDAO = new IngredientDAO();
-    userDAO = new UserDAO(); // initialiser UserDAO
+    userDAO = new UserDAO();
+    IngredientIdFillerValue = inventoryDAO.countInventoryItems();
   }
 
-  public void save(String inputName, IngredientCategory inputCategory, IngredientUnit inputUnit, int inputAmount, Date inputExpirationDate) {
-    int IngredientIdFillerValue = 0;
-    try {
-      IngredientIdFillerValue += 1;
+  public void saveItem(String inputName, IngredientCategory inputCategory, IngredientUnit inputUnit, int inputAmount, Date inputExpirationDate) {
+    IngredientIdFillerValue++;
+    System.out.println("IngredientIdFillerValue: " + IngredientIdFillerValue);
 
+    try {
       Ingredient.IngredientCategory ingredientCategory = Ingredient.IngredientCategory.valueOf(inputCategory.name());
       Ingredient.IngredientUnit ingredientUnit = Ingredient.IngredientUnit.valueOf(inputUnit.name());
 
@@ -39,11 +40,15 @@ public class ItemController {
       ingredientDAO.save(createdIngredient);
 
       User dummyUser = new User(1,"Kevin");
-      userDAO.save(dummyUser);
+
+      boolean isNewUser = userDAO.userExists(dummyUser);
+
+        if (!isNewUser) {
+            userDAO.save(dummyUser);
+        }
 
       InventoryDAO inventoryDAO = new InventoryDAO();
 
-      //from util.date to sql.date
       java.sql.Date inputExpirationDateSQL = new java.sql.Date(inputExpirationDate.getTime());
 
       Inventory inventory = new Inventory(dummyUser.getUserId(), createdIngredient.getId(),inputAmount, inputExpirationDateSQL,dummyUser.getUserId());

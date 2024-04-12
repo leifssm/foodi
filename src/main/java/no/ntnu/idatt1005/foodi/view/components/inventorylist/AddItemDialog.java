@@ -92,23 +92,14 @@ public class AddItemDialog extends StandardDialog {
     IngredientCategory category = getIngredientCategory();
     Date expirationDate = getExpirationDate();
 
-    System.out.println(
-            "Adding item: " + ingredient + ", " + amount + " " + unit + ", " + category + ", "
-                    + expirationDate
-                    + ".\nShould call method on controller to add item to inventory list.");
-
     String amountString = String.valueOf(amount);
     String unitString = unit.toString();
 
+    ItemController itemController = new ItemController();
+    itemController.saveItem(ingredient, category, unit, (int) amount, expirationDate);
+
     InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(), amountString, unitString);
     inventoryList.addItemToInventory(newItem);
-
-    ItemController itemController = new ItemController();
-    itemController.save(ingredient, category, unit, (int) amount, expirationDate);
-    /*
-    InventoryController inventoryController = new InventoryController();
-    inventoryController.save(newItem, ingredient, null);
-    */
 
   }
 

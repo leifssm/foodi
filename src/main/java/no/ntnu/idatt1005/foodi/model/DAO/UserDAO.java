@@ -68,4 +68,26 @@ public class UserDAO {
         return null;
     }
 
+    //method to check if user exists
+
+    public boolean userExists(User obj) {
+        String sql = "SELECT * FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, obj.getUserId());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
 }
