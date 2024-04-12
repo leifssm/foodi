@@ -29,13 +29,20 @@
   -fx-font-weight: bold;
 }
 
-.text-field * {
-  -fx-prompt-text-fill: #EFEFEF;
+.text-field, .text-field *, .combo-box, .combo-box * {
+  -fx-prompt-text-fill: #B4B4B4;
   -fx-background-color: #000000;
-  -fx-text-fill: #E6E6E6;
-  -fx-padding: 16px;
+  -fx-text-fill: #FFFFFF;
 }
 
-.text-field {
-  -fx-padding: 16;
+.text-field, .combo-box {
+  -fx-background-radius: 5px;
+}
+
+.header {
+  -fx-padding: 10px;
+}
+
+.header * {
+  -fx-font-size: 24px;
 }

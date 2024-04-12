@@ -1,9 +1,9 @@
 package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import javafx.application.Platform;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import no.ntnu.idatt1005.foodi.view.dialog.StandardDialog;
+import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
+import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
 
 /**
  * Class for creating a dialog for adding a new user.
@@ -20,59 +20,34 @@ public class NewUserDialog extends StandardDialog {
   public NewUserDialog() {
     super();
     setTitle("Add new user");
-    setHeaderText("Enter the name of the new user");
-
-    addOkButton();
-    addCancelButton();
+    setHeaderTitle("Enter the name of the new user");
 
     nameField = new TextField();
     nameField.setPromptText("Mr. Example Exampleman");
 
     getDialogPane().setContent(nameField);
 
-    setHandleResult();
+    addOkButton();
+    addCancelButton();
+
+    setOkAction(this::okAction);
 
     Platform.runLater(nameField::requestFocus);
   }
 
-  private void setHandleResult() {
-    setResultConverter(buttonType -> {
-      if (isOkButton(buttonType)) {
-        String name = nameField.getText();
-
-        if (!isNameValid(name)) {
-          showInvalidNameDialog();
-          return null;
-        }
-
-        addUser(name.toLowerCase());
-      }
-
-      nameField.clear();
-      return null;
-    });
-  }
-
-  private boolean isOkButton(ButtonType buttonType1) {
-    return buttonType1.getButtonData() == ButtonType.OK.getButtonData();
-  }
-
-  private boolean isNameValid(String name) {
-    return !name.isBlank();
-  }
-
-  private void showInvalidNameDialog() {
-    var dialog = new StandardDialog();
-    dialog.setTitle("Invalid name");
-    dialog.setContentText(
-        "The name " + nameField.getText() + " is invalid. Please enter a valid name.");
-
-    dialog.addOkButton();
-    dialog.showAndWait();
+  private void okAction() throws ValidationException {
+    addUser(getName());
   }
 
   private void addUser(String name) {
-    // TODO: Replace with controller
+    // TODO: Replace with calling method on controller
     System.out.println("Adding user with name: " + name);
+  }
+
+  private String getName() throws ValidationException {
+    if (nameField.getText().isBlank()) {
+      throw new ValidationException("Name cannot be blank");
+    }
+    return nameField.getText().toLowerCase();
   }
 }
