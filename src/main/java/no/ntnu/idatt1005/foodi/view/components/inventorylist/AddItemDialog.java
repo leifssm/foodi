@@ -6,6 +6,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.controller.ItemController;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
 import no.ntnu.idatt1005.foodi.view.components.dialog.NamedInputField;
@@ -101,6 +102,14 @@ public class AddItemDialog extends StandardDialog {
 
     InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(), amountString, unitString);
     inventoryList.addItemToInventory(newItem);
+
+    ItemController itemController = new ItemController();
+    itemController.save(ingredient, category, unit, (int) amount, expirationDate);
+    /*
+    InventoryController inventoryController = new InventoryController();
+    inventoryController.save(newItem, ingredient, null);
+    */
+
   }
 
   private @NotNull String getIngredient() throws ValidationException {
