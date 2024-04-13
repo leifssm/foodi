@@ -14,6 +14,7 @@ public class InventoryItem {
   private final String quantity;
   private final String unit;
 
+  /*
   public InventoryItem() {
     this.type = "🍗";
     this.name = "Chicken";
@@ -24,7 +25,20 @@ public class InventoryItem {
     this.quantity = "100";
     this.unit = "g";
   }
+  */
 
+  //funskjonell Item kode
+    public InventoryItem(String name, Date expiryDate, String category, String quantity,
+        String unit) {
+        this.type = "🍗";
+        this.name = name;
+        this.expiryDate = expiryDate;
+        this.category = category;
+        this.quantity = quantity;
+        this.unit = unit;
+    }
+
+  
   public String getType() {
     return type;
   }

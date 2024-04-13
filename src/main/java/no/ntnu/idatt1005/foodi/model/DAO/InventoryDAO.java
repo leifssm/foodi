@@ -12,43 +12,29 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class InventoryDAO {
 
-    /*
-    //putt inn Save Ingredient obj and User obj, as parameters, to not need to hardcode the user_id and ingredient_id
-    public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ?";
+
+    //method to get the total amount of tuples in the Inventory table
+
+    public int countInventoryItems() {
+        String sql = "SELECT COUNT(*) FROM inventory";
+        int count = 0;
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
+             Statement stmt = conn.createStatement()) {
 
-            pstmt.setInt(1, obj.getInventoryId());
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next() && rs.getInt(1) > 0) {
-                throw new SQLException("Error: Inventory with ID " + obj.getInventoryId() + " already exists in the database.");
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                count = rs.getInt(1);
             }
 
-            String insertSql = "INSERT INTO inventory (id, ingredient_id, amount, EXPIRATION_DATE, user_id) VALUES (?, ?, ?, ?, ?)";
-
-            try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
-                pstmt2.setInt(1, obj.getInventoryId());
-                pstmt2.setInt(2, obj2.getId());
-                pstmt2.setInt(3, obj.getAmount());
-                pstmt2.setDate(4, (Date) obj.getExperationDate());
-                pstmt2.setInt(5, obj3.getUserId());
-                pstmt2.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-
+        } catch (SQLException e) {
+            System.out.println("Error code: " + e.getErrorCode());
+            System.out.println("SQL state: " + e.getSQLState());
+            System.out.println(e.getMessage());
         }
 
-
-
+        return count;
     }
-
-
-    */
-
 
     public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ? AND ingredient_id = ?";
