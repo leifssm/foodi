@@ -36,7 +36,8 @@ public class ProfileItems extends HBox implements ComponentUtils {
       getChildren().add(profileItem);
     }
 
-    final Runnable onClick = () -> System.out.println("Add profile");
+    NewUserDialog newUserDialog = new NewUserDialog();
+    final Runnable onClick = newUserDialog::showAndWait;
     getChildren().add(new AddProfileButton(onClick));
   }
 }

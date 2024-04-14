@@ -3,13 +3,13 @@ import no.ntnu.idatt1005.foodi.model.objects.User;
 
 import java.sql.*;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class UserDAO {
 
 
     public void save (User obj) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM TEST.PUBLIC.\"user\" WHERE id = ?";
+        String checkSql = "SELECT COUNT(*) FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
@@ -21,7 +21,7 @@ public class UserDAO {
                 throw new SQLException("Error: User with ID " + obj.getUserId() + " already exists in the database.");
             }
 
-            String insertSql = "INSERT INTO TEST.PUBLIC.\"user\" (id, name) VALUES (?, ?)";
+            String insertSql = "INSERT INTO MAIN.PUBLIC.\"user\" (id, name) VALUES (?, ?)";
 
             try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
                 pstmt2.setInt(1, obj.getUserId());
@@ -35,7 +35,7 @@ public class UserDAO {
     }
 
     public void delete (User obj) {
-        String sql = "DELETE FROM TEST.PUBLIC.\"user\" WHERE id = ?";
+        String sql = "DELETE FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -49,7 +49,7 @@ public class UserDAO {
     }
 
     public User retrieve (User obj) {
-        String sql = "SELECT * FROM TEST.PUBLIC.\"user\" WHERE id = ?";
+        String sql = "SELECT * FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -66,6 +66,28 @@ public class UserDAO {
         }
 
         return null;
+    }
+
+    //method to check if user exists
+
+    public boolean userExists(User obj) {
+        String sql = "SELECT * FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, obj.getUserId());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
     }
 
 }

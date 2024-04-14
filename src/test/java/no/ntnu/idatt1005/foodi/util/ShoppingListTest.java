@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.*;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -61,9 +61,7 @@ public class ShoppingListTest {
         userDA.save(user2);
 
         shoppingList_item1 = new ShoppingList(1, 1,5, 2, 4);
-
         shoppingList_item2 = new ShoppingList(2, 2, 6, 3, 5);
-
 
         shoppingListDAO = new ShoppingListDAO();
 

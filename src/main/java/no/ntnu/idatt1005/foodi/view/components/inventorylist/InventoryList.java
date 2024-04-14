@@ -87,6 +87,21 @@ public class InventoryList extends VBox implements ComponentUtils {
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
 
+    items.addItems(
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem(),
+        new InventoryItem()
+    );
     render();
   }
 

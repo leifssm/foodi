@@ -22,7 +22,7 @@ public class Profiles extends CenteredPage implements ComponentUtils {
     addStylesheet("components/profiles/profiles");
     addClass("profiles");
 
-    List<String> profileNames = List.of("Leif", "Henrik", "Kevin", "Markus");
+    List<String> profileNames = List.of("leif", "henrik", "kevin", "markus");
     ProfileItems profileItems = new ProfileItems(profileNames);
 
     setContent(profileItems);
