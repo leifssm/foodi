@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -88,7 +89,7 @@ class QueryBuilder {
    * @param value The integer to use.
    * @return This QueryBuilder instance.
    */
-  public QueryBuilder addInt(int value) {
+  public @NotNull QueryBuilder addInt(int value) {
     checkLocked();
     parts.add((i, statement) -> statement.setInt(i, value));
     return this;
@@ -100,7 +101,7 @@ class QueryBuilder {
    * @param value The string to use.
    * @return This QueryBuilder instance.
    */
-  public QueryBuilder addString(String value) {
+  public @NotNull QueryBuilder addString(@NotNull String value) {
     checkLocked();
     parts.add((i, statement) -> statement.setString(i, value));
     return this;
@@ -112,7 +113,7 @@ class QueryBuilder {
    * @param value The double to use.
    * @return This QueryBuilder instance.
    */
-  public QueryBuilder addDouble(Double value) {
+  public @NotNull QueryBuilder addDouble(@NotNull Double value) {
     checkLocked();
     parts.add((i, statement) -> statement.setDouble(i, value));
     return this;
@@ -134,7 +135,7 @@ class QueryBuilder {
      * @return The return value of the method.
      * @throws SQLException If an error occurs while running the method.
      */
-    T runMethod(PreparedStatement statement) throws SQLException;
+    T runMethod(@NotNull PreparedStatement statement) throws SQLException;
   }
 
   /**
@@ -164,16 +165,20 @@ class QueryBuilder {
    * @param handler      The handler to handle the result.
    * @param <StatementT> The return type of the statement.
    * @param <ReturnT>    The return type of the method.
+   * @throws SQLException If an error occurs while running the query.
    */
   private <StatementT, ReturnT> ReturnT runAndThenReturnWithMethod(
-      StatementMethod<StatementT> method,
-      ResultHandler<StatementT, ReturnT> handler
+      @NotNull StatementMethod<StatementT> method,
+      @NotNull ResultHandler<StatementT, ReturnT> handler
   ) throws SQLException {
     locked = true;
 
+    // Store the result of the query outside the try-with-resources block so that the connection
+    // is ensured to close.
     ReturnT result;
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
         PreparedStatement statement = connection.prepareStatement(query)) {
+      // Throw an exception if the number of parameters does not match the number of parts.
       if (statement.getParameterMetaData().getParameterCount() != parts.size()) {
         throw new IllegalStateException(
             "Incorrect number of parameters. Got "
@@ -183,11 +188,13 @@ class QueryBuilder {
                 + "."
         );
       }
+      // Modify the statement with all the modifier functions.
       for (int i = 0; i < parts.size(); i++) {
         parts
             .get(i)
             .modifyStatement(i + 1, statement);
       }
+      // Run the method and handle the result.
       StatementT statementResult = method.runMethod(statement);
       result = handler.handleResult(statementResult);
     }
@@ -217,7 +224,9 @@ class QueryBuilder {
    * @param <T>      The return type of the consumer.
    * @return The converted consumer.
    */
-  private <T> ResultHandler<T, Void> convertToConsumer(ThrowingConsumer<T> consumer) {
+  private <T> @NotNull ResultHandler<T, Void> convertToConsumer(
+      @NotNull ThrowingConsumer<T> consumer
+  ) {
     return e -> {
       consumer.accept(e);
       return null;
@@ -231,7 +240,7 @@ class QueryBuilder {
    * @throws SQLException If an error occurs while executing the query.
    * @see PreparedStatement#executeQuery()
    */
-  public <T> T executeQuery(ResultHandler<ResultSet, T> handler) throws SQLException {
+  public <T> T executeQuery(@NotNull ResultHandler<ResultSet, T> handler) throws SQLException {
     return runAndThenReturnWithMethod(PreparedStatement::executeQuery, handler);
   }
 
@@ -242,7 +251,7 @@ class QueryBuilder {
    * @throws SQLException If an error occurs while executing the query.
    * @see PreparedStatement#executeQuery()
    */
-  public void executeQuery(ThrowingConsumer<ResultSet> handler) throws SQLException {
+  public void executeQuery(@NotNull ThrowingConsumer<ResultSet> handler) throws SQLException {
     runAndThenReturnWithMethod(PreparedStatement::executeQuery, convertToConsumer(handler));
   }
 
@@ -263,7 +272,7 @@ class QueryBuilder {
    * @throws SQLException If an error occurs while executing the query.
    * @see PreparedStatement#executeUpdate()
    */
-  public <T> T executeUpdate(ResultHandler<Integer, T> handler) throws SQLException {
+  public <T> T executeUpdate(@NotNull ResultHandler<Integer, T> handler) throws SQLException {
     return runAndThenReturnWithMethod(PreparedStatement::executeUpdate, handler);
   }
 
@@ -274,7 +283,7 @@ class QueryBuilder {
    * @throws SQLException If an error occurs while executing the update.
    * @see PreparedStatement#executeQuery()
    */
-  public void executeUpdate(ThrowingConsumer<Integer> handler) throws SQLException {
+  public void executeUpdate(@NotNull ThrowingConsumer<Integer> handler) throws SQLException {
     runAndThenReturnWithMethod(PreparedStatement::executeUpdate, convertToConsumer(handler));
   }
 
@@ -296,7 +305,7 @@ class QueryBuilder {
    * @see PreparedStatement#executeQuery()
    * @see #executeQuery(ResultHandler)
    */
-  public <T> @Nullable T executeQuerySafe(ResultHandler<ResultSet, T> handler) {
+  public <T> @Nullable T executeQuerySafe(@NotNull ResultHandler<ResultSet, T> handler) {
     try {
       return executeQuery(handler);
     } catch (SQLException e) {
@@ -310,7 +319,7 @@ class QueryBuilder {
    * @see PreparedStatement#executeQuery()
    * @see #executeQuery(ResultHandler)
    */
-  public void executeQuerySafe(ThrowingConsumer<ResultSet> handler) {
+  public void executeQuerySafe(@NotNull ThrowingConsumer<ResultSet> handler) {
     try {
       executeQuery(handler);
     } catch (SQLException e) {
@@ -340,7 +349,7 @@ class QueryBuilder {
    * @see PreparedStatement#executeUpdate()
    * @see #executeUpdate(ResultHandler)
    */
-  public <T> @Nullable T executeUpdateSafe(ResultHandler<Integer, T> handler) {
+  public <T> @Nullable T executeUpdateSafe(@NotNull ResultHandler<Integer, T> handler) {
     try {
       return executeUpdate(handler);
     } catch (SQLException e) {
@@ -355,7 +364,7 @@ class QueryBuilder {
    * @see PreparedStatement#executeUpdate()
    * @see #executeUpdate(ResultHandler)
    */
-  public void executeUpdateSafe(ThrowingConsumer<Integer> handler) {
+  public void executeUpdateSafe(@NotNull ThrowingConsumer<Integer> handler) {
     try {
       executeUpdate(handler);
     } catch (SQLException e) {
