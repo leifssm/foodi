@@ -102,4 +102,34 @@ public class IngredientDAO {
     // Return null if the ingredient was not found
     return null;
   }
+
+  /**
+   * Retrieve an ingredient from the database by its ID.
+   * @param id the id of the ingredient to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public Ingredient retrieveById(int id) {
+    String sql = "SELECT * FROM ingredient WHERE id = ?";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setInt(1, id);
+      ResultSet rs = pstmt.executeQuery();
+
+      if (rs.next()) {
+        String name = rs.getString("name");
+        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
+        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
+
+        return new Ingredient(id, name, unit, category);
+      }
+
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    // Return null if the ingredient was not found
+    return null;
+  }
 }

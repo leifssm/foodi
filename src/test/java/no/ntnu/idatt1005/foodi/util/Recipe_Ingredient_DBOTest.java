@@ -75,13 +75,13 @@ public class Recipe_Ingredient_DBOTest {
     testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 30);
     testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 45);
 
-    // Create new Recipe_Ingredient objects
-    testRecipe_Ingredient = new RecipeIngredient(1, 1, 2.0);
-    testRecipe_Ingredient2 = new RecipeIngredient(2, 2, 3.0);
-
     // Create new Ingredient objects
     testIngredient = new Ingredient(1, "Pasta", Ingredient.IngredientUnit.GRAM, Ingredient.IngredientCategory.GRAIN);
     testIngredient2 = new Ingredient(2, "Tomato sauce", Ingredient.IngredientUnit.MILLILITER, Ingredient.IngredientCategory.SAUCE);
+
+    // Create new Recipe_Ingredient objects
+    testRecipe_Ingredient = new RecipeIngredient(testRecipe, testIngredient, 2.0);
+    testRecipe_Ingredient2 = new RecipeIngredient(testRecipe2, testIngredient2, 3.0);
   }
 
   @Test
@@ -90,31 +90,90 @@ public class Recipe_Ingredient_DBOTest {
    * The reason we have Ingredient and Recipe objects here, is because in order to save a Recipe_Ingredient object to the database,
    * we need to have the Recipe and Ingredient objects already saved in the database with the same ID as the Recipe_Ingredient object.
    */
-  public void testSave() throws SQLException {
-    // Save the Recipe and Ingredient objects to the database with IDs 1
+  void testSave() throws SQLException {
+    // Save the Recipe and Ingredient objects to the database
     recipeDAO.save(testRecipe);
     ingredientDAO.save(testIngredient);
 
-    // Save the Recipe and Ingredient objects to the database with IDs 2
-    recipeDAO.save(testRecipe2);
-    ingredientDAO.save(testIngredient2);
-
-    // Test the first Recipe_Ingredient object
+    // Save the RecipeIngredient object to the database
     recipe_ingredient_DAO.save(testRecipe_Ingredient);
-    RecipeIngredient savedRecipe_Ingredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
-    assertEquals(testRecipe_Ingredient.toString(), savedRecipe_Ingredient.toString());
 
-    // Test the second Recipe_Ingredient object
-    recipe_ingredient_DAO.save(testRecipe_Ingredient2);
-    RecipeIngredient savedRecipe_Ingredient2 = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient2);
-    assertEquals(testRecipe_Ingredient2.toString(), savedRecipe_Ingredient2.toString());
+    // Retrieve the saved RecipeIngredient object from the database
+    RecipeIngredient savedRecipeIngredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
+
+    // Check if the saved RecipeIngredient object is the same as the original one
+    assertEquals(testRecipe_Ingredient.toString(), savedRecipeIngredient.toString());
 
     // Delete the test data from the database
     recipe_ingredient_DAO.delete(testRecipe_Ingredient);
-    recipe_ingredient_DAO.delete(testRecipe_Ingredient2);
     recipeDAO.delete(testRecipe);
-    recipeDAO.delete(testRecipe2);
     ingredientDAO.delete(testIngredient);
-    ingredientDAO.delete(testIngredient2);
   }
+
+  @Test
+  void testUpdate() throws SQLException {
+    // Save the Recipe and Ingredient objects to the database
+    recipeDAO.save(testRecipe);
+    ingredientDAO.save(testIngredient);
+
+    // Save the RecipeIngredient object to the database
+    recipe_ingredient_DAO.save(testRecipe_Ingredient);
+
+    // Update the RecipeIngredient object in the database
+    testRecipe_Ingredient.setAmount(3.0);
+    recipe_ingredient_DAO.update(testRecipe_Ingredient);
+
+    // Retrieve the updated RecipeIngredient object from the database
+    RecipeIngredient updatedRecipeIngredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
+
+    // Check if the updated RecipeIngredient object is the same as the original one
+    assertEquals(testRecipe_Ingredient.toString(), updatedRecipeIngredient.toString());
+
+    // Delete the test data from the database
+    recipe_ingredient_DAO.delete(testRecipe_Ingredient);
+    recipeDAO.delete(testRecipe);
+    ingredientDAO.delete(testIngredient);
+  }
+
+  @Test
+  void testDelete() throws SQLException {
+    // Save the Recipe and Ingredient objects to the database
+    recipeDAO.save(testRecipe);
+    ingredientDAO.save(testIngredient);
+
+    // Save the RecipeIngredient object to the database
+    recipe_ingredient_DAO.save(testRecipe_Ingredient);
+
+    // Delete the RecipeIngredient object from the database
+    recipe_ingredient_DAO.delete(testRecipe_Ingredient);
+
+    // Check if the RecipeIngredient object was deleted from the database
+    assertNull(recipe_ingredient_DAO.retrieve(testRecipe_Ingredient));
+
+    // Delete the test data from the database
+    recipeDAO.delete(testRecipe);
+    ingredientDAO.delete(testIngredient);
+  }
+
+  @Test
+  void testRetrieve() throws SQLException {
+    // Save the Recipe and Ingredient objects to the database
+    recipeDAO.save(testRecipe);
+    ingredientDAO.save(testIngredient);
+
+    // Save the RecipeIngredient object to the database
+    recipe_ingredient_DAO.save(testRecipe_Ingredient);
+
+    // Retrieve the RecipeIngredient object from the database
+    RecipeIngredient retrievedRecipeIngredient = recipe_ingredient_DAO.retrieve(testRecipe_Ingredient);
+
+    // Check if the retrieved RecipeIngredient object is the same as the original one
+    assertEquals(testRecipe_Ingredient.toString(), retrievedRecipeIngredient.toString());
+
+    // Delete the test data from the database
+    recipe_ingredient_DAO.delete(testRecipe_Ingredient);
+    recipeDAO.delete(testRecipe);
+    ingredientDAO.delete(testIngredient);
+  }
+
 }

@@ -8,22 +8,22 @@ package no.ntnu.idatt1005.foodi.model.objects;
  * @author Snake727
  */
 public class RecipeIngredient {
-  private int recipe_id;
-  private int ingredient_id;
+  private Recipe recipe;
+  private Ingredient ingredient;
   private double amount;
 
-  public RecipeIngredient(int recipe_id, int ingredient_id, double amount) {
-    this.recipe_id = recipe_id;
-    this.ingredient_id = ingredient_id;
+  public RecipeIngredient(Recipe recipe, Ingredient ingredient, double amount) {
+    this.recipe = recipe;
+    this.ingredient = ingredient;
     this.amount = amount;
   }
 
-  public int getRecipeId() {
-    return recipe_id;
+  public Recipe getRecipe() {
+    return recipe;
   }
 
-  public int getIngredientId() {
-    return ingredient_id;
+  public Ingredient getIngredient() {
+    return ingredient;
   }
 
   public double getAmount() {
@@ -33,9 +33,21 @@ public class RecipeIngredient {
   @Override
   public String toString() {
     return "Recipe_Ingredient{" +
-            "recipe_id=" + recipe_id +
-            ", ingredient_id=" + ingredient_id +
-            ", amount=" + amount +
+            "recipe = " + recipe +
+            ", ingredient = " + ingredient +
+            ", amount = " + amount +
             '}';
+  }
+
+  // main method that tests the toString method
+  public static void main(String[] args) {
+    Recipe recipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.MEDIUM, Recipe.DietaryTag.VEGAN, 30);
+    Ingredient ingredient = new Ingredient(1, "Pasta", Ingredient.IngredientUnit.GRAM, Ingredient.IngredientCategory.GRAIN);
+    RecipeIngredient recipeIngredient = new RecipeIngredient(recipe, ingredient, 200);
+    System.out.println(recipeIngredient.toString());
+  }
+
+  public void setAmount(double amount) {
+    this.amount = amount;
   }
 }
