@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.InventoryDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.InventoryIngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.*;
 
@@ -20,12 +20,12 @@ import java.util.Date;
 public class ItemController {
   private IngredientDAO ingredientDAO = new IngredientDAO();
   private UserDAO userDAO;
-  private InventoryDAO inventoryDAO = new InventoryDAO();
+  private InventoryIngredientDAO inventoryIngredientDAO = new InventoryIngredientDAO();
   static int IngredientIdFillerValue;
 
   public ItemController() {
     userDAO = new UserDAO();
-    IngredientIdFillerValue = inventoryDAO.countInventoryItems();
+    IngredientIdFillerValue = inventoryIngredientDAO.countInventoryItems();
   }
 
   public void saveItem(String inputName, IngredientCategory inputCategory, IngredientUnit inputUnit, int inputAmount, Date inputExpirationDate) {
@@ -47,12 +47,12 @@ public class ItemController {
             userDAO.save(dummyUser);
         }
 
-      InventoryDAO inventoryDAO = new InventoryDAO();
+      InventoryIngredientDAO inventoryIngredientDAO = new InventoryIngredientDAO();
 
       java.sql.Date inputExpirationDateSQL = new java.sql.Date(inputExpirationDate.getTime());
 
-      Inventory inventory = new Inventory(dummyUser.getUserId(), createdIngredient.getId(),inputAmount, inputExpirationDateSQL,dummyUser.getUserId());
-      inventoryDAO.save(inventory,createdIngredient,dummyUser);
+      InventoryIngredient inventoryIngredient = new InventoryIngredient(dummyUser.getUserId(), createdIngredient.getId(),inputAmount, inputExpirationDateSQL,dummyUser.getUserId());
+      inventoryIngredientDAO.save(inventoryIngredient,createdIngredient,dummyUser);
 
     } catch (SQLException e) {
       e.printStackTrace();
