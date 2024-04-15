@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.Inventory;
+import no.ntnu.idatt1005.foodi.model.objects.InventoryIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.User;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
-public class InventoryDAO {
+public class InventoryIngredientDAO {
 
 
     //method to get the total amount of tuples in the Inventory table
@@ -36,7 +36,7 @@ public class InventoryDAO {
         return count;
     }
 
-    public void save (Inventory obj, Ingredient obj2, User obj3) throws SQLException {
+    public void save (InventoryIngredient obj, Ingredient obj2, User obj3) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ? AND ingredient_id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -79,7 +79,7 @@ public class InventoryDAO {
 
 
 
-    public void update_amount_of_ingredient(Inventory obj, int amount, int ingredient_id) {
+    public void update_amount_of_ingredient(InventoryIngredient obj, int amount, int ingredient_id) {
         String sql = "UPDATE inventory SET amount = ? WHERE ingredient_id = ? AND id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -98,7 +98,7 @@ public class InventoryDAO {
 
 
     //evt. om noe blir froset, og utløpsdatoen endres
-    public void update_expiration_date(Inventory obj, Date date, int ingredient_id) {
+    public void update_expiration_date(InventoryIngredient obj, Date date, int ingredient_id) {
         String sql = "UPDATE inventory SET expiration_date = ? WHERE ingredient_id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -115,7 +115,7 @@ public class InventoryDAO {
     }
 
     //slette inventory
-    public void delete_inventory(Inventory obj) {
+    public void delete_inventory(InventoryIngredient obj) {
         String sql = "DELETE FROM inventory WHERE MAIN.PUBLIC.INVENTORY.ID = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -146,7 +146,7 @@ public class InventoryDAO {
         }
     }
 
-    public Inventory retrieve(Inventory obj, Ingredient obj2, User obj3){
+    public InventoryIngredient retrieve(InventoryIngredient obj, Ingredient obj2, User obj3){
         String sql = "SELECT * FROM inventory WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -156,7 +156,7 @@ public class InventoryDAO {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return new Inventory(rs.getInt("id"), obj2.getId(), rs.getInt("amount"), rs.getDate("expiration_date"), obj3.getUserId());
+                return new InventoryIngredient(rs.getInt("id"), obj2.getId(), rs.getInt("amount"), rs.getDate("expiration_date"), obj3.getUserId());
             }
 
         } catch (SQLException e) {

@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.model.objects;
 
 import java.sql.Date;
 
-public class Inventory {
+public class InventoryIngredient {
 
     private final int inventoryId;
 
@@ -15,7 +15,7 @@ public class Inventory {
     private final int userId;
 
 
-    public Inventory(int inventoryId, int ingredientId, int amount, Date experationDate, int userId) {
+    public InventoryIngredient(int inventoryId, int ingredientId, int amount, Date experationDate, int userId) {
         this.inventoryId = inventoryId;
         this.ingredientId = ingredientId;
         this.amount = amount;
