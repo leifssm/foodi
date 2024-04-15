@@ -1,8 +1,9 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,13 +25,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AddItemDialog extends StandardDialog {
 
+  private static final String DATE_FORMAT = "dd.MM.yyyy";
   private final TextField ingredientField;
   private final TextField amountField;
   private final ComboBox<IngredientUnit> unitField;
   private final ComboBox<IngredientCategory> categoryField;
-  private final DatePicker expirationDateField;
-
-    private final InventoryList inventoryList;
+  private final SimpleDateFormat dateFormatParser = new SimpleDateFormat(DATE_FORMAT);
+  private final TextField expirationDateField;
+  private final InventoryList inventoryList;
 
   /**
    * Constructor for the AddItemDialog class.
@@ -43,7 +45,7 @@ public class AddItemDialog extends StandardDialog {
     amountField = new TextField();
     unitField = new ComboBox<>();
     categoryField = new ComboBox<>();
-    expirationDateField = new DatePicker();
+    expirationDateField = new TextField();
 
     setTitle("Add New Item");
     setHeaderTitle("Add New Item");
@@ -67,17 +69,17 @@ public class AddItemDialog extends StandardDialog {
 
     categoryField.getItems().addAll(IngredientCategory.values());
 
-    expirationDateField.setPromptText("dd/mm/yyyy");
+    expirationDateField.setPromptText(DATE_FORMAT);
 
     VBox inputFields = new VBox();
     inputFields.getChildren().addAll(
-            new NamedInputField(ingredientField, "Ingredient name"),
-            new HBox(8,
-                    new NamedInputField(amountField, "Amount"),
-                    new NamedInputField(unitField, "Unit")
-            ),
-            new NamedInputField(categoryField, "Category"),
-            new NamedInputField(expirationDateField, "Expiration Date")
+        new NamedInputField(ingredientField, "Ingredient name"),
+        new HBox(8,
+            new NamedInputField(amountField, "Amount"),
+            new NamedInputField(unitField, "Unit")
+        ),
+        new NamedInputField(categoryField, "Category"),
+        new NamedInputField(expirationDateField, "Expiration Date")
     );
 
     inputFields.setSpacing(12);
@@ -98,7 +100,8 @@ public class AddItemDialog extends StandardDialog {
     ItemController itemController = new ItemController();
     itemController.saveItem(ingredient, category, unit, (int) amount, expirationDate);
 
-    InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(), amountString, unitString);
+    InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(),
+        amountString, unitString);
     inventoryList.addItemToInventory(newItem);
 
   }
@@ -112,7 +115,7 @@ public class AddItemDialog extends StandardDialog {
     return ingredientField.getText().toLowerCase();
   }
 
-  private @NotNull double getAmount() throws ValidationException {
+  private double getAmount() throws ValidationException {
     double amount = 0;
     try {
       amount = Double.parseDouble(amountField.getText());
@@ -145,11 +148,16 @@ public class AddItemDialog extends StandardDialog {
    *
    * @return The expiration date as a Date object or null.
    */
-  private @Nullable Date getExpirationDate() {
-    try {
-      return java.sql.Date.valueOf(expirationDateField.getValue());
-    } catch (Exception e) {
+  private @Nullable Date getExpirationDate() throws ValidationException {
+    if (expirationDateField.getText().isBlank()) {
       return null;
+    }
+
+    try {
+      return dateFormatParser.parse(expirationDateField.getText());
+    } catch (ParseException e) {
+      throw new ValidationException(
+          "Expiration date must be in the format dd.MM.yyyy or blank for no expiration date.");
     }
   }
 }
