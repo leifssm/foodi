@@ -14,6 +14,7 @@ import no.ntnu.idatt1005.foodi.view.components.dialog.NamedInputField;
 import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
 import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Class for creating a dialog for adding a new item to the inventory list. Extends the
@@ -147,7 +148,7 @@ public class AddItemDialog extends StandardDialog {
    *
    * @return The expiration date as a Date object or null.
    */
-  private Date getExpirationDate() throws ValidationException {
+  private @Nullable Date getExpirationDate() throws ValidationException {
     if (expirationDateField.getText().isBlank()) {
       return null;
     }
