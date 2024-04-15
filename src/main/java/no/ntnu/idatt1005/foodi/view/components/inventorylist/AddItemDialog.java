@@ -99,9 +99,9 @@ public class AddItemDialog extends StandardDialog {
     ItemController itemController = new ItemController();
     itemController.saveItem(ingredient, category, unit, (int) amount, expirationDate);
 
-//    InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(),
-//        amountString, unitString);
-//    inventoryList.addItemToInventory(newItem);
+    InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(),
+        amountString, unitString);
+    inventoryList.addItemToInventory(newItem);
 
   }
 
