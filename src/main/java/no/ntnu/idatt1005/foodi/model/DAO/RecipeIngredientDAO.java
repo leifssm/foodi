@@ -12,7 +12,7 @@ import java.sql.*;
 /**
  * This class is responsible for handling the database access for the Recipe_Ingredient class.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 

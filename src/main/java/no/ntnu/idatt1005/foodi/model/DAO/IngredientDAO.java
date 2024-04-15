@@ -10,7 +10,7 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
  * This class is responsible for handling the interaction between
  * the Ingredient class and the Database.
  *
- * @version 0.2.0
+ * @version 0.3.0
  * @author Snake727
  */
 
