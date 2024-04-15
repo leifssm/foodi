@@ -8,7 +8,7 @@ public class InventoryIngredient {
 
     private final int ingredientId;
 
-    private final int amount;
+    private final double amount;
 
     private final Date experationDate;
 
@@ -33,7 +33,7 @@ public class InventoryIngredient {
         return ingredientId;
     }
 
-    public int getAmount() {return amount;}
+    public double getAmount() {return amount;}
 
     public java.util.Date getExperationDate() {
         return experationDate;
