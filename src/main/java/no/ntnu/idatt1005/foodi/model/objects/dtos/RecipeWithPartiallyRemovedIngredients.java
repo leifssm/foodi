@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class RecipeWithPartiallyRemovedIngredients extends Recipe {
 
   private List<PartiallyRemovedAmountedIngredient> ingredients;
+  private int portions;
 
   /**
    * Constructor for a recipe with partially removed ingredients.
@@ -29,11 +30,12 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
       Difficulty difficulty,
       DietaryTag dietaryTag,
       int duration,
-      List<PartiallyRemovedAmountedIngredient> ingredients
       List<PartiallyRemovedAmountedIngredient> ingredients,
+      int portions
   ) {
     super(id, name, description, difficulty, dietaryTag, duration);
     setIngredients(ingredients);
+    setPortions(portions);
   }
 
   /**
@@ -52,5 +54,45 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
    */
   public void setIngredients(List<PartiallyRemovedAmountedIngredient> ingredients) {
     this.ingredients = List.copyOf(ingredients);
+  }
+
+  /**
+   * Returns the number of portions the recipe should be multiplied by.
+   *
+   * @return the number of portions
+   */
+  public int getPortions() {
+    return portions;
+  }
+
+  /**
+   * Sets the number of portions recipe should be multiplied by.
+   *
+   * @param portions the number of portions
+   */
+  public void setPortions(int portions) {
+    if (portions < 1) {
+      throw new IllegalArgumentException("Error: Portions cannot be less than 1.");
+    }
+  }
+
+  /**
+   * Returns the needed amount of the ingredient at the given index.
+   *
+   * @param index the index of the ingredient
+   * @return the needed amount of the ingredient
+   */
+  public double getNeededAmount(int index) {
+    return getNeededAmount(ingredients.get(index));
+  }
+
+  /**
+   * Returns ingredient amount * portions - removed amount of the ingredient. Returns at least 0.
+   *
+   * @param ingredient the ingredient to get the portioned amount of
+   * @return the needed amount of the ingredient
+   */
+  public double getNeededAmount(@NotNull PartiallyRemovedAmountedIngredient ingredient) {
+    return Math.max(0, ingredient.getAmount() * portions - ingredient.getRemovedAmount());
   }
 }

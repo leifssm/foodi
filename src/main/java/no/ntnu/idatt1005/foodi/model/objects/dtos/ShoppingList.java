@@ -1,41 +1,50 @@
 package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
+import java.util.List;
+
+/**
+ * A list of recipes with partially removed ingredients.
+ */
 public class ShoppingList {
 
-  private int shoppingListId;
+  private final int shoppingListId;
+  private List<RecipeWithPartiallyRemovedIngredients> recipes;
 
-  private int itemId;
-  private int ingredientId;
-  private double amount;
-  private int userId;
-
-  // evt. is bought, for å kunne autoslette, når den er true, sånn når noen velger remove item, så endrer den til true, og sånn at den fjernes fra listen
-
-  public ShoppingList(int shoppingListId, int itemId, int ingredientId, double amount, int userId) {
+  /**
+   * Constructor for a shopping list.
+   *
+   * @param shoppingListId the id of the shopping list
+   * @param recipes        a list of recipes with partially removed ingredients
+   */
+  public ShoppingList(int shoppingListId, List<RecipeWithPartiallyRemovedIngredients> recipes) {
     this.shoppingListId = shoppingListId;
-    this.itemId = itemId;
-    this.ingredientId = ingredientId;
-    this.amount = amount;
-    this.userId = userId;
+    setRecipes(recipes);
   }
 
+  /**
+   * Returns the id of the shopping list.
+   *
+   * @return the id of the shopping list
+   */
   public int getShoppingListId() {
     return shoppingListId;
   }
 
-  public int getIngredientId() {
-    return ingredientId;
+  /**
+   * Returns an immutable list of recipes with partially removed ingredients.
+   *
+   * @return an immutable list of recipes with partially removed ingredients
+   */
+  public List<RecipeWithPartiallyRemovedIngredients> getRecipes() {
+    return recipes;
   }
 
-  public double getAmount() {
-    return amount;
-  }
-
-  public int getUserId() {
-    return userId;
-  }
-
-  public void setAmount(int amount) {
-    this.amount = amount;
+  /**
+   * Sets the recipes of the shopping list.
+   *
+   * @param recipes a list of recipes with partially removed ingredients.
+   */
+  public void setRecipes(List<RecipeWithPartiallyRemovedIngredients> recipes) {
+    this.recipes = List.copyOf(recipes);
   }
 }
