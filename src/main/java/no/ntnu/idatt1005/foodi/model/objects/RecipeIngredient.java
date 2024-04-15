@@ -4,7 +4,7 @@ package no.ntnu.idatt1005.foodi.model.objects;
  * This class represents the recipe_ingredient object. Its responsibility
  * is to keep track of the ingredients and their amounts in a recipe.
  *
- * @version 0.2.0
+ * @version 0.3.0
  * @author Snake727
  */
 public class RecipeIngredient {
