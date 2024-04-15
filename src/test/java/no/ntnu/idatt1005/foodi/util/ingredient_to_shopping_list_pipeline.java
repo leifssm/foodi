@@ -117,15 +117,18 @@ public class ingredient_to_shopping_list_pipeline {
 
         recipeDAO = new RecipeDAO();
 
-        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE ,30);
-        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE,30);
+        Recipe testRecipe1 = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, Recipe.DietaryTag.NONE, 30);
+        Recipe testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE,30);
 
         recipe_ingredient_DAO = new RecipeIngredientDAO();
 
-    testRecipe_Ingredient = new RecipeIngredient(1, 1, 35.0);
-    testRecipe_Ingredient2 = new RecipeIngredient(2, 2, 3.0);
+        testIngredient1 = new Ingredient(1, "Egg", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.MEAT);
+        testIngredient2 = new Ingredient(2, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
 
-        recipeDAO.save(testRecipe);
+        testRecipe_Ingredient = new RecipeIngredient(testRecipe1, testIngredient1, 35.0);
+        testRecipe_Ingredient2 = new RecipeIngredient(testRecipe2, testIngredient2, 3.0);
+
+        recipeDAO.save(testRecipe1);
         recipeDAO.save(testRecipe2);
 
         recipe_ingredient_DAO.save(testRecipe_Ingredient);

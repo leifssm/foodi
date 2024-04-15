@@ -1,5 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import no.ntnu.idatt1005.foodi.model.objects.RecipeIngredient;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +12,7 @@ import java.sql.*;
 /**
  * This class is responsible for handling the database access for the Recipe_Ingredient class.
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Snake727
  */
 
@@ -23,12 +25,12 @@ public class RecipeIngredientDAO {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
 
-      pstmt.setInt(1, obj.getRecipeId());
-      pstmt.setInt(2, obj.getIngredientId());
+      pstmt.setInt(1, obj.getRecipe().getId());
+      pstmt.setInt(2, obj.getIngredient().getId());
       ResultSet rs = pstmt.executeQuery();
 
       if (rs.next() && rs.getInt(1) > 0) {
-        throw new SQLException("Error: Recipe_Ingredient with Recipe ID " + obj.getRecipeId() + " and Ingredient ID " + obj.getIngredientId() + " already exists in the database.");
+        throw new SQLException("Error: Recipe_Ingredient with Recipe ID " + obj.getRecipe().getId() + " and Ingredient ID " + obj.getIngredient().getId() + " already exists in the database.");
       }
     }
 
@@ -37,8 +39,8 @@ public class RecipeIngredientDAO {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
 
-      pstmt.setInt(1, obj.getRecipeId());
-      pstmt.setInt(2, obj.getIngredientId());
+      pstmt.setInt(1, obj.getRecipe().getId());
+      pstmt.setInt(2, obj.getIngredient().getId());
       pstmt.setDouble(3, obj.getAmount());
       pstmt.executeUpdate();
 
@@ -54,8 +56,8 @@ public class RecipeIngredientDAO {
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
       pstmt.setDouble(1, obj.getAmount());
-      pstmt.setInt(2, obj.getRecipeId());
-      pstmt.setInt(3, obj.getIngredientId());
+      pstmt.setInt(2, obj.getRecipe().getId());
+      pstmt.setInt(3, obj.getIngredient().getId());
       pstmt.executeUpdate();
 
     } catch (SQLException e) {
@@ -69,8 +71,8 @@ public class RecipeIngredientDAO {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-      pstmt.setInt(1, obj.getRecipeId());
-      pstmt.setInt(2, obj.getIngredientId());
+      pstmt.setInt(1, obj.getRecipe().getId());
+      pstmt.setInt(2, obj.getIngredient().getId());
       pstmt.executeUpdate();
 
     } catch (SQLException e) {
@@ -84,12 +86,20 @@ public class RecipeIngredientDAO {
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-      pstmt.setInt(1, obj.getRecipeId());
-      pstmt.setInt(2, obj.getIngredientId());
+      pstmt.setInt(1, obj.getRecipe().getId());
+      pstmt.setInt(2, obj.getIngredient().getId());
       ResultSet rs = pstmt.executeQuery();
 
       if (rs.next()) {
-        return new RecipeIngredient(rs.getInt("recipe_id"), rs.getInt("ingredient_id"), rs.getDouble("amount"));
+        RecipeDAO recipeDAO = new RecipeDAO();
+        IngredientDAO ingredientDAO = new IngredientDAO();
+
+        // Retrieve the Recipe and Ingredient objects using their respective DAOs
+        Recipe recipe = recipeDAO.retrieveById(rs.getInt("recipe_id"));
+        Ingredient ingredient = ingredientDAO.retrieveById(rs.getInt("ingredient_id"));
+
+        // Create a new RecipeIngredient object using the retrieved Recipe and Ingredient objects
+        return new RecipeIngredient(recipe, ingredient, rs.getDouble("amount"));
       }
 
     } catch (SQLException e) {
@@ -99,12 +109,6 @@ public class RecipeIngredientDAO {
     return null;
   }
 
-  /**
-   * Retrieves the required ingredients for a specific recipe.
-   *
-   * @param recipeId The ID of the recipe for which to retrieve the ingredients.
-   * @return A map where the key is the ingredient ID and the value is the amount required.
-   */
   public Map<Integer, Double> getRequiredAmountOfIngredientBasedOnChosenRecipe(int recipeId) {
     Map<Integer, Double> requiredIngredients = new HashMap<>();
 
