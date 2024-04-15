@@ -15,14 +15,31 @@ public class Ingredient {
   private @NotNull Unit unit;
   private @NotNull Category category;
 
-  public Ingredient(int id, @NotNull String name, @NotNull Unit unit,
-      @NotNull Category category) {
+  /**
+   * Creates an ingredient object with the given id, name, unit and category.
+   *
+   * @param id       the id of the ingredient
+   * @param name     the name of the ingredient
+   * @param unit     the unit of the ingredient
+   * @param category the category of the ingredient
+   */
+  public Ingredient(
+      int id,
+      @NotNull String name,
+      @NotNull Unit unit,
+      @NotNull Category category
+  ) {
     this.id = id;
     setName(name);
     setUnit(unit);
     setCategory(category);
   }
 
+  /**
+   * Returns the id of the ingredient.
+   *
+   * @return the id of the ingredient
+   */
   public int getId() {
     return id;
   }
@@ -192,7 +209,7 @@ public class Ingredient {
   }
 
   /**
-   * Returns a string representation of the ingredient. This is useful for debugging.
+   * Returns a string representation of the ingredient.
    *
    * @return a string representation of the ingredient.
    */

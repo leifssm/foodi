@@ -18,8 +18,25 @@ public class Recipe {
   private DietaryTag dietaryTag;
   private int duration;
 
-  public Recipe(int id, String name, String description, Difficulty difficulty,
-      DietaryTag dietaryTag, int duration) {
+  /**
+   * Creates a recipe object with the given id, name, description, difficulty, dietary tag, and
+   * duration.
+   *
+   * @param id          the id of the recipe
+   * @param name        the name of the recipe
+   * @param description the description of the recipe
+   * @param difficulty  the difficulty of the recipe
+   * @param dietaryTag  the dietary tag of the recipe
+   * @param duration    the duration of the recipe in minutes
+   */
+  public Recipe(
+      int id,
+      @NotNull String name,
+      @NotNull String description,
+      @NotNull Difficulty difficulty,
+      @NotNull DietaryTag dietaryTag,
+      int duration
+  ) {
     this.id = id;
     setName(name);
     setDescription(description);
@@ -43,8 +60,17 @@ public class Recipe {
    *
    * @return the name of the recipe
    */
-  public String getName() {
+  public @NotNull String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the recipe.
+   *
+   * @param name the new name of the recipe
+   */
+  public void setName(@NotNull String name) {
+    this.name = name;
   }
 
   /**
@@ -52,8 +78,17 @@ public class Recipe {
    *
    * @return the difficulty of the recipe
    */
-  public Difficulty getDifficulty() {
+  public @NotNull Difficulty getDifficulty() {
     return difficulty;
+  }
+
+  /**
+   * Set the difficulty of the recipe.
+   *
+   * @param difficulty the new difficulty of the recipe
+   */
+  public void setDifficulty(@NotNull Difficulty difficulty) {
+    this.difficulty = difficulty;
   }
 
   /**
@@ -66,44 +101,64 @@ public class Recipe {
   }
 
   /**
-   * Get the description of the recipe.
-   *
-   * @return the description of the recipe.
-   */
-  public String getDescription() {
-    return description;
-  }
-
-  public DietaryTag getDietaryTag() {
-    return dietaryTag;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setDifficulty(Difficulty difficulty) {
-    this.difficulty = difficulty;
-  }
-
-  public void setDietaryTag(DietaryTag dietaryTag) {
-    this.dietaryTag = dietaryTag;
-  }
-
-  /**
    * Set the duration of the recipe. The number represents the duration in minutes.
    *
-   * @param duration
+   * @param duration the new duration of the recipe
    */
-
   public void setDuration(int duration) {
     this.duration = duration;
   }
 
+  /**
+   * Get the description of the recipe.
+   *
+   * @return the description of the recipe.
+   */
+  public @NotNull String getDescription() {
+    return description;
+  }
+
+  /**
+   * Set the description of the recipe.
+   *
+   * @param description the new description of the recipe
+   */
+  public void setDescription(@NotNull String description) {
+    this.description = description;
+  }
+
+  /**
+   * Get the dietary tag of the recipe.
+   *
+   * @return the dietary tag of the recipe
+   */
+  public @NotNull DietaryTag getDietaryTag() {
+    return dietaryTag;
+  }
+
+  /**
+   * Set the dietary tag of the recipe.
+   *
+   * @param dietaryTag the new dietary tag of the recipe
+   */
+  public void setDietaryTag(@NotNull DietaryTag dietaryTag) {
+    this.dietaryTag = dietaryTag;
+  }
+
+  @Override
+  public @NotNull String toString() {
+    return "Recipe{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", difficulty=" + difficulty +
+        ", duration=" + duration +
+        '}';
+  }
+
+  /**
+   * This enum represents the difficulty of a recipe. The difficulty can be easy, medium, or hard.
+   */
   public enum Difficulty {
     EASY("EASY", "Easy"),
     MEDIUM("MEDIUM", "Medium"),
@@ -117,14 +172,12 @@ public class Recipe {
       this.difficulty = difficulty;
     }
 
-    public @NotNull String getDifficulty() {
-      return difficulty;
-    }
-
-    public @NotNull String getDatabaseKey() {
-      return databaseKey;
-    }
-
+    /**
+     * Returns the difficulty from the given key.
+     *
+     * @param key the key of the difficulty
+     * @return the difficulty enum
+     */
     public static @NotNull Difficulty fromKey(@NotNull String key) {
       for (Difficulty difficulty : Difficulty.values()) {
         if (difficulty.getDatabaseKey().equals(key)) {
@@ -134,11 +187,37 @@ public class Recipe {
       throw new IllegalArgumentException("No difficulty found for key: " + key);
     }
 
+    /**
+     * Returns the key of the difficulty to be used with the database.
+     *
+     * @return the key of the difficulty
+     */
+    public @NotNull String getDatabaseKey() {
+      return databaseKey;
+    }
+
+    /**
+     * Returns the difficulty as a string to be used for display purposes.
+     *
+     * @return the difficulty as a string
+     */
+    public @NotNull String getDifficulty() {
+      return difficulty;
+    }
+
+    /**
+     * Returns the database key of the difficulty.
+     *
+     * @return the database key of the difficulty
+     */
     public @NotNull String toString() {
       return databaseKey;
     }
   }
 
+  /**
+   * This enum represents the dietary tag of a recipe,
+   */
   public enum DietaryTag {
     VEGAN("VEGAN", "Vegan"),
     VEGETARIAN("VEGETARIAN", "Vegetarian"),
@@ -156,14 +235,12 @@ public class Recipe {
       this.name = name;
     }
 
-    public @NotNull String getName() {
-      return name;
-    }
-
-    public @NotNull String getDatabaseKey() {
-      return databaseKey;
-    }
-
+    /**
+     * Returns the dietary tag from the given key.
+     *
+     * @param key the key of the dietary tag
+     * @return the dietary tag enum
+     */
     public static @NotNull DietaryTag fromKey(@NotNull String key) {
       for (DietaryTag tag : DietaryTag.values()) {
         if (tag.getDatabaseKey().equals(key)) {
@@ -173,19 +250,31 @@ public class Recipe {
       throw new IllegalArgumentException("No dietary tag found for key: " + key);
     }
 
+    /**
+     * Returns the key of the dietary tag to be used with the database.
+     *
+     * @return the key of the dietary tag
+     */
+    public @NotNull String getDatabaseKey() {
+      return databaseKey;
+    }
+
+    /**
+     * Returns the name of the dietary tag.
+     *
+     * @return the name of the dietary tag
+     */
+    public @NotNull String getName() {
+      return name;
+    }
+
+    /**
+     * Returns the database key of the dietary tag.
+     *
+     * @return the database key of the dietary tag
+     */
     public @NotNull String toString() {
       return databaseKey;
     }
-  }
-
-  @Override
-  public String toString() {
-    return "Recipe{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", difficulty=" + difficulty +
-        ", duration=" + duration +
-        '}';
   }
 }
