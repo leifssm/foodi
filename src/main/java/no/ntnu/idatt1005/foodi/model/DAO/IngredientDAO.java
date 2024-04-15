@@ -16,6 +16,26 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class IngredientDAO {
 
+ public int countIngredientItems(){
+    String sql = "SELECT COUNT(*) FROM ingredient";
+    int count = 0;
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement()) {
+
+      ResultSet rs = stmt.executeQuery(sql);
+      while (rs.next()) {
+        count = rs.getInt(1);
+      }
+
+    } catch (SQLException e) {
+      System.out.println("Error code: " + e.getErrorCode());
+      System.out.println("SQL state: " + e.getSQLState());
+      System.out.println(e.getMessage());
+    }
+
+    return count;
+  }
 
   public void save(Ingredient obj) throws SQLException {
     String checkSql = "SELECT COUNT(*) FROM ingredient WHERE id = ?";
