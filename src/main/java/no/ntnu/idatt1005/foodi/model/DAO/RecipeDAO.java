@@ -99,4 +99,34 @@ public class RecipeDAO {
     }
     return null;
   }
+
+  /**
+   * Retrieve a recipe by its ID.
+   * @param id The id of the recipe to retrieve.
+   * @return The recipe object if found, otherwise null.
+   */
+  public Recipe retrieveById(int id) {
+    String sql = "SELECT * FROM recipe WHERE id = ?";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setInt(1, id);
+      ResultSet rs = pstmt.executeQuery();
+
+      if (rs.next()) {
+        return new Recipe(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+                Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+                rs.getInt("duration")
+        );
+      }
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
 }
