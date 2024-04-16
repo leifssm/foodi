@@ -1,10 +1,12 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 import javafx.scene.control.Label;
@@ -34,13 +36,13 @@ public class RecipePage extends BorderPane implements CssUtils {
     recipeImage.setFitWidth(100);
     widthProperty().addListener(w ->{
       recipeImage.setFitWidth(getWidth());
-      setPadding(new javafx.geometry.Insets(getWidth()/2.2, 0, 0, 0));
+      setPadding(new Insets(getWidth()/2.2, 0, 0, 0));
     });
 
     Label recipeTitle = new Label(title);
     recipeTitle.getStyleClass().add("recipe-title");
 
-    imageUrl = LoadUtils.getImage(difficulty + ".png");
+    imageUrl = LoadUtils.getImage("difficulty/" + difficulty + ".png");
     if (imageUrl == null) {
       throw new AssertionError("Image not found: " + imagePath);
     }
@@ -86,7 +88,7 @@ public class RecipePage extends BorderPane implements CssUtils {
     recipeContent.setBottom(ingredientsInstructionsBox);
     recipeContent.getStyleClass().add("recipe-content");
 
-    getChildren().addAll(recipeImage);
+    getChildren().add(recipeImage);
     setTop(recipeHeader);
     setCenter(recipeContent);
   }
