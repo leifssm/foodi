@@ -27,7 +27,6 @@ public abstract class PageController {
    */
   private void setPageUpdate() {
     getPage().setUpdate(this::update);
-    update();
   }
 
   /**

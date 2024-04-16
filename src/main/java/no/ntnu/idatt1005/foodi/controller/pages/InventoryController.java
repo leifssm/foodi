@@ -14,11 +14,13 @@ public class InventoryController extends PageController {
   /**
    * Constructor for the InventoryController class.
    *
-   * @param inventoryView the inventory view
+   * @param inventoryPage the inventory view
    */
-  public InventoryController(Inventory inventoryView, Supplier<User> getCurrentUser) {
-    super(inventoryView);
+  public InventoryController(Inventory inventoryPage, Supplier<User> getCurrentUser) {
+    super(inventoryPage);
     this.getCurrentUser = getCurrentUser;
+
+    update();
   }
 
   @Override
@@ -27,5 +29,9 @@ public class InventoryController extends PageController {
     System.out.println("Get data from backend with userId: " + getCurrentUser.get().userId()
         + " and update the inventory view.");
     System.out.println("Call the render() with the appropriate data for the inventory page.");
+
+    getPage().render();
   }
+
+
 }
