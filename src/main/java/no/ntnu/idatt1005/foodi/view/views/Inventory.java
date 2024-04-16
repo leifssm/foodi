@@ -19,6 +19,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  */
 public class Inventory extends TitledPage implements CssUtils, Page {
 
+  private BorderPane topBar;
   private Runnable update;
 
   /**
@@ -28,18 +29,17 @@ public class Inventory extends TitledPage implements CssUtils, Page {
     super("Inventory", "Manage your inventory");
     addStylesheet("components/inventory/inventory");
     addClass("inventory");
+
+    setTopBar();
+
+    render();
   }
 
-  /**
-   * Method for rendering the inventory page.
-   */
-  public void render() {
-    InventoryList inventoryList = new InventoryList();
-
-    BorderPane topBar = new BorderPane();
+  private void setTopBar() {
+    topBar = new BorderPane();
     topBar.getStyleClass().add("inventory-top-bar");
     topBar.setLeft(
-        new StandardButton("Add item", () -> new AddItemDialog(inventoryList)).setType(
+        new StandardButton("Add item", () -> new AddItemDialog(null)).setType(
             StandardButton.Style.SUCCESS));
 
     HBox actions = new HBox(
@@ -48,6 +48,14 @@ public class Inventory extends TitledPage implements CssUtils, Page {
     );
     actions.getStyleClass().add("inventory-actions");
     topBar.setRight(actions);
+  }
+
+
+  /**
+   * Method for rendering the inventory page.
+   */
+  public void render() {
+    InventoryList inventoryList = new InventoryList();
     VBox content = new VBox(topBar, inventoryList);
 
     setContent(content);
