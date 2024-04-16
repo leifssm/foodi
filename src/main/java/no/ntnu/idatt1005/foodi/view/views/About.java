@@ -5,7 +5,17 @@ import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1005.foodi.view.components.TitledPage;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
+/**
+ * The about view.
+ *
+ * <p> This class is a custom component for displaying the about page. </p>
+ */
+
 public class About extends TitledPage implements CssUtils {
+
+  /**
+   * The constructor of the about view.
+   */
   public About() {
     super("Your vision, our mission");
     addStylesheet("components/about/about");
