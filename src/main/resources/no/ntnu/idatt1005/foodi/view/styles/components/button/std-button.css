@@ -2,6 +2,7 @@
   -fx-font-weight: bold;
   -fx-background-radius: 5px;
   -fx-text-fill: white;
+  -fx-cursor: hand;
 }
 
 .std-button.normal {
