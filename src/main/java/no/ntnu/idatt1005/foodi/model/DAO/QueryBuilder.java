@@ -101,6 +101,17 @@ class QueryBuilder {
   }
 
   /**
+   * Replaces the next "?" parameter with the given date.
+   * @param value The date to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addDate(@NotNull java.sql.Date value) {
+    checkLocked();
+    parts.add((i, statement) -> statement.setDate(i, value));
+    return this;
+  }
+
+  /**
    * Executes a SELECT query and returns the result without throwing if it encounters an error.
    * Returns {@code null} if it does.
    *

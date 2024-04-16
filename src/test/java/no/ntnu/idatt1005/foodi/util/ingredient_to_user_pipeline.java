@@ -8,7 +8,6 @@ import java.sql.*;
 import java.time.LocalDate;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.InventoryIngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.InventoryIngredient;

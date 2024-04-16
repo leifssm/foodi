@@ -11,7 +11,6 @@ public class ItemDAO {
 
     private final IngredientDAO ingredientDAO = new IngredientDAO();
     private final UserDAO userDAO = new UserDAO();
-    private final InventoryIngredientDAO inventoryIngredientDAO = new InventoryIngredientDAO();
 
     public void saveItem(ExpiringIngredient item) {
         try {
