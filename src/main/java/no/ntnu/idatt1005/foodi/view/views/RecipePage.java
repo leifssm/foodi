@@ -1,19 +1,21 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.view.Page;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 
-public class RecipePage extends BorderPane implements CssUtils, Page {
+/**
+ * Class for displaying a recipe page.
+ */
+public class RecipePage extends StatefulPage implements CssUtils {
 
   private final String imagePath = "chicken-soup.jpg";
   private final String title = "Chicken Soup";
@@ -21,8 +23,10 @@ public class RecipePage extends BorderPane implements CssUtils, Page {
   private final String difficulty = "easy";
   private final String description = "A delicious chicken soup that is perfect for a cold winter day. It is easy to make and only requires a few ingredients. It is also very healthy and nutritious. Enjoy! 🍲";
   private final String instructions = "1. Boil the chicken in a pot with water for 30 minutes.\n2. Add the vegetables and spices.\n3. Let it simmer for 10 minutes.\n4. Serve hot with bread.";
-  private Runnable controllerUpdate;
 
+  /**
+   * Constructor for the RecipePage class.
+   */
   public RecipePage() {
     addStylesheet("components/recipe/recipe-page");
     addClass("recipe");
@@ -94,24 +98,5 @@ public class RecipePage extends BorderPane implements CssUtils, Page {
     getChildren().add(recipeImage);
     setTop(recipeHeader);
     setCenter(recipeContent);
-  }
-
-  @Override
-  public void update() {
-    if (controllerUpdate == null) {
-      return;
-    }
-
-    controllerUpdate.run();
-  }
-
-  @Override
-  public void setUpdate(Runnable controllerUpdate) {
-    this.controllerUpdate = controllerUpdate;
-  }
-
-  @Override
-  public Node getNode() {
-    return this;
   }
 }

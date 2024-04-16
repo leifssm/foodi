@@ -3,7 +3,7 @@ package no.ntnu.idatt1005.foodi.view.location;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.layout.BorderPane;
-import no.ntnu.idatt1005.foodi.view.Page;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,7 +17,7 @@ public class Router extends BorderPane {
   /**
    * A map of routes and their corresponding nodes.
    */
-  HashMap<String, Page> routes = new HashMap<>();
+  HashMap<String, StatefulPage> routes = new HashMap<>();
 
   /**
    * Creates an empty router.
@@ -38,9 +38,9 @@ public class Router extends BorderPane {
       return;
     }
 
-    for (Map.Entry<String, Page> entry : routes.entrySet()) {
+    for (Map.Entry<String, StatefulPage> entry : routes.entrySet()) {
       String route = entry.getKey();
-      Page page = entry.getValue();
+      StatefulPage page = entry.getValue();
 
       if (LocationHandler.isLocationFuzzy(route)) {
         setPage(page);
@@ -56,8 +56,8 @@ public class Router extends BorderPane {
    *
    * @param page The page to show
    */
-  private void setPage(@NotNull Page page) {
-    setCenter(page.getNode());
+  private void setPage(@NotNull StatefulPage page) {
+    setCenter(page);
     page.update();
   }
 
@@ -68,7 +68,8 @@ public class Router extends BorderPane {
    * @param page The page to show
    * @throws IllegalArgumentException If the route already exists
    */
-  public void addRoute(@NotNull String path, @NotNull Page page) throws IllegalArgumentException {
+  public void addRoute(@NotNull String path, @NotNull StatefulPage page)
+      throws IllegalArgumentException {
     if (routes.containsKey(path)) {
       throw new IllegalArgumentException("Route already exists");
     }

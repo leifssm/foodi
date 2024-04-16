@@ -1,6 +1,6 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
-import no.ntnu.idatt1005.foodi.view.Page;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 
 /**
  * Interface for a page controller. This controller manages updates to the page it controls,
@@ -8,14 +8,14 @@ import no.ntnu.idatt1005.foodi.view.Page;
  */
 public abstract class PageController {
 
-  private final Page page;
+  private final StatefulPage page;
 
   /**
    * Constructor for the PageController class.
    *
    * @param page the page that the controller is managing
    */
-  protected PageController(Page page) {
+  protected PageController(StatefulPage page) {
     this.page = page;
 
     setPageUpdate();
@@ -26,16 +26,7 @@ public abstract class PageController {
    * update itself when refreshed.
    */
   private void setPageUpdate() {
-    getPage().setUpdate(this::update);
-  }
-
-  /**
-   * Returns the page that the controller is managing.
-   *
-   * @return the page that the controller is managing
-   */
-  protected Page getPage() {
-    return page;
+    page.setUpdate(this::update);
   }
 
   /**

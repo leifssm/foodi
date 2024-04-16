@@ -36,6 +36,8 @@ public class SideBar extends VBox implements CssUtils {
    * @param currentUsername The username of the currently logged in user
    */
   public void render(String currentUsername) {
+    getChildren().clear();
+
     String image = LoadUtils.getImage("foodi.png");
     if (image != null) {
       ImageView logo = new ImageView(image);
@@ -78,9 +80,6 @@ public class SideBar extends VBox implements CssUtils {
   }
 
   private void attachUsernameListener(SimpleObjectProperty<User> currentUserProperty) {
-    currentUserProperty.subscribe(newUser -> {
-      getChildren().clear();
-      render(newUser.name());
-    });
+    currentUserProperty.subscribe(newUser -> render(newUser.name()));
   }
 }

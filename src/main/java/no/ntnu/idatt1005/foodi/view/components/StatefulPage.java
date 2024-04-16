@@ -23,7 +23,10 @@ public abstract class StatefulPage extends BorderPane {
     super();
   }
 
-  protected void update() {
+  /**
+   * Updates the page with the runnable set by the controller.
+   */
+  public void update() {
     if (controllerUpdate == null) {
       return;
     }
@@ -31,6 +34,11 @@ public abstract class StatefulPage extends BorderPane {
     controllerUpdate.run();
   }
 
+  /**
+   * Sets the update runnable for the page. Used by the controller.
+   *
+   * @param controllerUpdate The runnable to set
+   */
   public void setUpdate(Runnable controllerUpdate) {
     this.controllerUpdate = controllerUpdate;
   }
