@@ -10,12 +10,32 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
  * This class is responsible for handling the interaction between
  * the Ingredient class and the Database.
  *
- * @version 0.2.0
+ * @version 0.3.0
  * @author Snake727
  */
 
 public class IngredientDAO {
 
+ public int countIngredientItems(){
+    String sql = "SELECT COUNT(*) FROM ingredient";
+    int count = 0;
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement()) {
+
+      ResultSet rs = stmt.executeQuery(sql);
+      while (rs.next()) {
+        count = rs.getInt(1);
+      }
+
+    } catch (SQLException e) {
+      System.out.println("Error code: " + e.getErrorCode());
+      System.out.println("SQL state: " + e.getSQLState());
+      System.out.println(e.getMessage());
+    }
+
+    return count;
+  }
 
   public void save(Ingredient obj) throws SQLException {
     String checkSql = "SELECT COUNT(*) FROM ingredient WHERE id = ?";
@@ -93,6 +113,36 @@ public class IngredientDAO {
         Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
 
         return new Ingredient(obj.getId(), name, unit, category);
+      }
+
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    // Return null if the ingredient was not found
+    return null;
+  }
+
+  /**
+   * Retrieve an ingredient from the database by its ID.
+   * @param id the id of the ingredient to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public Ingredient retrieveById(int id) {
+    String sql = "SELECT * FROM ingredient WHERE id = ?";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      pstmt.setInt(1, id);
+      ResultSet rs = pstmt.executeQuery();
+
+      if (rs.next()) {
+        String name = rs.getString("name");
+        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
+        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
+
+        return new Ingredient(id, name, unit, category);
       }
 
     } catch (SQLException e) {

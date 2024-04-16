@@ -18,15 +18,15 @@ import org.junit.jupiter.api.*;
 public class ingredient_to_shopping_list_pipeline {
 
     private static UserDAO userDA;
-    private static InventoryDAO inventoryDA;
+    private static InventoryIngredientDAO inventoryDA;
 
-    private static Inventory inventory1;
+    private static InventoryIngredient inventoryIngredient1;
 
-    private static Inventory inventory2;
+    private static InventoryIngredient inventoryIngredient2;
 
-    private static Inventory inventory3;
+    private static InventoryIngredient inventoryIngredient3;
 
-    private static Inventory inventory4;
+    private static InventoryIngredient inventoryIngredient4;
 
     private static IngredientDAO ingredientDA;
 
@@ -93,11 +93,11 @@ public class ingredient_to_shopping_list_pipeline {
 
 
         //når de initialiseres, bør fremmednøkkelverdiene være null og så senere, bli tilegnet, gjennom save metoden
-        inventoryDA = new InventoryDAO();
-        inventory1 = new Inventory(1, NULL, 7, sqlDate, NULL);
-        inventory2 = new Inventory(2, NULL, 2, sqlDate, NULL);
-        inventory3 = new Inventory(3, NULL, 23, sqlDate, NULL);
-        inventory4 = new Inventory(1, NULL, 5, sqlDate, NULL);
+        inventoryDA = new InventoryIngredientDAO();
+        inventoryIngredient1 = new InventoryIngredient(1, NULL, 7, sqlDate, NULL);
+        inventoryIngredient2 = new InventoryIngredient(2, NULL, 2, sqlDate, NULL);
+        inventoryIngredient3 = new InventoryIngredient(3, NULL, 23, sqlDate, NULL);
+        inventoryIngredient4 = new InventoryIngredient(1, NULL, 5, sqlDate, NULL);
 
         // save the user, ingredients and inventory - indirectly testing the save method
         // in the user, ingredient and inventory DAO classes
@@ -107,25 +107,28 @@ public class ingredient_to_shopping_list_pipeline {
         ingredientDA.save(testIngredient1);
         ingredientDA.save(testIngredient2);
 
-        inventoryDA.save(inventory1, testIngredient1, testUser);
-        inventoryDA.save(inventory2, testIngredient2, testUser);
-        inventoryDA.save(inventory3, testIngredient1, testUser);
-        inventoryDA.save(inventory4, testIngredient1, testUser);  //samme ingrediens og id som i inventory 1, bare med annerledes megnde, bør resultere i bare 1 tuppel, hvor mengden er 12
+        inventoryDA.save(inventoryIngredient1, testIngredient1, testUser);
+        inventoryDA.save(inventoryIngredient2, testIngredient2, testUser);
+        inventoryDA.save(inventoryIngredient3, testIngredient1, testUser);
+        inventoryDA.save(inventoryIngredient4, testIngredient1, testUser);  //samme ingrediens og id som i inventory 1, bare med annerledes megnde, bør resultere i bare 1 tuppel, hvor mengden er 12
 
 
         //recipe og recipe_ingredient
 
         recipeDAO = new RecipeDAO();
 
-        testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE ,30);
-        testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE,30);
+        Recipe testRecipe1 = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY, Recipe.DietaryTag.NONE, 30);
+        Recipe testRecipe2 = new Recipe(2, "Chipsi Mayai", "Potet omelett", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE,30);
 
         recipe_ingredient_DAO = new RecipeIngredientDAO();
 
-    testRecipe_Ingredient = new RecipeIngredient(1, 1, 35.0);
-    testRecipe_Ingredient2 = new RecipeIngredient(2, 2, 3.0);
+        testIngredient1 = new Ingredient(1, "Egg", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.MEAT);
+        testIngredient2 = new Ingredient(2, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
 
-        recipeDAO.save(testRecipe);
+        testRecipe_Ingredient = new RecipeIngredient(testRecipe1, testIngredient1, 35.0);
+        testRecipe_Ingredient2 = new RecipeIngredient(testRecipe2, testIngredient2, 3.0);
+
+        recipeDAO.save(testRecipe1);
         recipeDAO.save(testRecipe2);
 
         recipe_ingredient_DAO.save(testRecipe_Ingredient);
@@ -233,7 +236,7 @@ public class ingredient_to_shopping_list_pipeline {
         @Test
         @Order(2)
         public void update_amount_of_ingredient() {
-            inventoryDA.update_amount_of_ingredient(inventory2, 24, 1);
+            inventoryDA.update_amount_of_ingredient(inventoryIngredient2, 24, 1);
             String checkSql = "SELECT * FROM inventory";
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
                  PreparedStatement pstmt = connection.prepareStatement(checkSql)) {
@@ -253,7 +256,7 @@ public class ingredient_to_shopping_list_pipeline {
         @Test
         @Order(5)
         public void delete_inventory() {
-            inventoryDA.delete_inventory(inventory2);
+            inventoryDA.delete_inventory(inventoryIngredient2);
             String number_of_entries_inventory = "Select COUNT(*) FROM inventory";
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
                 Statement statement = connection.createStatement();
@@ -271,7 +274,7 @@ public class ingredient_to_shopping_list_pipeline {
         public void update_expiration_date() {
             LocalDate localDate = LocalDate.of(2004, 10, 14);
             Date sqlDate = Date.valueOf(localDate);
-            inventoryDA.update_expiration_date(inventory1, sqlDate, 1);
+            inventoryDA.update_expiration_date(inventoryIngredient1, sqlDate, 1);
             String checkSql = "SELECT * FROM inventory";
             try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
                  PreparedStatement pstmt = connection.prepareStatement(checkSql)) {
@@ -293,12 +296,12 @@ public class ingredient_to_shopping_list_pipeline {
         @Order(3)
         //fikser dette senere, ellers er inventory tingz gucci.
         public void retrieve_inventory() {
-            Inventory inventory = inventoryDA.retrieve(inventory3, testIngredient1, testUser);
-            assertEquals(inventory3.getInventoryId(), inventory.getInventoryId());
-            assertEquals(testIngredient1.getId(), inventory.getIngredientId());
-            assertEquals(inventory3.getExperationDate(), inventory.getExperationDate());
-            assertEquals(testUser.getUserId(), inventory.getUserId());
-            assertEquals(inventory3.getAmount(), inventory.getAmount());
+            InventoryIngredient inventoryIngredient = inventoryDA.retrieve(inventoryIngredient3, testIngredient1, testUser);
+            assertEquals(inventoryIngredient3.getInventoryId(), inventoryIngredient.getInventoryId());
+            assertEquals(testIngredient1.getId(), inventoryIngredient.getIngredientId());
+            assertEquals(inventoryIngredient3.getExperationDate(), inventoryIngredient.getExperationDate());
+            assertEquals(testUser.getUserId(), inventoryIngredient.getUserId());
+            assertEquals(inventoryIngredient3.getAmount(), inventoryIngredient.getAmount());
         }
 
 
@@ -411,7 +414,7 @@ public class ingredient_to_shopping_list_pipeline {
 
 
             int recipeId = testRecipe.getId();
-            int inventoryId = inventory3.getInventoryId();
+            int inventoryId = inventoryIngredient3.getInventoryId();
 
             // Assuming we have a method in inventoryDA to get the total amount of each ingredient in inventory
             Map<Integer, Double> currentInventory = inventoryDA.getTotalAmountPerIngredient(inventoryId);

@@ -1,8 +1,8 @@
 # Project description
 The project is tool for planning of purchases.
-- [ ] The application must provide an overview of food inventory
+- [ ] The application must provide an overview of food inventoryIngredient
 - [ ] Have a cookbook with recipes
-- [ ] Generate a shopping list based on the selected recipe in the cookbook as well as the current inventory.
+- [ ] Generate a shopping list based on the selected recipe in the cookbook as well as the current inventoryIngredient.
 - [ ] The requirement specification described above is not final. Functionalities can be added and prioritized in dialogue with the customer and through feedback from user tests along the way. 
 
 # Agreement
