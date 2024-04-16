@@ -78,13 +78,17 @@ public class IngredientDAO {
    * @return The id of the ingredient. Returns -1 if nothing was found.
    */
   private static Integer findIngredientId(@NotNull String ingredientName, @NotNull Ingredient.Unit unit, @NotNull Ingredient.Category category) {
-    return new QueryBuilder("SELECT COUNT(*) FROM ingredient WHERE name = " + ingredientName + " AND unit = " + unit + " AND category = " + category)
-        .executeQuerySafe(rs -> {
-          if (rs.next()) {
-            return rs.getInt(1);
-          }
-          return -1;
-        });
+    Integer result = new QueryBuilder("SELECT COUNT(*) FROM ingredient WHERE name = ? AND unit = ? AND category = ?")
+          .addString(ingredientName)
+          .addString(unit.toString())
+          .addString(category.toString())
+          .executeQuerySafe(rs -> {
+            if (rs.next()) {
+              return rs.getInt(1);
+            }
+            return -1;
+          });
+    return result != null ? result : -1;
   }
 
   /**
