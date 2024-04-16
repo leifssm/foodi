@@ -28,7 +28,12 @@ public class Inventory extends TitledPage implements CssUtils, Page {
     super("Inventory", "Manage your inventory");
     addStylesheet("components/inventory/inventory");
     addClass("inventory");
+  }
 
+  /**
+   * Method for rendering the inventory page.
+   */
+  public void render() {
     InventoryList inventoryList = new InventoryList();
 
     BorderPane topBar = new BorderPane();

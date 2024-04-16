@@ -11,7 +11,7 @@ import no.ntnu.idatt1005.foodi.view.Root;
 public class ApplicationController {
 
   private final Root root;
-  private User user;
+  private User currentUser;
 
   /**
    * Constructor for the ApplicationController class.
@@ -25,8 +25,16 @@ public class ApplicationController {
   }
 
   private void createControllers() {
-    new InventoryController(root.getInventoryPage());
-    //new CookbookGridController(root.getCookbookGridPage());
-    //new ProfilesController(root.getProfilesPage());
+    new InventoryController(root.getInventoryPage(), this::getCurrentUser);
+    //    new CookbookGridController(root.getCookbookGridPage());
+    //    new ProfilesController(root.getProfilesPage(), this::setCurrentUser);
+  }
+
+  public User getCurrentUser() {
+    return currentUser;
+  }
+
+  public void setCurrentUser(User user) {
+    this.currentUser = user;
   }
 }
