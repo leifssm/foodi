@@ -41,7 +41,7 @@ public class RecipeIngredient {
 
   // main method that tests the toString method
   public static void main(String[] args) {
-    Recipe recipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.MEDIUM, Recipe.DietaryTag.VEGAN, 30);
+    Recipe recipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.MEDIUM, Recipe.DietaryTag.VEGAN, 30, "imagePath", "instruction");
     Ingredient ingredient = new Ingredient(1, "Pasta", Ingredient.IngredientUnit.GRAM, Ingredient.IngredientCategory.GRAIN);
     RecipeIngredient recipeIngredient = new RecipeIngredient(recipe, ingredient, 200);
     System.out.println(recipeIngredient.toString());

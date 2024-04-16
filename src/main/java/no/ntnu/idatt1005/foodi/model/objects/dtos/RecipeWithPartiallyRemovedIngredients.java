@@ -30,10 +30,12 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
       Difficulty difficulty,
       DietaryTag dietaryTag,
       int duration,
+      String imagePath,
+      String instruction,
       List<PartiallyRemovedAmountedIngredient> ingredients,
       int portions
   ) {
-    super(id, name, description, difficulty, dietaryTag, duration);
+    super(id, name, description, difficulty, dietaryTag, duration, imagePath, instruction);
     setIngredients(ingredients);
     setPortions(portions);
   }
