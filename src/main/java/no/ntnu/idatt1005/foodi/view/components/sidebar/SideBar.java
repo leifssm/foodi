@@ -78,7 +78,7 @@ public class SideBar extends VBox implements CssUtils {
   }
 
   private void attachUsernameListener(SimpleObjectProperty<User> currentUserProperty) {
-    currentUserProperty.addListener((observable, oldUser, newUser) -> {
+    currentUserProperty.subscribe(newUser -> {
       getChildren().clear();
       render(newUser.name());
     });
