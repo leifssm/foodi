@@ -16,13 +16,12 @@ public class Root extends BorderPane {
   /**
    * Constructor for the Root class.
    */
-  public Root() {
+  public Root(Router router) {
     super();
     getStylesheets().add(LoadUtils.getStylesheet("root"));
     getStyleClass().add("main");
     setLeft(new SideBar());
 
-    Router router = new Router();
     router.addRoute("inventory", new Inventory());
     router.addRoute("cookbook-grid", new CookbookGrid());
     router.addRoute("profiles", new Profiles());
