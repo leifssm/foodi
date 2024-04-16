@@ -20,11 +20,7 @@ public class RecipeController {
   }
 
   public void save(Recipe recipe) {
-    try {
-      recipeDAO.save(recipe);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+    recipeDAO.saveRecipeObject(recipe);
   }
 
   public void update(Recipe recipe) {
