@@ -1,8 +1,10 @@
 package no.ntnu.idatt1005.foodi.view.components.sidebar;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
@@ -18,12 +20,14 @@ public class SideBar extends VBox implements CssUtils {
   /**
    * The constructor of the sidebar component.
    */
-  public SideBar() {
+  public SideBar(SimpleObjectProperty<User> currentUserProperty) {
     super();
     addStylesheet("components/sidebar");
     addClass("sidebar");
 
-    render("USERNAME HERE");
+    render(currentUserProperty.get().name());
+
+    attachUsernameListener(currentUserProperty);
   }
 
   /**
@@ -71,5 +75,12 @@ public class SideBar extends VBox implements CssUtils {
             "about"
         )
     );
+  }
+
+  private void attachUsernameListener(SimpleObjectProperty<User> currentUserProperty) {
+    currentUserProperty.addListener((observable, oldUser, newUser) -> {
+      getChildren().clear();
+      render(newUser.name());
+    });
   }
 }

@@ -7,6 +7,7 @@ import no.ntnu.idatt1005.foodi.controller.pages.ProfilesController;
 import no.ntnu.idatt1005.foodi.controller.pages.RecipePageController;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.Root;
+import no.ntnu.idatt1005.foodi.view.components.sidebar.SideBar;
 
 /**
  * Controller for the application. This controller manages the creation of pages and their routing
@@ -26,6 +27,8 @@ public class ApplicationController {
     this.root = root;
     this.currentUserProperty = new SimpleObjectProperty<>(
         new User(1, "REPLACE WITH DATA FROM DTO"));
+
+    root.setSidebar(new SideBar(this.currentUserProperty));
 
     createControllers();
   }

@@ -12,6 +12,12 @@ public class ProfilesController extends PageController {
   private final Profiles view;
   private final SimpleObjectProperty<User> currentUserProperty;
 
+  /**
+   * Constructor for the ProfilesController class.
+   *
+   * @param profilesPage        the profiles view
+   * @param currentUserProperty the current user property
+   */
   public ProfilesController(Profiles profilesPage, SimpleObjectProperty<User> currentUserProperty) {
     super(profilesPage);
     this.currentUserProperty = currentUserProperty;
@@ -23,6 +29,10 @@ public class ProfilesController extends PageController {
     // Update the profiles view
     System.out.println("Get data from backend and update the profiles view.");
     System.out.println("Call the render() with the appropriate data for the profiles page.");
+    changeUser(new User(1, "DTO"));
   }
 
+  void changeUser(User user) {
+    currentUserProperty.set(user);
+  }
 }

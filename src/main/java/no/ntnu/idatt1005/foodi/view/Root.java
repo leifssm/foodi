@@ -31,7 +31,6 @@ public class Root extends BorderPane {
 
     getStylesheets().add(LoadUtils.getStylesheet("root"));
     getStyleClass().add("main");
-    setLeft(new SideBar());
 
     Router router = new Router();
     router.addRoute("inventory", inventoryPage);
@@ -41,6 +40,10 @@ public class Root extends BorderPane {
     // add more routes here
 
     setCenter(router);
+  }
+
+  public void setSidebar(SideBar sidebar) {
+    setLeft(sidebar);
   }
 
   public Inventory getInventoryPage() {
