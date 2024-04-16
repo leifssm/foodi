@@ -179,12 +179,14 @@ public class Recipe {
   @Override
   public @NotNull String toString() {
     return "Recipe{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", difficulty=" + difficulty +
-        ", duration=" + duration +
-        '}';
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", difficulty=" + difficulty +
+            ", duration=" + duration +
+            ", imagePath='" + imagePath + '\'' +
+            ", instruction='" + instruction + '\'' +
+            '}';
   }
 
   /**
