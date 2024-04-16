@@ -1,10 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
-import java.sql.*;
-
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
+import java.sql.SQLException;
 
 /**
  * This class is responsible for handling the interaction between
@@ -16,111 +14,55 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class IngredientDAO {
 
- public int countIngredientItems(){
-    String sql = "SELECT COUNT(*) FROM ingredient";
-    int count = 0;
+  public int countIngredientItems() {
+    Integer result = new QueryBuilder("SELECT COUNT(*) FROM ingredient")
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()) {
-
-      ResultSet rs = stmt.executeQuery(sql);
-      while (rs.next()) {
-        count = rs.getInt(1);
-      }
-
-    } catch (SQLException e) {
-      System.out.println("Error code: " + e.getErrorCode());
-      System.out.println("SQL state: " + e.getSQLState());
-      System.out.println(e.getMessage());
-    }
-
-    return count;
+    return result != null ? result : 0;
   }
 
-  public void save(Ingredient obj) throws SQLException {
-    String checkSql = "SELECT COUNT(*) FROM ingredient WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
-
-      pstmt.setInt(1, obj.getId());
-      ResultSet rs = pstmt.executeQuery();
-
-      if (rs.next() && rs.getInt(1) > 0) {
-        throw new SQLException("Error: Ingredient with ID " + obj.getId() + " already exists in the database.");
-      }
-    }
-
-    String insertSql = "INSERT INTO ingredient (id, name, unit, category) VALUES (?, ?, ?, ?)";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
-
-      pstmt.setInt(1, obj.getId());
-      pstmt.setString(2, obj.getName());
-      pstmt.setString(3, obj.getUnit().toString());
-      pstmt.setString(4, obj.getCategory().toString());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  public void saveIngredient(Ingredient obj) throws SQLException {
+    new QueryBuilder("INSERT INTO ingredient (id, name, unit, category) VALUES (?, ?, ?, ?)")
+        .addInt(obj.getId())
+        .addString(obj.getName())
+        .addString(obj.getUnit().getDatabaseKey())
+        .addString(obj.getCategory().getDatabaseKey())
+        .executeUpdateSafe();
   }
 
-  public void update(Ingredient obj) {
-    String sql = "UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setString(1, obj.getName());
-      pstmt.setString(2, obj.getUnit().toString());
-      pstmt.setString(3, obj.getCategory().toString());
-      pstmt.setInt(4, obj.getId());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  public void updateIngredient(Ingredient obj) {
+    new QueryBuilder("UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?")
+        .addString(obj.getName())
+        .addString(obj.getUnit().getDatabaseKey())
+        .addString(obj.getCategory().getDatabaseKey())
+        .addInt(obj.getId())
+        .executeUpdateSafe();
   }
 
-  public void delete(Ingredient obj) {
-    String sql = "DELETE FROM ingredient WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setInt(1, obj.getId());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  public void deleteIngredient(Ingredient obj) {
+    new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
   }
 
-  public Ingredient retrieve(Ingredient obj) {
-    String sql = "SELECT * FROM ingredient WHERE id = ?";
+  public Ingredient retrieveIngredient(Ingredient obj) {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setInt(1, obj.getId());
-      ResultSet rs = pstmt.executeQuery();
-
-      if (rs.next()) {
-        String name = rs.getString("name");
-        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
-        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
-
-        return new Ingredient(obj.getId(), name, unit, category);
-      }
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-
-    // Return null if the ingredient was not found
-    return null;
+            return new Ingredient(obj.getId(), name, unit, category);
+          }
+          return null;
+        });
   }
 
   /**
@@ -128,28 +70,32 @@ public class IngredientDAO {
    * @param id the id of the ingredient to retrieve.
    * @return The Ingredient object. Returns null if nothing was found.
    */
-  public Ingredient retrieveById(int id) {
-    String sql = "SELECT * FROM ingredient WHERE id = ?";
+  public Ingredient retrieveIngredientById(int id) {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
+        .addInt(id)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            return new Ingredient(id, name, unit, category);
+          }
+          return null;
+        });
+  }
 
-      pstmt.setInt(1, id);
-      ResultSet rs = pstmt.executeQuery();
+  public Ingredient retrieveExpiringIngredients() {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE expiration_date < CURRENT_DATE")
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
 
-      if (rs.next()) {
-        String name = rs.getString("name");
-        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
-        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
-
-        return new Ingredient(id, name, unit, category);
-      }
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-
-    // Return null if the ingredient was not found
-    return null;
+            return new Ingredient(rs.getInt("id"), name, unit, category);
+          }
+          return null;
+        });
   }
 }

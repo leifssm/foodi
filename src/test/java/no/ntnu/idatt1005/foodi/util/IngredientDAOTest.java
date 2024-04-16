@@ -1,6 +1,6 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,8 +50,8 @@ public class IngredientDAOTest {
 
     // Initialize a new IngredientDatabaseAccess object and two Ingredient objects
     ingredientDA = new IngredientDAO();
-    testIngredient1 = new Ingredient(5, "Carrot", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
-    testIngredient2 = new Ingredient(6, "Potato", Ingredient.IngredientUnit.PIECE, Ingredient.IngredientCategory.VEGETABLE);
+    testIngredient1 = new Ingredient(5, "Carrot", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
+    testIngredient2 = new Ingredient(6, "Potato", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
 
 
 
