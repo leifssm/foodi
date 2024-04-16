@@ -18,8 +18,8 @@ public class RecipePageController extends PageController {
    * @param recipePage          the inventory view
    * @param currentUserProperty the current user property
    */
-  public RecipePageController(RecipePage recipePage, SimpleObjectProperty<User> currentUserProperty
-  ) {
+  public RecipePageController(RecipePage recipePage,
+      SimpleObjectProperty<User> currentUserProperty) {
     super(recipePage);
 
     this.view = recipePage;
