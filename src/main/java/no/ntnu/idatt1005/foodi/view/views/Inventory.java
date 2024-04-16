@@ -20,7 +20,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 public class Inventory extends TitledPage implements CssUtils, Page {
 
   private BorderPane topBar;
-  private Runnable update;
+  private Runnable controllerUpdate;
 
   /**
    * Constructor for the Inventory class.
@@ -62,13 +62,17 @@ public class Inventory extends TitledPage implements CssUtils, Page {
   }
 
   @Override
-  public Runnable getUpdate() {
-    return update;
+  public void update() {
+    if (controllerUpdate == null) {
+      return;
+    }
+
+    controllerUpdate.run();
   }
 
   @Override
-  public void setUpdate(Runnable update) {
-    this.update = update;
+  public void setUpdate(Runnable controllerUpdate) {
+    this.controllerUpdate = controllerUpdate;
   }
 
   @Override

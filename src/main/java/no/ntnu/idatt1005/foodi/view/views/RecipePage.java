@@ -21,7 +21,7 @@ public class RecipePage extends BorderPane implements CssUtils, Page {
   private final String difficulty = "easy";
   private final String description = "A delicious chicken soup that is perfect for a cold winter day. It is easy to make and only requires a few ingredients. It is also very healthy and nutritious. Enjoy! 🍲";
   private final String instructions = "1. Boil the chicken in a pot with water for 30 minutes.\n2. Add the vegetables and spices.\n3. Let it simmer for 10 minutes.\n4. Serve hot with bread.";
-  private Runnable update;
+  private Runnable controllerUpdate;
 
   public RecipePage() {
     addStylesheet("components/recipe/recipe-page");
@@ -97,13 +97,17 @@ public class RecipePage extends BorderPane implements CssUtils, Page {
   }
 
   @Override
-  public Runnable getUpdate() {
-    return update;
+  public void update() {
+    if (controllerUpdate == null) {
+      return;
+    }
+
+    controllerUpdate.run();
   }
 
   @Override
-  public void setUpdate(Runnable update) {
-    this.update = update;
+  public void setUpdate(Runnable controllerUpdate) {
+    this.controllerUpdate = controllerUpdate;
   }
 
   @Override

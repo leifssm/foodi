@@ -16,7 +16,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  */
 public class CookbookGrid extends TitledPage implements CssUtils, Page {
 
-  private Runnable update;
+  private Runnable controllerUpdate;
 
   /**
    * The constructor of the cookbook grid view.
@@ -68,13 +68,17 @@ public class CookbookGrid extends TitledPage implements CssUtils, Page {
   }
 
   @Override
-  public Runnable getUpdate() {
-    return update;
+  public void update() {
+    if (controllerUpdate == null) {
+      return;
+    }
+
+    controllerUpdate.run();
   }
 
   @Override
-  public void setUpdate(Runnable update) {
-    this.update = update;
+  public void setUpdate(Runnable controllerUpdate) {
+    this.controllerUpdate = controllerUpdate;
   }
 
   @Override

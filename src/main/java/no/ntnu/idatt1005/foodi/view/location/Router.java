@@ -47,7 +47,7 @@ public class Router extends BorderPane {
         return;
       }
     }
-    
+
     setCenter(null);
   }
 
@@ -58,7 +58,7 @@ public class Router extends BorderPane {
    */
   private void setPage(@NotNull Page page) {
     setCenter(page.getNode());
-    page.refresh();
+    page.update();
   }
 
   /**

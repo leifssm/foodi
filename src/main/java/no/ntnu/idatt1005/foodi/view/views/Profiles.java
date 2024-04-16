@@ -14,7 +14,7 @@ import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
  */
 public class Profiles extends CenteredPage implements Page {
 
-  private Runnable update;
+  private Runnable controllerUpdate;
 
   /**
    * Constructor for the Profiles class.
@@ -29,13 +29,17 @@ public class Profiles extends CenteredPage implements Page {
   }
 
   @Override
-  public Runnable getUpdate() {
-    return update;
+  public void update() {
+    if (controllerUpdate == null) {
+      return;
+    }
+
+    controllerUpdate.run();
   }
 
   @Override
-  public void setUpdate(Runnable update) {
-    this.update = update;
+  public void setUpdate(Runnable controllerUpdate) {
+    this.controllerUpdate = controllerUpdate;
   }
 
   @Override

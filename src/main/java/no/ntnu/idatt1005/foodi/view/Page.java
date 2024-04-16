@@ -12,31 +12,15 @@ import javafx.scene.Node;
  */
 public interface Page {
 
-  /**
-   * Refreshes the page by running the update Runnable. Static pages does not need specify an
-   * update.
-   */
-  default void refresh() {
-    if (getUpdate() != null) {
-      getUpdate().run();
-    }
-  }
-
-  /**
-   * Returns the Runnable that updates the page. This Runnable is intended to be set by the
-   * controller.
-   *
-   * @return the Runnable that updates the page
-   */
-  Runnable getUpdate();
+  void update();
 
   /**
    * Sets the Runnable used to update the page. This method provides an interface for the controller
    * to define the update behavior.
    *
-   * @param update the Runnable that updates the page
+   * @param controllerUpdate the Runnable that updates the page
    */
-  void setUpdate(Runnable update);
+  void setUpdate(Runnable controllerUpdate);
 
   /**
    * Returns the Node that represents the page.
