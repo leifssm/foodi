@@ -30,7 +30,6 @@ public class InventoryController extends PageController {
         + " and update the inventory view.");
     System.out.println("Call the render() with the appropriate data for the inventory page.");
 
-    getPage().render();
   }
 
 

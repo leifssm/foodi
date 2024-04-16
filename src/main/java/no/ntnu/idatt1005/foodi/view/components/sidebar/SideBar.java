@@ -14,6 +14,7 @@ import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
  */
 public class SideBar extends VBox implements CssUtils {
 
+
   /**
    * The constructor of the sidebar component.
    */
@@ -22,6 +23,15 @@ public class SideBar extends VBox implements CssUtils {
     addStylesheet("components/sidebar");
     addClass("sidebar");
 
+    render("USERNAME HERE");
+  }
+
+  /**
+   * Method for rendering the sidebar.
+   *
+   * @param currentUsername The username of the currently logged in user
+   */
+  public void render(String currentUsername) {
     String image = LoadUtils.getImage("foodi.png");
     if (image != null) {
       ImageView logo = new ImageView(image);
@@ -37,7 +47,7 @@ public class SideBar extends VBox implements CssUtils {
 
     getChildren().addAll(
         new SideBarItem(
-            "Profiles",
+            currentUsername,
             "profiles"
         ),
         new SideBarItem(

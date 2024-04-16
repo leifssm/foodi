@@ -34,7 +34,7 @@ public abstract class PageController {
    *
    * @return the page that the controller is managing
    */
-  private Page getPage() {
+  protected Page getPage() {
     return page;
   }
 
