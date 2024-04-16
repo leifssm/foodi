@@ -7,7 +7,7 @@ import java.sql.*;
 /**
  * This class is responsible for managing the database access for the Recipe object.
  *
- * @version 0.2.0
+ * @version 0.1.0
  * @author Snake727
  */
 
@@ -129,6 +129,4 @@ public class RecipeDAO {
     }
     return null;
   }
-
-  
 }
