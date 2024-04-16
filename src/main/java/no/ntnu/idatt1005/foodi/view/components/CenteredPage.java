@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components;
 
 import javafx.scene.Node;
-import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
@@ -10,7 +9,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class CenteredPage extends BorderPane implements CssUtils {
+public class CenteredPage extends StatefulPage implements CssUtils {
 
   /**
    * Constructor for the CenteredPage class.

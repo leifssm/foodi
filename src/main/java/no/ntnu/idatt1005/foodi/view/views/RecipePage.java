@@ -2,25 +2,31 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
-import javafx.scene.control.Label;
 
 
-public class RecipePage extends BorderPane implements CssUtils {
+/**
+ * Class for displaying a recipe page.
+ */
+public class RecipePage extends StatefulPage implements CssUtils {
 
-  private String imagePath = "chicken-soup.jpg";
-  private String title = "Chicken Soup";
-  private int time = 30;
-  private String difficulty = "easy";
-  private String description = "A delicious chicken soup that is perfect for a cold winter day. It is easy to make and only requires a few ingredients. It is also very healthy and nutritious. Enjoy! 🍲";
-  private String instructions = "1. Boil the chicken in a pot with water for 30 minutes.\n2. Add the vegetables and spices.\n3. Let it simmer for 10 minutes.\n4. Serve hot with bread.";
+  private final String imagePath = "chicken-soup.jpg";
+  private final String title = "Chicken Soup";
+  private final int time = 30;
+  private final String difficulty = "easy";
+  private final String description = "A delicious chicken soup that is perfect for a cold winter day. It is easy to make and only requires a few ingredients. It is also very healthy and nutritious. Enjoy! 🍲";
+  private final String instructions = "1. Boil the chicken in a pot with water for 30 minutes.\n2. Add the vegetables and spices.\n3. Let it simmer for 10 minutes.\n4. Serve hot with bread.";
 
+  /**
+   * Constructor for the RecipePage class.
+   */
   public RecipePage() {
     addStylesheet("components/recipe/recipe-page");
     addClass("recipe");
@@ -34,9 +40,9 @@ public class RecipePage extends BorderPane implements CssUtils {
     recipeImage.getStyleClass().add("recipe-image");
     recipeImage.setPreserveRatio(true);
     recipeImage.setFitWidth(100);
-    widthProperty().addListener(w ->{
+    widthProperty().addListener(w -> {
       recipeImage.setFitWidth(getWidth());
-      setPadding(new Insets(getWidth()/2.2, 0, 0, 0));
+      setPadding(new Insets(getWidth() / 2.2, 0, 0, 0));
     });
 
     Label recipeTitle = new Label(title);
@@ -54,7 +60,7 @@ public class RecipePage extends BorderPane implements CssUtils {
     HBox titleDifficultyBox = new HBox(recipeTitle, difficultyImage);
     titleDifficultyBox.getStyleClass().add("title-difficulty-box");
 
-    Label recipeTime = new Label( "⏱ " + time + " minutes");
+    Label recipeTime = new Label("⏱ " + time + " minutes");
     recipeTime.getStyleClass().add("recipe-time");
 
     BorderPane recipeHeader = new BorderPane();
@@ -75,8 +81,9 @@ public class RecipePage extends BorderPane implements CssUtils {
     ingredientsTitle.getStyleClass().add("ingredients-title");
     Button addIngredientsButton = new Button("Add to Shopping List");
     addIngredientsButton.getStyleClass().add("add-ingredients-button");
-    VBox ingredientsList = new VBox(new Label("Chicken"), new Label("Vegetables"), new Label("Spices"));
-    VBox ingredientsBox = new VBox(ingredientsTitle, ingredientsList,addIngredientsButton);
+    VBox ingredientsList = new VBox(new Label("Chicken"), new Label("Vegetables"),
+        new Label("Spices"));
+    VBox ingredientsBox = new VBox(ingredientsTitle, ingredientsList, addIngredientsButton);
     ingredientsBox.getStyleClass().add("ingredients-box");
 
     BorderPane ingredientsInstructionsBox = new BorderPane();

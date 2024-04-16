@@ -14,22 +14,51 @@ import no.ntnu.idatt1005.foodi.view.views.RecipePage;
  */
 public class Root extends BorderPane {
 
+  private final Inventory inventoryPage;
+  private final CookbookGrid cookbookGridPage;
+  private final Profiles profilesPage;
+  private final RecipePage recipePage;
+
   /**
    * Constructor for the Root class.
    */
   public Root() {
     super();
+    inventoryPage = new Inventory();
+    cookbookGridPage = new CookbookGrid();
+    profilesPage = new Profiles();
+    recipePage = new RecipePage();
+
     getStylesheets().add(LoadUtils.getStylesheet("root"));
     getStyleClass().add("main");
-    setLeft(new SideBar());
 
     Router router = new Router();
-    router.addRoute("inventory", new Inventory());
-    router.addRoute("cookbook-grid", new CookbookGrid());
-    router.addRoute("profiles", new Profiles());
-    router.addRoute("recipe-page", new RecipePage());
+    router.addRoute("inventory", inventoryPage);
+    router.addRoute("cookbook-grid", cookbookGridPage);
+    router.addRoute("profiles", profilesPage);
+    router.addRoute("recipe-page", recipePage);
     // add more routes here
 
     setCenter(router);
+  }
+
+  public void setSidebar(SideBar sidebar) {
+    setLeft(sidebar);
+  }
+
+  public Inventory getInventoryPage() {
+    return inventoryPage;
+  }
+
+  public CookbookGrid getCookbookGridPage() {
+    return cookbookGridPage;
+  }
+
+  public Profiles getProfilesPage() {
+    return profilesPage;
+  }
+
+  public RecipePage getRecipePage() {
+    return recipePage;
   }
 }
