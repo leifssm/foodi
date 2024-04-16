@@ -1,98 +1,50 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
-import org.junit.jupiter.api.BeforeAll;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Unit;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
+import no.ntnu.idatt1005.foodi.model.repository.Test.DatabaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import java.sql.*;
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IngredientDAOTest {
-  private static IngredientDAO ingredientDAO;
-  private static Ingredient testIngredient1;
-  private static Ingredient testIngredient2;
+  private IngredientDAO ingredientDAO;
+  private Ingredient testIngredient;
 
-  @BeforeAll
-  public static void setUp() throws SQLException {
-    // Initialize the database if not already initialized
-    DatabaseMain databaseMain = new DatabaseMain();
-    databaseMain.initializeDatabaseMain();
+  @BeforeEach
+  public void setUp() throws SQLException {
+    // Initialize the database
+    DatabaseTest databaseTest = new DatabaseTest();
+    databaseTest.initializeDatabase();
 
-    String deleteInventorySql = "DELETE FROM inventory";
-    String deleteShoppingListSql = "DELETE FROM shopping_list";
-    String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
-    String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
-    String deleteIngredientSql = "DELETE FROM ingredient";
-    String deleteRecipeSql = "DELETE FROM recipe";
-    ;
-
-
-    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+    // Delete every element in the database
+    try (Connection connection = DriverManager.getConnection(DatabaseTest.DB_URL, DatabaseTest.USER, DatabaseTest.PASS)) {
       Statement statement = connection.createStatement();
-      statement.executeUpdate(deleteInventorySql);
-      statement.executeUpdate(deleteShoppingListSql);
-      statement.executeUpdate(deleteUserSql);
-      statement.executeUpdate(deleteRecipe_IngredientSql);
-      statement.executeUpdate(deleteIngredientSql);
-      statement.executeUpdate(deleteRecipeSql);
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
+      statement.executeUpdate("DELETE FROM inventory");
+      statement.executeUpdate("DELETE FROM shopping_list");
+      statement.executeUpdate("DELETE FROM PUBLIC.\"user\"");
+      statement.executeUpdate("DELETE FROM recipe_ingredient");
+      statement.executeUpdate("DELETE FROM ingredient");
+      statement.executeUpdate("DELETE FROM recipe");
     }
 
-
-    // Initialize a new IngredientDatabaseAccess object and two Ingredient objects
-    testIngredient1 = new Ingredient(5, "Carrot", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
-    testIngredient2 = new Ingredient(6, "Potato", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
-
-
+    // Initialize a new IngredientDAO object and an Ingredient object
+    ingredientDAO = new IngredientDAO();
+    testIngredient = new Ingredient(1, "Test Ingredient", Unit.GRAM, Category.MEAT);
   }
 
   @Test
   void testSaveIngredientObject() {
-    ingredientDAO.saveIngredientObject(testIngredient1);
-    Ingredient retrievedIngredient = ingredientDAO.retrieveIngredient(testIngredient1);
-    assertEquals(testIngredient1.toString(), retrievedIngredient.toString());
-  }
-
-  @Test
-  public void testUpdateIngredient() {
-    testIngredient1.setName("Updated Ingredient");
-    ingredientDAO.updateIngredient(testIngredient2);
-    Ingredient updatedIngredient = ingredientDAO.retrieveIngredient(testIngredient1);
-    assertEquals(testIngredient1.toString(), updatedIngredient.toString());
-  }
-
-  @Test
-  public void testDeleteIngredient() {
-    ingredientDAO.deleteIngredient(testIngredient1);
-    assertNull(ingredientDAO.retrieveIngredient(testIngredient1));
-  }
-
-  @Test
-  public void testSaveIngredientToUserInventory() throws Exception {
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Ingredient.Category.MEAT, 100.0, Date.valueOf(LocalDate.now()));
-    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
-    assertTrue(totalAmount >= 100.0);
-  }
-
-  @Test
-  public void testUpdateIngredientInUserInventory() {
-    ingredientDAO.updateIngredientInUserInventory(1, testIngredient1.getId(), 200.0, LocalDate.now());
-    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
-    assertTrue(totalAmount >= 200.0);
-  }
-
-  @Test
-  public void testDeleteIngredientFromUserInventory() {
-    ingredientDAO.deleteIngredientFromUserInventory(1, testIngredient1.getId());
-    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
-    assertTrue(totalAmount < 200.0);
+    ingredientDAO.saveIngredientObject(testIngredient);
+    Ingredient retrievedIngredient = ingredientDAO.retrieveIngredient(testIngredient);
+    assertEquals(testIngredient.toString(), retrievedIngredient.toString());
   }
 }

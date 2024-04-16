@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeIngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.RecipeIngredient;
 
 import java.sql.SQLException;
 

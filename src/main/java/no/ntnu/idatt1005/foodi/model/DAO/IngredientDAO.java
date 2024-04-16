@@ -1,12 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
-import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +47,7 @@ public class IngredientDAO {
    * @param category The category of the ingredient to save.
    * @throws SQLException if an error occurs while saving the ingredient.
    */
-  private void saveIngredient(@NotNull String ingredientName,@NotNull IngredientUnit unit,@NotNull IngredientCategory category) throws SQLException {
+  private void saveIngredient(@NotNull String ingredientName,@NotNull Ingredient.Unit unit,@NotNull Ingredient.Category category) throws SQLException {
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)
@@ -81,7 +77,7 @@ public class IngredientDAO {
    * @param category The category of the ingredient to find.
    * @return The id of the ingredient. Returns -1 if nothing was found.
    */
-  private static Integer findIngredientId(@NotNull String ingredientName, @NotNull IngredientUnit unit, @NotNull IngredientCategory category) {
+  private static Integer findIngredientId(@NotNull String ingredientName, @NotNull Ingredient.Unit unit, @NotNull Ingredient.Category category) {
     return new QueryBuilder("SELECT COUNT(*) FROM ingredient WHERE name = " + ingredientName + " AND unit = " + unit + " AND category = " + category)
         .executeQuerySafe(rs -> {
           if (rs.next()) {
@@ -101,7 +97,7 @@ public class IngredientDAO {
    * @param amount The amount of the ingredient to save.
    * @param expirationDate The expiration date of the ingredient.
    */
-  public void saveIngredientToUserInventory(int userId, String ingredientName, IngredientUnit unit, IngredientCategory category, double amount, @Nullable Date expirationDate) throws SQLException {
+  public void saveIngredientToUserInventory(int userId, String ingredientName, Ingredient.Unit unit, Ingredient.Category category, double amount, @Nullable Date expirationDate) throws SQLException {
     int ingredientId = findIngredientId(ingredientName, unit, category);
     if (ingredientId == -1) {
       saveIngredient(ingredientName, unit, category);

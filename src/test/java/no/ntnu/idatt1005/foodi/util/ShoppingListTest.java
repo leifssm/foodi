@@ -3,9 +3,6 @@ package no.ntnu.idatt1005.foodi.util;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
-import no.ntnu.idatt1005.foodi.model.objects.User;
 import org.junit.jupiter.api.*;
 
 import java.sql.*;

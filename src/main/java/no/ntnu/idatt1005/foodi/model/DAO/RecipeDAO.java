@@ -1,6 +1,5 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*; // DB_URL, USER, PASS
 import java.sql.*;
 

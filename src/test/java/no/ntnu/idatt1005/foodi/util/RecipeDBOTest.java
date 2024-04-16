@@ -1,6 +1,5 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,7 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class is responsible for testing the RecipeDatabaseAccess class.

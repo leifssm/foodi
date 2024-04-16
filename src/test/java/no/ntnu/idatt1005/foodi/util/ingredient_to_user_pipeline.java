@@ -9,9 +9,6 @@ import java.time.LocalDate;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.InventoryIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.User;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Dette bestemmer rekkefølgen på testene

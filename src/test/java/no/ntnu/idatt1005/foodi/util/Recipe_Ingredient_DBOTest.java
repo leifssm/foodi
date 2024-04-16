@@ -1,10 +1,7 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeIngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.RecipeIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import org.junit.jupiter.api.BeforeAll;
