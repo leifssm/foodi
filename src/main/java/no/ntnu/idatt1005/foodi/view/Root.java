@@ -4,10 +4,7 @@ import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1005.foodi.view.components.sidebar.SideBar;
 import no.ntnu.idatt1005.foodi.view.location.Router;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
-import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
-import no.ntnu.idatt1005.foodi.view.views.Inventory;
-import no.ntnu.idatt1005.foodi.view.views.Profiles;
-import no.ntnu.idatt1005.foodi.view.views.RecipePage;
+import no.ntnu.idatt1005.foodi.view.views.*;
 
 /**
  * Class that creates the main view of the application.
@@ -28,6 +25,7 @@ public class Root extends BorderPane {
     cookbookGridPage = new CookbookGrid();
     profilesPage = new Profiles();
     recipePage = new RecipePage();
+    About about = new About();
 
     getStylesheets().add(LoadUtils.getStylesheet("root"));
     getStyleClass().add("main");
@@ -37,6 +35,7 @@ public class Root extends BorderPane {
     router.addRoute("cookbook-grid", cookbookGridPage);
     router.addRoute("profiles", profilesPage);
     router.addRoute("recipe-page", recipePage);
+    router.addRoute("about", about);
     // add more routes here
 
     setCenter(router);
