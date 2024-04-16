@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
+import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
@@ -23,16 +24,23 @@ public class ProfilesController extends PageController {
     this.currentUserProperty = currentUserProperty;
 
     this.view = profilesPage;
+
+    attachToView();
+  }
+
+  private void attachToView() {
+    view.setChangeUser(this::changeUser);
+  }
+
+  void changeUser(User user) {
+    currentUserProperty.set(user);
   }
 
   void update() {
     // Update the profiles view
     System.out.println("Get data from backend and update the profiles view.");
     System.out.println("Call the render() with the appropriate data for the profiles page.");
-    changeUser(new User(1, "DTO"));
-  }
-
-  void changeUser(User user) {
-    currentUserProperty.set(user);
+    List<User> profileNames = List.of(new User(0, "Henrik 0"), new User(1, "Henrik 1"));
+    view.render(profileNames);
   }
 }
