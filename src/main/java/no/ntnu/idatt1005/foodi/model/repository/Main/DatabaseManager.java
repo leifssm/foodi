@@ -190,8 +190,79 @@ public class DatabaseManager {
                         "15",
                         "recipes/crispy-tortilla-garden-salad.png",
                         "1. Rinse and dry lettuce leaves and fresh herbs.\n2. Thinly slice radishes and onions.\n3. Cut tortilla into small squares and toast until crispy.\n4. Combine vegetables in a bowl, top with tortilla squares.\n5. Drizzle with olive oil and balsamic vinegar, toss gently.\n6. Serve immediately to maintain the crispiness of tortillas."
+                },
+                {
+                        "Grilled Salmon with Zoodle Medley",
+                        "Succulent grilled salmon served on a bed of zucchini noodles and carrots, with a touch of lime for an added zest.",
+                        "MEDIUM",
+                        "GLUTEN_FREE",
+                        "30",
+                        "recipes/grilled-salmon-zoodle-medley.png",
+                        "1. Season the salmon with salt, pepper, and a hint of lime zest.\n2. Grill the salmon to desired doneness.\n3. Spiralize zucchini and carrots into noodles.\n4. Sauté the vegetables with a bit of olive oil and garlic.\n5. Plate the zoodles, top with the grilled salmon.\n6. Garnish with a wedge of lime and serve."
+                },
+                {
+                        "Traditional Seafood Paella",
+                        "A classic Spanish seafood paella with a mix of shrimp, mussels, and squid, infused with aromatic saffron and herbs.",
+                        "HARD",
+                        "SEA_FREE",
+                        "60",
+                        "recipes/traditional-seafood-paella.png",
+                        "1. Prepare the seafood by cleaning and cutting it as needed.\n2. In a paella pan, sauté onions and garlic in olive oil.\n3. Add rice and cook until translucent, stirring frequently.\n4. Stir in saffron-infused broth and simmer.\n5. Add seafood, arranging it evenly across the pan.\n6. Cook without stirring until the rice is tender and seafood is cooked.\n7. Let it rest for a few minutes before serving.\n8. Garnish with lemon wedges and parsley."
+                },
+                {
+                        "Banana Almond Pancakes",
+                        "Fluffy pancakes stacked high, topped with freshly sliced bananas, almond slivers, and a generous drizzle of maple syrup.",
+                        "EASY",
+                        "NUT_FREE",
+                        "20",
+                        "recipes/banana-almond-pancakes.png",
+                        "1. Mix flour, baking powder, sugar, and a pinch of salt.\n2. In another bowl, beat eggs and then mix in milk and melted butter.\n3. Combine wet and dry ingredients to make the batter.\n4. Pour batter onto a hot griddle to form pancakes, flipping once bubbles form.\n5. Slice bananas and toast almond slivers.\n6. Stack pancakes, adding banana slices and almonds between layers.\n7. Finish with a drizzle of maple syrup and garnish with mint."
+                },
+                {
+                        "Rustic Cheese Pizza",
+                        "A homemade pizza with a golden-brown crust, bubbly cheese topping, and a hint of rosemary, perfect for a cozy dinner.",
+                        "MEDIUM",
+                        "VEGETARIAN",
+                        "45",
+                        "recipes/rustic-cheese-pizza.png",
+                        "1. Prepare pizza dough and let it rise until doubled in size.\n2. Preheat oven to a high temperature with a pizza stone inside.\n3. Roll out the dough and place on a cornmeal-dusted paddle.\n4. Spread tomato sauce and sprinkle a blend of mozzarella and cheddar cheese.\n5. Add fresh rosemary leaves.\n6. Slide pizza onto the hot stone and bake until the crust is crisp and cheese is golden.\n7. Let cool for a few minutes, then slice and serve."
+                },
+                {
+                        "Smoky BBQ Ribs with Sides",
+                        "Tender, fall-off-the-bone ribs smothered in smoky BBQ sauce, served with crispy fries, seasoned tomatoes, and zesty pickles.",
+                        "HARD",
+                        "DAIRY_FREE",
+                        "120",
+                        "recipes/smoky-bbq-ribs-with-sides.png",
+                        "1. Season the ribs with a dry rub and let marinate for at least 1 hour.\n2. Preheat the grill to low heat and place ribs on indirect heat.\n3. Grill the ribs, turning occasionally, for about 2 hours.\n4. Baste with BBQ sauce during the last 30 minutes of grilling.\n5. Slice potatoes and season for fries, then bake until golden.\n6. Slice tomatoes and season with salt, pepper, and a pinch of parsley.\n7. Serve ribs with a side of fries, seasoned tomatoes, and pickles."
+                },
+                {
+                        "Classic Grilled Cheese Sandwich",
+                        "Golden-brown toasted sandwich with a gooey melted cheese filling, perfect for a quick and satisfying meal.",
+                        "EASY",
+                        "VEGETARIAN",
+                        "10",
+                        "recipes/classic-grilled-cheese-sandwich.png",
+                        "1. Butter two slices of bread on one side each.\n2. Place a slice of cheese between the bread slices, buttered sides out.\n3. Heat a pan over medium heat and place the sandwich in the pan.\n4. Grill until the bread is golden brown and cheese is melted, flipping once.\n5. Remove from pan, let it cool for a minute, then cut diagonally and serve."
+                },
+                {
+                        "Pesto Farfalle Pasta Salad",
+                        "Chilled farfalle pasta coated in rich pesto sauce, mixed with cherry tomatoes and fresh greens for a light and flavorful dish.",
+                        "EASY",
+                        "VEGETARIAN",
+                        "20",
+                        "recipes/pesto-farfalle-pasta-salad.png",
+                        "1. Cook farfalle pasta in salted boiling water until al dente, then drain and cool.\n2. In a bowl, mix the pasta with homemade or store-bought pesto sauce.\n3. Halve cherry tomatoes and shred some fresh basil leaves.\n4. Add the tomatoes and basil to the pasta and toss everything together.\n5. Refrigerate until serving time.\n6. Garnish with parmesan shavings before serving, if desired."
+                },
+                {
+                        "Saucy Chicken with Broccoli and Potatoes",
+                        "Tender chicken pieces simmered in a savory sauce with steamed broccoli and potatoes, a wholesome and comforting meal.",
+                        "MEDIUM",
+                        "DAIRY_FREE",
+                        "40",
+                        "recipes/saucy-chicken-with-broccoli-potatoes.png",
+                        "1. Season chicken pieces with salt, pepper, and paprika.\n2. Brown chicken in a pan with olive oil, then remove and set aside.\n3. In the same pan, add diced potatoes and cook until they start to soften.\n4. Add broccoli florets and continue to cook for a few minutes.\n5. Return the chicken to the pan and add your choice of sauce (e.g., tomato-based, cream-based).\n6. Cover and simmer until the chicken is cooked through and the vegetables are tender.\n7. Serve hot, garnished with fresh herbs."
                 }
-
         };
 
         RecipeDAO recipeDAO = new RecipeDAO();
