@@ -73,7 +73,7 @@ public class SideBar extends VBox implements CssUtils {
             new SideBarSubItem("Add item", "shopping-list/add")
         ),
         new SideBarItem(
-            "About",
+            "About us",
             "about"
         )
     );
