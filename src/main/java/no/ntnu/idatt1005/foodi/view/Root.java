@@ -34,10 +34,10 @@ public class Root extends BorderPane {
     setLeft(new SideBar());
 
     Router router = new Router();
-    router.addRoute("inventory", new Inventory());
-    router.addRoute("cookbook-grid", new CookbookGrid());
-    router.addRoute("profiles", new Profiles());
-    router.addRoute("recipe-page", new RecipePage());
+    router.addRoute("inventory", inventoryPage);
+    router.addRoute("cookbook-grid", cookbookGridPage);
+    router.addRoute("profiles", profilesPage);
+    router.addRoute("recipe-page", recipePage);
     // add more routes here
 
     setCenter(router);

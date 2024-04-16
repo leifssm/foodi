@@ -1,6 +1,8 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
-import java.util.function.Supplier;
+import java.util.List;
+import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Inventory;
 
@@ -9,16 +11,20 @@ import no.ntnu.idatt1005.foodi.view.views.Inventory;
  */
 public class InventoryController extends PageController {
 
-  private final Supplier<User> getCurrentUser;
+  private final SimpleObjectProperty<User> currentUserProperty;
+  private final Inventory view;
 
   /**
    * Constructor for the InventoryController class.
    *
    * @param inventoryPage the inventory view
    */
-  public InventoryController(Inventory inventoryPage, Supplier<User> getCurrentUser) {
+  public InventoryController(Inventory inventoryPage,
+      SimpleObjectProperty<User> currentUserProperty) {
     super(inventoryPage);
-    this.getCurrentUser = getCurrentUser;
+    this.view = inventoryPage;
+
+    this.currentUserProperty = currentUserProperty;
 
     update();
   }
@@ -26,10 +32,16 @@ public class InventoryController extends PageController {
   @Override
   void update() {
     // Update the inventory view
-    System.out.println("Get data from backend with userId: " + getCurrentUser.get().userId()
+    System.out.println("Get data from backend with userId: " + currentUserProperty.get().userId()
         + " and update the inventory view.");
     System.out.println("Call the render() with the appropriate data for the inventory page.");
 
+    // view.render(getInventoryData());
+  }
+
+  private List<GroupedExpiringIngredients> getInventoryData() {
+    // Get the inventory data from the backend
+    return null;
   }
 
 

@@ -8,8 +8,11 @@ import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
  */
 public class CookbookGridController extends PageController {
 
+  private final CookbookGrid view;
+
   public CookbookGridController(CookbookGrid cookbookGridPage) {
     super(cookbookGridPage);
+    this.view = cookbookGridPage;
   }
 
   @Override

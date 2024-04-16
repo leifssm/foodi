@@ -1,6 +1,6 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
-import java.util.function.Consumer;
+import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
 
@@ -9,8 +9,14 @@ import no.ntnu.idatt1005.foodi.view.views.Profiles;
  */
 public class ProfilesController extends PageController {
 
-  public ProfilesController(Profiles profilesPage, Consumer<User> setCurrentUser) {
+  private final Profiles view;
+  private final SimpleObjectProperty<User> currentUserProperty;
+
+  public ProfilesController(Profiles profilesPage, SimpleObjectProperty<User> currentUserProperty) {
     super(profilesPage);
+    this.currentUserProperty = currentUserProperty;
+
+    this.view = profilesPage;
   }
 
   void update() {
