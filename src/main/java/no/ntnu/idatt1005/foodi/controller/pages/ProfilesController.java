@@ -37,9 +37,7 @@ public class ProfilesController extends PageController {
   }
 
   void update() {
-    // Update the profiles view
-    System.out.println("Get data from backend and update the profiles view.");
-    System.out.println("Call the render() with the appropriate data for the profiles page.");
+    // TODO: Fetch profile names from the backend
     List<User> profileNames = List.of(new User(0, "Henrik 0"), new User(1, "Henrik 1"));
     view.render(profileNames);
   }
