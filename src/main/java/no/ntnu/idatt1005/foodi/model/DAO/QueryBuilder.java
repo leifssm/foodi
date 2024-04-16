@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Database.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Database.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Database.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.USER;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,33 +35,14 @@ import org.jetbrains.annotations.Nullable;
 class QueryBuilder {
 
   private static final Logger LOGGER = Logger.getLogger(QueryBuilder.class.getName());
-
-  /**
-   * A functional interface for modifying a {@link PreparedStatement} parameter at a given index.
-   * Index starts at 1.
-   */
-  public interface StatementModifier {
-
-    /**
-     * Modifies the statement at the given index.
-     *
-     * @param modifyingIndex The index to modify starting at 1.
-     * @param statement      The statement to modify.
-     * @throws SQLException If an error occurs while modifying the statement.
-     */
-    void modifyStatement(int modifyingIndex, PreparedStatement statement) throws SQLException;
-  }
-
   /**
    * The SQL query to use and build from.
    */
   private final String query;
-
   /**
    * A list of methods to modify the statement.
    */
   private final ArrayList<StatementModifier> parts = new ArrayList<>();
-
   /**
    * Whether the query is locked or not. After the query is run, the statement is locked and the
    * query parameters can no longer be modified.
@@ -77,12 +58,6 @@ class QueryBuilder {
     this.query = query;
   }
 
-  private void checkLocked() {
-    if (locked) {
-      throw new IllegalStateException("Query is locked and cannot be modified.");
-    }
-  }
-
   /**
    * Replaces the next "?" parameter with the given integer.
    *
@@ -93,6 +68,12 @@ class QueryBuilder {
     checkLocked();
     parts.add((i, statement) -> statement.setInt(i, value));
     return this;
+  }
+
+  private void checkLocked() {
+    if (locked) {
+      throw new IllegalStateException("Query is locked and cannot be modified.");
+    }
   }
 
   /**
@@ -119,41 +100,33 @@ class QueryBuilder {
     return this;
   }
 
+  /**
+   * Executes a SELECT query and returns the result without throwing if it encounters an error.
+   * Returns {@code null} if it does.
+   *
+   * @return The result of the query. Returns null if the query throws.
+   * @see PreparedStatement#executeQuery()
+   * @see #executeQuery(ResultHandler)
+   */
+  public <T> @Nullable T executeQuerySafe(@NotNull ResultHandler<ResultSet, T> handler) {
+    try {
+      return executeQuery(handler);
+    } catch (SQLException e) {
+      return null;
+    }
+  }
+
   // TODO: Add more add methods for different types of parameters if needed.
 
   /**
-   * Represents a method that can be run on a {@link PreparedStatement}.
+   * Executes a SELECT query and returns the result through a handler function.
    *
-   * @param <T> The return type of the method.
+   * @return The result of the query.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
    */
-  public interface StatementMethod<T> {
-
-    /**
-     * Runs the method on the given statement.
-     *
-     * @param statement The statement to run the method on.
-     * @return The return value of the method.
-     * @throws SQLException If an error occurs while running the method.
-     */
-    T runMethod(@NotNull PreparedStatement statement) throws SQLException;
-  }
-
-  /**
-   * Runs the given method on the query and returns the result.
-   *
-   * @param <InputT>   The given type of the method.
-   * @param <ResultT>> The return type of the method.
-   */
-  public interface ResultHandler<InputT, ResultT> {
-
-    /**
-     * Handles the result of the query.
-     *
-     * @param resultSet The result to handle.
-     * @return The result of the handler.
-     * @throws SQLException If an error occurs while handling the result.
-     */
-    ResultT handleResult(InputT resultSet) throws SQLException;
+  public <T> T executeQuery(@NotNull ResultHandler<ResultSet, T> handler) throws SQLException {
+    return runAndThenReturnWithMethod(PreparedStatement::executeQuery, handler);
   }
 
   /**
@@ -202,19 +175,28 @@ class QueryBuilder {
   }
 
   /**
-   * A functional interface for consuming a value and throwing an exception.
+   * Executes a SELECT query and consumes the value without throwing if it encounters an error.
    *
-   * @param <T> The type of the value to consume.
+   * @see PreparedStatement#executeQuery()
+   * @see #executeQuery(ResultHandler)
    */
-  public interface ThrowingConsumer<T> {
+  public void executeQuerySafe(@NotNull ThrowingConsumer<ResultSet> handler) {
+    try {
+      executeQuery(handler);
+    } catch (SQLException e) {
+      LOGGER.info("Error while executing query: " + e.getMessage());
+    }
+  }
 
-    /**
-     * Consumes the value.
-     *
-     * @param t The value to consume.
-     * @throws SQLException If an error occurs while consuming the value.
-     */
-    void accept(T t) throws SQLException;
+  /**
+   * Executes a SELECT query.
+   *
+   * @param handler The handler to handle the result.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeQuery(@NotNull ThrowingConsumer<ResultSet> handler) throws SQLException {
+    runAndThenReturnWithMethod(PreparedStatement::executeQuery, convertToConsumer(handler));
   }
 
   /**
@@ -234,100 +216,6 @@ class QueryBuilder {
   }
 
   /**
-   * Executes a SELECT query and returns the result through a handler function.
-   *
-   * @return The result of the query.
-   * @throws SQLException If an error occurs while executing the query.
-   * @see PreparedStatement#executeQuery()
-   */
-  public <T> T executeQuery(@NotNull ResultHandler<ResultSet, T> handler) throws SQLException {
-    return runAndThenReturnWithMethod(PreparedStatement::executeQuery, handler);
-  }
-
-  /**
-   * Executes a SELECT query.
-   *
-   * @param handler The handler to handle the result.
-   * @throws SQLException If an error occurs while executing the query.
-   * @see PreparedStatement#executeQuery()
-   */
-  public void executeQuery(@NotNull ThrowingConsumer<ResultSet> handler) throws SQLException {
-    runAndThenReturnWithMethod(PreparedStatement::executeQuery, convertToConsumer(handler));
-  }
-
-  /**
-   * Executes a SELECT query.
-   *
-   * @throws SQLException If an error occurs while executing the query.
-   * @see PreparedStatement#executeQuery()
-   */
-  public void executeQuery() throws SQLException {
-    runAndThenReturnWithMethod(PreparedStatement::executeQuery, e -> null);
-  }
-
-  /**
-   * Executes either a INSERT, UPDATE or a DELETE query.
-   *
-   * @return The result of the query.
-   * @throws SQLException If an error occurs while executing the query.
-   * @see PreparedStatement#executeUpdate()
-   */
-  public <T> T executeUpdate(@NotNull ResultHandler<Integer, T> handler) throws SQLException {
-    return runAndThenReturnWithMethod(PreparedStatement::executeUpdate, handler);
-  }
-
-  /**
-   * Executes either a INSERT, UPDATE or a DELETE query.
-   *
-   * @param handler The handler to handle the result.
-   * @throws SQLException If an error occurs while executing the update.
-   * @see PreparedStatement#executeQuery()
-   */
-  public void executeUpdate(@NotNull ThrowingConsumer<Integer> handler) throws SQLException {
-    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, convertToConsumer(handler));
-  }
-
-  /**
-   * Executes either a INSERT, UPDATE or a DELETE query.
-   *
-   * @throws SQLException If an error occurs while executing the query.
-   * @see PreparedStatement#executeUpdate()
-   */
-  public void executeUpdate() throws SQLException {
-    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, e -> null);
-  }
-
-  /**
-   * Executes a SELECT query and returns the result without throwing if it encounters an error.
-   * Returns {@code null} if it does.
-   *
-   * @return The result of the query. Returns null if the query throws.
-   * @see PreparedStatement#executeQuery()
-   * @see #executeQuery(ResultHandler)
-   */
-  public <T> @Nullable T executeQuerySafe(@NotNull ResultHandler<ResultSet, T> handler) {
-    try {
-      return executeQuery(handler);
-    } catch (SQLException e) {
-      return null;
-    }
-  }
-
-  /**
-   * Executes a SELECT query and consumes the value without throwing if it encounters an error.
-   *
-   * @see PreparedStatement#executeQuery()
-   * @see #executeQuery(ResultHandler)
-   */
-  public void executeQuerySafe(@NotNull ThrowingConsumer<ResultSet> handler) {
-    try {
-      executeQuery(handler);
-    } catch (SQLException e) {
-      LOGGER.info("Error while executing query: " + e.getMessage());
-    }
-  }
-
-  /**
    * Executes a SELECT query and consumes the value without throwing if it encounters an error.
    *
    * @see PreparedStatement#executeQuery()
@@ -339,6 +227,16 @@ class QueryBuilder {
     } catch (SQLException e) {
       LOGGER.info("Error while executing query: " + e.getMessage());
     }
+  }
+
+  /**
+   * Executes a SELECT query.
+   *
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeQuery() throws SQLException {
+    runAndThenReturnWithMethod(PreparedStatement::executeQuery, e -> null);
   }
 
   /**
@@ -358,6 +256,17 @@ class QueryBuilder {
   }
 
   /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @return The result of the query.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeUpdate()
+   */
+  public <T> T executeUpdate(@NotNull ResultHandler<Integer, T> handler) throws SQLException {
+    return runAndThenReturnWithMethod(PreparedStatement::executeUpdate, handler);
+  }
+
+  /**
    * Executes either a INSERT, UPDATE or a DELETE query and consumes the value without throwing if
    * it encounters an error.
    *
@@ -373,6 +282,17 @@ class QueryBuilder {
   }
 
   /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @param handler The handler to handle the result.
+   * @throws SQLException If an error occurs while executing the update.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeUpdate(@NotNull ThrowingConsumer<Integer> handler) throws SQLException {
+    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, convertToConsumer(handler));
+  }
+
+  /**
    * Executes either a INSERT, UPDATE or a DELETE query without throwing if it encounters an error.
    *
    * @see PreparedStatement#executeUpdate()
@@ -384,5 +304,82 @@ class QueryBuilder {
     } catch (SQLException e) {
       LOGGER.info("Error while executing query: " + e.getMessage());
     }
+  }
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeUpdate()
+   */
+  public void executeUpdate() throws SQLException {
+    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, e -> null);
+  }
+
+  /**
+   * A functional interface for modifying a {@link PreparedStatement} parameter at a given index.
+   * Index starts at 1.
+   */
+  public interface StatementModifier {
+
+    /**
+     * Modifies the statement at the given index.
+     *
+     * @param modifyingIndex The index to modify starting at 1.
+     * @param statement      The statement to modify.
+     * @throws SQLException If an error occurs while modifying the statement.
+     */
+    void modifyStatement(int modifyingIndex, PreparedStatement statement) throws SQLException;
+  }
+
+  /**
+   * Represents a method that can be run on a {@link PreparedStatement}.
+   *
+   * @param <T> The return type of the method.
+   */
+  public interface StatementMethod<T> {
+
+    /**
+     * Runs the method on the given statement.
+     *
+     * @param statement The statement to run the method on.
+     * @return The return value of the method.
+     * @throws SQLException If an error occurs while running the method.
+     */
+    T runMethod(@NotNull PreparedStatement statement) throws SQLException;
+  }
+
+  /**
+   * Runs the given method on the query and returns the result.
+   *
+   * @param <InputT>   The given type of the method.
+   * @param <ResultT>> The return type of the method.
+   */
+  public interface ResultHandler<InputT, ResultT> {
+
+    /**
+     * Handles the result of the query.
+     *
+     * @param resultSet The result to handle.
+     * @return The result of the handler.
+     * @throws SQLException If an error occurs while handling the result.
+     */
+    ResultT handleResult(InputT resultSet) throws SQLException;
+  }
+
+  /**
+   * A functional interface for consuming a value and throwing an exception.
+   *
+   * @param <T> The type of the value to consume.
+   */
+  public interface ThrowingConsumer<T> {
+
+    /**
+     * Consumes the value.
+     *
+     * @param t The value to consume.
+     * @throws SQLException If an error occurs while consuming the value.
+     */
+    void accept(T t) throws SQLException;
   }
 }
