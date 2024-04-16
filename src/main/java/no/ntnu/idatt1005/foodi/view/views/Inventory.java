@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -55,5 +56,10 @@ public class Inventory extends TitledPage implements CssUtils, Page {
   @Override
   public void setUpdate(Runnable update) {
     this.update = update;
+  }
+
+  @Override
+  public Node getNode() {
+    return this;
   }
 }

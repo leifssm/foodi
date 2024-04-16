@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
 import java.util.List;
+import javafx.scene.Node;
 import no.ntnu.idatt1005.foodi.view.Page;
 import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
 import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
@@ -35,5 +36,10 @@ public class Profiles extends CenteredPage implements Page {
   @Override
   public void setUpdate(Runnable update) {
     this.update = update;
+  }
+
+  @Override
+  public Node getNode() {
+    return this;
   }
 }

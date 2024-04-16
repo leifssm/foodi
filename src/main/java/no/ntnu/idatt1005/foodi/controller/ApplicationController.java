@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.controller;
 
-import javafx.scene.Node;
+import no.ntnu.idatt1005.foodi.controller.pages.InventoryController;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.Root;
-import no.ntnu.idatt1005.foodi.view.location.Router;
 
 /**
  * Controller for the application. This controller manages the creation of pages and their routing
@@ -10,13 +10,23 @@ import no.ntnu.idatt1005.foodi.view.location.Router;
  */
 public class ApplicationController {
 
-  private final Router router;
+  private final Root root;
+  private User user;
 
-  public ApplicationController(Root root, Router router) {
-    this.router = router;
+  /**
+   * Constructor for the ApplicationController class.
+   *
+   * @param root the root view of the application
+   */
+  public ApplicationController(Root root) {
+    this.root = root;
+
+    createControllers();
   }
 
-  private void createPage(String path, Node pageContent) {
-    router.addRoute(path, pageContent);
+  private void createControllers() {
+    new InventoryController(root.getInventoryPage());
+    //new CookbookGridController(root.getCookbookGridPage());
+    //new ProfilesController(root.getProfilesPage());
   }
 }

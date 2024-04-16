@@ -25,11 +25,9 @@ public class Main extends Application {
 
   @Override
   public void start(@NotNull Stage stage) {
-    // FontLoader.loadFontsFromDirectory("fira_sans_otf");
-
     Router router = new Router();
     Root root = new Root(router);
-    new ApplicationController(root, router);
+    new ApplicationController(root);
     Scene scene = new Scene(root, 800, 600);
 
     stage.setTitle("Foodi");

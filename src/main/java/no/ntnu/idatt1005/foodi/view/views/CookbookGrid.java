@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.view.Page;
@@ -74,5 +75,10 @@ public class CookbookGrid extends TitledPage implements CssUtils, Page {
   @Override
   public void setUpdate(Runnable update) {
     this.update = update;
+  }
+
+  @Override
+  public Node getNode() {
+    return this;
   }
 }
