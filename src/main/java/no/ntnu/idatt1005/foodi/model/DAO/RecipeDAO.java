@@ -7,7 +7,7 @@ import java.sql.*;
 /**
  * This class is responsible for managing the database access for the Recipe object.
  *
- * @version 0.2.0
+ * @version 0.1.0
  * @author Snake727
  */
 
@@ -91,7 +91,9 @@ public class RecipeDAO {
                 rs.getString("description"),
                 Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
                 Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
-                rs.getInt("duration")
+                rs.getInt("duration"),
+                rs.getString("imagepath"),
+                rs.getString("instruction")
         );
       }
     } catch (SQLException e) {
@@ -121,7 +123,9 @@ public class RecipeDAO {
                 rs.getString("description"),
                 Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
                 Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
-                rs.getInt("duration")
+                rs.getInt("duration"),
+                rs.getString("imagepath"),
+                rs.getString("instruction")
         );
       }
     } catch (SQLException e) {

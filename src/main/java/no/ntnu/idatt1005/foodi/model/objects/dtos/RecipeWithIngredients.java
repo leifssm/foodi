@@ -30,9 +30,11 @@ public class RecipeWithIngredients extends Recipe {
       Difficulty difficulty,
       DietaryTag dietaryTag,
       int duration,
-      List<AmountedIngredient> ingredients
+      List<AmountedIngredient> ingredients,
+      String imagePath,
+      String instruction
   ) {
-    super(id, name, description, difficulty, dietaryTag, duration);
+    super(id, name, description, difficulty, dietaryTag, duration, imagePath, instruction);
     setIngredients(ingredients);
   }
 

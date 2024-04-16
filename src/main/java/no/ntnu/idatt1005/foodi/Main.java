@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import no.ntnu.idatt1005.foodi.controller.ApplicationController;
 import no.ntnu.idatt1005.foodi.view.Root;
-import no.ntnu.idatt1005.foodi.view.location.Router;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,8 +24,7 @@ public class Main extends Application {
 
   @Override
   public void start(@NotNull Stage stage) {
-    Router router = new Router();
-    Root root = new Root(router);
+    Root root = new Root();
     new ApplicationController(root);
     Scene scene = new Scene(root, 800, 600);
 

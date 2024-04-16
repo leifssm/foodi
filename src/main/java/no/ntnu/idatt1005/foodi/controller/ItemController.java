@@ -1,15 +1,13 @@
 package no.ntnu.idatt1005.foodi.controller;
 
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.InventoryIngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.DAO.ItemDAO;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
 import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
-import no.ntnu.idatt1005.foodi.model.objects.InventoryIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.User;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 
 /**
  * This class is responsible for handling the usage of items in the inventory back connecting
@@ -20,49 +18,29 @@ import no.ntnu.idatt1005.foodi.model.objects.User;
  */
 
 public class ItemController {
-
-  private final IngredientDAO ingredientDAO = new IngredientDAO();
-  private final UserDAO userDAO;
-  private final InventoryIngredientDAO inventoryIngredientDAO = new InventoryIngredientDAO();
+  private final ItemDAO itemDAO;
+    private final IngredientDAO ingredientDAO;
 
   public ItemController() {
-    userDAO = new UserDAO();
+    this.itemDAO = new ItemDAO();
+    this.ingredientDAO = new IngredientDAO();
   }
 
+
+  // nySaveItem metode som lager en DTO object
   public void saveItem(String inputName, IngredientCategory inputCategory, IngredientUnit inputUnit,
-      int inputAmount, Date inputExpirationDate) {
-    final int newIngredientId = inventoryIngredientDAO.countInventoryItems() + 1;
+                        int inputAmount, Date inputExpirationDate) {
+    final int newIngredientId = ingredientDAO.countIngredientItems() + 1;
     System.out.println("IngredientIdFillerValue: " + newIngredientId);
 
-    try {
-      Ingredient.IngredientCategory ingredientCategory = Ingredient.IngredientCategory.valueOf(
-          inputCategory.name());
-      Ingredient.IngredientUnit ingredientUnit = Ingredient.IngredientUnit.valueOf(
-          inputUnit.name());
+      no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Unit ingredientUnit = no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Unit.valueOf(inputUnit.name());
+      no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category ingredientCategory = no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category.valueOf(inputCategory.name());
+      LocalDate localExpirationDate = inputExpirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-      Ingredient createdIngredient = new Ingredient(newIngredientId, inputName,
-          ingredientUnit, ingredientCategory);
-      ingredientDAO.save(createdIngredient);
+      ExpiringIngredient createdIngredient = new ExpiringIngredient(newIngredientId, inputName,
+              ingredientUnit, ingredientCategory, inputAmount, localExpirationDate);
 
-      User dummyUser = new User(1, "Kevin");
+      itemDAO.saveItem(createdIngredient);
 
-      boolean isNewUser = userDAO.userExists(dummyUser);
-
-      if (!isNewUser) {
-        userDAO.save(dummyUser);
-      }
-
-      InventoryIngredientDAO inventoryIngredientDAO = new InventoryIngredientDAO();
-
-      java.sql.Date inputExpirationDateSQL = new java.sql.Date(inputExpirationDate.getTime());
-
-      InventoryIngredient inventoryIngredient = new InventoryIngredient(dummyUser.getUserId(),
-          createdIngredient.getId(), inputAmount, inputExpirationDateSQL, dummyUser.getUserId());
-      inventoryIngredientDAO.save(inventoryIngredient, createdIngredient, dummyUser);
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
   }
-
 }

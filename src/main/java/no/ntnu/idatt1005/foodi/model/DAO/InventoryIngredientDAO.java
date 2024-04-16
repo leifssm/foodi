@@ -12,30 +12,6 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
 public class InventoryIngredientDAO {
 
-
-    //method to get the total amount of tuples in the Inventory table
-
-    public int countInventoryItems() {
-        String sql = "SELECT COUNT(*) FROM inventory";
-        int count = 0;
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement()) {
-
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                count = rs.getInt(1);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error code: " + e.getErrorCode());
-            System.out.println("SQL state: " + e.getSQLState());
-            System.out.println(e.getMessage());
-        }
-
-        return count;
-    }
-
     public void save (InventoryIngredient obj, Ingredient obj2, User obj3) throws SQLException {
         String checkSql = "SELECT COUNT(*) FROM inventory WHERE id = ? AND ingredient_id = ?";
 
@@ -51,7 +27,7 @@ public class InventoryIngredientDAO {
                 String updateSql = "UPDATE inventory SET amount = amount + ? WHERE id = ? AND ingredient_id = ?";
 
                 try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
-                    pstmt2.setInt(1, obj.getAmount());
+                    pstmt2.setInt(1, (int) obj.getAmount());
                     pstmt2.setInt(2, obj.getInventoryId());
                     pstmt2.setInt(3, obj2.getId());
                     pstmt2.executeUpdate();
@@ -65,7 +41,7 @@ public class InventoryIngredientDAO {
                 try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
                     pstmt2.setInt(1, obj.getInventoryId());
                     pstmt2.setInt(2, obj2.getId());
-                    pstmt2.setInt(3, obj.getAmount());
+                    pstmt2.setInt(3, (int) obj.getAmount());
                     pstmt2.setDate(4, (Date) obj.getExperationDate());
                     pstmt2.setInt(5, obj3.getUserId());
                     pstmt2.executeUpdate();

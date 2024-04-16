@@ -72,8 +72,8 @@ public class Recipe_Ingredient_DBOTest {
 
 
     // Create new Recipe objects
-    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 30);
-    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 45);
+    testRecipe = new Recipe(1, "Pasta", "Pasta with tomato sauce", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 30, "https://www.example.com", "https://www.example.com");
+    testRecipe2 = new Recipe(2, "Pizza", "Pizza with tomato sauce and cheese", Recipe.Difficulty.EASY,Recipe.DietaryTag.NONE, 45, "https://www.example.com", "https://www.example.com");
 
     // Create new Ingredient objects
     testIngredient = new Ingredient(1, "Pasta", Ingredient.IngredientUnit.GRAM, Ingredient.IngredientCategory.GRAIN);

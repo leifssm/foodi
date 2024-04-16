@@ -69,7 +69,9 @@ public class DatabaseMain {
               "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
               "dietary_tag VARCHAR," +
               "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE'))," +
-              "duration INT);");
+              "duration INT," +
+              "imagePath VARCHAR," +
+              "Instruction VARCHAR);");
 
       // Recipe Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe_ingredient (" +
