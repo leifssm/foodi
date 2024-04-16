@@ -4,19 +4,18 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IngredientDAOTest {
-  private static IngredientDAO ingredientDA;
+  private static IngredientDAO ingredientDAO;
   private static Ingredient testIngredient1;
   private static Ingredient testIngredient2;
 
@@ -35,7 +34,7 @@ public class IngredientDAOTest {
     ;
 
 
-    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
       Statement statement = connection.createStatement();
       statement.executeUpdate(deleteInventorySql);
       statement.executeUpdate(deleteShoppingListSql);
@@ -49,34 +48,51 @@ public class IngredientDAOTest {
 
 
     // Initialize a new IngredientDatabaseAccess object and two Ingredient objects
-    ingredientDA = new IngredientDAO();
     testIngredient1 = new Ingredient(5, "Carrot", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
     testIngredient2 = new Ingredient(6, "Potato", Ingredient.Unit.PIECE, Ingredient.Category.VEGETABLE);
 
 
-
   }
 
   @Test
-  public void testSave() throws SQLException {
-    ingredientDA.save(testIngredient1);
-    Ingredient savedIngredient = ingredientDA.retrieve(testIngredient1);
-    assertEquals(testIngredient1.toString(), savedIngredient.toString());
+  void testSaveIngredientObject() {
+    ingredientDAO.saveIngredientObject(testIngredient1);
+    Ingredient retrievedIngredient = ingredientDAO.retrieveIngredient(testIngredient1);
+    assertEquals(testIngredient1.toString(), retrievedIngredient.toString());
   }
 
   @Test
-  public void testUpdate() {
-    testIngredient1.setName("Onion");
-    ingredientDA.update(testIngredient1);
-    Ingredient updatedIngredient = ingredientDA.retrieve(testIngredient1);
+  public void testUpdateIngredient() {
+    testIngredient1.setName("Updated Ingredient");
+    ingredientDAO.updateIngredient(testIngredient2);
+    Ingredient updatedIngredient = ingredientDAO.retrieveIngredient(testIngredient1);
     assertEquals(testIngredient1.toString(), updatedIngredient.toString());
-    ingredientDA.delete(testIngredient1);
   }
 
   @Test
-  public void testDelete() throws SQLException {
-    ingredientDA.save(testIngredient2);
-    ingredientDA.delete(testIngredient2);
-    assertNull(ingredientDA.retrieve(testIngredient2));
+  public void testDeleteIngredient() {
+    ingredientDAO.deleteIngredient(testIngredient1);
+    assertNull(ingredientDAO.retrieveIngredient(testIngredient1));
+  }
+
+  @Test
+  public void testSaveIngredientToUserInventory() throws Exception {
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Ingredient.Category.MEAT, 100.0, Date.valueOf(LocalDate.now()));
+    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
+    assertTrue(totalAmount >= 100.0);
+  }
+
+  @Test
+  public void testUpdateIngredientInUserInventory() {
+    ingredientDAO.updateIngredientInUserInventory(1, testIngredient1.getId(), 200.0, LocalDate.now());
+    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
+    assertTrue(totalAmount >= 200.0);
+  }
+
+  @Test
+  public void testDeleteIngredientFromUserInventory() {
+    ingredientDAO.deleteIngredientFromUserInventory(1, testIngredient1.getId());
+    double totalAmount = ingredientDAO.getTotalAmountOfIngredientsInInventory(1);
+    assertTrue(totalAmount < 200.0);
   }
 }
