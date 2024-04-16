@@ -1,9 +1,9 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import java.util.List;
+import no.ntnu.idatt1005.foodi.view.Page;
 import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
 import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
-
-import java.util.List;
 
 /**
  * Class for displaying the inventory page.
@@ -11,7 +11,9 @@ import java.util.List;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class Profiles extends CenteredPage {
+public class Profiles extends CenteredPage implements Page {
+
+  private Runnable update;
 
   /**
    * Constructor for the Profiles class.
@@ -23,5 +25,15 @@ public class Profiles extends CenteredPage {
     ProfileItems profileItems = new ProfileItems(profileNames);
 
     setContent(profileItems);
+  }
+
+  @Override
+  public Runnable getUpdate() {
+    return update;
+  }
+
+  @Override
+  public void setUpdate(Runnable update) {
+    this.update = update;
   }
 }

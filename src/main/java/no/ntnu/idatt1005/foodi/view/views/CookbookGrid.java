@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.view.Page;
 import no.ntnu.idatt1005.foodi.view.components.TitledPage;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCard;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCardRow;
@@ -12,7 +13,9 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  *
  * <p> This class is a custom component for displaying the cookbook in grid view. </p>
  */
-public class CookbookGrid extends TitledPage implements CssUtils {
+public class CookbookGrid extends TitledPage implements CssUtils, Page {
+
+  private Runnable update;
 
   /**
    * The constructor of the cookbook grid view.
@@ -61,5 +64,15 @@ public class CookbookGrid extends TitledPage implements CssUtils {
     scrollPane.setFitToWidth(true);
 
     setContent(scrollPane);
+  }
+
+  @Override
+  public Runnable getUpdate() {
+    return update;
+  }
+
+  @Override
+  public void setUpdate(Runnable update) {
+    this.update = update;
   }
 }
