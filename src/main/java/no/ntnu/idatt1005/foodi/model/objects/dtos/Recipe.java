@@ -48,6 +48,8 @@ public class Recipe {
     setDietaryTag(dietaryTag);
     // Duration is in minutes
     setDuration(duration);
+    setImagePath(imagePath);
+    setInstruction(instruction);
   }
 
   /**
