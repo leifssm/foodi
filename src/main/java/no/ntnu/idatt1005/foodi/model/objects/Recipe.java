@@ -14,8 +14,10 @@ public class Recipe {
   private Difficulty difficulty;
   private DietaryTag dietaryTag;
   private int duration;
+  private String imagePath;
+  private String instruction;
 
-  public Recipe(int id, String name, String description, Difficulty difficulty, DietaryTag dietaryTag, int duration) {
+  public Recipe(int id, String name, String description, Difficulty difficulty, DietaryTag dietaryTag, int duration, String imagePath, String instruction) {
     this.id = id;
     setName(name);
     setDescription(description);
@@ -23,6 +25,8 @@ public class Recipe {
     setDietaryTag(dietaryTag);
     // Duration is in minutes
     setDuration(duration);
+    setImagePath(imagePath);
+    setInstruction(instruction);
   }
 
   /**
@@ -86,6 +90,14 @@ public class Recipe {
   }
   public void setDietaryTag(DietaryTag dietaryTag) {
     this.dietaryTag = dietaryTag;
+  }
+
+  public void setInstruction(String instruction) {
+    this.instruction = instruction;
+  }
+
+  public void setImagePath(String imagePath) {
+      this.imagePath = imagePath;
   }
 
   /**
