@@ -20,7 +20,7 @@ import java.time.LocalDate;
  * This class is responsible for handling the interaction between
  * the Ingredient class and the Database.
  *
- * @version 0.4.0
+ * @version 0.5.0
  * @author Snake727
  */
 
@@ -57,6 +57,19 @@ public class IngredientDAO {
         .addString(ingredientName)
         .addString(unit.toString())
         .addString(category.toString())
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Saves an ingredient object to the database.
+   *
+   * @param obj The ingredient object to save.
+   */
+  public void saveIngredientObject(@NotNull Ingredient obj) {
+    new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
+        .addString(obj.getName())
+        .addString(obj.getUnit().getDatabaseKey())
+        .addString(obj.getCategory().getDatabaseKey())
         .executeUpdateSafe();
   }
 

@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.repository.Main;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -158,15 +158,15 @@ public class DatabaseManager {
             Ingredient ingredient = new Ingredient(
                     i + 1,
                     ingredientData[0],
-                    Ingredient.IngredientUnit.valueOf(ingredientData[2].toUpperCase()),
-                    Ingredient.IngredientCategory.valueOf(ingredientData[1].toUpperCase())
+                    Ingredient.Unit.valueOf(ingredientData[2].toUpperCase()),
+                    Ingredient.Category.valueOf(ingredientData[1].toUpperCase())
             );
             ingredients.add(ingredient);
         }
 
         IngredientDAO ingredientDAO = new IngredientDAO();
         for (Ingredient ingredient : ingredients) {
-            ingredientDAO.save(ingredient);
+            ingredientDAO.saveIngredientObject(ingredient);
         }
 
         System.out.println("Ingredients table populated successfully.");
