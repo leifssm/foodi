@@ -1,7 +1,9 @@
 package no.ntnu.idatt1005.foodi.model.repository.Main;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class DatabaseManager {
             System.out.println("1: Populate the database");
             System.out.println("2: Remove all data from the database");
             System.out.println("3: Stop the application");
+            System.out.println("4: Populate the recipes table");
 
             String command = scanner.nextLine();
 
@@ -35,6 +38,9 @@ public class DatabaseManager {
                     break;
                 case "3":
                     running = false;
+                    break;
+                case "4":
+                    populateRecipes();
                     break;
                 default:
                     System.out.println("Invalid command. Please enter a number between 1 and 3.");
@@ -170,6 +176,41 @@ public class DatabaseManager {
         }
 
         System.out.println("Ingredients table populated successfully.");
+    }
+
+    private static void populateRecipes() throws SQLException {
+        removeAllData();
+
+        String[][] recipesData = {
+                {
+                        "Crispy Tortilla Garden Salad",
+                        "A vibrant garden salad garnished with crispy tortilla squares, fresh cherry tomatoes, and thinly sliced radishes, perfect for a light and healthy meal.",
+                        "EASY",
+                        "VEGAN",
+                        "15",
+                        "recipes/crispy-tortilla-garden-salad.png",
+                        "1. Rinse and dry lettuce leaves and fresh herbs.\n2. Thinly slice radishes and onions.\n3. Cut tortilla into small squares and toast until crispy.\n4. Combine vegetables in a bowl, top with tortilla squares.\n5. Drizzle with olive oil and balsamic vinegar, toss gently.\n6. Serve immediately to maintain the crispiness of tortillas."
+                }
+
+        };
+
+        RecipeDAO recipeDAO = new RecipeDAO();
+        for (int i = 0; i < recipesData.length; i++) {
+            String[] recipeData = recipesData[i];
+            Recipe recipe = new Recipe(
+                    i + 1,
+                    recipeData[0],
+                    recipeData[1],
+                    Recipe.Difficulty.valueOf(recipeData[2].toUpperCase()),
+                    Recipe.DietaryTag.valueOf(recipeData[3].toUpperCase()),
+                    Integer.parseInt(recipeData[4]),
+                    recipeData[5],
+                    recipeData[6]
+            );
+            recipeDAO.save(recipe);
+        }
+
+        System.out.println("Recipes table populated successfully.");
     }
 
     private static void removeAllData() {
