@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.controller;
 import no.ntnu.idatt1005.foodi.controller.pages.CookbookGridController;
 import no.ntnu.idatt1005.foodi.controller.pages.InventoryController;
 import no.ntnu.idatt1005.foodi.controller.pages.ProfilesController;
+import no.ntnu.idatt1005.foodi.controller.pages.RecipePageController;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.Root;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,7 @@ public class ApplicationController {
     new InventoryController(root.getInventoryPage(), this::getCurrentUser);
     new CookbookGridController(root.getCookbookGridPage());
     new ProfilesController(root.getProfilesPage(), this::setCurrentUser);
+    new RecipePageController(root.getRecipePage(), this::getCurrentUser);
   }
 
   public User getCurrentUser() {
