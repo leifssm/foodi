@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.location;
 
 import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1005.foodi.view.Page;
 import org.jetbrains.annotations.NotNull;
@@ -36,12 +37,17 @@ public class Router extends BorderPane {
       setPage(routes.get(location));
       return;
     }
-    for (String route : routes.keySet()) {
+
+    for (Map.Entry<String, Page> entry : routes.entrySet()) {
+      String route = entry.getKey();
+      Page page = entry.getValue();
+
       if (LocationHandler.isLocationFuzzy(route)) {
-        setPage(routes.get(route));
+        setPage(page);
         return;
       }
     }
+    
     setCenter(null);
   }
 
