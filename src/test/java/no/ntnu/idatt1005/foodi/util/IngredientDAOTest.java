@@ -152,7 +152,7 @@ public class IngredientDAOTest {
   }
 
   @Test
-  void testRetrieveAmountedIngredientsFromRecipe() throws SQLException {
+  void testRetrieveAmountedIngredientsFromInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
       Statement statement = connection.createStatement();
@@ -169,5 +169,54 @@ public class IngredientDAOTest {
     ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
 
     assertEquals(5, ingredientDAO.retrieveAmountedIngredientsFromInventory(1).size());
+  }
+
+  // Create a recipe with id 1 and insert five different ingredients
+  // Then retrieve the amounted ingredients from the recipe and check if the size is 5
+  @Test
+  void testRetrieveAmountedIngredientsFromRecipe() throws SQLException {
+    // Create a recipe with id 1
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("INSERT INTO PUBLIC.recipe (id, name, description, difficulty, dietary_tag, duration) VALUES (1, 'Test Recipe', 'Test Description', 'EASY', 'VEGAN', 30)");
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    // Create five different ingredients
+    ingredientDAO.saveIngredient("Test Ingredient 1", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredient("Test Ingredient 2", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredient("Test Ingredient 3", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredient("Test Ingredient 4", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredient("Test Ingredient 5", Ingredient.Unit.GRAM, Category.MEAT);
+
+    // Insert the five different ingredients into the recipe
+    ingredientDAO.saveIngredientToRecipe(1, 1, 100);
+    ingredientDAO.saveIngredientToRecipe(1, 2, 100);
+    ingredientDAO.saveIngredientToRecipe(1, 3, 100);
+    ingredientDAO.saveIngredientToRecipe(1, 4, 100);
+    ingredientDAO.saveIngredientToRecipe(1, 5, 100);
+
+    assertEquals(5, ingredientDAO.retrieveAmountedIngredientsFromRecipe(1).size());
+  }
+
+  @Test
+  void testGetTotalAmountOfIngredientsInInventory() throws SQLException {
+    // Create a user with id 1
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("INSERT INTO PUBLIC.\"user\" (id, name) VALUES (1, 'Test User')");
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT, 100, Date.valueOf("2022-12-31"));
+
+    assertEquals(500, ingredientDAO.getTotalAmountOfIngredientsInInventory(1));
   }
 }

@@ -76,6 +76,21 @@ public class IngredientDAO {
   }
 
   /**
+   * Saves an ingredient to a recipe. This is done by inserting the recipe id, ingredient id and amount into the recipe_ingredient table.
+   *
+   * @param recipeId The id of the recipe to save the ingredient to.
+   * @param ingredientId The id of the ingredient to save.
+   * @param amount The amount of the ingredient to save.
+   */
+  public void saveIngredientToRecipe(int recipeId, int ingredientId, double amount) {
+    new QueryBuilder("INSERT INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES (?, ?, ?)")
+        .addInt(recipeId)
+        .addInt(ingredientId)
+        .addDouble(amount)
+        .executeUpdateSafe();
+  }
+
+  /**
    * Saves an ingredient object to the database.
    *
    * @param obj The ingredient object to save.
