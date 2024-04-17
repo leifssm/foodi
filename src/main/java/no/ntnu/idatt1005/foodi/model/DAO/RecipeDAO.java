@@ -27,7 +27,7 @@ public class RecipeDAO {
       }
     }
 
-    String insertSql = "INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration) VALUES (?, ?, ?, ?, ?, ?)";
+    String insertSql = "INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration, IMAGEPATH, INSTRUCTION) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
@@ -38,6 +38,8 @@ public class RecipeDAO {
       pstmt.setString(4, obj.getDifficulty().toString());
       pstmt.setString(5, obj.getDietaryTag().toString()); // new field
       pstmt.setInt(6, obj.getDuration());
+      pstmt.setString(7, obj.getImagePath());
+      pstmt.setString(8, obj.getInstruction());
       pstmt.executeUpdate();
 
     } catch (SQLException e) {

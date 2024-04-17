@@ -100,6 +100,14 @@ public class Recipe {
       this.imagePath = imagePath;
   }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public String getInstruction() {
+        return instruction;
+    }
+
   /**
    * Set the duration of the recipe. The number represents the duration in minutes.
    *
