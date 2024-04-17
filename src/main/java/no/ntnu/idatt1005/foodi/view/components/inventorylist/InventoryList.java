@@ -20,9 +20,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InventoryList extends VBox implements CssUtils {
 
-  private final Paginator<GroupedExpiringIngredients> items = new Paginator<>();
-
   private final GridPane gridPane;
+  private Paginator<GroupedExpiringIngredients> items = new Paginator<>();
 
   /**
    * Constructor for the InventoryList class.
@@ -96,6 +95,7 @@ public class InventoryList extends VBox implements CssUtils {
    */
   public void render(@NotNull final List<GroupedExpiringIngredients> groupedExpiringIngredients) {
     clearCells();
+    items = new Paginator<>(groupedExpiringIngredients, 10);
 
     final List<GroupedExpiringIngredients> currentPage = items.getCurrentPage();
 
