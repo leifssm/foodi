@@ -43,15 +43,10 @@ public class GroupedExpiringIngredients {
   public ExpiringIngredient getMainExpiringIngredient() {
     double totalAmount = 0;
     LocalDate lowestExpiryDate = null;
+    
     for (ExpiringIngredient ingredient : getIngredients()) {
       totalAmount += ingredient.getAmount();
-
-      boolean isLowestExpiryDate =
-          ingredient.getExpirationDate() != null && (lowestExpiryDate == null
-              || ingredient.getExpirationDate().isBefore(lowestExpiryDate));
-      if (isLowestExpiryDate) {
-        lowestExpiryDate = ingredient.getExpirationDate();
-      }
+      lowestExpiryDate = minDate(ingredient.getExpirationDate(), lowestExpiryDate);
     }
 
     final String ingredientName = getIngredients().get(0).getName();
@@ -75,6 +70,16 @@ public class GroupedExpiringIngredients {
    */
   public List<ExpiringIngredient> getIngredients() {
     return List.copyOf(ingredients);
+  }
+
+  private LocalDate minDate(LocalDate date1, LocalDate date2) {
+    if (date1 == null) {
+      return date2;
+    }
+    if (date2 == null) {
+      return date1;
+    }
+    return date1.isBefore(date2) ? date1 : date2;
   }
 
   @Override
