@@ -9,34 +9,38 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
  */
 public class RecipeDAO {
   public void saveRecipeObject(Recipe obj) {
-    new QueryBuilder("INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration) VALUES (?, ?, ?, ?, ?, ?)")
+    new QueryBuilder("INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
           .addInt(obj.getId())
           .addString(obj.getName())
           .addString(obj.getDescription())
           .addString(obj.getDifficulty().toString())
           .addString(obj.getDietaryTag().toString())
+          .addString(obj.getImagePath())
+          .addString(obj.getInstruction())
           .addInt(obj.getDuration())
           .executeUpdateSafe();
   }
 
-  public void saveRecipe(String name, String description, String difficulty, String dietaryTag, int duration){
-    new QueryBuilder("INSERT INTO recipe (name, description, difficulty, dietary_tag, duration) VALUES (?, ?, ?, ?, ?)")
+  public void saveRecipe(String name, String description, String difficulty, String dietaryTag, int duration, String imagePath, String instruction){
+    new QueryBuilder("INSERT INTO recipe (name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?)")
           .addString(name)
           .addString(description)
           .addString(difficulty)
           .addString(dietaryTag)
+          .addString(imagePath)
+          .addString(instruction)
           .addInt(duration)
           .executeUpdateSafe();
   }
 
-
-
   public void update(Recipe obj) {
-    new QueryBuilder("UPDATE recipe SET name = ?, description = ?, difficulty = ?, duration = ? WHERE id = ?")
+    new QueryBuilder("UPDATE recipe SET name = ?, description = ?, difficulty = ?, duration = ?, imagePath = ?, instruction = ? WHERE id = ?")
           .addString(obj.getName())
           .addString(obj.getDescription())
           .addString(obj.getDifficulty().toString())
           .addInt(obj.getDuration())
+          .addString(obj.getImagePath())
+          .addString(obj.getInstruction())
           .addInt(obj.getId())
           .executeUpdateSafe();
   }
@@ -58,7 +62,9 @@ public class RecipeDAO {
                     rs.getString("description"),
                     Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
                     Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
-                    rs.getInt("duration")
+                    rs.getInt("duration"),
+                    rs.getString("imagePath"),
+                    rs.getString("instruction")
               );
             }
             return null;
@@ -76,7 +82,9 @@ public class RecipeDAO {
                     rs.getString("description"),
                     Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
                     Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
-                    rs.getInt("duration")
+                    rs.getInt("duration"),
+                    rs.getString("imagePath"),
+                    rs.getString("instruction")
               );
             }
             return null;
