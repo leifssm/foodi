@@ -26,7 +26,8 @@ public class ProfileItems extends HBox implements CssUtils {
    *
    * @param profileNames List of profile names
    */
-  public ProfileItems(List<User> profileNames, Consumer<User> changeUser) {
+  public ProfileItems(List<User> profileNames, Consumer<User> changeUser,
+      Consumer<String> addUser) {
     super();
     addStylesheet("components/profiles/profile-items");
     addClass("profile-items");
@@ -38,7 +39,7 @@ public class ProfileItems extends HBox implements CssUtils {
       getChildren().add(profileItem);
     }
 
-    NewUserDialog newUserDialog = new NewUserDialog();
+    NewUserDialog newUserDialog = new NewUserDialog(addUser);
     final Runnable onClick = newUserDialog::showAndWait;
     getChildren().add(new AddProfileButton(onClick));
   }

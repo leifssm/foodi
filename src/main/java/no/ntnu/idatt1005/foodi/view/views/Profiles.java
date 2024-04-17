@@ -15,6 +15,7 @@ import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
 public class Profiles extends CenteredPage {
 
   private Consumer<User> changeUser;
+  private Consumer<String> addUser;
 
   /**
    * Constructor for the Profiles class.
@@ -30,12 +31,16 @@ public class Profiles extends CenteredPage {
    */
   public void render(List<User> users) {
     // Render the profiles view
-    ProfileItems profileItems = new ProfileItems(users, changeUser);
+    ProfileItems profileItems = new ProfileItems(users, changeUser, addUser);
 
     setContent(profileItems);
   }
 
   public void setChangeUser(Consumer<User> changeUser) {
     this.changeUser = changeUser;
+  }
+
+  public void setAddUser(Consumer<String> addUser) {
+    this.addUser = addUser;
   }
 }
