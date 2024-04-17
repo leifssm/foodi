@@ -47,7 +47,7 @@ public class IngredientDAO {
    * @param category The category of the ingredient to save.
    * @throws SQLException if an error occurs while saving the ingredient.
    */
-  private void saveIngredient(@NotNull String ingredientName,@NotNull Ingredient.Unit unit,@NotNull Ingredient.Category category) throws SQLException {
+  public void saveIngredient(@NotNull String ingredientName,@NotNull Ingredient.Unit unit,@NotNull Ingredient.Category category) throws SQLException {
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)
@@ -116,7 +116,8 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-  public void updateIngredient(@NotNull Ingredient obj) {
+  // Not sure if this method is necessary
+  private void updateIngredient(@NotNull Ingredient obj) {
     new QueryBuilder("UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?")
         .addString(obj.getName())
         .addString(obj.getUnit().getDatabaseKey())
