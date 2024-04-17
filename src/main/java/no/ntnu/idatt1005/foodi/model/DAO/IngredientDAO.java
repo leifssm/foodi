@@ -40,6 +40,25 @@ public class IngredientDAO {
   }
 
   /**
+   * Counts the number of ingredient items in a user's inventory.
+   *
+   * @param userId The id of the user to count the ingredients from.
+   * @return the number of ingredient items in the user's inventory.
+   */
+  public int countIngredientItemsInUserInventory(int userId) {
+    Integer result = new QueryBuilder("SELECT COUNT(*) FROM inventory WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
+
+    return result != null ? result : 0;
+  }
+
+  /**
    * Saves an ingredient object to the database.
    *
    * @param ingredientName The name of the ingredient to save.
@@ -168,7 +187,7 @@ public class IngredientDAO {
     new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
         .addInt(userId)
         .addInt(ingredientId)
-  .executeUpdateSafe();
+        .executeUpdateSafe();
   }
 
   // Not sure if this is necessary considering the argument is an Ingredient object
