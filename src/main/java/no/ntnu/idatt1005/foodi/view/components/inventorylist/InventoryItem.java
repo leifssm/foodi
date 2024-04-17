@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.Date;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 
 /**
  * Temp data class, will be replaced with actual data from the database.
@@ -28,17 +29,33 @@ public class InventoryItem {
   */
 
   //funskjonell Item kode
-    public InventoryItem(String name, Date expiryDate, String category, String quantity,
-        String unit) {
-        this.type = "🍗";
-        this.name = name;
-        this.expiryDate = expiryDate;
-        this.category = category;
-        this.quantity = quantity;
-        this.unit = unit;
-    }
+  public InventoryItem(String name, Date expiryDate, String category, String quantity,
+      String unit) {
+    this.type = "🍗";
+    this.name = name;
+    this.expiryDate = expiryDate;
+    this.category = category;
+    this.quantity = quantity;
+    this.unit = unit;
+  }
 
-  
+
+  /**
+   * Constructor for the InventoryItem class. Ideally the Inventory view should be refactored to
+   * just use the ExpiringIngredient class directly.
+   *
+   * @param expiringIngredient The expiring ingredient to display
+   */
+  public InventoryItem(ExpiringIngredient expiringIngredient) {
+    this.type = "🍗";
+    this.name = expiringIngredient.getName();
+    this.expiryDate = expiringIngredient.getExpirationDateAsDate();
+    this.category = expiringIngredient.getCategory().toString();
+    this.quantity = Double.toString(expiringIngredient.getAmount());
+    this.unit = expiringIngredient.getUnit().toString();
+  }
+
+
   public String getType() {
     return type;
   }
