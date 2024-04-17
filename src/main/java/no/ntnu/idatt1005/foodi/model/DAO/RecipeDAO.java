@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is responsible for handling the usage of database operations regarding stored recipes in the database.
@@ -8,7 +9,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
  * @version 0.2.0
  */
 public class RecipeDAO {
-  public void saveRecipeObject(Recipe obj) {
+  public void saveRecipeObject(@NotNull Recipe obj) {
     new QueryBuilder("INSERT INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
           .addInt(obj.getId())
           .addString(obj.getName())
@@ -27,13 +28,26 @@ public class RecipeDAO {
           .addString(description)
           .addString(difficulty)
           .addString(dietaryTag)
+          .addInt(duration)
           .addString(imagePath)
           .addString(instruction)
-          .addInt(duration)
           .executeUpdateSafe();
   }
 
-  public void update(Recipe obj) {
+  public void updateRecipeById(int id, String name, String description, String difficulty, String dietaryTag, int duration, String imagePath, String instruction){
+    new QueryBuilder("UPDATE recipe SET name = ?, description = ?, difficulty = ?, dietary_tag = ?, duration = ?, imagePath = ?, instruction = ? WHERE id = ?")
+          .addString(name)
+          .addString(description)
+          .addString(difficulty)
+          .addString(dietaryTag)
+          .addInt(duration)
+          .addString(imagePath)
+          .addString(instruction)
+          .addInt(id)
+          .executeUpdateSafe();
+  }
+
+  public void update(@NotNull Recipe obj) {
     new QueryBuilder("UPDATE recipe SET name = ?, description = ?, difficulty = ?, duration = ?, imagePath = ?, instruction = ? WHERE id = ?")
           .addString(obj.getName())
           .addString(obj.getDescription())
@@ -45,13 +59,19 @@ public class RecipeDAO {
           .executeUpdateSafe();
   }
 
-  public void delete(Recipe obj) {
+  public void delete(@NotNull Recipe obj) {
     new QueryBuilder("DELETE FROM recipe WHERE id = ?")
           .addInt(obj.getId())
           .executeUpdateSafe();
   }
 
-  public Recipe retrieve(Recipe obj) {
+  public void deleteRecipeById(int id) {
+    new QueryBuilder("DELETE FROM recipe WHERE id = ?")
+          .addInt(id)
+          .executeUpdateSafe();
+  }
+
+  public Recipe retrieve(@NotNull Recipe obj) {
     return new QueryBuilder("SELECT * FROM recipe WHERE id = ?")
           .addInt(obj.getId())
           .executeQuerySafe(rs -> {

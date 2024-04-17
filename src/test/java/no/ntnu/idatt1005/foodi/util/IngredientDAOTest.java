@@ -19,9 +19,8 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IngredientDAOTest {
+class IngredientDAOTest {
   private IngredientDAO ingredientDAO;
-  private Ingredient testIngredient;
 
   @BeforeEach
   public void setUp() throws SQLException {

@@ -6,6 +6,8 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 
 import java.sql.Date;
 
+// Vet ikke helt om denne klassen
+
 public class ItemDAO {
 
     private final IngredientDAO ingredientDAO = new IngredientDAO();
@@ -22,10 +24,7 @@ public class ItemDAO {
 
         // Save to User table
         User dummyUser = new User(1, "Kevin");
-        boolean isNewUser = userDAO.userExists(dummyUser);
-        if (!isNewUser) {
-            userDAO.save(dummyUser);
-        }
+        userDAO.saveUser(dummyUser.name());
 
         // Save to InventoryIngredient table
         Date inputExpirationDateSQL = Date.valueOf(item.getExpirationDate());
