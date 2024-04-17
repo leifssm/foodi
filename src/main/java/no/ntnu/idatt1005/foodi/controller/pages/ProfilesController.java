@@ -33,6 +33,7 @@ public class ProfilesController extends PageController {
    */
   private void attachToView() {
     view.setChangeUser(this::changeUser);
+    view.setAddUser(this::addUser);
   }
 
 
