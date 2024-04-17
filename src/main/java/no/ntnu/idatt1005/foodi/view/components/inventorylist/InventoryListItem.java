@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
@@ -25,8 +26,14 @@ class InventoryListItem {
    * @param mainItem The main item to display
    * @param items    The sub items to display, if any
    */
-  public InventoryListItem(@NotNull InventoryItem mainItem,
-      @NotNull InventoryItem @NotNull ... items) {
+  public InventoryListItem(@NotNull GroupedExpiringIngredients ingredientGroup) {
+    InventoryItem mainItem = new InventoryItem(
+        ingredientGroup.getMainExpiringIngredient());
+
+    InventoryItem[] items = ingredientGroup.getIngredients().stream()
+        .map(InventoryItem::new)
+        .toArray(InventoryItem[]::new);
+
     this.subItems = new InventoryListSubItem[items.length];
 
     StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();

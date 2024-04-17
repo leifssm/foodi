@@ -1,15 +1,15 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.function.Consumer;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.controller.ItemController;
-import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
-import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.view.components.dialog.NamedInputField;
 import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
 import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
@@ -28,18 +28,18 @@ public class AddItemDialog extends StandardDialog {
   private static final String DATE_FORMAT = "dd.MM.yyyy";
   private final TextField ingredientField;
   private final TextField amountField;
-  private final ComboBox<IngredientUnit> unitField;
-  private final ComboBox<IngredientCategory> categoryField;
-  private final SimpleDateFormat dateFormatParser = new SimpleDateFormat(DATE_FORMAT);
+  private final ComboBox<Ingredient.Unit> unitField;
+  private final ComboBox<Ingredient.Category> categoryField;
+  private final DateTimeFormatter dateFormatParser = DateTimeFormatter.ofPattern(DATE_FORMAT);
   private final TextField expirationDateField;
-  private final InventoryList inventoryList;
+  private final Consumer<ExpiringIngredient> onItemAdded;
 
   /**
    * Constructor for the AddItemDialog class.
    */
-  public AddItemDialog(InventoryList inventoryList) {
+  public AddItemDialog(Consumer<ExpiringIngredient> onItemAdded) {
     super();
-    this.inventoryList = inventoryList;
+    this.onItemAdded = onItemAdded;
 
     ingredientField = new TextField();
     amountField = new TextField();
@@ -65,9 +65,9 @@ public class AddItemDialog extends StandardDialog {
 
     amountField.setPromptText("5");
 
-    unitField.getItems().addAll(IngredientUnit.values());
+    unitField.getItems().addAll(Ingredient.Unit.values());
 
-    categoryField.getItems().addAll(IngredientCategory.values());
+    categoryField.getItems().addAll(Ingredient.Category.values());
 
     expirationDateField.setPromptText(DATE_FORMAT);
 
@@ -90,20 +90,12 @@ public class AddItemDialog extends StandardDialog {
   private void okAction() throws ValidationException {
     String ingredient = getIngredient();
     double amount = getAmount();
-    IngredientUnit unit = getIngredientUnit();
-    IngredientCategory category = getIngredientCategory();
-    Date expirationDate = getExpirationDate();
+    Ingredient.Unit unit = getIngredientUnit();
+    Ingredient.Category category = getIngredientCategory();
+    LocalDate expirationDate = getExpirationDate();
 
-    String amountString = String.valueOf(amount);
-    String unitString = unit.toString();
-
-    ItemController itemController = new ItemController();
-    itemController.saveItem(ingredient, category, unit, (int) amount, expirationDate);
-
-    InventoryItem newItem = new InventoryItem(ingredient, expirationDate, category.toString(),
-        amountString, unitString);
-    inventoryList.addItemToInventory(newItem);
-
+    onItemAdded.accept(
+        new ExpiringIngredient(0, ingredient, unit, category, amount, expirationDate));
   }
 
   private @NotNull String getIngredient() throws ValidationException {
@@ -126,7 +118,7 @@ public class AddItemDialog extends StandardDialog {
     return amount;
   }
 
-  private @NotNull IngredientUnit getIngredientUnit() throws ValidationException {
+  private @NotNull Ingredient.Unit getIngredientUnit() throws ValidationException {
     if (unitField.getValue() == null) {
       throw new ValidationException("Unit must be selected.");
     }
@@ -134,7 +126,7 @@ public class AddItemDialog extends StandardDialog {
     return unitField.getValue();
   }
 
-  private @NotNull IngredientCategory getIngredientCategory() throws ValidationException {
+  private @NotNull Ingredient.Category getIngredientCategory() throws ValidationException {
     if (categoryField.getValue() == null) {
       throw new ValidationException("Category must be selected.");
     }
@@ -148,14 +140,14 @@ public class AddItemDialog extends StandardDialog {
    *
    * @return The expiration date as a Date object or null.
    */
-  private @Nullable Date getExpirationDate() throws ValidationException {
+  private @Nullable LocalDate getExpirationDate() throws ValidationException {
     if (expirationDateField.getText().isBlank()) {
       return null;
     }
 
     try {
-      return dateFormatParser.parse(expirationDateField.getText());
-    } catch (ParseException e) {
+      return LocalDate.parse(expirationDateField.getText(), dateFormatParser);
+    } catch (DateTimeParseException e) {
       throw new ValidationException(
           "Expiration date must be in the format dd.MM.yyyy or blank for no expiration date.");
     }

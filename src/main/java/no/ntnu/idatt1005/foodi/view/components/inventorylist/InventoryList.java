@@ -7,8 +7,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.Paginator;
 import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for displaying a list of ingredients.
@@ -18,7 +20,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  */
 public class InventoryList extends VBox implements CssUtils {
 
-  private final Paginator<InventoryItem> items = new Paginator<>();
+  private final Paginator<GroupedExpiringIngredients> items = new Paginator<>();
 
   private final GridPane gridPane;
 
@@ -85,43 +87,22 @@ public class InventoryList extends VBox implements CssUtils {
 
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
-
-    /*
-    items.addItems(
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem()
-    );
-    */
-
-    render();
-  }
-
-  public void addItemToInventory(InventoryItem item) {
-    items.addItem(item);
-    render();
   }
 
   /**
    * Clears the current cells and displays all stored cells to the view.
+   *
+   * @param groupedExpiringIngredients a list of grouped expiring ingredients
    */
-  public void render() {
+  public void render(@NotNull final List<GroupedExpiringIngredients> groupedExpiringIngredients) {
     clearCells();
 
-    List<InventoryItem> currentPage = items.getCurrentPage();
+    final List<GroupedExpiringIngredients> currentPage = items.getCurrentPage();
+
     int rowNum = 2;
-    for (InventoryItem item : currentPage) {
-      InventoryListItem rows = new InventoryListItem(item, item, item);
+    for (GroupedExpiringIngredients ingredientGroup : currentPage) {
+
+      InventoryListItem rows = new InventoryListItem(ingredientGroup);
       gridPane.addRow(rowNum++, rows.getMainItems());
 
       for (InventoryListSubItem subRow : rows.getSubItems()) {
@@ -140,9 +121,5 @@ public class InventoryList extends VBox implements CssUtils {
     gridPane.getChildren().removeIf(node ->
         GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
     );
-  }
-
-  public Paginator<InventoryItem> getItems() {
-    return items;
   }
 }
