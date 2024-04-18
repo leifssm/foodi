@@ -22,7 +22,14 @@ public class GroupedExpiringIngredients {
    */
   public GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredient> ingredients) {
     this.groupedBy = groupedBy;
-    this.ingredients = List.copyOf(ingredients);
+    this.ingredients = sortIngredientsByExpiryDate(ingredients);
+  }
+
+  private List<ExpiringIngredient> sortIngredientsByExpiryDate(
+      List<ExpiringIngredient> ingredients) {
+    return ingredients.stream()
+        .sorted((i1, i2) -> i1.getExpirationDate().compareTo(i2.getExpirationDate()))
+        .toList();
   }
 
   /**
@@ -54,12 +61,12 @@ public class GroupedExpiringIngredients {
     final Ingredient.Category category = getIngredients().get(0).getCategory();
 
     return new ExpiringIngredient(
-          -1,
-          ingredientName,
-          unit,
-          category,
-          totalAmount,
-          lowestExpiryDate
+        -1,
+        ingredientName,
+        unit,
+        category,
+        totalAmount,
+        lowestExpiryDate
     );
   }
 
@@ -85,9 +92,9 @@ public class GroupedExpiringIngredients {
   @Override
   public String toString() {
     return String.format(
-          "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
-          groupedBy,
-          ingredients
+        "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
+        groupedBy,
+        ingredients
     );
   }
 }

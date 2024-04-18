@@ -119,7 +119,7 @@ public class InventoryList extends VBox implements CssUtils {
    */
   public void clearCells() {
     gridPane.getChildren().removeIf(node ->
-        GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
+        GridPane.getRowIndex(node) == null || GridPane.getRowIndex(node) > 1
     );
   }
 }
