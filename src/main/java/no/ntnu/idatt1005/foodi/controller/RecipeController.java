@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 
 import java.sql.SQLException;
 
@@ -20,11 +20,7 @@ public class RecipeController {
   }
 
   public void save(Recipe recipe) {
-    try {
-      recipeDAO.save(recipe);
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+    recipeDAO.saveRecipeObject(recipe);
   }
 
   public void update(Recipe recipe) {

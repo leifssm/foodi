@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
-import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
 
 import java.sql.SQLException;
 import java.util.Map;

@@ -5,9 +5,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.ItemDAO;
-import no.ntnu.idatt1005.foodi.model.objects.IngredientCategory;
-import no.ntnu.idatt1005.foodi.model.objects.IngredientUnit;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
 /**
  * This class is responsible for handling the usage of items in the inventory back connecting
@@ -28,7 +27,7 @@ public class ItemController {
 
 
   // nySaveItem metode som lager en DTO object
-  public void saveItem(String inputName, IngredientCategory inputCategory, IngredientUnit inputUnit,
+  public void saveItem(String inputName, Ingredient.Category inputCategory, Ingredient.Unit inputUnit,
                         int inputAmount, Date inputExpirationDate) {
     final int newIngredientId = ingredientDAO.countIngredientItems() + 1;
     System.out.println("IngredientIdFillerValue: " + newIngredientId);
