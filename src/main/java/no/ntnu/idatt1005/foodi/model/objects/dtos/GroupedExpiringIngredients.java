@@ -9,7 +9,10 @@ import java.util.List;
  * @author Leif Mørstad
  * @version 1.0
  */
-public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredient> ingredients) {
+public class GroupedExpiringIngredients {
+
+  private final String groupedBy;
+  private final List<ExpiringIngredient> ingredients;
 
   /**
    * Constructor for a group of expiring ingredients.
@@ -27,8 +30,7 @@ public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredie
    *
    * @return the group by which the ingredients are grouped
    */
-  @Override
-  public String groupedBy() {
+  public String getGroupedBy() {
     return groupedBy;
   }
 
@@ -41,7 +43,7 @@ public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredie
   public ExpiringIngredient getMainExpiringIngredient() {
     double totalAmount = 0;
     LocalDate lowestExpiryDate = null;
-    
+
     for (ExpiringIngredient ingredient : getIngredients()) {
       totalAmount += ingredient.getAmount();
       lowestExpiryDate = minDate(ingredient.getExpirationDate(), lowestExpiryDate);
@@ -52,12 +54,12 @@ public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredie
     final Ingredient.Category category = getIngredients().get(0).getCategory();
 
     return new ExpiringIngredient(
-        -1,
-        ingredientName,
-        unit,
-        category,
-        totalAmount,
-        lowestExpiryDate
+          -1,
+          ingredientName,
+          unit,
+          category,
+          totalAmount,
+          lowestExpiryDate
     );
   }
 
@@ -66,8 +68,7 @@ public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredie
    *
    * @return an immutable list of expiring ingredients
    */
-  @Override
-  public List<ExpiringIngredient> ingredients() {
+  public List<ExpiringIngredient> getIngredients() {
     return List.copyOf(ingredients);
   }
 
@@ -84,9 +85,9 @@ public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredie
   @Override
   public String toString() {
     return String.format(
-        "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
-        groupedBy,
-        ingredients
+          "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
+          groupedBy,
+          ingredients
     );
   }
 }
