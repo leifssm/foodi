@@ -1,6 +1,5 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +7,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Unit;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +19,6 @@ public class InventoryController extends PageController {
   private final SimpleObjectProperty<User> currentUserProperty;
   private final Inventory view;
   private final IngredientDAO ingredientDAO;
-  private ArrayList<GroupedExpiringIngredients> dummyInventoryData;
 
   /**
    * Constructor for the InventoryController class.
@@ -37,28 +33,8 @@ public class InventoryController extends PageController {
     this.currentUserProperty = currentUserProperty;
     this.ingredientDAO = new IngredientDAO();
 
-    initializeDummyData();
     attachToView();
     update();
-  }
-
-  private void initializeDummyData() {
-    dummyInventoryData = new ArrayList<>(List.of(
-        new GroupedExpiringIngredients("Milk", List.of(
-            new ExpiringIngredient(1, "Milk", Unit.LITER, Category.DAIRY, 1.5,
-                LocalDate.of(2024, 5, 1)),
-            new ExpiringIngredient(2, "Milk", Unit.LITER, Category.DAIRY, .5,
-                LocalDate.of(2024, 4, 15))
-        )),
-        new GroupedExpiringIngredients("Cheese", List.of(
-            new ExpiringIngredient(3, "Cheese", Unit.KILOGRAM, Category.DAIRY, 0.5,
-                LocalDate.of(2024, 4, 18))
-        )),
-        new GroupedExpiringIngredients("Bread", List.of(
-            new ExpiringIngredient(4, "Bread", Unit.PIECE, Category.GRAIN, 1,
-                LocalDate.of(2024, 5, 1))
-        ))
-    ));
   }
 
   private void attachToView() {
@@ -118,7 +94,6 @@ public class InventoryController extends PageController {
       }
     }
 
-    System.out.println("Fetching inventory data from user: " + currentUserProperty.get().name());
     return groupedInventoryData.entrySet()
         .stream()
         .map(entry -> new GroupedExpiringIngredients(entry.getKey(), entry.getValue()))
