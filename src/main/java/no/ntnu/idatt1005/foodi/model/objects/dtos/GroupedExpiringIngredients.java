@@ -9,10 +9,7 @@ import java.util.List;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class GroupedExpiringIngredients {
-
-  private final String groupedBy;
-  private final List<ExpiringIngredient> ingredients;
+public record GroupedExpiringIngredients(String groupedBy, List<ExpiringIngredient> ingredients) {
 
   /**
    * Constructor for a group of expiring ingredients.
@@ -30,7 +27,8 @@ public class GroupedExpiringIngredients {
    *
    * @return the group by which the ingredients are grouped
    */
-  public String getGroupedBy() {
+  @Override
+  public String groupedBy() {
     return groupedBy;
   }
 
@@ -68,7 +66,8 @@ public class GroupedExpiringIngredients {
    *
    * @return an immutable list of expiring ingredients
    */
-  public List<ExpiringIngredient> getIngredients() {
+  @Override
+  public List<ExpiringIngredient> ingredients() {
     return List.copyOf(ingredients);
   }
 

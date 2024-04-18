@@ -1,157 +1,172 @@
 package no.ntnu.idatt1005.foodi.util;
 
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.ShoppingList;
-import no.ntnu.idatt1005.foodi.model.objects.User;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ShoppingListTest {
 
-    private static ShoppingListDAO shoppingListDAO;
-    private static ShoppingList shoppingList_item1;
+  private static ShoppingListDAO shoppingListDAO;
+  private static UserDAO userDAO;
+  private static IngredientDAO ingredientDAO;
+  private static RecipeDAO recipeDAO;
+  private static User testUser;
+  private static Ingredient testIngredient1;
+  private static Ingredient testIngredient2;
+  private static Ingredient testIngredient3;
+  private  static Ingredient testIngredient4;
+  private static Ingredient testIngredient5;
 
-    private static ShoppingList shoppingList_item2;
+  @BeforeEach
+  public void setUp() throws SQLException {
+    // Initialize the main database
+    DatabaseMain databaseMain = new DatabaseMain();
+    databaseMain.initializeDatabaseMain();
 
-    private static IngredientDAO ingredientDA;
+    // Initialize new DAO objects
+    ingredientDAO = new IngredientDAO();
+    userDAO = new UserDAO();
+    shoppingListDAO = new ShoppingListDAO();
+    recipeDAO = new RecipeDAO();
 
-    private static UserDAO userDA;
+    // Create a test user
+    testUser = new User(1, "Test User");
+    userDAO.saveUser(testUser.name());
 
+    // Create new test ingredients
+    testIngredient1 = new Ingredient(1, "Test Ingredient 1", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
+    testIngredient2 = new Ingredient(2, "Test Ingredient 2", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
+    testIngredient3 = new Ingredient(3, "Test Ingredient 3", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
+    testIngredient4 = new Ingredient(4, "Test Ingredient 4", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
+    testIngredient5 = new Ingredient(5, "Test Ingredient 5", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
 
-    private static User user1;
+    // Save the test ingredients to the database
+    ingredientDAO.saveIngredientObject(testIngredient1);
+    ingredientDAO.saveIngredientObject(testIngredient2);
+    ingredientDAO.saveIngredientObject(testIngredient3);
+    ingredientDAO.saveIngredientObject(testIngredient4);
+    ingredientDAO.saveIngredientObject(testIngredient5);
 
-    private static User user2;
+    // Create a new test recipe
+    recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg", "This is a test instruction");
 
-    private static Ingredient ingredient1;
+    // Save the test ingredients to a recipe
+    ingredientDAO.saveIngredientToRecipe(1, testIngredient1.getId(), 2.0);
+    ingredientDAO.saveIngredientToRecipe(1, testIngredient2.getId(), 3.0);
+    ingredientDAO.saveIngredientToRecipe(1, testIngredient3.getId(), 4.0);
+    ingredientDAO.saveIngredientToRecipe(1, testIngredient4.getId(), 5.0);
+    ingredientDAO.saveIngredientToRecipe(1, testIngredient5.getId(), 6.0);
+  }
 
-    private static Ingredient ingredient2;
-    @BeforeAll
-    public static void setUp() throws SQLException {
-
-
-
-        String sql = "DELETE FROM shopping_list";
-        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        ingredientDA = new IngredientDAO();
-        ingredient1 = new Ingredient(5, "Kahawa Bønner", Ingredient.IngredientUnit.LITER, Ingredient.IngredientCategory.GRAIN);
-        ingredient2 = new Ingredient(6, "Melk", Ingredient.IngredientUnit.LITER, Ingredient.IngredientCategory.DAIRY);
-        ingredientDA.save(ingredient1);
-        ingredientDA.save(ingredient2);
-
-        user1 = new User(4, "Kari");
-        user2 = new User(5, "Per");
-        userDA = new UserDAO();
-        userDA.save(user1);
-        userDA.save(user2);
-
-        shoppingList_item1 = new ShoppingList(1, 1,5, 2, 4);
-        shoppingList_item2 = new ShoppingList(2, 2, 6, 3, 5);
-
-        shoppingListDAO = new ShoppingListDAO();
-
+  @AfterEach
+  public void tearDown() throws SQLException {
+    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER, DatabaseMain.PASS);
+         Statement stmt = conn.createStatement()) {
+      stmt.execute("DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
     }
-    @Nested
-    @DisplayName("Testing ShoppingListDAO")
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-    class ShoppingListDAOTest {
+  }
 
-        @Test
-        @Order(1)
-        public void saveShoppingList() throws SQLException {
+  // Test the save method in the ShoppingListDAO class
+  // This is done by generating a new shopping list based on the test recipe
+  // and saving it to the database. The method then retrieves the shopping list
+  // from the database and compares it to the original shopping list.
+  @Test
+  @Order(1)
+  public void testSaveShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
 
-            Map<Integer, Double> shoppingList = new HashMap<>();
-            shoppingList.put(5, 2.0);
-            shoppingList.put(6, 3.0);
-            shoppingListDAO.save(shoppingList, user1.getUserId(), 1);
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-            String sql = "SELECT * FROM shopping_list WHERE user_id = ?";
-            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setInt(1, user1.getUserId());
-                ResultSet rs = statement.executeQuery();
-                rs.next();
-                assertEquals(5, rs.getInt("ingredient_id"));
-                assertEquals(2.0, rs.getDouble("amount"));
-                rs.next();
-                assertEquals(6, rs.getInt("ingredient_id"));
-                assertEquals(3.0, rs.getDouble("amount"));
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
 
-        @Test
-        public void showShoppingList() {
-            String sqlquery = "SELECT * FROM shopping_list WHERE user_id = ?";
+    assertEquals(shoppingList, retrievedShoppingList, "The saved shopping list should match the retrieved shopping list.");
+  }
 
-            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-                PreparedStatement statement = connection.prepareStatement(sqlquery);
-                statement.setInt(1, user1.getUserId()); // replace user1.getUserId() with the actual user id
-                ResultSet rs = statement.executeQuery();
+  @Test
+  @Order(2)
+  public void testDeleteShoppingList() {
+    shoppingListDAO.deleteAllForUser(testUser.userId());
 
-                while(rs.next()) {
-                    int id = rs.getInt("shoppinglist_id");
-                    int itemId = rs.getInt("item_id");
-                    int ingredientId = rs.getInt("ingredient_id");
-                    double amount = rs.getDouble("amount");
-                    int userId = rs.getInt("user_id");
-                    System.out.println("Shoppinglist_id: " + id + " Item_id: " + itemId + " Ingredient_id: " + ingredientId + " Amount: " + amount + " User_id: " + userId);
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
 
+    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty after deletion.");
+  }
 
-        @Test
-        @Order(3)
-        public void DeleteShoppingList() {
+  @Test
+  @Order(3)
+  public void testUpdateShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
 
-            //number of shopping list items before deleting with sql query
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-            String number_of_entries = "SELECT COUNT(*) FROM shopping_list";
-            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-                Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(number_of_entries);
-                rs.next();
-                int number_of_entries_before_deletion = rs.getInt(1);
-                assertEquals(2, number_of_entries_before_deletion);
-                shoppingListDAO.deleteAllForUser(user1.getUserId());
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+    Map<Integer, Double> updatedShoppingList = new HashMap<>();
+    updatedShoppingList.put(testIngredient1.getId(), 4.0);
+    updatedShoppingList.put(testIngredient2.getId(), 5.0);
 
-            try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)){
-                Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(number_of_entries);
-                rs.next();
-                int number_of_entries_after_deletion = rs.getInt(1);
-                assertEquals(0, number_of_entries_after_deletion);
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+    shoppingListDAO.save(updatedShoppingList, testUser.userId(), 1);
 
-        }
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
 
+    assertEquals(updatedShoppingList, retrievedShoppingList, "The updated shopping list should match the retrieved shopping list.");
+  }
 
-    }
+  @Test
+  @Order(4)
+  public void testGetShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
 
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
 
+    assertEquals(shoppingList, retrievedShoppingList, "The saved shopping list should match the retrieved shopping list.");
+  }
+
+  @Test
+  @Order(5)
+  public void testGetEmptyShoppingList() {
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+
+    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if no shopping list has been saved.");
+  }
+
+  @Test
+  @Order(6)
+  public void testGetShoppingListForNonExistingUser() {
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(1);
+
+    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if the user does not exist.");
+  }
+
+  @Test
+  @Order(7)
+  public void testSaveEmptyShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+
+    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if no ingredients are added.");
+  }
 }
