@@ -4,6 +4,8 @@ import no.ntnu.idatt1005.foodi.model.DAO.QueryBuilder;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 
@@ -61,5 +63,17 @@ public class UserDAO {
             return null;
           });
     return count != null && count > 0;
+  }
+
+  public List<User> retrieveAllUsers() {
+    List<User> users = new ArrayList<>();
+    new QueryBuilder("SELECT * FROM PUBLIC.\"user\"")
+          .executeQuerySafe(rs -> {
+            while (rs.next()) {
+              users.add(new User(rs.getInt("id"), rs.getString("name")));
+            }
+            return users;
+          });
+    return users;
   }
 }
