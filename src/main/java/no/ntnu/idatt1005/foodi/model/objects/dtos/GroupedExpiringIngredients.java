@@ -61,12 +61,12 @@ public class GroupedExpiringIngredients {
     final Ingredient.Category category = getIngredients().get(0).getCategory();
 
     return new ExpiringIngredient(
-        -1,
-        ingredientName,
-        unit,
-        category,
-        totalAmount,
-        lowestExpiryDate
+          -1,
+          ingredientName,
+          unit,
+          category,
+          totalAmount,
+          lowestExpiryDate
     );
   }
 
@@ -92,9 +92,9 @@ public class GroupedExpiringIngredients {
   @Override
   public String toString() {
     return String.format(
-        "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
-        groupedBy,
-        ingredients
+          "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
+          groupedBy,
+          ingredients
     );
   }
 }
