@@ -90,6 +90,7 @@ public class Database {
           + "ingredient_id INT,"
           + "amount DOUBLE,"
           + "expiration_date DATE,"
+          + "is_frozen BOOLEAN DEFAULT FALSE,"
           + "user_id INT,"
           + "PRIMARY KEY (id, ingredient_id),"
           + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"

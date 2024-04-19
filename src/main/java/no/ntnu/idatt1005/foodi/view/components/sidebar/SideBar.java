@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
@@ -26,7 +27,8 @@ public class SideBar extends VBox implements ComponentUtils {
 
     render(currentUserProperty.get().name());
 
-    attachUsernameListener(currentUserProperty);
+    currentUserProperty.subscribe(newUser -> render(newUser.name()));
+    LocationHandler.subscribe(l -> render(currentUserProperty.get().name()));
   }
 
   /**
@@ -57,28 +59,20 @@ public class SideBar extends VBox implements ComponentUtils {
         ),
         new SideBarItem(
             "Inventory",
-            "inventory",
-            new SideBarSubItem("Add item", "inventory/add"),
-            new SideBarSubItem("Add item", "inventory/add")
+            "inventory"
         ),
         new SideBarItem(
             "Cookbook",
-            "cookbook-grid",
-            new SideBarSubItem("Add item", "cookbook/add")
+            "cookbook-grid"
         ),
         new SideBarItem(
             "Shopping List",
-            "shopping-list",
-            new SideBarSubItem("Add item", "shopping-list/add")
+            "shopping-list"
         ),
         new SideBarItem(
             "About us",
             "about"
         )
     );
-  }
-
-  private void attachUsernameListener(SimpleObjectProperty<User> currentUserProperty) {
-    currentUserProperty.subscribe(newUser -> render(newUser.name()));
   }
 }

@@ -1,6 +1,12 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -113,7 +119,7 @@ public class RecipeDAO {
   }
 
   /**
-   * Updates a recipe in the recipe table in the database.
+   * Updates a recipe object in the recipe table in the database.
    *
    * @param obj the recipe object to be updated,
    */
@@ -181,6 +187,61 @@ public class RecipeDAO {
   }
 
   /**
+   * Retrieves all recipes from the database as objects and returns them as a list.
+   *
+   * @return a list of all recipes in the database.
+   */
+  public List<Recipe> retrieveAll() {
+    return new QueryBuilder("SELECT * FROM recipe")
+        .executeQuerySafe(rs -> {
+          List<Recipe> recipes = new ArrayList<>();
+          while (rs.next()) {
+            recipes.add(new Recipe(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+                Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+                rs.getInt("duration"),
+                rs.getString("imagePath"),
+                rs.getString("instruction")
+            ));
+          }
+          return recipes;
+        });
+  }
+
+  /**
+   * Returns a RecipeWithIngredients object by retrieving the necessary data from the database by
+   * searching using the recipe id.
+   *
+   * @param recipeId The id of the recipe to retrieve.
+   * @return A RecipeWithIngredients object.
+   */
+  public RecipeWithIngredients retrieveRecipeWithIngredientsById(int recipeId) {
+    Recipe recipe = retrieveById(recipeId);
+    if (recipe == null) {
+      return null;
+    }
+
+    IngredientDAO ingredientDAO = new IngredientDAO();
+    List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
+        recipeId);
+
+    return new RecipeWithIngredients(
+        recipe.getId(),
+        recipe.getName(),
+        recipe.getDescription(),
+        recipe.getDifficulty(),
+        recipe.getDietaryTag(),
+        recipe.getDuration(),
+        ingredients,
+        recipe.getImagePath(),
+        recipe.getInstruction()
+    );
+  }
+
+  /**
    * Retrieves a recipe object from the database.
    *
    * @param id the id of the recipe to be retrieved.
@@ -204,5 +265,35 @@ public class RecipeDAO {
           }
           return null;
         });
+  }
+
+  public Recipe[] retrieveAllRecipesWithIngredients(int @NotNull ... ingredientIds) {
+    String query = "SELECT * FROM recipe WHERE id IN (" +
+        "SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id IN (" +
+        String.join(",", Collections.nCopies(ingredientIds.length, "?")) +
+        ") GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = ?)";
+    QueryBuilder queryBuilder = new QueryBuilder(query);
+    for (int ingredientId : ingredientIds) {
+      queryBuilder.addInt(ingredientId);
+    }
+    queryBuilder.addInt(ingredientIds.length);
+    Recipe[] recipes = queryBuilder.executeQuerySafe(rs -> {
+      List<Recipe> recipesForIngredient = new ArrayList<>();
+      while (rs.next()) {
+        recipesForIngredient.add(new Recipe(
+            rs.getInt("id"),
+            rs.getString("name"),
+            rs.getString("description"),
+            Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+            Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+            rs.getInt("duration"),
+            rs.getString("imagePath"),
+            rs.getString("instruction")
+        ));
+      }
+      return recipesForIngredient.toArray(new Recipe[0]);
+    });
+    List<Recipe> allRecipes = new ArrayList<>(Arrays.asList(recipes));
+    return allRecipes.toArray(new Recipe[0]);
   }
 }
