@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * subscribe to.
  *
  * @author Leif Mørstad
- * @version 1.0
+ * @version 1.1
  * @see Router
  */
 public class LocationHandler {
