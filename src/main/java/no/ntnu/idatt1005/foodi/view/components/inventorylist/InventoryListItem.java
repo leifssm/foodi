@@ -38,7 +38,7 @@ class InventoryListItem {
     ExpiringIngredient mainItem = items.getMainExpiringIngredient();
     List<ExpiringIngredient> ingredients = items.getIngredients();
 
-    this.subItems = new InventoryListSubItem[items.getIngredients().size()];
+    this.subItems = new InventoryListSubItem[ingredients.size()];
 
     StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
     for (int i = 0; i < ingredients.size(); i++) {
