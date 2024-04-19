@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
@@ -12,10 +12,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.objects.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient.Category;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

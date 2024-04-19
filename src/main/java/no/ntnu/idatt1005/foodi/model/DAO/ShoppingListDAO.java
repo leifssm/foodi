@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 import org.jetbrains.annotations.NotNull;
 
 /**

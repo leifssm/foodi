@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.objects.dtos;
+package no.ntnu.idatt1005.foodi.model.objects;
 
 import java.time.LocalDate;
 import java.util.Comparator;

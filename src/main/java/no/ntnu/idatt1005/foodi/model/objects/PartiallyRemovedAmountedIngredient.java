@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.objects.dtos;
+package no.ntnu.idatt1005.foodi.model.objects;
 
 /**
  * This class represents an amounted ingredient object with a removed amount to be displayed to show

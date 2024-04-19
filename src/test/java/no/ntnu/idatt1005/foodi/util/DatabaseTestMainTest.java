@@ -1,15 +1,15 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.USER;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

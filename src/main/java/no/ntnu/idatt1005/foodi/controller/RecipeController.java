@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.controller;
 
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
 
 /**
  * This class is responsible for handling the usage of database operations regarding stored recipes

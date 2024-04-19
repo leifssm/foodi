@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import no.ntnu.idatt1005.foodi.view.views.Inventory;
 import org.jetbrains.annotations.NotNull;
 

@@ -2,8 +2,8 @@ package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import java.util.List;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.RecipeWithPartiallyRemovedIngredients;
 import no.ntnu.idatt1005.foodi.view.components.button.DoubleButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
 import no.ntnu.idatt1005.foodi.view.components.shoppinglist.IngredientGrouper.IngredientCategoryGroup;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.RecipeWithIngredients;
 import org.jetbrains.annotations.NotNull;
 
 /**

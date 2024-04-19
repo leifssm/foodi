@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import no.ntnu.idatt1005.foodi.controller.ApplicationController;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
 import no.ntnu.idatt1005.foodi.view.Root;
 import org.jetbrains.annotations.NotNull;
 

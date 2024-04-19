@@ -1,9 +1,9 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.Date;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 
 // Vet ikke helt om denne klassen
 

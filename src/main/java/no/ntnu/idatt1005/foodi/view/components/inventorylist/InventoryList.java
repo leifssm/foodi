@@ -7,7 +7,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 

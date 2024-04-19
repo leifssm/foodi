@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.repository.Main;
+package no.ntnu.idatt1005.foodi.model.repository;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
 
 /**
  * This class is responsible for creating and initializing the database. It also checks if the

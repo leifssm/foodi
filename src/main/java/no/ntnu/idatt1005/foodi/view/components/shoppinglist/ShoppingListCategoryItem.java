@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
