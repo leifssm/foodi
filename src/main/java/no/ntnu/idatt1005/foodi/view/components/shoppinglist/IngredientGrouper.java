@@ -9,8 +9,20 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import org.jetbrains.annotations.NotNull;
 
-class IngredientGrouper {
+/**
+ * Class for grouping ingredients.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class IngredientGrouper {
 
+  /**
+   * Groups ingredients by category.
+   *
+   * @param ingredients The ingredients to group
+   * @return A list of ingredient category groups
+   */
   static List<IngredientCategoryGroup> groupByCategory(
       List<AmountedIngredient> ingredients
   ) {
@@ -35,6 +47,12 @@ class IngredientGrouper {
     return groups;
   }
 
+  /**
+   * Joins ingredients from multiple recipes and adds up the total.
+   *
+   * @param recipes The recipes to join
+   * @return A list of ingredients with the updated amount
+   */
   static @NotNull List<AmountedIngredient> joinIngredientsFromRecipes(
       RecipeWithPartiallyRemovedIngredients @NotNull [] recipes
   ) {
@@ -63,6 +81,12 @@ class IngredientGrouper {
     return combinedIngredients;
   }
 
+  /**
+   * A record for grouping ingredients by category.
+   *
+   * @param name        The category grouped by
+   * @param ingredients The ingredients in the category
+   */
   public record IngredientCategoryGroup(
       @NotNull Ingredient.Category name,
       @NotNull ArrayList<AmountedIngredient> ingredients
