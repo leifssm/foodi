@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
@@ -14,7 +14,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
-import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +26,7 @@ class IngredientDAOTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    DatabaseMain databaseMain = new DatabaseMain();
-    databaseMain.initializeDatabaseMain();
+    Database.initializeEmpty();
 
     // Initialize a new IngredientDAO object
     ingredientDAO = new IngredientDAO();
@@ -35,8 +34,8 @@ class IngredientDAOTest {
 
   @AfterEach
   public void tearDown() throws SQLException {
-    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER,
-        DatabaseMain.PASS);
+    try (Connection conn = DriverManager.getConnection(Database.DB_URL, Database.USER,
+        Database.PASS);
         Statement stmt = conn.createStatement()) {
       stmt.execute(
           "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database

@@ -15,7 +15,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -40,8 +40,7 @@ public class ShoppingListTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    DatabaseMain databaseMain = new DatabaseMain();
-    databaseMain.initializeDatabaseMain();
+    Database.initializeEmpty();
 
     // Initialize new DAO objects
     ingredientDAO = new IngredientDAO();
@@ -86,8 +85,8 @@ public class ShoppingListTest {
 
   @AfterEach
   public void tearDown() throws SQLException {
-    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER,
-        DatabaseMain.PASS);
+    try (Connection conn = DriverManager.getConnection(Database.DB_URL, Database.USER,
+        Database.PASS);
         Statement stmt = conn.createStatement()) {
       stmt.execute(
           "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database

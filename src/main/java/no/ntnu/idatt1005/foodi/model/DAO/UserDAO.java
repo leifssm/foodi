@@ -15,6 +15,16 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 public class UserDAO {
 
   /**
+   * Adds a default user to the database.
+   */
+  public void addDefaultUserIfNotExists() {
+    new QueryBuilder("MERGE INTO PUBLIC.\"user\" (id, name) VALUES (?, ?)")
+        .addInt(1)
+        .addString("Default")
+        .executeUpdateSafe();
+  }
+
+  /**
    * Saves a user to the database.
    *
    * @param name the name of the user

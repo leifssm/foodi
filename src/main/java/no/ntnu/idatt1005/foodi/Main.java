@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import no.ntnu.idatt1005.foodi.controller.ApplicationController;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import no.ntnu.idatt1005.foodi.view.Root;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +20,7 @@ public class Main extends Application {
    * Main method for the application. Launches the application
    */
   public static void main(String[] args) {
+    Database.initialize();
     launch();
   }
 

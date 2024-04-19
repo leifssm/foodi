@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -124,6 +124,7 @@ class QueryBuilder {
     try {
       return executeQuery(handler);
     } catch (SQLException e) {
+      LOGGER.info("Error while executing query: " + e.getMessage());
       return null;
     }
   }

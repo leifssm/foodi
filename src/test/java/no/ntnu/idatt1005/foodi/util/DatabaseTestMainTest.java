@@ -1,25 +1,22 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class DatabaseTestMainTest {
 
-  private DatabaseMain databaseMain;
-
   @BeforeEach
   public void setUp() {
-    databaseMain = new DatabaseMain();
     String deleteInventorySql = "DELETE FROM inventory";
     String deleteShoppingListSql = "DELETE FROM shopping_list";
     String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
@@ -42,6 +39,6 @@ public class DatabaseTestMainTest {
 
   @Test
   public void testInitializeDatabaseMain() {
-    assertDoesNotThrow(() -> databaseMain.initializeDatabaseMain());
+    assertDoesNotThrow(Database::initialize);
   }
 }
