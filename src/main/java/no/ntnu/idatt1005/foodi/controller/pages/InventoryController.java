@@ -1,8 +1,10 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
@@ -13,9 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Controller for the inventory page. This controller manages the updates to the inventory page.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
  */
 public class InventoryController extends PageController {
 
+  private static final Logger LOGGER = Logger.getLogger(InventoryController.class.getName());
   private final SimpleObjectProperty<User> currentUserProperty;
   private final Inventory view;
   private final IngredientDAO ingredientDAO;
@@ -43,17 +49,15 @@ public class InventoryController extends PageController {
 
   @Override
   void update() {
-    var inventoryData = getInventoryDataFromUser();
-    view.render(inventoryData);
+    view.render(getInventoryDataFromUser());
   }
 
   /**
-   * Adds an ingredient to the inventory with the inventory DAO.
+   * Adds an ingredient to the inventory with {@link IngredientDAO}.
    *
    * @param ingredient the ingredient to add
    */
   private void onAddItem(ExpiringIngredient ingredient) {
-    System.out.println("Adding ingredient: " + ingredient.getName());
     try {
       ingredientDAO.saveIngredientToUserInventory(
           currentUserProperty.get().userId(),
@@ -63,17 +67,18 @@ public class InventoryController extends PageController {
           ingredient.getAmount(),
           new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())
       );
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (SQLException e) {
+      LOGGER.severe("Failed to add ingredient to inventory: " + e.getMessage());
     }
 
     update();
   }
 
   /**
-   * Fetches the inventory data from the user.
+   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
+   * {@link GroupedExpiringIngredients}.
    *
-   * @return the inventory data from the user
+   * @return a list of grouped expiring ingredients
    */
   private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
     List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
