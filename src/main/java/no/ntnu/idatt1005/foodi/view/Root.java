@@ -43,7 +43,7 @@ public class Root extends BorderPane {
         .addRoute("shopping-list", shoppingListPage)
         .addRoute("cookbook-grid", cookbookGridPage)
         .addRoute("profiles", profilesPage)
-        .addRoute("recipes/1", recipePage)
+        .addRoute("recipes", recipePage)
         .addRoute("about", aboutPage);
     // add more routes here
 
