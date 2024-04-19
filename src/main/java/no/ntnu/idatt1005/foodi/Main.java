@@ -20,12 +20,13 @@ public class Main extends Application {
    * Main method for the application. Launches the application
    */
   public static void main(String[] args) {
-    Database.initialize();
     launch();
   }
 
   @Override
   public void start(@NotNull Stage stage) {
+    Database.initialize();
+
     Root root = new Root();
     new ApplicationController(root);
     Scene scene = new Scene(root, 800, 600);
