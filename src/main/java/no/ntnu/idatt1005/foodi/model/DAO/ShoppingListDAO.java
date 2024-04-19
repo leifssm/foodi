@@ -1,8 +1,12 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,6 +26,7 @@ public class ShoppingListDAO {
    * @param listId       the id of the shopping list.
    * @throws SQLException if an error occurs while saving the shopping list.
    */
+
   public void save(@NotNull Map<Integer, Double> shoppingList, int userId, int listId)
       throws SQLException {
     // Delete existing entries for the user to avoid duplicates
@@ -55,21 +60,88 @@ public class ShoppingListDAO {
   }
 
   /**
+   * Retrieves all ingredients from every recipe in a users shopping list.
+   *
+   * @param userId the id of the user.
+   * @return a list of all ingredients in the shopping list.
+   */
+  public List<AmountedIngredient> getAllIngredientsFromShoppingList(int userId) {
+    List<Recipe> recipes = getRecipesInShoppingListForUser(userId);
+    IngredientDAO ingredientDAO = new IngredientDAO();
+    List<AmountedIngredient> allIngredients = new ArrayList<>();
+
+    for (Recipe recipe : recipes) {
+      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
+          recipe.getId());
+      allIngredients.addAll(ingredients);
+    }
+
+    return allIngredients;
+  }
+
+  /**
+   * Retrieves all the recipes in a users shopping list.
+   *
+   * @param userId the id of the user.
+   * @return a list of recipes in the shopping list.
+   */
+  public List<Recipe> getRecipesInShoppingListForUser(int userId) {
+    RecipeDAO recipeDAO = new RecipeDAO();
+    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
+    List<Recipe> recipes = new ArrayList<>();
+
+    for (Integer ingredientId : shoppingList.keySet()) {
+      List<Integer> recipeIds = getRecipeIdsByIngredientId(ingredientId);
+      for (Integer recipeId : recipeIds) {
+        Recipe recipe = recipeDAO.retrieveById(recipeId);
+        if (recipe != null) {
+          recipes.add(recipe);
+        }
+      }
+    }
+
+    return recipes;
+  }
+
+  /**
    * Retrieves the shopping list for a user.
    *
    * @param userId the id of the user.
    * @return a map of ingredient ids and their amounts.
    */
   public Map<Integer, Double> getShoppingListForUser(int userId) {
-    return new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
+    Map<Integer, Double> currentShoppingList = new HashMap<>();
+
+    new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
         .addInt(userId)
         .executeQuerySafe(rs -> {
-          Map<Integer, Double> currentShoppingList = new HashMap<>();
-          
           while (rs.next()) {
             currentShoppingList.put(rs.getInt("ingredient_id"), rs.getDouble("amount"));
           }
           return currentShoppingList;
         });
+
+    return currentShoppingList;
+  }
+
+  /**
+   * Retrieves the recipe ids for a given ingredient id.
+   *
+   * @param ingredientId the id of the ingredient.
+   * @return a list of recipe ids.
+   */
+  private List<Integer> getRecipeIdsByIngredientId(int ingredientId) {
+    List<Integer> recipeIds = new ArrayList<>();
+
+    new QueryBuilder("SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id = ?")
+        .addInt(ingredientId)
+        .executeQuerySafe(rs -> {
+          while (rs.next()) {
+            recipeIds.add(rs.getInt("recipe_id"));
+          }
+          return recipeIds;
+        });
+
+    return recipeIds;
   }
 }
