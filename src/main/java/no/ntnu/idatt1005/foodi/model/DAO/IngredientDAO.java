@@ -159,6 +159,26 @@ public class IngredientDAO {
   }
 
   /**
+   * Merges an ingredient object into the database. If the ingredient already exists, it will be
+   * updated. If not, it will be inserted.
+   *
+   * @param id             The id of the ingredient to merge.
+   * @param ingredientName The name of the ingredient to merge.
+   * @param unit           The unit of the ingredient to merge.
+   * @param category       The category of the ingredient to merge.
+   */
+  public void mergeIngredient(int id, @NotNull String ingredientName, @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category) {
+    // If no such ingredient exists, proceed with the insertion
+    new QueryBuilder("MERGE INTO ingredient (id, name, unit, category) VALUES (?, ?, ?, ?)")
+        .addInt(id)
+        .addString(ingredientName)
+        .addString(unit.toString())
+        .addString(category.toString())
+        .executeUpdateSafe();
+  }
+
+  /**
    * Updates an ingredient object in the database.
    *
    * @param obj The ingredient object to update.
