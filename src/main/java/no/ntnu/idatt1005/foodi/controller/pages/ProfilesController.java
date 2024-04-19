@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
 
@@ -12,6 +13,7 @@ public class ProfilesController extends PageController {
 
   private final Profiles view;
   private final SimpleObjectProperty<User> currentUserProperty;
+  private final UserDAO userDAO;
 
   /**
    * Constructor for the ProfilesController class.
@@ -21,6 +23,7 @@ public class ProfilesController extends PageController {
    */
   public ProfilesController(Profiles profilesPage, SimpleObjectProperty<User> currentUserProperty) {
     super(profilesPage);
+    this.userDAO = new UserDAO();
     this.currentUserProperty = currentUserProperty;
 
     this.view = profilesPage;
@@ -52,10 +55,7 @@ public class ProfilesController extends PageController {
    * @param name the name of the user to add
    */
   private void addUser(String name) {
-    // TODO: Add user to the backend using DAO, the DAO should return a User DTO object
-    System.out.println("Adding user: " + name);
-    User user = new User(2, name); // Replace with the user object from the DAO
-    changeUser(user);
+    userDAO.saveUser(name);
 
     // Update to rerender the view with the added user
     update();
@@ -72,7 +72,6 @@ public class ProfilesController extends PageController {
    * @return a list of all users
    */
   private List<User> getAllUsers() {
-    // TODO: Fetch profile names from the backend
-    return List.of(new User(0, "Henrik 0"), new User(1, "Henrik 1"));
+    return userDAO.retrieveAllUsers();
   }
 }
