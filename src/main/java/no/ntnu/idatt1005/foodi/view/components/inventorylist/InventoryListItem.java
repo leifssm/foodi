@@ -1,9 +1,11 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
@@ -26,15 +28,19 @@ class InventoryListItem {
    * @param mainItem The main item to display
    * @param items    The sub items to display, if any
    */
-  public InventoryListItem(
-      @NotNull ExpiringIngredient mainItem,
-      @NotNull ExpiringIngredient @NotNull ... items
-  ) {
-    this.subItems = new InventoryListSubItem[items.length];
+  public InventoryListItem(@NotNull GroupedExpiringIngredients items) {
+    if (items.getIngredients().isEmpty()) {
+      throw new IllegalArgumentException("At least one item must be provided");
+    }
+
+    ExpiringIngredient mainItem = items.getMainExpiringIngredient();
+    List<ExpiringIngredient> ingredients = items.getIngredients();
+
+    this.subItems = new InventoryListSubItem[items.getIngredients().size()];
 
     StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
-    for (int i = 0; i < items.length; i++) {
-      InventoryListSubItem subItem = new InventoryListSubItem(items[i]);
+    for (int i = 0; i < ingredients.size(); i++) {
+      InventoryListSubItem subItem = new InventoryListSubItem(ingredients.get(i));
       subItems[i] = subItem;
       selectHandler.bindCheckBox(subItem.getSelect());
     }
@@ -58,7 +64,15 @@ class InventoryListItem {
 
     Label category = new Label(mainItem.getCategory().getName());
 
-    Label quantity = new Label(mainItem.getAmountString());
+    double quantityValue = 0;
+    for (ExpiringIngredient ingredient : ingredients) {
+      quantityValue += ingredient.getAmount();
+    }
+    String quantityString = "%.2f %s".formatted(
+        quantityValue,
+        mainItem.getUnit().getName()
+    );
+    Label quantity = new Label(quantityString);
     quantity.getStyleClass().add("center");
 
     Label unit = new Label(mainItem.getUnit().getName());
