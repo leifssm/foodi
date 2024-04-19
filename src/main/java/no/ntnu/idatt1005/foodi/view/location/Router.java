@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.view.location;
 import java.util.HashMap;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,12 +34,16 @@ public class Router extends BorderPane {
    */
   private void updateLocation(@NotNull String location) {
     if (routes.containsKey(location)) {
-      setCenter(routes.get(location));
+      setPage(routes.get(location));
       return;
     }
-    for (String route : routes.keySet()) {
+
+    for (Map.Entry<String, StatefulPage> entry : routes.entrySet()) {
+      String route = entry.getKey();
+      Node page = entry.getValue();
+
       if (LocationHandler.isLocationFuzzy(route)) {
-        setCenter(routes.get(route));
+        setPage(page);
         return;
       }
     }
@@ -46,23 +51,30 @@ public class Router extends BorderPane {
   }
 
   /**
+   * Sets the center of the router to the given page and refreshes it.
+   *
+   * @param page The page to show
+   */
+  private void setPage(@NotNull StatefulPage page) {
+    setCenter(page);
+    page.update();
+  }
+
+  /**
    * Adds a route to the router, which is shown when the given route is active.
    *
    * @param path The path of the route
    * @param node The node to display when the route is active
-   * @return this router
    * @throws IllegalArgumentException If the route already exists
    */
-  public Router addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
+  public void addRoute(@NotNull String path, @NotNull Node node) throws IllegalArgumentException {
     if (routes.containsKey(path)) {
       throw new IllegalArgumentException("Route already exists");
     }
-    routes.put(path, node);
 
+    routes.put(path, page);
     if (LocationHandler.isLocationFuzzy(path)) {
-      setCenter(node);
+      setPage(page);
     }
-
-    return this;
   }
 }

@@ -3,7 +3,6 @@ package no.ntnu.idatt1005.foodi.view.components;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class TitledPage extends BorderPane implements ComponentUtils {
+public class TitledPage extends StatefulPage implements ComponentUtils {
 
   /**
    * Constructor for the TitledPage class.

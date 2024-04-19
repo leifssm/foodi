@@ -1,6 +1,9 @@
 package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class represents the amounted ingredient object with an expiration date. It extends the
@@ -53,8 +56,18 @@ public class ExpiringIngredient extends AmountedIngredient {
     this.expirationDate = expirationDate;
   }
 
+  /**
+   * Returns the expiration date of the ingredient as a legacy Date object. Not ideal, but the views
+   * in Inventory depends on it.
+   *
+   * @return the expiration date of the ingredient as a Date object
+   */
+  public Date getExpirationDateAsDate() {
+    return Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  }
+
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return String.format(
         "ExpiringIngredient{id=%o, name='%s', unit=%s, "
             + "category=%s, amount=%.2f, expirationDate='%s'}",

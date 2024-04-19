@@ -3,7 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.sidebar;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 /**
@@ -17,10 +17,23 @@ public class SideBar extends VBox implements ComponentUtils {
   /**
    * The constructor of the sidebar component.
    */
-  public SideBar() {
+  public SideBar(SimpleObjectProperty<User> currentUserProperty) {
     super();
     addStylesheet("components/sidebar");
     addClass("sidebar");
+
+    render(currentUserProperty.get().name());
+
+    attachUsernameListener(currentUserProperty);
+  }
+
+  /**
+   * Method for rendering the sidebar.
+   *
+   * @param currentUsername The username of the currently logged in user
+   */
+  public void render(String currentUsername) {
+    getChildren().clear();
 
     String image = LoadUtils.getImage("foodi.png");
     if (image != null) {
@@ -37,7 +50,7 @@ public class SideBar extends VBox implements ComponentUtils {
 
     getChildren().addAll(
         new SideBarItem(
-            "Profiles",
+            currentUsername,
             "profiles"
         ),
         new SideBarItem(
@@ -57,9 +70,13 @@ public class SideBar extends VBox implements ComponentUtils {
             new SideBarSubItem("Add item", "shopping-list/add")
         ),
         new SideBarItem(
-            "About",
+            "About us",
             "about"
         )
     );
+  }
+
+  private void attachUsernameListener(SimpleObjectProperty<User> currentUserProperty) {
+    currentUserProperty.subscribe(newUser -> render(newUser.name()));
   }
 }

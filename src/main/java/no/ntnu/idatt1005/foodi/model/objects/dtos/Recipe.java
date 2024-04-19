@@ -17,6 +17,8 @@ public class Recipe {
   private Difficulty difficulty;
   private DietaryTag dietaryTag;
   private int duration;
+  private String imagePath;
+  private String instruction;
 
   /**
    * Creates a recipe object with the given id, name, description, difficulty, dietary tag, and
@@ -35,7 +37,9 @@ public class Recipe {
       @NotNull String description,
       @NotNull Difficulty difficulty,
       @NotNull DietaryTag dietaryTag,
-      int duration
+      int duration,
+      @NotNull String imagePath,
+      @NotNull String instruction
   ) {
     this.id = id;
     setName(name);
@@ -44,6 +48,8 @@ public class Recipe {
     setDietaryTag(dietaryTag);
     // Duration is in minutes
     setDuration(duration);
+    setImagePath(imagePath);
+    setInstruction(instruction);
   }
 
   /**
@@ -145,15 +151,44 @@ public class Recipe {
     this.dietaryTag = dietaryTag;
   }
 
+  public @NotNull String getImagePath() {
+    return imagePath;
+  }
+
+  public @NotNull String getInstruction() {
+    return instruction;
+  }
+
+  /**
+   * Set the image path of the recipe.
+   *
+   * @param imagePath the new image path of the recipe
+   */
+  public void setImagePath(@NotNull String imagePath) {
+    this.imagePath = imagePath;
+  }
+
+  /**
+   * Set the instruction of the recipe.
+   *
+   * @param instruction the new instruction of the recipe
+   */
+  public void setInstruction(@NotNull String instruction) {
+      this.instruction = instruction;
+  }
+
+
   @Override
   public @NotNull String toString() {
     return "Recipe{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", description='" + description + '\'' +
-        ", difficulty=" + difficulty +
-        ", duration=" + duration +
-        '}';
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", difficulty=" + difficulty +
+            ", duration=" + duration +
+            ", imagePath='" + imagePath + '\'' +
+            ", instruction='" + instruction + '\'' +
+            '}';
   }
 
   /**

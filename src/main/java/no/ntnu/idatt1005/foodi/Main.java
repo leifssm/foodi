@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import no.ntnu.idatt1005.foodi.controller.ApplicationController;
 import no.ntnu.idatt1005.foodi.view.Root;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,9 +24,8 @@ public class Main extends Application {
 
   @Override
   public void start(@NotNull Stage stage) {
-    // FontLoader.loadFontsFromDirectory("fira_sans_otf");
-
     Root root = new Root();
+    new ApplicationController(root);
     Scene scene = new Scene(root, 800, 600);
 
     stage.setTitle("Foodi");

@@ -1,155 +1,376 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-
-import java.sql.*;
-
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * This class is responsible for handling the interaction between
- * the Ingredient class and the Database.
+ * This class is responsible for handling the interaction between the Ingredient class and the
+ * Database.
  *
- * @version 0.3.0
  * @author Snake727
+ * @version 0.9.0
  */
 
 public class IngredientDAO {
 
- public int countIngredientItems(){
-    String sql = "SELECT COUNT(*) FROM ingredient";
-    int count = 0;
+  /**
+   * Counts the number of ingredient items in the database.
+   *
+   * @return the number of ingredient items in the database.
+   */
+  public int countIngredientItems() {
+    Integer result = new QueryBuilder("SELECT COUNT(*) FROM ingredient")
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()) {
-
-      ResultSet rs = stmt.executeQuery(sql);
-      while (rs.next()) {
-        count = rs.getInt(1);
-      }
-
-    } catch (SQLException e) {
-      System.out.println("Error code: " + e.getErrorCode());
-      System.out.println("SQL state: " + e.getSQLState());
-      System.out.println(e.getMessage());
-    }
-
-    return count;
+    return result != null ? result : 0;
   }
 
-  public void save(Ingredient obj) throws SQLException {
-    String checkSql = "SELECT COUNT(*) FROM ingredient WHERE id = ?";
+  /**
+   * Counts the number of ingredient items in a user's inventory.
+   *
+   * @param userId The id of the user to count the ingredients from.
+   * @return the number of ingredient items in the user's inventory.
+   */
+  public int countIngredientItemsInUserInventory(int userId) {
+    Integer result = new QueryBuilder("SELECT COUNT(*) FROM inventory WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
-
-      pstmt.setInt(1, obj.getId());
-      ResultSet rs = pstmt.executeQuery();
-
-      if (rs.next() && rs.getInt(1) > 0) {
-        throw new SQLException("Error: Ingredient with ID " + obj.getId() + " already exists in the database.");
-      }
-    }
-
-    String insertSql = "INSERT INTO ingredient (id, name, unit, category) VALUES (?, ?, ?, ?)";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
-
-      pstmt.setInt(1, obj.getId());
-      pstmt.setString(2, obj.getName());
-      pstmt.setString(3, obj.getUnit().toString());
-      pstmt.setString(4, obj.getCategory().toString());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+    return result != null ? result : 0;
   }
 
-  public void update(Ingredient obj) {
-    String sql = "UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setString(1, obj.getName());
-      pstmt.setString(2, obj.getUnit().toString());
-      pstmt.setString(3, obj.getCategory().toString());
-      pstmt.setInt(4, obj.getId());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  /**
+   * Saves an ingredient to a recipe. This is done by inserting the recipe id, ingredient id and
+   * amount into the recipe_ingredient table.
+   *
+   * @param recipeId     The id of the recipe to save the ingredient to.
+   * @param ingredientId The id of the ingredient to save.
+   * @param amount       The amount of the ingredient to save.
+   */
+  public void saveIngredientToRecipe(int recipeId, int ingredientId, double amount) {
+    new QueryBuilder(
+        "INSERT INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES (?, ?, ?)")
+        .addInt(recipeId)
+        .addInt(ingredientId)
+        .addDouble(amount)
+        .executeUpdateSafe();
   }
 
-  public void delete(Ingredient obj) {
-    String sql = "DELETE FROM ingredient WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setInt(1, obj.getId());
-      pstmt.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  /**
+   * Saves an ingredient object to the database.
+   *
+   * @param obj The ingredient object to save.
+   */
+  public void saveIngredientObject(@NotNull Ingredient obj) {
+    new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
+        .addString(obj.getName())
+        .addString(obj.getUnit().getDatabaseKey())
+        .addString(obj.getCategory().getDatabaseKey())
+        .executeUpdateSafe();
   }
 
-  public Ingredient retrieve(Ingredient obj) {
-    String sql = "SELECT * FROM ingredient WHERE id = ?";
-
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-      pstmt.setInt(1, obj.getId());
-      ResultSet rs = pstmt.executeQuery();
-
-      if (rs.next()) {
-        String name = rs.getString("name");
-        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
-        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
-
-        return new Ingredient(obj.getId(), name, unit, category);
-      }
-
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
+  /**
+   * Saves an ingredient to a user's inventory.
+   *
+   * @param userId         The id of the user to save the ingredient to.
+   * @param ingredientName The name of the ingredient to save.
+   * @param unit           The unit of the ingredient to save.
+   * @param category       The category of the ingredient to save.
+   * @param amount         The amount of the ingredient to save.
+   * @param expirationDate The expiration date of the ingredient.
+   */
+  public void saveIngredientToUserInventory(int userId, String ingredientName, Ingredient.Unit unit,
+      Ingredient.Category category, double amount, @Nullable Date expirationDate)
+      throws SQLException {
+    int ingredientId = findIngredientId(ingredientName, unit, category);
+    if (ingredientId == -1) {
+      saveIngredient(ingredientName, unit, category);
+      ingredientId = findIngredientId(ingredientName, unit, category);
     }
 
-    // Return null if the ingredient was not found
-    return null;
+    new QueryBuilder(
+        "INSERT INTO inventory "
+            + "(ingredient_id, user_id, amount, expiration_date) VALUES (?, ?, ?, ?)")
+        .addInt(ingredientId)
+        .addInt(userId)
+        .addDouble(amount)
+        .addDate(expirationDate)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Finds the id of an ingredient in the database.
+   *
+   * @param ingredientName The name of the ingredient to find.
+   * @param unit           The unit of the ingredient to find.
+   * @param category       The category of the ingredient to find.
+   * @return The id of the ingredient. Returns -1 if nothing was found.
+   */
+  private static Integer findIngredientId(@NotNull String ingredientName,
+      @NotNull Ingredient.Unit unit, @NotNull Ingredient.Category category) {
+    Integer result = new QueryBuilder(
+        "SELECT id FROM ingredient WHERE name = ? AND unit = ? AND category = ?")
+        .addString(ingredientName)
+        .addString(unit.toString())
+        .addString(category.toString())
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return -1;
+        });
+    return result != null ? result : -1;
+  }
+
+  /**
+   * Saves an ingredient object to the database.
+   *
+   * @param ingredientName The name of the ingredient to save.
+   * @param unit           The unit of the ingredient to save.
+   * @param category       The category of the ingredient to save.
+   * @throws SQLException if an error occurs while saving the ingredient.
+   */
+  public void saveIngredient(@NotNull String ingredientName, @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category) throws SQLException {
+    // If no such ingredient exists, proceed with the insertion
+    new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
+        .addString(ingredientName)
+        .addString(unit.toString())
+        .addString(category.toString())
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Updates an ingredient object in the database.
+   *
+   * @param obj The ingredient object to update.
+   */
+  private void updateIngredient(@NotNull Ingredient obj) {
+    new QueryBuilder("UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?")
+        .addString(obj.getName())
+        .addString(obj.getUnit().getDatabaseKey())
+        .addString(obj.getCategory().getDatabaseKey())
+        .addInt(obj.getId())
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Updates an ingredient in a user's inventory.
+   *
+   * @param userId         The id of the user to update the ingredient in.
+   * @param ingredientId   The id of the ingredient to update.
+   * @param amount         The new amount of the ingredient.
+   * @param expirationDate The new expiration date of the ingredient.
+   */
+  public void updateIngredientInUserInventory(int userId, int ingredientId, double amount,
+      @NotNull LocalDate expirationDate) {
+    new QueryBuilder(
+        "UPDATE inventory SET "
+            + "amount = ?, expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
+        .addDouble(amount)
+        .addDate(Date.valueOf(expirationDate))
+        .addInt(userId)
+        .addInt(ingredientId)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Updates the expiration date of an ingredient in a user's inventory.
+   *
+   * @param userId         The id of the user to update the ingredient in.
+   * @param ingredientId   The id of the ingredient to update.
+   * @param expirationDate The new expiration date of the ingredient.
+   */
+  public void updateIngredientExpirationDate(int userId, int ingredientId,
+      @NotNull LocalDate expirationDate) {
+    new QueryBuilder(
+        "UPDATE inventory SET expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
+        .addDate(Date.valueOf(expirationDate))
+        .addInt(userId)
+        .addInt(ingredientId)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Deletes an ingredient object from the database.
+   *
+   * @param obj The ingredient object to delete.
+   */
+  public void deleteIngredientObject(@NotNull Ingredient obj) {
+    new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Deletes an ingredient from a user's inventory.
+   *
+   * @param userId       The id of the user to delete the ingredient from.
+   * @param ingredientId The id of the ingredient to delete.
+   */
+  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
+        .addInt(userId)
+        .addInt(ingredientId)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Retrieves an ingredient object from the database.
+   *
+   * @param obj The ingredient object to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable Ingredient retrieveIngredientObject(@NotNull Ingredient obj) {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
+
+            return new Ingredient(obj.getId(), name, unit, category);
+          }
+          return null;
+        });
+  }
+
+  /**
+   * Retrieves all ingredients and their amounts in a recipe. This is done by checking the recipe
+   * table for a matching recipe id.
+   *
+   * @param recipeId The id of the recipe to retrieve ingredients from.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable List<AmountedIngredient> retrieveAmountedIngredientsFromRecipe(int recipeId) {
+    return new QueryBuilder(
+        "SELECT i.*, ri.amount FROM recipe_ingredient ri "
+            + "JOIN ingredient i ON ri.ingredient_id = i.id WHERE ri.recipe_id = ?")
+        .addInt(recipeId)
+        .executeQuerySafe(rs -> {
+          List<AmountedIngredient> ingredients = new ArrayList<>();
+          while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
+            double amount = rs.getDouble("amount");
+
+            ingredients.add(new AmountedIngredient(id, name, unit, category, amount));
+          }
+          return ingredients;
+        });
+  }
+
+  /**
+   * Retrieve a list of all the ingredients in a users inventory. The list contains
+   * AmountedIngredient objects with the amount of each ingredient.
+   *
+   * @param userId The id of the user to retrieve the inventory from.
+   * @return A list of AmountedIngredient objects.
+   */
+  public @Nullable List<AmountedIngredient> retrieveAmountedIngredientsFromInventory(int userId) {
+    return new QueryBuilder("SELECT * FROM inventory WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          List<AmountedIngredient> ingredients = new ArrayList<>();
+          while (rs.next()) {
+            int ingredientId = rs.getInt("ingredient_id");
+            double amount = rs.getDouble("amount");
+
+            Ingredient ingredient = retrieveIngredientById(ingredientId);
+            assert ingredient != null;
+            ingredients.add(new AmountedIngredient(ingredient.getId(), ingredient.getName(),
+                ingredient.getUnit(), ingredient.getCategory(), amount));
+          }
+          return ingredients;
+        });
   }
 
   /**
    * Retrieve an ingredient from the database by its ID.
+   *
    * @param id the id of the ingredient to retrieve.
    * @return The Ingredient object. Returns null if nothing was found.
    */
-  public Ingredient retrieveById(int id) {
-    String sql = "SELECT * FROM ingredient WHERE id = ?";
+  public @Nullable Ingredient retrieveIngredientById(int id) {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
+        .addInt(id)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            String name = rs.getString("name");
+            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString("unit"));
+            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString("category"));
 
-    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            return new Ingredient(id, name, unit, category);
+          }
+          return null;
+        });
+  }
 
-      pstmt.setInt(1, id);
-      ResultSet rs = pstmt.executeQuery();
+  /**
+   * Retrieve a list of all the ingredients in a users inventory. The list contains
+   * ExpiringIngredient objects with the amount and expiration date of each ingredient.
+   *
+   * @param userId The id of the user to retrieve the inventory from.
+   * @return A list of ExpiringIngredient objects.
+   */
 
-      if (rs.next()) {
-        String name = rs.getString("name");
-        Ingredient.IngredientUnit unit = Ingredient.IngredientUnit.valueOf(rs.getString("unit"));
-        Ingredient.IngredientCategory category = Ingredient.IngredientCategory.valueOf(rs.getString("category"));
+  public @Nullable List<ExpiringIngredient> retrieveExpiringIngredientsFromInventory(int userId) {
+    return new QueryBuilder("SELECT * FROM inventory WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          List<ExpiringIngredient> ingredients = new ArrayList<>();
+          while (rs.next()) {
+            int ingredientId = rs.getInt("ingredient_id");
+            double amount = rs.getDouble("amount");
+            Date expirationDateSql = rs.getDate("expiration_date");
+            LocalDate expirationDate = expirationDateSql.toLocalDate();
 
-        return new Ingredient(id, name, unit, category);
-      }
+            Ingredient ingredient = retrieveIngredientById(ingredientId);
+            assert ingredient != null;
+            ingredients.add(new ExpiringIngredient(ingredient.getId(), ingredient.getName(),
+                ingredient.getUnit(), ingredient.getCategory(), amount, expirationDate));
+          }
+          return ingredients;
+        });
+  }
 
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  /**
+   * Retrieve the total amount of an ingredient in a user's inventory.
+   *
+   * @param userId The id of the user to retrieve the inventory from.
+   * @return The total amount of the ingredient in the user's inventory.
+   */
+  public double getTotalAmountOfIngredientsInInventory(int userId) {
+    Double result = new QueryBuilder("SELECT SUM(amount) FROM inventory WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getDouble(1);
+          }
+          return null;
+        });
 
-    // Return null if the ingredient was not found
-    return null;
+    return result != null ? result : 0;
   }
 }

@@ -7,9 +7,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.view.Paginator;
-import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
 
 /**
  * Class for displaying a list of ingredients.
@@ -86,20 +85,23 @@ public class InventoryList extends VBox implements ComponentUtils {
 
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
-
-    render();
   }
 
   /**
    * Clears the current cells and displays all stored cells to the view.
+   *
+   * @param groupedExpiringIngredients a list of grouped expiring ingredients
    */
-  public void render() {
+  public void render(@NotNull final List<GroupedExpiringIngredients> groupedExpiringIngredients) {
     clearCells();
+    items = new Paginator<>(groupedExpiringIngredients, 10);
 
-    List<ExpiringIngredient> currentPage = items.getCurrentPage();
+    final List<GroupedExpiringIngredients> currentPage = items.getCurrentPage();
+
     int rowNum = 2;
-    for (ExpiringIngredient item : currentPage) {
-      InventoryListItem rows = new InventoryListItem(item, item, item);
+    for (GroupedExpiringIngredients ingredientGroup : currentPage) {
+
+      InventoryListItem rows = new InventoryListItem(ingredientGroup);
       gridPane.addRow(rowNum++, rows.getMainItems());
 
       for (InventoryListSubItem subRow : rows.getSubItems()) {
@@ -116,11 +118,7 @@ public class InventoryList extends VBox implements ComponentUtils {
    */
   public void clearCells() {
     gridPane.getChildren().removeIf(node ->
-        GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
+        GridPane.getRowIndex(node) == null || GridPane.getRowIndex(node) > 1
     );
-  }
-
-  public Paginator<ExpiringIngredient> getItems() {
-    return items;
   }
 }

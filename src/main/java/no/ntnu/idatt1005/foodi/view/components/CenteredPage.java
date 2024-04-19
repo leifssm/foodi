@@ -10,7 +10,7 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class CenteredPage extends BorderPane implements ComponentUtils {
+public class CenteredPage extends StatefulPage implements ComponentUtils {
 
   /**
    * Constructor for the CenteredPage class.

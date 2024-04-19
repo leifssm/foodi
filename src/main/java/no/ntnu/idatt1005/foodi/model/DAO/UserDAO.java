@@ -1,93 +1,124 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
-import no.ntnu.idatt1005.foodi.model.objects.User;
 
-import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain.*;
-
+/**
+ * This class is a Data Access Object (DAO) for the User class. It is used to interact with the
+ * database. The class contains methods for saving, deleting, updating and retrieving user objects
+ * from the database.
+ *
+ * @author Snake727
+ * @version 0.5.0
+ */
 public class UserDAO {
 
+  /**
+   * Saves a user to the database.
+   *
+   * @param name the name of the user
+   */
 
-    public void save (User obj) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
+  public void saveUser(String name) {
+    new QueryBuilder("INSERT INTO PUBLIC.\"user\" (name) VALUES (?)")
+        .addString(name)
+        .executeUpdateSafe();
+  }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
+  /**
+   * Deletes a user from the database.
+   *
+   * @param userId the id of the user to delete
+   */
 
-            pstmt.setInt(1, obj.getUserId());
-            ResultSet rs = pstmt.executeQuery();
+  public void deleteUser(int userId) {
+    new QueryBuilder("DELETE FROM PUBLIC.\"user\" WHERE id = ?")
+        .addInt(userId)
+        .executeUpdateSafe();
+  }
 
-            if (rs.next() && rs.getInt(1) > 0) {
-                throw new SQLException("Error: User with ID " + obj.getUserId() + " already exists in the database.");
-            }
+  /**
+   * Updates the name of a user in the database.
+   *
+   * @param userId the id of the user to update
+   * @param name   the new name of the user
+   */
+  public void updateUserName(int userId, String name) {
+    new QueryBuilder("UPDATE PUBLIC.\"user\" SET name = ? WHERE id = ?")
+        .addString(name)
+        .addInt(userId)
+        .executeUpdateSafe();
+  }
 
-            String insertSql = "INSERT INTO MAIN.PUBLIC.\"user\" (id, name) VALUES (?, ?)";
+  /**
+   * Retrieves the id of a user from the database.
+   *
+   * @param name the name of the user
+   * @return the id of the user
+   */
+  public int retrieveUserId(String name) {
+    Integer result = new QueryBuilder("SELECT id FROM PUBLIC.\"user\" WHERE name = ?")
+        .addString(name)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
 
-            try (PreparedStatement pstmt2 = conn.prepareStatement(insertSql)) {
-                pstmt2.setInt(1, obj.getUserId());
-                pstmt2.setString(2, obj.getName());
-                pstmt2.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+    return (result != null) ? result : -1; // or any default value
+  }
 
-        }
-    }
+  /**
+   * Retrieves the name of a user from the database.
+   *
+   * @param userId the id of the user
+   * @return the name of the user
+   */
+  public String retrieveUserName(int userId) {
+    return new QueryBuilder("SELECT name FROM PUBLIC.\"user\" WHERE id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getString(1);
+          }
+          return null;
+        });
+  }
 
-    public void delete (User obj) {
-        String sql = "DELETE FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
+  /**
+   * Checks if a user exists in the database.
+   *
+   * @param userId the id of the user
+   * @return true if the user exists, false otherwise
+   */
+  public boolean userExists(int userId) {
+    Integer count = new QueryBuilder("SELECT COUNT(*) FROM PUBLIC.\"user\" WHERE id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          if (rs.next()) {
+            return rs.getInt(1);
+          }
+          return null;
+        });
+    return count != null && count > 0;
+  }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, obj.getUserId());
-            pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public User retrieve (User obj) {
-        String sql = "SELECT * FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, obj.getUserId());
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return new User(rs.getInt("id"), rs.getString("name"));
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return null;
-    }
-
-    //method to check if user exists
-
-    public boolean userExists(User obj) {
-        String sql = "SELECT * FROM MAIN.PUBLIC.\"user\" WHERE id = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, obj.getUserId());
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return false;
-    }
-
+  /**
+   * Retrieves all users from the database.
+   *
+   * @return a list of all users
+   */
+  public List<User> retrieveAllUsers() {
+    List<User> users = new ArrayList<>();
+    new QueryBuilder("SELECT * FROM PUBLIC.\"user\"")
+        .executeQuerySafe(rs -> {
+          while (rs.next()) {
+            users.add(new User(rs.getInt("id"), rs.getString("name")));
+          }
+          return users;
+        });
+    return users;
+  }
 }
