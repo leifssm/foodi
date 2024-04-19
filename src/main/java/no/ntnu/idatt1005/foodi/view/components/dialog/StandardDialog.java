@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
-import no.ntnu.idatt1005.foodi.view.utils.DialogCssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.DialogComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,8 +16,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Henrik Kvamme
  */
-public class StandardDialog extends Dialog<Void> implements
-    DialogCssUtils {
+public class StandardDialog extends Dialog<Void> implements DialogComponentUtils {
 
   private ButtonType okButtonType;
 

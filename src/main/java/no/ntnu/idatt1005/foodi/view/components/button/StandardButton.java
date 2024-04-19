@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.components.button;
 
 import javafx.scene.control.Button;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.1
  */
-public class StandardButton extends Button implements CssUtils {
+public class StandardButton extends Button implements ComponentUtils {
 
   private Style currentStyle = Style.NORMAL;
 

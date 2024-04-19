@@ -10,7 +10,7 @@ import javafx.scene.control.DialogPane;
  * @author Henrik Kvamme & Leif Mørstad
  * @version 1.0
  */
-public interface DialogCssUtils extends CssUtils {
+public interface DialogComponentUtils extends ComponentUtils {
 
   @Override
   default ObservableList<String> getStylesheets() {

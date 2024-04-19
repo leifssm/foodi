@@ -155,10 +155,6 @@ public class Recipe {
     return imagePath;
   }
 
-  public @NotNull String getInstruction() {
-    return instruction;
-  }
-
   /**
    * Set the image path of the recipe.
    *
@@ -168,27 +164,31 @@ public class Recipe {
     this.imagePath = imagePath;
   }
 
+  public @NotNull String getInstruction() {
+    return instruction;
+  }
+
   /**
    * Set the instruction of the recipe.
    *
    * @param instruction the new instruction of the recipe
    */
   public void setInstruction(@NotNull String instruction) {
-      this.instruction = instruction;
+    this.instruction = instruction;
   }
 
 
   @Override
   public @NotNull String toString() {
     return "Recipe{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", description='" + description + '\'' +
-            ", difficulty=" + difficulty +
-            ", duration=" + duration +
-            ", imagePath='" + imagePath + '\'' +
-            ", instruction='" + instruction + '\'' +
-            '}';
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", difficulty=" + difficulty +
+        ", duration=" + duration +
+        ", imagePath='" + imagePath + '\'' +
+        ", instruction='" + instruction + '\'' +
+        '}';
   }
 
   /**

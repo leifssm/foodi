@@ -3,7 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.profiles;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for creating a profile item. A profile item is a square button with a color and a label
@@ -12,7 +12,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class ProfileItem extends VBox implements CssUtils {
+public class ProfileItem extends VBox implements ComponentUtils {
 
   /**
    * Constructor for the ProfileItem class.
