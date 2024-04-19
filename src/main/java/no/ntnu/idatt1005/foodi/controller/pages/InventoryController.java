@@ -45,11 +45,8 @@ public class InventoryController extends PageController {
 
   private void attachToView() {
     view.setOnAddItem(this::onAddItem);
-  }
-
-  @Override
-  void update() {
-    view.render(getInventoryDataFromUser());
+    view.setOnFreezeItems(this::onFreezeItem);
+    view.setOnDeleteItems(this::onDeleteItems);
   }
 
   /**
@@ -74,6 +71,26 @@ public class InventoryController extends PageController {
     update();
   }
 
+  private void onFreezeItem() {
+    List<ExpiringIngredient> ingredients = view.getSelectedItems();
+    LOGGER.info("Freezing " + ingredients.size() + " items");
+  }
+
+  private void onDeleteItems() {
+    List<ExpiringIngredient> ingredients = view.getSelectedItems();
+    LOGGER.info("Deleting " + ingredients.size() + " items");
+
+    for (ExpiringIngredient ingredient : ingredients) {
+      ingredientDAO.deleteIngredientObject(ingredient);
+    }
+    update();
+  }
+
+  @Override
+  void update() {
+    view.render(getInventoryDataFromUser());
+  }
+
   /**
    * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
    * {@link GroupedExpiringIngredients}.
@@ -82,7 +99,8 @@ public class InventoryController extends PageController {
    */
   private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
     List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
-        currentUserProperty.get().userId());
+        currentUserProperty.get().userId()
+    );
 
     if (inventoryData == null) {
       return new ArrayList<>();
@@ -99,9 +117,12 @@ public class InventoryController extends PageController {
       }
     }
 
-    return groupedInventoryData.entrySet()
+    return groupedInventoryData
+        .entrySet()
         .stream()
-        .map(entry -> new GroupedExpiringIngredients(entry.getKey(), entry.getValue()))
+        .map(entry ->
+            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
+        )
         .toList();
   }
 }
