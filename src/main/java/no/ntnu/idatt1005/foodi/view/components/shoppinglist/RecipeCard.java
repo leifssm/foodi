@@ -6,8 +6,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
@@ -15,18 +16,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A component for displaying a summary of a recipe. Used by {@link AddedRecipes}.
  *
+ * @author Leif Mørstad
  * @version 1.0
  * @see AddedRecipes
  * @see Recipe
- * @author Leif Mørstad
  */
 public class RecipeCard extends BorderPane implements ComponentUtils {
+
   /**
    * Constructor for the RecipeCard class.
    *
    * @param recipe The recipe to display
    */
-  public RecipeCard(@NotNull Recipe recipe) {
+  public RecipeCard(@NotNull RecipeWithPartiallyRemovedIngredients recipe) {
     super();
     addStylesheet("components/shopping-list/recipe-card");
     addClass("recipe-card");
@@ -37,15 +39,14 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     setCenter(title);
     setRight(
         new HBox(
-          new RecipeServings(4), // TODO: Add dynamic servings
-          new StandardButton(
-              "X",
-              () -> System.out.println("Remove recipe"),
-              StandardButton.Style.ERROR
-          )
+            new RecipeServings(recipe.getPortions()),
+            new StandardButton(
+                "X",
+                () -> System.out.println("Remove recipe"),
+                StandardButton.Style.ERROR
+            )
         )
     );
-
 
     BorderPane ingredientsWrapper = new BorderPane();
     ingredientsWrapper.getStyleClass().add("ingredients-wrapper");
@@ -59,8 +60,24 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     VBox ingredients = new VBox();
     ingredients.getStyleClass().add("ingredients");
 
-    for (InventoryItem item : recipe.getIngredients()) {
-      ingredients.getChildren().add(new IngredientItem(item));
+    for (PartiallyRemovedAmountedIngredient item : recipe.getIngredients()) {
+      String name = item.getCategory().getIcon() + " " + item.getName();
+      if (item.getRemainingAmount() > 0) {
+        ingredients.getChildren().add(
+            new KeptPartOfIngredientItem(
+                name,
+                item.getRemainingAmount() + " " + item.getUnit()
+            )
+        );
+      }
+      if (item.getRemovedAmount() > 0) {
+        ingredients.getChildren().add(
+            new RemovedPartOfIngredientItem(
+                name,
+                item.getRemovedAmount() + " " + item.getUnit()
+            )
+        );
+      }
     }
 
     ingredientsWrapper.setCenter(ingredients);
@@ -68,6 +85,7 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
   }
 
   private static class RecipeServings extends Label implements ComponentUtils {
+
     public RecipeServings(int servings) {
       super();
       addClass("recipe-servings");
@@ -76,20 +94,27 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
     }
   }
 
-  private static class IngredientItem extends StackPane implements ComponentUtils {
-    public IngredientItem(@NotNull Ingredient item) {
+  private static class KeptPartOfIngredientItem extends BorderPane implements ComponentUtils {
+
+    public KeptPartOfIngredientItem(@NotNull String name, @NotNull String amount) {
       super();
       addClasses("ingredient");
 
-      BorderPane content = new BorderPane();
-      content.setLeft(
-          // TODO: Should be improved if icons are added
-          new Label(item.getType() + " " + item.getName())
-      );
+      setLeft(new Label(name));
 
-      Label amount = new Label(item.getQuantity() + " " + item.getUnit());
-      amount.getStyleClass().add("ingredient-amount");
-      content.setRight(amount);
+      Label amountLabel = new Label(amount);
+      amountLabel.getStyleClass().add("ingredient-amount");
+      setRight(amountLabel);
+    }
+  }
+
+  private static class RemovedPartOfIngredientItem extends StackPane implements ComponentUtils {
+
+    public RemovedPartOfIngredientItem(@NotNull String name, @NotNull String amount) {
+      super();
+      addClasses("ingredient");
+
+      BorderPane content = new KeptPartOfIngredientItem(name, amount);
 
       HBox crossedOutLine = new HBox();
       crossedOutLine.getStyleClass().add("crossed-out-line");
