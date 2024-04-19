@@ -22,7 +22,7 @@ public class NewUserDialog extends StandardDialog {
   public NewUserDialog(Consumer<String> addUser) {
     super();
     this.addUser = addUser;
-    
+
     setTitle("Add new user");
     setHeaderTitle("Enter the name of the new user");
 

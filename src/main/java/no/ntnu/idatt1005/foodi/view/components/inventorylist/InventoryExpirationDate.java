@@ -1,9 +1,11 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
-import java.util.Date;
+import static java.time.temporal.ChronoUnit.DAYS;
+
+import java.time.LocalDate;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,19 +14,17 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.0
  */
-class InventoryExpirationDate extends TextFlow implements CssUtils {
+class InventoryExpirationDate extends TextFlow implements ComponentUtils {
 
   /**
    * Constructor for the InventoryExpirationDate class.
    *
    * @param date The expiration date of the inventory item
    */
-  public InventoryExpirationDate(@NotNull Date date) {
+  public InventoryExpirationDate(@NotNull LocalDate date) {
     addClass("expiry-date");
 
-    int daysUntilExpired = (int) (
-        (date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-    );
+    long daysUntilExpired = DAYS.between(LocalDate.now(), date);
 
     if (daysUntilExpired < 0) {
       Text expiryText = new Text(

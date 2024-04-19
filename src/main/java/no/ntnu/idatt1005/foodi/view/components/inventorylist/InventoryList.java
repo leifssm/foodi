@@ -8,8 +8,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
-import no.ntnu.idatt1005.foodi.view.Paginator;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class InventoryList extends VBox implements CssUtils {
+public class InventoryList extends VBox implements ComponentUtils {
 
   private final GridPane gridPane;
-  private Paginator<GroupedExpiringIngredients> items = new Paginator<>();
 
   /**
    * Constructor for the InventoryList class.
@@ -91,14 +89,10 @@ public class InventoryList extends VBox implements CssUtils {
   /**
    * Clears the current cells and displays all stored cells to the view.
    *
-   * @param groupedExpiringIngredients a list of grouped expiring ingredients
+   * @param currentPage a list of grouped expiring ingredients
    */
-  public void render(@NotNull final List<GroupedExpiringIngredients> groupedExpiringIngredients) {
+  public void render(@NotNull final List<GroupedExpiringIngredients> currentPage) {
     clearCells();
-    items = new Paginator<>(groupedExpiringIngredients, 10);
-
-    final List<GroupedExpiringIngredients> currentPage = items.getCurrentPage();
-
     int rowNum = 2;
     for (GroupedExpiringIngredients ingredientGroup : currentPage) {
 
