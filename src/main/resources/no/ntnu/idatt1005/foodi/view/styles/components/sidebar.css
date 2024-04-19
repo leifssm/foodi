@@ -7,10 +7,11 @@
 }
 
 .sidebar-button {
+  -fx-text-fill: #b4b4b4;
   -fx-max-width: infinity;
   -fx-alignment: center-left;
 }
 
-.selected .sidebar-button {
+.sidebar-button.selected {
   -fx-text-fill: white;
 }
