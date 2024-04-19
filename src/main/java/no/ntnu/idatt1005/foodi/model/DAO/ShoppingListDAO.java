@@ -1,8 +1,11 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,6 +25,7 @@ public class ShoppingListDAO {
    * @param listId       the id of the shopping list.
    * @throws SQLException if an error occurs while saving the shopping list.
    */
+
   public void save(@NotNull Map<Integer, Double> shoppingList, int userId, int listId)
       throws SQLException {
     // Delete existing entries for the user to avoid duplicates
@@ -55,6 +59,30 @@ public class ShoppingListDAO {
   }
 
   /**
+   * Retrieves the shopping list for a user with partially removed ingredients.
+   *
+   * @param userId the id of the user.
+   * @return a list of recipes with partially removed ingredients.
+   */
+  public List<Recipe> getRecipesInShoppingListForUser(int userId) {
+    RecipeDAO recipeDAO = new RecipeDAO();
+    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
+    List<Recipe> recipes = new ArrayList<>();
+
+    for (Integer ingredientId : shoppingList.keySet()) {
+      List<Integer> recipeIds = getRecipeIdsByIngredientId(ingredientId);
+      for (Integer recipeId : recipeIds) {
+        Recipe recipe = recipeDAO.retrieveById(recipeId);
+        if (recipe != null) {
+          recipes.add(recipe);
+        }
+      }
+    }
+
+    return recipes;
+  }
+
+  /**
    * Retrieves the shopping list for a user.
    *
    * @param userId the id of the user.
@@ -73,5 +101,26 @@ public class ShoppingListDAO {
         });
 
     return currentShoppingList;
+  }
+
+  /**
+   * Retrieves the recipe ids for a given ingredient id.
+   *
+   * @param ingredientId the id of the ingredient.
+   * @return a list of recipe ids.
+   */
+  private List<Integer> getRecipeIdsByIngredientId(int ingredientId) {
+    List<Integer> recipeIds = new ArrayList<>();
+
+    new QueryBuilder("SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id = ?")
+        .addInt(ingredientId)
+        .executeQuerySafe(rs -> {
+          while (rs.next()) {
+            recipeIds.add(rs.getInt("recipe_id"));
+          }
+          return recipeIds;
+        });
+
+    return recipeIds;
   }
 }

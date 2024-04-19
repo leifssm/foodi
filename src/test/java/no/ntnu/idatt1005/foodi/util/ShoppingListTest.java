@@ -1,5 +1,14 @@
 package no.ntnu.idatt1005.foodi.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
@@ -7,12 +16,13 @@ import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ShoppingListTest {
@@ -25,7 +35,7 @@ public class ShoppingListTest {
   private static Ingredient testIngredient1;
   private static Ingredient testIngredient2;
   private static Ingredient testIngredient3;
-  private  static Ingredient testIngredient4;
+  private static Ingredient testIngredient4;
   private static Ingredient testIngredient5;
 
   @BeforeEach
@@ -45,11 +55,16 @@ public class ShoppingListTest {
     userDAO.saveUser(testUser.name());
 
     // Create new test ingredients
-    testIngredient1 = new Ingredient(1, "Test Ingredient 1", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
-    testIngredient2 = new Ingredient(2, "Test Ingredient 2", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
-    testIngredient3 = new Ingredient(3, "Test Ingredient 3", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
-    testIngredient4 = new Ingredient(4, "Test Ingredient 4", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
-    testIngredient5 = new Ingredient(5, "Test Ingredient 5", Ingredient.Unit.GRAM, Ingredient.Category.VEGETABLE);
+    testIngredient1 = new Ingredient(1, "Test Ingredient 1", Ingredient.Unit.GRAM,
+        Ingredient.Category.VEGETABLE);
+    testIngredient2 = new Ingredient(2, "Test Ingredient 2", Ingredient.Unit.GRAM,
+        Ingredient.Category.VEGETABLE);
+    testIngredient3 = new Ingredient(3, "Test Ingredient 3", Ingredient.Unit.GRAM,
+        Ingredient.Category.VEGETABLE);
+    testIngredient4 = new Ingredient(4, "Test Ingredient 4", Ingredient.Unit.GRAM,
+        Ingredient.Category.VEGETABLE);
+    testIngredient5 = new Ingredient(5, "Test Ingredient 5", Ingredient.Unit.GRAM,
+        Ingredient.Category.VEGETABLE);
 
     // Save the test ingredients to the database
     ingredientDAO.saveIngredientObject(testIngredient1);
@@ -59,7 +74,8 @@ public class ShoppingListTest {
     ingredientDAO.saveIngredientObject(testIngredient5);
 
     // Create a new test recipe
-    recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg", "This is a test instruction");
+    recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg",
+        "This is a test instruction");
 
     // Save the test ingredients to a recipe
     ingredientDAO.saveIngredientToRecipe(1, testIngredient1.getId(), 2.0);
@@ -71,9 +87,11 @@ public class ShoppingListTest {
 
   @AfterEach
   public void tearDown() throws SQLException {
-    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER, DatabaseMain.PASS);
-         Statement stmt = conn.createStatement()) {
-      stmt.execute("DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
+    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER,
+        DatabaseMain.PASS);
+        Statement stmt = conn.createStatement()) {
+      stmt.execute(
+          "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
     }
   }
 
@@ -93,9 +111,11 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertEquals(shoppingList, retrievedShoppingList, "The saved shopping list should match the retrieved shopping list.");
+    assertEquals(shoppingList, retrievedShoppingList,
+        "The saved shopping list should match the retrieved shopping list.");
   }
 
   @Test
@@ -103,9 +123,11 @@ public class ShoppingListTest {
   public void testDeleteShoppingList() {
     shoppingListDAO.deleteAllForUser(testUser.userId());
 
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty after deletion.");
+    assertTrue(retrievedShoppingList.isEmpty(),
+        "The shopping list should be empty after deletion.");
   }
 
   @Test
@@ -123,9 +145,11 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(updatedShoppingList, testUser.userId(), 1);
 
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertEquals(updatedShoppingList, retrievedShoppingList, "The updated shopping list should match the retrieved shopping list.");
+    assertEquals(updatedShoppingList, retrievedShoppingList,
+        "The updated shopping list should match the retrieved shopping list.");
   }
 
   @Test
@@ -137,17 +161,21 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertEquals(shoppingList, retrievedShoppingList, "The saved shopping list should match the retrieved shopping list.");
+    assertEquals(shoppingList, retrievedShoppingList,
+        "The saved shopping list should match the retrieved shopping list.");
   }
 
   @Test
   @Order(5)
   public void testGetEmptyShoppingList() {
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if no shopping list has been saved.");
+    assertTrue(retrievedShoppingList.isEmpty(),
+        "The shopping list should be empty if no shopping list has been saved.");
   }
 
   @Test
@@ -155,7 +183,8 @@ public class ShoppingListTest {
   public void testGetShoppingListForNonExistingUser() {
     Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(1);
 
-    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if the user does not exist.");
+    assertTrue(retrievedShoppingList.isEmpty(),
+        "The shopping list should be empty if the user does not exist.");
   }
 
   @Test
@@ -165,8 +194,30 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(testUser.userId());
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
 
-    assertTrue(retrievedShoppingList.isEmpty(), "The shopping list should be empty if no ingredients are added.");
+    assertTrue(retrievedShoppingList.isEmpty(),
+        "The shopping list should be empty if no ingredients are added.");
+  }
+
+  // This method should be tested by adding five recipes to the shopping list
+  // Then assert that the amount of recipes in the shopping list is equal to five
+  @Test
+  @Order(8)
+  @DisplayName("Test that the getRecipesInShoppingListForUser method"
+      + "returns the correct amount of recipes in the shopping list.")
+  public void testGetRecipesInShoppingListForUser() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    assertEquals(5, shoppingListDAO.getRecipesInShoppingListForUser(testUser.userId()).size(),
+        "The amount of recipes in the shopping list should be equal to the amount of ingredients in the shopping list.");
   }
 }
