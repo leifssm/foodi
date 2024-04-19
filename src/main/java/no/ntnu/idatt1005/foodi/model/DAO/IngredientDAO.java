@@ -229,16 +229,22 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-  /**
-   * Deletes an ingredient object from the database.
-   *
-   * @param obj The ingredient object to delete.
-   */
-  public void deleteIngredientObject(@NotNull Ingredient obj) {
-    new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
-        .addInt(obj.getId())
-        .executeUpdateSafe();
-  }
+    /**
+     * Deletes an ingredient object from the database and also deletes related entries in the inventory table.
+     *
+     * @param obj The ingredient object to delete.
+     */
+    public void deleteIngredientObject(@NotNull Ingredient obj) {
+        // First, delete the related entries in the inventory table
+        new QueryBuilder("DELETE FROM inventory WHERE ingredient_id = ?")
+                .addInt(obj.getId())
+                .executeUpdateSafe();
+
+        // Then, delete the ingredient from the ingredient table
+        new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
+                .addInt(obj.getId())
+                .executeUpdateSafe();
+    }
 
   /**
    * Deletes an ingredient from a user's inventory.
