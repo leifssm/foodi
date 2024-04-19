@@ -7,9 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -17,21 +19,18 @@ import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
  */
 public class RecipePage extends StatefulPage implements ComponentUtils {
 
-  private final String imagePath = "chicken-soup.jpg";
-  private final String title = "Chicken Soup";
-  private final int time = 30;
-  private final String difficulty = "easy";
-  private final String description = "A delicious chicken soup that is perfect for a cold winter day. It is easy to make and only requires a few ingredients. It is also very healthy and nutritious. Enjoy! 🍲";
-  private final String instructions = "1. Boil the chicken in a pot with water for 30 minutes.\n2. Add the vegetables and spices.\n3. Let it simmer for 10 minutes.\n4. Serve hot with bread.";
-
   /**
    * Constructor for the RecipePage class.
    */
   public RecipePage() {
     addStylesheet("components/recipe/recipe-page");
     addClass("recipe");
+  }
 
+  public void render (@NotNull RecipeWithIngredients recipe) {
+    // Render the recipe page
     // Load the image and create an ImageView for it
+    String imagePath = recipe.getImagePath();
     String imageUrl = LoadUtils.getImage(imagePath);
     if (imageUrl == null) {
       throw new AssertionError("Image not found: " + imagePath);
@@ -45,10 +44,10 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
       setPadding(new Insets(getWidth() / 2.2, 0, 0, 0));
     });
 
-    Label recipeTitle = new Label(title);
+    Label recipeTitle = new Label(recipe.getName());
     recipeTitle.getStyleClass().add("recipe-title");
 
-    imageUrl = LoadUtils.getImage("difficulty/" + difficulty + ".png");
+    imageUrl = LoadUtils.getImage("difficulty/" + recipe.getDifficulty() + ".png");
     if (imageUrl == null) {
       throw new AssertionError("Image not found: " + imagePath);
     }
@@ -60,7 +59,7 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     HBox titleDifficultyBox = new HBox(recipeTitle, difficultyImage);
     titleDifficultyBox.getStyleClass().add("title-difficulty-box");
 
-    Label recipeTime = new Label("⏱ " + time + " minutes");
+    Label recipeTime = new Label("⏱ " + recipe.getDuration() + " minutes");
     recipeTime.getStyleClass().add("recipe-time");
 
     BorderPane recipeHeader = new BorderPane();
@@ -68,12 +67,12 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     recipeHeader.setRight(recipeTime);
     recipeHeader.getStyleClass().add("recipe-header");
 
-    Label recipeDescription = new Label(description);
+    Label recipeDescription = new Label(recipe.getDescription());
     recipeDescription.getStyleClass().add("recipe-description");
 
     Label instructionsTitle = new Label("Instructions");
     instructionsTitle.getStyleClass().add("instructions-title");
-    Label instructions = new Label(this.instructions);
+    Label instructions = new Label(recipe.getInstruction());
     instructions.getStyleClass().add("instructions");
     VBox instructionsBox = new VBox(instructionsTitle, instructions);
 
