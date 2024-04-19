@@ -40,7 +40,7 @@ public class IngredientGrouper {
         currentGroup = new IngredientCategoryGroup(ingredient.getCategory(), new ArrayList<>());
         groups.add(currentGroup);
       } else {
-        currentGroup = groups.getLast();
+        currentGroup = groups.get(groups.size() - 1);
       }
       currentGroup.ingredients.add(ingredient);
     }
