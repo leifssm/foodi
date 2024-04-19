@@ -57,19 +57,15 @@ public class SideBar extends VBox implements ComponentUtils {
         ),
         new SideBarItem(
             "Inventory",
-            "inventory",
-            new SideBarSubItem("Add item", "inventory/add"),
-            new SideBarSubItem("Add item", "inventory/add")
+            "inventory"
         ),
         new SideBarItem(
             "Cookbook",
-            "cookbook-grid",
-            new SideBarSubItem("Add item", "cookbook/add")
+            "cookbook-grid"
         ),
         new SideBarItem(
             "Shopping List",
-            "shopping-list",
-            new SideBarSubItem("Add item", "shopping-list/add")
+            "shopping-list"
         ),
         new SideBarItem(
             "About us",
