@@ -80,9 +80,6 @@ class InventoryListItem {
     Label unit = new Label(mainItem.getUnit().getName());
     unit.getStyleClass().add("center");
 
-    Label edit = new Label("🖊️");
-    edit.getStyleClass().add("center");
-
     StandardCheckBox select = new StandardCheckBox();
     select.setScale(0.6);
     select.getStyleClass().add("center");
@@ -96,7 +93,6 @@ class InventoryListItem {
         category,
         quantity,
         unit,
-        edit,
         select
     };
   }

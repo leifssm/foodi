@@ -43,9 +43,6 @@ class InventoryListSubItem {
     Label unit = new Label(item.getUnit().getName());
     unit.getStyleClass().addAll("center", "gray", "vertical-padding");
 
-    Label edit = new Label("e");
-    edit.getStyleClass().add("center");
-
     select.setScale(0.6);
     select.getStyleClass().add("center");
 
@@ -56,7 +53,6 @@ class InventoryListSubItem {
         category,
         quantity,
         unit,
-        edit,
         select
     };
   }
