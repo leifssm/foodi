@@ -29,7 +29,7 @@ public class RecipeDBOTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    Database.initialize();
+    Database.initializeEmpty();
 
     // Initialize a new IngredientDAO object
     ingredientDAO = new IngredientDAO();

@@ -30,19 +30,17 @@ public class Database {
   }
 
   /**
-   * This method creates a database in the user's home directory. It also populates the database
-   * with the necessary tables. The method also checks if the database already exists, and if it
-   * does, it will not create a new one.
+   * This method creates a database in the user's home directory with empty tables. Used by test
+   * classes.
    */
-  public static void initialize() {
+  public static void initializeEmpty() {
     try (Connection conn = getConnection()) {
       createTablesIfNotExists(conn);
       LOGGER.info("Database has been created and initialized.");
+      removeAllData();
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
-
-    insertDefaultData();
   }
 
   private static Connection getConnection() throws SQLException {
@@ -109,6 +107,47 @@ public class Database {
               + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
               + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
     }
+  }
+
+  /**
+   * This method removes all data from the database.
+   */
+  public static void removeAllData() {
+    String deleteInventorySql = "DELETE FROM inventory";
+    String deleteShoppingListSql = "DELETE FROM shopping_list";
+    String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
+    String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
+    String deleteIngredientSql = "DELETE FROM ingredient";
+    String deleteRecipeSql = "DELETE FROM recipe";
+
+    try (Connection connection = getConnection()) {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate(deleteInventorySql);
+      statement.executeUpdate(deleteShoppingListSql);
+      statement.executeUpdate(deleteUserSql);
+      statement.executeUpdate(deleteRecipe_IngredientSql);
+      statement.executeUpdate(deleteIngredientSql);
+      statement.executeUpdate(deleteRecipeSql);
+    } catch (SQLException e) {
+      LOGGER.info("SQL Exception: " + e.getMessage());
+    }
+
+  }
+
+  /**
+   * This method creates a database in the user's home directory. It also populates the database
+   * with the necessary tables. The method also checks if the database already exists, and if it
+   * does, it will not create a new one.
+   */
+  public static void initialize() {
+    try (Connection conn = getConnection()) {
+      createTablesIfNotExists(conn);
+      LOGGER.info("Database has been created and initialized.");
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+
+    insertDefaultData();
   }
 
   private static void insertDefaultData() {
@@ -376,31 +415,6 @@ public class Database {
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
-  }
-
-  /**
-   * This method removes all data from the database.
-   */
-  public static void removeAllData() {
-    String deleteInventorySql = "DELETE FROM inventory";
-    String deleteShoppingListSql = "DELETE FROM shopping_list";
-    String deleteUserSql = "DELETE FROM MAIN.PUBLIC.\"user\"";
-    String deleteRecipe_IngredientSql = "DELETE FROM recipe_ingredient";
-    String deleteIngredientSql = "DELETE FROM ingredient";
-    String deleteRecipeSql = "DELETE FROM recipe";
-
-    try (Connection connection = getConnection()) {
-      Statement statement = connection.createStatement();
-      statement.executeUpdate(deleteInventorySql);
-      statement.executeUpdate(deleteShoppingListSql);
-      statement.executeUpdate(deleteUserSql);
-      statement.executeUpdate(deleteRecipe_IngredientSql);
-      statement.executeUpdate(deleteIngredientSql);
-      statement.executeUpdate(deleteRecipeSql);
-    } catch (SQLException e) {
-      LOGGER.info("SQL Exception: " + e.getMessage());
-    }
-
   }
 
   private static boolean tablesExist(Connection conn) throws SQLException {

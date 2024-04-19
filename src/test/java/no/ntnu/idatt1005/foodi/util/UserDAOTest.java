@@ -12,6 +12,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserDAOTest {
@@ -21,7 +22,7 @@ public class UserDAOTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    Database.initialize();
+    Database.initializeEmpty();
 
     // Initialize a new IngredientDAO object
     userDAO = new UserDAO();
@@ -123,5 +124,12 @@ public class UserDAOTest {
 
     // Compare the user with the one retrieved from the database
     assertEquals(userDAO.retrieveAllUsers().size(), 5);
+  }
+
+  @Test
+  @DisplayName("Default user should have user id 1")
+  void testDefaultUser() throws SQLException {
+    userDAO.addDefaultUserIfNotExists();
+    assertEquals(userDAO.retrieveUserName(1), "Default");
   }
 }

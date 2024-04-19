@@ -40,7 +40,7 @@ public class ShoppingListTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    Database.initialize();
+    Database.initializeEmpty();
 
     // Initialize new DAO objects
     ingredientDAO = new IngredientDAO();
