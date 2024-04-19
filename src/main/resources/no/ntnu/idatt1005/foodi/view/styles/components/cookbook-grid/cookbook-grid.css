@@ -1,3 +1,7 @@
 .cookbook-grid-scroll {
   -fx-background-color: transparent;
 }
+
+.cookbook {
+  -fx-background-color: black;
+}
