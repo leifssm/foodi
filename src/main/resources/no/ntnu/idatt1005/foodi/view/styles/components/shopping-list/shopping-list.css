@@ -1,0 +1,11 @@
+.shopping-list {
+  -fx-max-width: infinity;
+}
+
+.shopping-list BorderPane {
+  -fx-pref-height: 0;
+}
+
+.shopping-list .shopping-list-content-wrapper {
+  -fx-pref-height: 0;
+}

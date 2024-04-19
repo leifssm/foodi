@@ -5,7 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 /**
@@ -14,8 +14,7 @@ import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class SideBar extends VBox implements CssUtils {
-
+public class SideBar extends VBox implements ComponentUtils {
 
   /**
    * The constructor of the sidebar component.

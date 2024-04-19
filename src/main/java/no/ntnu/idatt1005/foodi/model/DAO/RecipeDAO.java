@@ -17,18 +17,15 @@ public class RecipeDAO {
    * @param obj the recipe object to be saved,
    */
   public void saveRecipeObject(@NotNull Recipe obj) {
-    new QueryBuilder(
-        "INSERT INTO recipe (id, name, description, difficulty, "
-            + "dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-        .addInt(obj.getId())
-        .addString(obj.getName())
-        .addString(obj.getDescription())
-        .addString(obj.getDifficulty().toString())
-        .addString(obj.getDietaryTag().toString())
-        .addString(obj.getImagePath())
-        .addString(obj.getInstruction())
-        .addInt(obj.getDuration())
-        .executeUpdateSafe();
+    saveRecipe(
+        obj.getName(),
+        obj.getDescription(),
+        obj.getDifficulty().toString(),
+        obj.getDietaryTag().toString(),
+        obj.getDuration(),
+        obj.getImagePath(),
+        obj.getInstruction()
+    );
   }
 
   /**
@@ -47,6 +44,36 @@ public class RecipeDAO {
     new QueryBuilder(
         "INSERT INTO recipe (name, description, difficulty, "
             + "dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        .addString(name)
+        .addString(description)
+        .addString(difficulty)
+        .addString(dietaryTag)
+        .addInt(duration)
+        .addString(imagePath)
+        .addString(instruction)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Merges a recipe to the recipe table in the database.
+   *
+   * @param id          the id of the recipe.
+   * @param name        the name of the recipe.
+   * @param description the description of the recipe.
+   * @param difficulty  the difficulty of the recipe.
+   * @param dietaryTag  the dietary tag of the recipe.
+   * @param duration    the duration of the recipe.
+   * @param imagePath   the image path of the recipe.
+   * @param instruction the instruction of the recipe.
+   */
+  public void mergeRecipe(int id, String name, String description, String difficulty,
+      String dietaryTag,
+      int duration, String imagePath, String instruction) {
+    new QueryBuilder(
+        "MERGE INTO recipe (id, name, description, difficulty,"
+            + "dietary_tag, duration, imagePath, instruction)"
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+        .addInt(id)
         .addString(name)
         .addString(description)
         .addString(difficulty)

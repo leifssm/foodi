@@ -1,20 +1,20 @@
 package no.ntnu.idatt1005.foodi.controller;
 
-import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
-
 import java.sql.SQLException;
 import java.util.Map;
+import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 
 /**
- * This class is responsible for handling the usage of
- * database operations regarding stored shopping lists in the frontend.
+ * This class is responsible for handling the usage of database operations regarding stored shopping
+ * lists in the frontend.
  *
- * @version 0.1.0
  * @author Snake727
+ * @version 0.1.0
  */
 
 public class ShoppingListController {
-  private ShoppingListDAO shoppingListDAO;
+
+  private final ShoppingListDAO shoppingListDAO;
 
   public ShoppingListController() {
     shoppingListDAO = new ShoppingListDAO();

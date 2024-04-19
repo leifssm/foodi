@@ -47,7 +47,6 @@ public class Router extends BorderPane {
         return;
       }
     }
-
     setCenter(null);
   }
 
@@ -65,11 +64,13 @@ public class Router extends BorderPane {
    * Adds a route to the router, which is shown when the given route is active.
    *
    * @param path The path of the route
-   * @param page The page to show
+   * @param page The page to display when the route is active
    * @throws IllegalArgumentException If the route already exists
    */
-  public void addRoute(@NotNull String path, @NotNull StatefulPage page)
-      throws IllegalArgumentException {
+  public Router addRoute(
+      @NotNull String path,
+      @NotNull StatefulPage page
+  ) throws IllegalArgumentException {
     if (routes.containsKey(path)) {
       throw new IllegalArgumentException("Route already exists");
     }
@@ -78,5 +79,7 @@ public class Router extends BorderPane {
     if (LocationHandler.isLocationFuzzy(path)) {
       setPage(page);
     }
+
+    return this;
   }
 }

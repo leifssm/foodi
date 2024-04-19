@@ -80,4 +80,15 @@ public class ExpiringIngredient extends AmountedIngredient {
     );
   }
 
+  @Override
+  public ExpiringIngredient copy() {
+    return new ExpiringIngredient(
+        getId(),
+        getName(),
+        getUnit(),
+        getCategory(),
+        getAmount(),
+        expirationDate
+    );
+  }
 }

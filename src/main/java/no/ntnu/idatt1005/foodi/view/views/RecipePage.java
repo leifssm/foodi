@@ -8,14 +8,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
 
 /**
  * Class for displaying a recipe page.
  */
-public class RecipePage extends StatefulPage implements CssUtils {
+public class RecipePage extends StatefulPage implements ComponentUtils {
 
   private final String imagePath = "chicken-soup.jpg";
   private final String title = "Chicken Soup";

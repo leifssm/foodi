@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,23 +24,23 @@ class InventoryListSubItem {
    *
    * @param item The inventory item to display
    */
-  public InventoryListSubItem(@NotNull InventoryItem item) {
+  public InventoryListSubItem(@NotNull ExpiringIngredient item) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");
 
-    TextFlow expiryDate = new InventoryExpirationDate(item.getExpiryDate());
+    TextFlow expiryDate = new InventoryExpirationDate(item.getExpirationDate());
     expiryDate.getStyleClass().addAll("gray", "sub-item-expiration-date");
 
-    InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpiryDate());
+    InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpirationDate());
     Label category = new Label(); // Empty
 
     InventoryListInput quantity = new InventoryListInput();
-    quantity.setText(item.getQuantity());
+    quantity.setText(item.getAmountString());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
 
-    Label unit = new Label(item.getUnit());
+    Label unit = new Label(item.getUnit().getName());
     unit.getStyleClass().addAll("center", "gray", "vertical-padding");
 
     Label edit = new Label("e");

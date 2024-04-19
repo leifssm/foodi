@@ -1,8 +1,10 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
-import java.util.Date;
+import static java.time.temporal.ChronoUnit.DAYS;
+
+import java.time.LocalDate;
 import javafx.scene.control.ProgressBar;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Leif Mørstad
  * @version 1.0
  */
-class InventoryListProgressBar extends ProgressBar implements CssUtils {
+class InventoryListProgressBar extends ProgressBar implements ComponentUtils {
 
   private boolean isFrozen = false;
 
@@ -20,7 +22,7 @@ class InventoryListProgressBar extends ProgressBar implements CssUtils {
    *
    * @param expiry The expiration date of the inventory item
    */
-  public InventoryListProgressBar(@NotNull Date expiry) {
+  public InventoryListProgressBar(@NotNull LocalDate expiry) {
     this();
     setExpiry(expiry);
   }
@@ -41,11 +43,9 @@ class InventoryListProgressBar extends ProgressBar implements CssUtils {
    *
    * @param expiry The expiration date of the inventory item
    */
-  public void setExpiry(@NotNull Date expiry) {
+  public void setExpiry(@NotNull LocalDate expiry) {
     double maxProgressInDays = 14;
-    double daysUntilExpired = 1 + (
-        (double) (expiry.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-    );
+    long daysUntilExpired = 1 + DAYS.between(LocalDate.now(), expiry);
 
     double progress = Math.max(0, Math.min(daysUntilExpired / maxProgressInDays, 1));
 

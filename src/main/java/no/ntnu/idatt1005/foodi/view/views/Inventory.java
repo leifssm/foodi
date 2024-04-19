@@ -11,7 +11,7 @@ import no.ntnu.idatt1005.foodi.view.components.TitledPage;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
 import no.ntnu.idatt1005.foodi.view.components.inventorylist.AddItemDialog;
 import no.ntnu.idatt1005.foodi.view.components.inventorylist.InventoryList;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for displaying the inventory page.
@@ -19,7 +19,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  * @author Leif Mørstad
  * @version 1.2
  */
-public class Inventory extends TitledPage implements CssUtils {
+public class Inventory extends TitledPage implements ComponentUtils {
 
   private final InventoryList inventoryList;
   private StandardButton addItemButton;
@@ -34,7 +34,8 @@ public class Inventory extends TitledPage implements CssUtils {
 
     inventoryList = new InventoryList();
     VBox content = new VBox(createTopBar(), inventoryList);
-    setContent(content);
+
+    setContent(content, true);
   }
 
   private BorderPane createTopBar() {

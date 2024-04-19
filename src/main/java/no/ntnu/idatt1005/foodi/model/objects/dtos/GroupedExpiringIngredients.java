@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class GroupedExpiringIngredients {
   private List<ExpiringIngredient> sortIngredientsByExpiryDate(
       List<ExpiringIngredient> ingredients) {
     return ingredients.stream()
-        .sorted((i1, i2) -> i1.getExpirationDate().compareTo(i2.getExpirationDate()))
+        .sorted(Comparator.comparing(ExpiringIngredient::getExpirationDate))
         .toList();
   }
 
@@ -61,12 +62,12 @@ public class GroupedExpiringIngredients {
     final Ingredient.Category category = getIngredients().get(0).getCategory();
 
     return new ExpiringIngredient(
-          -1,
-          ingredientName,
-          unit,
-          category,
-          totalAmount,
-          lowestExpiryDate
+        -1,
+        ingredientName,
+        unit,
+        category,
+        totalAmount,
+        lowestExpiryDate
     );
   }
 
@@ -92,9 +93,9 @@ public class GroupedExpiringIngredients {
   @Override
   public String toString() {
     return String.format(
-          "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
-          groupedBy,
-          ingredients
+        "GroupedExpiringIngredients{groupedBy='%s', ingredients=%s}",
+        groupedBy,
+        ingredients
     );
   }
 }

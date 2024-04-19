@@ -26,7 +26,7 @@ public class ApplicationController {
   public ApplicationController(Root root) {
     this.root = root;
     this.currentUserProperty = new SimpleObjectProperty<>(
-        new User(1, "REPLACE WITH DATA FROM DTO"));
+        new User(1, "Default"));
 
     root.setSidebar(new SideBar(this.currentUserProperty));
 

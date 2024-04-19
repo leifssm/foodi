@@ -1,27 +1,28 @@
 package no.ntnu.idatt1005.foodi.util;
 
-import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import static org.junit.jupiter.api.Assertions.*;
+import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class UserDAOTest {
+
   private UserDAO userDAO;
 
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    DatabaseMain databaseMain = new DatabaseMain();
-    databaseMain.initializeDatabaseMain();
+    Database.initializeEmpty();
 
     // Initialize a new IngredientDAO object
     userDAO = new UserDAO();
@@ -29,9 +30,11 @@ public class UserDAOTest {
 
   @AfterEach
   public void tearDown() throws SQLException {
-    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER, DatabaseMain.PASS);
-         Statement stmt = conn.createStatement()) {
-      stmt.execute("DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
+    try (Connection conn = DriverManager.getConnection(Database.DB_URL, Database.USER,
+        Database.PASS);
+        Statement stmt = conn.createStatement()) {
+      stmt.execute(
+          "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
     }
   }
 
@@ -121,5 +124,12 @@ public class UserDAOTest {
 
     // Compare the user with the one retrieved from the database
     assertEquals(userDAO.retrieveAllUsers().size(), 5);
+  }
+
+  @Test
+  @DisplayName("Default user should have user id 1")
+  void testDefaultUser() throws SQLException {
+    userDAO.addDefaultUserIfNotExists();
+    assertEquals(userDAO.retrieveUserName(1), "Default");
   }
 }
