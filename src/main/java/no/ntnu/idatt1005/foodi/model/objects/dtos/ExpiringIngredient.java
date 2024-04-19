@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class ExpiringIngredient extends AmountedIngredient {
 
   private LocalDate expirationDate;
+  private Boolean isFrozen;
 
   /**
    * Constructor for an amounted ingredient object with an expiration date.
@@ -25,6 +26,7 @@ public class ExpiringIngredient extends AmountedIngredient {
    * @param category       the category of the ingredient
    * @param amount         the amount of the ingredient in the unit of the given unit
    * @param expirationDate the expiration date of the ingredient without a timestamp
+   * @param isFrozen       whether the ingredient is frozen or not
    */
   public ExpiringIngredient(
       int id,
@@ -32,10 +34,12 @@ public class ExpiringIngredient extends AmountedIngredient {
       Unit unit,
       Category category,
       double amount,
-      LocalDate expirationDate
+      LocalDate expirationDate,
+      Boolean isFrozen
   ) {
     super(id, name, unit, category, amount);
     setExpirationDate(expirationDate);
+    setIsFrozen(isFrozen);
   }
 
   /**
@@ -66,6 +70,24 @@ public class ExpiringIngredient extends AmountedIngredient {
     return Date.from(expirationDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
 
+  /**
+   * Returns whether the ingredient is frozen or not.
+   *
+   * @return whether the ingredient is frozen or not
+   */
+  public Boolean getIsFrozen() {
+    return isFrozen;
+  }
+
+  /**
+   * Sets whether the ingredient is frozen or not.
+   *
+   * @param isFrozen whether the ingredient is frozen or not
+   */
+  public void setIsFrozen(Boolean isFrozen) {
+    this.isFrozen = isFrozen;
+  }
+
   @Override
   public @NotNull String toString() {
     return String.format(
@@ -88,7 +110,8 @@ public class ExpiringIngredient extends AmountedIngredient {
         getUnit(),
         getCategory(),
         getAmount(),
-        expirationDate
+        expirationDate,
+        isFrozen
     );
   }
 }

@@ -113,6 +113,18 @@ class QueryBuilder {
   }
 
   /**
+   * Replaces the next "?" parameter with the given boolean.
+   *
+   * @param value The boolean to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addBoolean(boolean value) {
+    checkLocked();
+    parts.add((i, statement) -> statement.setBoolean(i, value));
+    return this;
+  }
+
+  /**
    * Executes a SELECT query and returns the result without throwing if it encounters an error.
    * Returns {@code null} if it does.
    *

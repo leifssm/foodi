@@ -93,9 +93,10 @@ public class AddItemDialog extends StandardDialog {
     Ingredient.Unit unit = getIngredientUnit();
     Ingredient.Category category = getIngredientCategory();
     LocalDate expirationDate = getExpirationDate();
+    boolean isFrozen = getIsFrozen();
 
     onItemAdded.accept(
-        new ExpiringIngredient(0, ingredient, unit, category, amount, expirationDate));
+        new ExpiringIngredient(0, ingredient, unit, category, amount, expirationDate, isFrozen));
   }
 
   private @NotNull String getIngredient() throws ValidationException {
@@ -151,5 +152,9 @@ public class AddItemDialog extends StandardDialog {
       throw new ValidationException(
           "Expiration date must be in the format dd.MM.yyyy or blank for no expiration date.");
     }
+  }
+
+  private boolean getIsFrozen() {
+    return false;
   }
 }
