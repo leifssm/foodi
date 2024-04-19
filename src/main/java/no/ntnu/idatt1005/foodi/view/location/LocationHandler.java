@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A class that handles the navigation of the application, which other classes can either change or
@@ -55,7 +56,7 @@ public class LocationHandler {
    *
    * @param location the sub location to navigate to
    */
-  public static void addendLocation(@NotNull String location) {
+  public static void appendLocation(@NotNull String location) {
     LocationHandler.setLocation(LocationHandler.getLocation() + '/' + location);
   }
 
@@ -111,6 +112,39 @@ public class LocationHandler {
    */
   public static boolean isLocationFuzzy(@NotNull String location) {
     return LocationHandler.getLocation().startsWith(location);
+  }
+
+  /**
+   * Checks if a segment exists at the given index.
+   *
+   * @param index the index to query
+   * @return true if the segment exists, false otherwise
+   */
+  public static boolean locationSegmentExists(int index) {
+    return getLocationSegmentLength() > index;
+  }
+
+  /**
+   * Gets the length of the location segments.
+   *
+   * @return the length of the location segments
+   */
+  public static int getLocationSegmentLength() {
+    return getLocation().split("/").length;
+  }
+
+  /**
+   * Gets a segment of the location.
+   *
+   * @param index the index to query
+   * @return the segment at the given index, or null if it does not exist
+   */
+  public static @Nullable String getLocationSegment(int index) {
+    String[] segments = getLocation().split("/");
+    if (index < 0 || index >= segments.length) {
+      return null;
+    }
+    return segments[index];
   }
 
   /**
