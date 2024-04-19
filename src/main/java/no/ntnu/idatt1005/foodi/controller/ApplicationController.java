@@ -37,6 +37,6 @@ public class ApplicationController {
     new InventoryController(root.getInventoryPage(), currentUserProperty);
     new CookbookGridController(root.getCookbookGridPage());
     new ProfilesController(root.getProfilesPage(), currentUserProperty);
-    new RecipePageController(root.getRecipePage(), currentUserProperty);
+    new RecipePageController(root.getRecipePage());
   }
 }
