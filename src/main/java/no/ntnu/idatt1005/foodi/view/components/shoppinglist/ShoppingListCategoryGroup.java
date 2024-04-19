@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.view.components.shoppinglist.IngredientGrouper.IngredientCategoryGroup;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 

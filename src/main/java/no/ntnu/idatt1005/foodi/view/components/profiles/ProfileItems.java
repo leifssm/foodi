@@ -3,7 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.profiles;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.scene.layout.HBox;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 

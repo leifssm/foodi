@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.DB_URL;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.PASS;
+import static no.ntnu.idatt1005.foodi.model.repository.Database.USER;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

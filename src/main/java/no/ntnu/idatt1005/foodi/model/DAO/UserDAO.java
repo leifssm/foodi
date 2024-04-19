@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.util.ArrayList;
 import java.util.List;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 
 /**
  * This class is a Data Access Object (DAO) for the User class. It is used to interact with the

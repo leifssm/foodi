@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import java.util.List;
 import java.util.function.Consumer;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
 import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
 

@@ -3,7 +3,7 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.model.objects.User;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
 
 /**
