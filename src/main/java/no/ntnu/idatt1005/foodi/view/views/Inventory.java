@@ -47,7 +47,7 @@ public class Inventory extends TitledPage implements ComponentUtils {
     topBar.getStyleClass().add("inventory-top-bar");
 
     addItemButton = new StandardButton("Add item").setType(StandardButton.Style.SUCCESS);
-    freezeButton = new StandardButton("Freeze").setType(StandardButton.Style.PRIMARY);
+    freezeButton = new StandardButton("Toggle Freeze").setType(StandardButton.Style.PRIMARY);
     deleteButton = new StandardButton("Delete").setType(StandardButton.Style.ERROR);
     topBar.setLeft(addItemButton);
 
