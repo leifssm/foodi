@@ -101,4 +101,25 @@ public class UserDAOTest {
     assertFalse(userDAO.userExists(1));
   }
 
+  @Test
+  void testRetrieveAllUsers() throws SQLException {
+    // Save a new user
+    userDAO.saveUser("Test User");
+
+    // Compare the user with the one retrieved from the database
+    assertEquals(userDAO.retrieveAllUsers().size(), 1);
+  }
+
+  @Test
+  void testRetrieveAllUsersWithManyUsers() throws SQLException {
+    // Save a new user
+    userDAO.saveUser("Test User 1");
+    userDAO.saveUser("Test User 2");
+    userDAO.saveUser("Test User 3");
+    userDAO.saveUser("Test User 4");
+    userDAO.saveUser("Test User 5");
+
+    // Compare the user with the one retrieved from the database
+    assertEquals(userDAO.retrieveAllUsers().size(), 5);
+  }
 }
