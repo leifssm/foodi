@@ -89,7 +89,7 @@ public class InventoryList extends VBox implements ComponentUtils {
   /**
    * Clears the current cells and displays all stored cells to the view.
    *
-   * @param groupedExpiringIngredients a list of grouped expiring ingredients
+   * @param currentPage a list of grouped expiring ingredients
    */
   public void render(@NotNull final List<GroupedExpiringIngredients> currentPage) {
     clearCells();

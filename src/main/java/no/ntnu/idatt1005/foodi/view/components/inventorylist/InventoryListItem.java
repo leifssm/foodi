@@ -25,10 +25,12 @@ class InventoryListItem {
   /**
    * Constructor for the InventoryListItem class.
    *
-   * @param mainItem The main item to display
-   * @param items    The sub items to display, if any
+   * @param items The items to display
+   * @throws IllegalArgumentException if the list of items is empty
    */
-  public InventoryListItem(@NotNull GroupedExpiringIngredients items) {
+  public InventoryListItem(
+      @NotNull GroupedExpiringIngredients items
+  ) throws IllegalArgumentException {
     if (items.getIngredients().isEmpty()) {
       throw new IllegalArgumentException("At least one item must be provided");
     }

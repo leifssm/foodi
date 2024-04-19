@@ -102,6 +102,7 @@ class QueryBuilder {
 
   /**
    * Replaces the next "?" parameter with the given date.
+   *
    * @param value The date to use.
    * @return This QueryBuilder instance.
    */

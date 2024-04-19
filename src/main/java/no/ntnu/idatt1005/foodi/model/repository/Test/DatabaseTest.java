@@ -1,26 +1,38 @@
 package no.ntnu.idatt1005.foodi.model.repository.Test;
 //Pensjonert kode
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 
-import java.sql.*;
-
 /**
- * This class is responsible for creating and initializing the database.
- * It also checks if the database already exists, and if it does, it will not create a new one.
+ * This class is responsible for creating and initializing the database. It also checks if the
+ * database already exists, and if it does, it will not create a new one.
  *
- * @version 0.2.0
  * @author Snake727
+ * @version 0.2.0
  */
 
 public class DatabaseTest {
+
   public static final String DB_URL = "jdbc:h2:~/test"; // This URL will create an H2 database in the user's home directory
   public static final String USER = "sa";
   public static final String PASS = "";
 
+  // Main method for testing purposes
+  public static void main(String[] args) {
+    DatabaseMain dbInitializer = new DatabaseMain();
+    dbInitializer.initializeDatabaseMain();
+  }
+
   /**
-   * This method creates a database in the user's home directory. It also populates the database with the necessary tables.
-   * The method also checks if the database already exists, and if it does, it will not create a new one.
-   *
+   * This method creates a database in the user's home directory. It also populates the database
+   * with the necessary tables. The method also checks if the database already exists, and if it
+   * does, it will not create a new one.
    */
 
   public void initializeDatabase() {
@@ -58,7 +70,8 @@ public class DatabaseTest {
           "id INT AUTO_INCREMENT PRIMARY KEY," +
           "name VARCHAR NOT NULL," +
           "unit VARCHAR," +
-          "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON'))," +
+          "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON')),"
+          +
           "category VARCHAR," +
           "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE')));");
 
@@ -106,12 +119,6 @@ public class DatabaseTest {
 
       System.out.println("Tables created successfully.");
     }
-  }
-
-  // Main method for testing purposes
-  public static void main(String[] args){
-    DatabaseMain dbInitializer = new DatabaseMain();
-    dbInitializer.initializeDatabaseMain();
   }
 }
 

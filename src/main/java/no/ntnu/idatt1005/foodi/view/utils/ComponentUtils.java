@@ -10,9 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.1
  */
 public interface ComponentUtils {
-  ObservableList<String> getStylesheets();
-
-  ObservableList<String> getStyleClass();
 
   /**
    * Adds a stylesheet dependency to the element.
@@ -29,14 +26,7 @@ public interface ComponentUtils {
     getStylesheets().add(url);
   }
 
-  /**
-   * Adds a class name to the elements' css class list.
-   *
-   * @param className the classname to add
-   */
-  default void addClass(@NotNull String className) {
-    getStyleClass().add(className);
-  }
+  ObservableList<String> getStylesheets();
 
   /**
    * Adds all class names to the elements' css class list.
@@ -47,14 +37,7 @@ public interface ComponentUtils {
     getStyleClass().addAll(className);
   }
 
-  /**
-   * Removes a class name to the elements' css class list.
-   *
-   * @param className the classname to remove
-   */
-  default void removeClass(@NotNull String className) {
-    getStyleClass().remove(className);
-  }
+  ObservableList<String> getStyleClass();
 
   /**
    * Removes class names to the elements' css class list.
@@ -63,15 +46,6 @@ public interface ComponentUtils {
    */
   default void removeClasses(@NotNull String... classNames) {
     getStyleClass().removeAll(classNames);
-  }
-
-  /**
-   * Returns the elements' css class list.
-   *
-   * @return the elements' css class list
-   */
-  default ObservableList<String> getClasses() {
-    return getStyleClass();
   }
 
   /**
@@ -89,6 +63,33 @@ public interface ComponentUtils {
       addClass(className);
       return true;
     }
+  }
+
+  /**
+   * Returns the elements' css class list.
+   *
+   * @return the elements' css class list
+   */
+  default ObservableList<String> getClasses() {
+    return getStyleClass();
+  }
+
+  /**
+   * Removes a class name to the elements' css class list.
+   *
+   * @param className the classname to remove
+   */
+  default void removeClass(@NotNull String className) {
+    getStyleClass().remove(className);
+  }
+
+  /**
+   * Adds a class name to the elements' css class list.
+   *
+   * @param className the classname to add
+   */
+  default void addClass(@NotNull String className) {
+    getStyleClass().add(className);
   }
 
   /**

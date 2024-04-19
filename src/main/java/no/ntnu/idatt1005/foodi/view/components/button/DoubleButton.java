@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -9,15 +9,16 @@ import javafx.scene.layout.BorderPane;
  * A component used to display a main button and a secondary button, where the main button is given
  * priority when expanding the element.
  *
- * @version 1.0
  * @author Leif Mørstad
+ * @version 1.0
  */
 public class DoubleButton extends BorderPane {
+
   /**
    * Constructor for the DoubleButton class.
    *
-   * @param mainButton The main button which is given expanding priority when the DoubleButton is
-   *                   stretched.
+   * @param mainButton      The main button which is given expanding priority when the DoubleButton
+   *                        is stretched.
    * @param secondaryButton The secondary button
    */
   public DoubleButton(Button mainButton, Node secondaryButton) {

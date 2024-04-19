@@ -1,24 +1,36 @@
 package no.ntnu.idatt1005.foodi.model.repository.Main;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * This class is responsible for creating and initializing the database.
- * It also checks if the database already exists, and if it does, it will not create a new one.
+ * This class is responsible for creating and initializing the database. It also checks if the
+ * database already exists, and if it does, it will not create a new one.
  *
- * @version 0.2.0
  * @author Snake727
+ * @version 0.2.0
  */
 
 public class DatabaseMain {
+
   public static final String DB_URL = "jdbc:h2:~/main"; // This URL will create an H2 database in the user's home directory
   public static final String USER = "main";
   public static final String PASS = "";
 
+  // Main method for testing purposes
+  public static void main(String[] args) {
+    DatabaseMain dbInitializer = new DatabaseMain();
+    dbInitializer.initializeDatabaseMain();
+  }
+
   /**
-   * This method creates a database in the user's home directory. It also populates the database with the necessary tables.
-   * The method also checks if the database already exists, and if it does, it will not create a new one.
-   *
+   * This method creates a database in the user's home directory. It also populates the database
+   * with the necessary tables. The method also checks if the database already exists, and if it
+   * does, it will not create a new one.
    */
 
   public void initializeDatabaseMain() {
@@ -56,22 +68,24 @@ public class DatabaseMain {
           "id INT AUTO_INCREMENT PRIMARY KEY," +
           "name VARCHAR NOT NULL," +
           "unit VARCHAR," +
-          "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON'))," +
+          "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON')),"
+          +
           "category VARCHAR," +
           "CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE', 'FISH', 'POULTRY', 'CRUSTACEAN')));");
 
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe (" +
-              "id INT AUTO_INCREMENT PRIMARY KEY," +
-              "name VARCHAR NOT NULL," +
-              "description VARCHAR," +
-              "difficulty VARCHAR," +
-              "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
-              "dietary_tag VARCHAR," +
-              "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE'))," +
-              "duration INT," +
-              "imagePath VARCHAR," +
-              "Instruction VARCHAR);");
+          "id INT AUTO_INCREMENT PRIMARY KEY," +
+          "name VARCHAR NOT NULL," +
+          "description VARCHAR," +
+          "difficulty VARCHAR," +
+          "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD'))," +
+          "dietary_tag VARCHAR," +
+          "CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE')),"
+          +
+          "duration INT," +
+          "imagePath VARCHAR," +
+          "Instruction VARCHAR);");
 
       // Recipe Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe_ingredient (" +
@@ -107,12 +121,6 @@ public class DatabaseMain {
 
       System.out.println("Tables created successfully.");
     }
-  }
-
-  // Main method for testing purposes
-  public static void main(String[] args){
-    DatabaseMain dbInitializer = new DatabaseMain();
-    dbInitializer.initializeDatabaseMain();
   }
 }
 

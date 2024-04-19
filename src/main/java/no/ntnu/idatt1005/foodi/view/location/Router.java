@@ -64,7 +64,7 @@ public class Router extends BorderPane {
    * Adds a route to the router, which is shown when the given route is active.
    *
    * @param path The path of the route
-   * @param node The node to display when the route is active
+   * @param page The page to display when the route is active
    * @throws IllegalArgumentException If the route already exists
    */
   public Router addRoute(
