@@ -15,9 +15,10 @@ import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Main.DatabaseMain;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,8 @@ public class ShoppingListTest {
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
-    Database.initializeEmpty();
+    DatabaseMain databaseMain = new DatabaseMain();
+    databaseMain.initializeDatabaseMain();
 
     // Initialize new DAO objects
     ingredientDAO = new IngredientDAO();
@@ -85,8 +87,8 @@ public class ShoppingListTest {
 
   @AfterEach
   public void tearDown() throws SQLException {
-    try (Connection conn = DriverManager.getConnection(Database.DB_URL, Database.USER,
-        Database.PASS);
+    try (Connection conn = DriverManager.getConnection(DatabaseMain.DB_URL, DatabaseMain.USER,
+        DatabaseMain.PASS);
         Statement stmt = conn.createStatement()) {
       stmt.execute(
           "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
@@ -197,5 +199,45 @@ public class ShoppingListTest {
 
     assertTrue(retrievedShoppingList.isEmpty(),
         "The shopping list should be empty if no ingredients are added.");
+  }
+
+  // This method should be tested by adding five recipes to the shopping list
+  // Then assert that the amount of recipes in the shopping list is equal to five
+  @Test
+  @Order(8)
+  @DisplayName("Test that the getRecipesInShoppingListForUser method"
+      + "returns the correct amount of recipes in the shopping list.")
+  public void testGetRecipesInShoppingListForUser() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    assertEquals(5, shoppingListDAO.getRecipesInShoppingListForUser(testUser.userId()).size(),
+        "The amount of recipes in the shopping list should be equal to the amount of ingredients in the shopping list.");
+  }
+
+  @Test
+  @Order(9)
+  @DisplayName("Test that the getAllIngredientsFromShoppingList method"
+      + "returns the correct amount of ingredients based on the recipes"
+      + "in the shopping list.")
+  public void testGetAllIngredientsFromShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    assertEquals(25, shoppingListDAO.getAllIngredientsFromShoppingList(testUser.userId()).size(),
+        "The amount of ingredients in the shopping list should be equal "
+            + "to the amount of ingredients in the shopping list in total.");
   }
 }
