@@ -41,7 +41,7 @@ public class InventoryList extends VBox implements ComponentUtils {
     ColumnConstraints iconCol = new ColumnConstraints();
     iconCol.setPercentWidth(5);
     ColumnConstraints nameCol = new ColumnConstraints();
-    nameCol.setPercentWidth(25);
+    nameCol.setPercentWidth(30);
     ColumnConstraints expiryCol = new ColumnConstraints();
     expiryCol.setPercentWidth(20);
     ColumnConstraints categoryCol = new ColumnConstraints();
@@ -50,8 +50,6 @@ public class InventoryList extends VBox implements ComponentUtils {
     quantityCol.setPercentWidth(10);
     ColumnConstraints unitCol = new ColumnConstraints();
     unitCol.setPercentWidth(10);
-    ColumnConstraints editCol = new ColumnConstraints();
-    editCol.setPercentWidth(5);
     ColumnConstraints selectCol = new ColumnConstraints();
     selectCol.setPercentWidth(5);
 
@@ -62,7 +60,6 @@ public class InventoryList extends VBox implements ComponentUtils {
         categoryCol,
         quantityCol,
         unitCol,
-        editCol,
         selectCol
     );
 
@@ -78,7 +75,6 @@ public class InventoryList extends VBox implements ComponentUtils {
         new Label("CATEGORY"),
         amount,
         unit,
-        new Label(),
         new Label()
     );
 
