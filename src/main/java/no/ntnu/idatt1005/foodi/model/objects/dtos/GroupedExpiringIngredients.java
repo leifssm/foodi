@@ -60,6 +60,7 @@ public class GroupedExpiringIngredients {
     final String ingredientName = getIngredients().get(0).getName();
     final Ingredient.Unit unit = getIngredients().get(0).getUnit();
     final Ingredient.Category category = getIngredients().get(0).getCategory();
+    final boolean isFrozen = getIngredients().get(0).getIsFrozen();
 
     return new ExpiringIngredient(
         -1,
@@ -67,7 +68,8 @@ public class GroupedExpiringIngredients {
         unit,
         category,
         totalAmount,
-        lowestExpiryDate
+        lowestExpiryDate,
+        isFrozen
     );
   }
 

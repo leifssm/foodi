@@ -365,11 +365,12 @@ public class IngredientDAO {
             double amount = rs.getDouble("amount");
             Date expirationDateSql = rs.getDate("expiration_date");
             LocalDate expirationDate = expirationDateSql.toLocalDate();
+            boolean isFrozen = rs.getBoolean("is_frozen");
 
             Ingredient ingredient = retrieveIngredientById(ingredientId);
             assert ingredient != null;
             ingredients.add(new ExpiringIngredient(ingredient.getId(), ingredient.getName(),
-                ingredient.getUnit(), ingredient.getCategory(), amount, expirationDate));
+                ingredient.getUnit(), ingredient.getCategory(), amount, expirationDate, isFrozen));
           }
           return ingredients;
         });
@@ -392,5 +393,14 @@ public class IngredientDAO {
         });
 
     return result != null ? result : 0;
+  }
+
+  public void toggleFreezeIngredient(int userId, int ingredientId, boolean isFrozen) {
+    new QueryBuilder(
+        "UPDATE inventory SET is_frozen = ? WHERE user_id = ? AND ingredient_id = ?")
+        .addBoolean(isFrozen)
+        .addInt(userId)
+        .addInt(ingredientId)
+        .executeUpdateSafe();
   }
 }

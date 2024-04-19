@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
@@ -238,5 +239,26 @@ class IngredientDAOTest {
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
 
     assertEquals(500, ingredientDAO.getTotalAmountOfIngredientsInInventory(1));
+  }
+
+  @Test
+  void testToggleFreezeIngredient() throws SQLException {
+    // Create a user with id 1
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("INSERT INTO PUBLIC.\"user\" (id, name) VALUES (1, 'Test User')");
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+        Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDAO.toggleFreezeIngredient(1, 1, true);
+
+    ExpiringIngredient retrievedIngredient = Objects.requireNonNull(
+        ingredientDAO.retrieveExpiringIngredientsFromInventory(
+            1)).get(0);
+    assertEquals(true, retrievedIngredient.getIsFrozen());
   }
 }
