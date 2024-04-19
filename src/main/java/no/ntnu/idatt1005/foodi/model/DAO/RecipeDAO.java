@@ -266,7 +266,7 @@ public class RecipeDAO {
         });
   }
 
-  Recipe[] retrieveAllRecipesWithIngredients(int... ingredientIds) {
+  Recipe[] retrieveAllRecipesWithIngredients(int @NotNull ... ingredientIds) {
     List<Recipe> allRecipes = new ArrayList<>();
     for (int ingredientId : ingredientIds) {
       Recipe[] recipes = new QueryBuilder(
