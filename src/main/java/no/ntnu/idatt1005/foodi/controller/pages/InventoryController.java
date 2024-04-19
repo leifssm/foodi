@@ -92,6 +92,7 @@ public class InventoryController extends PageController {
    * @return the date the ingredient should be eaten before
    */
   private LocalDate getUnfrozenDate(@NotNull LocalDate expirationDate) {
+    // expiration date is an unused parameter for future compatibility
     return LocalDate.now().plusDays(2);
   }
 
