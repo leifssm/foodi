@@ -6,6 +6,11 @@
   -fx-pref-width: 140px;
 }
 
+.sidebar-logo {
+  -fx-alignment: left;
+  -fx-end-margin: 30px;
+}
+
 .sidebar-button {
   -fx-max-width: infinity;
   -fx-alignment: center-left;
