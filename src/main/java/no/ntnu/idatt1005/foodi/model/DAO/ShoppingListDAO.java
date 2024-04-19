@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +57,26 @@ public class ShoppingListDAO {
     new QueryBuilder("DELETE FROM shopping_list WHERE user_id = ?")
         .addInt(userId)
         .executeUpdateSafe();
+  }
+
+  /**
+   * Retrieves all ingredients from the shopping list for a user.
+   *
+   * @param userId the id of the user.
+   * @return a list of all ingredients in the shopping list.
+   */
+  public List<AmountedIngredient> getAllIngredientsFromShoppingList(int userId) {
+    List<Recipe> recipes = getRecipesInShoppingListForUser(userId);
+    IngredientDAO ingredientDAO = new IngredientDAO();
+    List<AmountedIngredient> allIngredients = new ArrayList<>();
+
+    for (Recipe recipe : recipes) {
+      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
+          recipe.getId());
+      allIngredients.addAll(ingredients);
+    }
+
+    return allIngredients;
   }
 
   /**
