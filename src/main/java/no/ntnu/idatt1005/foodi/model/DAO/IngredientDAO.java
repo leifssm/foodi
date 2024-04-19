@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  * Database.
  *
  * @author Snake727
- * @version 0.5.0
+ * @version 0.9.0
  */
 
 public class IngredientDAO {
@@ -107,7 +107,8 @@ public class IngredientDAO {
     }
 
     new QueryBuilder(
-        "INSERT INTO inventory (ingredient_id, user_id, amount, expiration_date) VALUES (?, ?, ?, ?)")
+        "INSERT INTO inventory "
+            + "(ingredient_id, user_id, amount, expiration_date) VALUES (?, ?, ?, ?)")
         .addInt(ingredientId)
         .addInt(userId)
         .addDouble(amount)
@@ -157,7 +158,11 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-  // Not sure if this method is necessary
+  /**
+   * Updates an ingredient object in the database.
+   *
+   * @param obj The ingredient object to update.
+   */
   private void updateIngredient(@NotNull Ingredient obj) {
     new QueryBuilder("UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?")
         .addString(obj.getName())
@@ -178,7 +183,8 @@ public class IngredientDAO {
   public void updateIngredientInUserInventory(int userId, int ingredientId, double amount,
       @NotNull LocalDate expirationDate) {
     new QueryBuilder(
-        "UPDATE inventory SET amount = ?, expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
+        "UPDATE inventory SET "
+            + "amount = ?, expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
         .addDouble(amount)
         .addDate(Date.valueOf(expirationDate))
         .addInt(userId)
@@ -186,6 +192,13 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
+  /**
+   * Updates the expiration date of an ingredient in a user's inventory.
+   *
+   * @param userId         The id of the user to update the ingredient in.
+   * @param ingredientId   The id of the ingredient to update.
+   * @param expirationDate The new expiration date of the ingredient.
+   */
   public void updateIngredientExpirationDate(int userId, int ingredientId,
       @NotNull LocalDate expirationDate) {
     new QueryBuilder(
@@ -196,8 +209,12 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-  // Not sure if this is necessary
-  public void deleteIngredient(@NotNull Ingredient obj) {
+  /**
+   * Deletes an ingredient object from the database.
+   *
+   * @param obj The ingredient object to delete.
+   */
+  public void deleteIngredientObject(@NotNull Ingredient obj) {
     new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
         .addInt(obj.getId())
         .executeUpdateSafe();
@@ -216,8 +233,13 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-  // Not sure if this is necessary considering the argument is an Ingredient object
-  public @Nullable Ingredient retrieveIngredient(@NotNull Ingredient obj) {
+  /**
+   * Retrieves an ingredient object from the database.
+   *
+   * @param obj The ingredient object to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable Ingredient retrieveIngredientObject(@NotNull Ingredient obj) {
     return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
         .addInt(obj.getId())
         .executeQuerySafe(rs -> {
@@ -241,7 +263,8 @@ public class IngredientDAO {
    */
   public @Nullable List<AmountedIngredient> retrieveAmountedIngredientsFromRecipe(int recipeId) {
     return new QueryBuilder(
-        "SELECT i.*, ri.amount FROM recipe_ingredient ri JOIN ingredient i ON ri.ingredient_id = i.id WHERE ri.recipe_id = ?")
+        "SELECT i.*, ri.amount FROM recipe_ingredient ri "
+            + "JOIN ingredient i ON ri.ingredient_id = i.id WHERE ri.recipe_id = ?")
         .addInt(recipeId)
         .executeQuerySafe(rs -> {
           List<AmountedIngredient> ingredients = new ArrayList<>();
