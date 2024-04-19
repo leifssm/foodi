@@ -29,7 +29,7 @@ public class IngredientGrouper {
     ArrayList<AmountedIngredient> sortedIngredients = new ArrayList<>(ingredients);
     sortedIngredients.sort(Comparator.comparing(a -> a.getCategory().getName()));
 
-    List<IngredientCategoryGroup> groups = new ArrayList<>();
+    ArrayList<IngredientCategoryGroup> groups = new ArrayList<>();
 
     for (AmountedIngredient ingredient : sortedIngredients) {
       IngredientCategoryGroup currentGroup;
@@ -40,7 +40,7 @@ public class IngredientGrouper {
         currentGroup = new IngredientCategoryGroup(ingredient.getCategory(), new ArrayList<>());
         groups.add(currentGroup);
       } else {
-        currentGroup = groups.getLast();
+        currentGroup = groups.get(groups.size() - 1);
       }
       currentGroup.ingredients.add(ingredient);
     }
