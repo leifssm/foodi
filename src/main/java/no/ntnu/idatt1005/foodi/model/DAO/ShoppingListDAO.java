@@ -61,17 +61,15 @@ public class ShoppingListDAO {
    * @return a map of ingredient ids and their amounts.
    */
   public Map<Integer, Double> getShoppingListForUser(int userId) {
-    Map<Integer, Double> currentShoppingList = new HashMap<>();
-
-    new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
+    return new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
         .addInt(userId)
         .executeQuerySafe(rs -> {
+          Map<Integer, Double> currentShoppingList = new HashMap<>();
+          
           while (rs.next()) {
-            current_shoppingList.put(rs.getInt("ingredient_id"), rs.getDouble("amount"));
+            currentShoppingList.put(rs.getInt("ingredient_id"), rs.getDouble("amount"));
           }
-          return current_shoppingList;
+          return currentShoppingList;
         });
-
-    return current_shoppingList;
   }
 }
