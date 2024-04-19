@@ -1,8 +1,10 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
@@ -23,27 +25,29 @@ class InventoryListItem {
   /**
    * Constructor for the InventoryListItem class.
    *
-   * @param mainItem The main item to display
-   * @param items    The sub items to display, if any
+   * @param items The items to display
+   * @throws IllegalArgumentException if the list of items is empty
    */
-  public InventoryListItem(@NotNull GroupedExpiringIngredients ingredientGroup) {
-    InventoryItem mainItem = new InventoryItem(
-        ingredientGroup.getMainExpiringIngredient());
+  public InventoryListItem(
+      @NotNull GroupedExpiringIngredients items
+  ) throws IllegalArgumentException {
+    if (items.getIngredients().isEmpty()) {
+      throw new IllegalArgumentException("At least one item must be provided");
+    }
 
-    InventoryItem[] items = ingredientGroup.getIngredients().stream()
-        .map(InventoryItem::new)
-        .toArray(InventoryItem[]::new);
+    ExpiringIngredient mainItem = items.getMainExpiringIngredient();
+    List<ExpiringIngredient> ingredients = items.getIngredients();
 
-    this.subItems = new InventoryListSubItem[items.length];
+    this.subItems = new InventoryListSubItem[ingredients.size()];
 
     StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
-    for (int i = 0; i < items.length; i++) {
-      InventoryListSubItem subItem = new InventoryListSubItem(items[i]);
+    for (int i = 0; i < ingredients.size(); i++) {
+      InventoryListSubItem subItem = new InventoryListSubItem(ingredients.get(i));
       subItems[i] = subItem;
       selectHandler.bindCheckBox(subItem.getSelect());
     }
 
-    Label icon = new Label(mainItem.getType());
+    Label icon = new Label(mainItem.getCategory().getIcon());
 
     HBox nameBox = new HBox();
     Label name = new Label(mainItem.getName());
@@ -58,17 +62,25 @@ class InventoryListItem {
         })
     );
 
-    InventoryExpirationDate expiryDate = new InventoryExpirationDate(mainItem.getExpiryDate());
+    InventoryExpirationDate expiryDate = new InventoryExpirationDate(mainItem.getExpirationDate());
 
-    Label category = new Label(mainItem.getCategory());
+    Label category = new Label(mainItem.getCategory().getName());
 
-    Label quantity = new Label(mainItem.getQuantity());
+    double quantityValue = 0;
+    for (ExpiringIngredient ingredient : ingredients) {
+      quantityValue += ingredient.getAmount();
+    }
+    String quantityString = "%.2f %s".formatted(
+        quantityValue,
+        mainItem.getUnit().getName()
+    );
+    Label quantity = new Label(quantityString);
     quantity.getStyleClass().add("center");
 
-    Label unit = new Label(mainItem.getUnit());
+    Label unit = new Label(mainItem.getUnit().getName());
     unit.getStyleClass().add("center");
 
-    Label edit = new Label("e");
+    Label edit = new Label("🖊️");
     edit.getStyleClass().add("center");
 
     StandardCheckBox select = new StandardCheckBox();

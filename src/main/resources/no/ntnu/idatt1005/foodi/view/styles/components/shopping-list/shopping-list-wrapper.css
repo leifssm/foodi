@@ -1,0 +1,6 @@
+.shopping-list-wrapper {
+  -fx-background-color: #222222;
+  -fx-background-radius: 5px;
+  -fx-spacing: 10px;
+  -fx-padding: 10px 20px 20px;
+}

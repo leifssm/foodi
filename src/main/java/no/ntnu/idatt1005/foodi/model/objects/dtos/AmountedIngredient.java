@@ -55,6 +55,24 @@ public class AmountedIngredient extends Ingredient {
     this.amount = amount;
   }
 
+  /**
+   * Returns the amount of the ingredient with a suffixed unit.
+   *
+   * @return an amount with a unit
+   */
+  public @NotNull String getUnitedAmount() {
+    return String.format("%s %s", getAmountString(), getUnit());
+  }
+
+  /**
+   * Returns the amount of the ingredient as a string.
+   *
+   * @return the amount of the ingredient as a string
+   */
+  public @NotNull String getAmountString() {
+    return String.format("%.2f", amount);
+  }
+
   @Override
   public @NotNull String toString() {
     return String.format(
@@ -67,4 +85,13 @@ public class AmountedIngredient extends Ingredient {
     );
   }
 
+  /**
+   * Returns a copy of the amounted ingredient.
+   *
+   * @return a copy of the amounted ingredient
+   */
+  @Override
+  public AmountedIngredient copy() {
+    return new AmountedIngredient(getId(), getName(), getUnit(), getCategory(), amount);
+  }
 }

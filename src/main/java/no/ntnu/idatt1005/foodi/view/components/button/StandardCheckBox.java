@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.components.button;
 
 import javafx.scene.control.CheckBox;
-import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for creating a standard styled checkbox.
@@ -9,7 +9,7 @@ import no.ntnu.idatt1005.foodi.view.utils.CssUtils;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class StandardCheckBox extends CheckBox implements CssUtils {
+public class StandardCheckBox extends CheckBox implements ComponentUtils {
 
   /**
    * Constructor for the StandardCheckBox class. Defaults the checkbox to be unselected.
