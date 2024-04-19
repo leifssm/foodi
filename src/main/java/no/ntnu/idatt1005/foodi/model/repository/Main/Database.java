@@ -115,8 +115,8 @@ public class Database {
     try {
       insertRecipes();
       LOGGER.info("Recipes inserted successfully.");
-      insertIngredients();
-      LOGGER.info("Ingredients inserted successfully.");
+      // insertIngredients();
+      // LOGGER.info("Ingredients inserted successfully.");
       insertDefaultUser();
       LOGGER.info("Default user inserted successfully.");
     } catch (SQLException e) {
@@ -224,6 +224,24 @@ public class Database {
             recipeData[6]
         );
       }
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+  private static void insertDefaultUser() throws SQLException {
+    new UserDAO().addDefaultUserIfNotExists();
+  }
+
+  private static void mergeRecipe(Connection connection, int id, String name, String description,
+      String difficulty,
+      String dietaryTag,
+      int duration, String imagePath, String instruction) {
+    try (Statement statement = connection.createStatement()) {
+      statement.executeUpdate(
+          "MERGE INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES ("
+              + id + ", '" + name + "', '" + description + "', '" + difficulty + "', '" + dietaryTag
+              + "', " + duration + ", '" + imagePath + "', '" + instruction + "')");
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
@@ -344,24 +362,6 @@ public class Database {
             Ingredient.Category.valueOf(ingredientData[1].toUpperCase())
         );
       }
-    } catch (SQLException e) {
-      LOGGER.severe("SQL Exception: " + e.getMessage());
-    }
-  }
-
-  private static void insertDefaultUser() throws SQLException {
-    new UserDAO().addDefaultUserIfNotExists();
-  }
-
-  private static void mergeRecipe(Connection connection, int id, String name, String description,
-      String difficulty,
-      String dietaryTag,
-      int duration, String imagePath, String instruction) {
-    try (Statement statement = connection.createStatement()) {
-      statement.executeUpdate(
-          "MERGE INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES ("
-              + id + ", '" + name + "', '" + description + "', '" + difficulty + "', '" + dietaryTag
-              + "', " + duration + ", '" + imagePath + "', '" + instruction + "')");
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
