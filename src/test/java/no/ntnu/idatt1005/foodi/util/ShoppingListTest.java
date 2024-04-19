@@ -18,6 +18,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -197,5 +198,43 @@ public class ShoppingListTest {
 
     assertTrue(retrievedShoppingList.isEmpty(),
         "The shopping list should be empty if no ingredients are added.");
+  }
+
+  @Test
+  @Order(8)
+  @DisplayName("Test that the getRecipesInShoppingListForUser method"
+      + "returns the correct amount of recipes in the shopping list.")
+  public void testGetRecipesInShoppingListForUser() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    assertEquals(5, shoppingListDAO.getRecipesInShoppingListForUser(testUser.userId()).size(),
+        "The amount of recipes in the shopping list should be equal to the amount of ingredients in the shopping list.");
+  }
+
+  @Test
+  @Order(9)
+  @DisplayName("Test that the getAllIngredientsFromShoppingList method"
+      + "returns the correct amount of ingredients based on the recipes"
+      + "in the shopping list.")
+  public void testGetAllIngredientsFromShoppingList() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    assertEquals(25, shoppingListDAO.getAllIngredientsFromShoppingList(testUser.userId()).size(),
+        "The amount of ingredients in the shopping list should be equal "
+            + "to the amount of ingredients in the shopping list in total.");
   }
 }
