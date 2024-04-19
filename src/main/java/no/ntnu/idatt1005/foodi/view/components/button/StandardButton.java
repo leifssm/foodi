@@ -23,7 +23,7 @@ public class StandardButton extends Button implements ComponentUtils {
    */
   public StandardButton(String text, @NotNull Runnable action, @NotNull Style style) {
     this(text, action);
-    addClass(style.className);
+    setType(style);
   }
 
   /**
@@ -38,17 +38,6 @@ public class StandardButton extends Button implements ComponentUtils {
   }
 
   /**
-   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
-   *
-   * @param text The text to be displayed on the button
-   */
-  public StandardButton(String text) {
-    super(text);
-    addStylesheet("components/button/std-button");
-    addClasses("std-button", currentStyle.className);
-  }
-
-  /**
    * Sets the style of the button.
    *
    * @param type The style of the button
@@ -59,6 +48,17 @@ public class StandardButton extends Button implements ComponentUtils {
     addClass(type.className);
     currentStyle = type;
     return this;
+  }
+
+  /**
+   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
+   *
+   * @param text The text to be displayed on the button
+   */
+  public StandardButton(String text) {
+    super(text);
+    addStylesheet("components/button/std-button");
+    addClasses("std-button", currentStyle.className);
   }
 
   /**

@@ -1,12 +1,10 @@
 .std-button {
   -fx-font-weight: bold;
   -fx-background-radius: 5px;
-  -fx-text-fill: white;
   -fx-cursor: hand;
 }
 
 .std-button.normal {
-  -fx-text-fill: #b4b4b4;
   -fx-background-color: transparent;
 }
 
