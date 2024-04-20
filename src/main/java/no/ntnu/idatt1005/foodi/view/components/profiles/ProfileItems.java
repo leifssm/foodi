@@ -15,11 +15,6 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @version 1.0
  */
 public class ProfileItems extends HBox implements ComponentUtils {
-  // TODO: When integrating with the backend, the constructor should take a list of profile items
-  //    public ProfileItems(ArrayList<Profile> profileItems) {
-  //        super();
-  ////        Assign color from Profile object
-  //    }
 
   /**
    * Constructor for the ProfileItems class.
