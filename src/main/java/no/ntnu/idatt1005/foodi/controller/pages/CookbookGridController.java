@@ -7,7 +7,6 @@ import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCardRow;
 import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Controller for the cookbook grid page. This controller manages the updates to the cookbook grid
@@ -18,6 +17,11 @@ public class CookbookGridController extends PageController {
   private final CookbookGrid view;
   private final RecipeDAO recipeDAO;
 
+  /**
+   * Constructor for the CookbookGridController class.
+   *
+   * @param cookbookGridPage the cookbook grid view
+   */
   public CookbookGridController(CookbookGrid cookbookGridPage) {
     super(cookbookGridPage);
     this.view = cookbookGridPage;
