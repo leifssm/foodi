@@ -3,9 +3,12 @@ package no.ntnu.idatt1005.foodi.view.components.sidebar;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
+import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 
@@ -25,10 +28,10 @@ public class SideBar extends VBox implements ComponentUtils {
     addStylesheet("components/sidebar");
     addClass("sidebar");
 
-    render(currentUserProperty.get().getCapitalizedName());
+    render(currentUserProperty.get());
 
-    currentUserProperty.subscribe(newUser -> render(newUser.name()));
-    LocationHandler.subscribe(l -> render(currentUserProperty.get().name()));
+    currentUserProperty.subscribe(this::render);
+    LocationHandler.subscribe(l -> render(currentUserProperty.get()));
   }
 
   /**
@@ -36,7 +39,8 @@ public class SideBar extends VBox implements ComponentUtils {
    *
    * @param currentUsername The username of the currently logged in user
    */
-  public void render(String currentUsername) {
+  public void render(User currentUser) {
+    String currentUsername = currentUser.getCapitalizedName();
     getChildren().clear();
 
     String image = LoadUtils.getImage("foodi.png");
@@ -53,10 +57,7 @@ public class SideBar extends VBox implements ComponentUtils {
     }
 
     getChildren().addAll(
-        new SideBarItem(
-            currentUsername,
-            "profiles"
-        ),
+        getProfilesButton(currentUsername),
         new SideBarItem(
             "Inventory",
             "inventory"
@@ -74,5 +75,21 @@ public class SideBar extends VBox implements ComponentUtils {
             "about"
         )
     );
+  }
+
+  private HBox getProfilesButton(String currentUsername) {
+    SideBarItem navButton = new SideBarItem(
+        currentUsername,
+        "profiles"
+    );
+
+    Rectangle profileImage = new Rectangle(12, 12);
+    profileImage.setStyle("-fx-fill: " + ColorUtils.usernameToColor(currentUsername) + ";");
+
+    HBox container = new HBox(profileImage, navButton);
+    container.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+    container.setPadding(new Insets(0, 0, 0, 8));
+
+    return container;
   }
 }
