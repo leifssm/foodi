@@ -70,9 +70,10 @@ public class StandardButton extends Button implements ComponentUtils {
   public StandardButton(String text, boolean standardStyle) {
     super(text);
     addStylesheet("components/button/std-button");
+    addClass(currentStyle.className);
 
     if (standardStyle) {
-      addClasses("std-button", currentStyle.className);
+      addClass("std-button");
     }
 
     enableKeyboardNavigation();
