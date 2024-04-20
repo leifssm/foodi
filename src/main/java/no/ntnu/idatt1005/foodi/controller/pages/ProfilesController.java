@@ -51,9 +51,10 @@ public class ProfilesController extends PageController {
   }
 
   /**
-   * Method for adding a user using DAO.
+   * Method for adding a new user.
    *
-   * @param name the name of the user to add
+   * @param name the name of the new user
+   * @return true if the user was added, false if the max users has been reached
    */
   private Boolean addUser(String name) {
     if (userDAO.retrieveAllUsers().size() >= MAX_USERS) {
@@ -62,7 +63,7 @@ public class ProfilesController extends PageController {
 
     userDAO.saveUser(name);
     update();
-    
+
     return true;
   }
 
