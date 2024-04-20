@@ -58,8 +58,17 @@ public class Router extends BorderPane {
    */
   private void setPage(@NotNull StatefulPage page) {
     setCenter(page);
-    page.update();
     activeView = page;
+    updateActiveView();
+  }
+
+  /**
+   * Updates the active view.
+   */
+  public void updateActiveView() {
+    if (activeView != null) {
+      activeView.update();
+    }
   }
 
   /**
@@ -83,14 +92,5 @@ public class Router extends BorderPane {
     }
 
     return this;
-  }
-
-  /**
-   * Updates the active view.
-   */
-  public void updateActiveView() {
-    if (activeView != null) {
-      activeView.update();
-    }
   }
 }

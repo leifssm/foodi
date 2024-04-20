@@ -51,6 +51,9 @@ public class Root extends BorderPane {
     setCenter(router);
   }
 
+  /**
+   * Method for updating the active view.
+   */
   public void updateActiveView() {
     router.updateActiveView();
   }
