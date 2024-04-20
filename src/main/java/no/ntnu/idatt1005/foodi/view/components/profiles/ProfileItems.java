@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import javafx.scene.layout.HBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
@@ -36,7 +35,7 @@ public class ProfileItems extends HBox implements ComponentUtils {
     for (User user : profileNames) {
       // Init ProfileItem
       final Runnable onClick = () -> changeUser.accept(user);
-      ProfileItem profileItem = new ProfileItem(user.name(), ColorUtils.getRandomColor(), onClick);
+      ProfileItem profileItem = new ProfileItem(user.getCapitalizedName(), onClick);
       getChildren().add(profileItem);
     }
 
