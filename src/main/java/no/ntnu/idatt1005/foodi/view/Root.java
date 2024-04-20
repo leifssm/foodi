@@ -67,10 +67,6 @@ public class Root extends BorderPane {
     return shoppingListPage;
   }
 
-  public About getAboutPage() {
-    return aboutPage;
-  }
-
   public CookbookGrid getCookbookGridPage() {
     return cookbookGridPage;
   }
