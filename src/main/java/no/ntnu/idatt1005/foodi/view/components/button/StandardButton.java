@@ -58,9 +58,22 @@ public class StandardButton extends Button implements ComponentUtils {
    * @param text The text to be displayed on the button
    */
   public StandardButton(String text) {
+    this(text, true);
+  }
+
+  /**
+   * Constructor for the StandardButton class.
+   *
+   * @param text          The text to be displayed on the button
+   * @param standardStyle Whether to use the standard style
+   */
+  public StandardButton(String text, boolean standardStyle) {
     super(text);
     addStylesheet("components/button/std-button");
-    addClasses("std-button", currentStyle.className);
+
+    if (standardStyle) {
+      addClasses("std-button", currentStyle.className);
+    }
 
     enableKeyboardNavigation();
   }
@@ -69,9 +82,8 @@ public class StandardButton extends Button implements ComponentUtils {
    * Enables keyboard navigation for the button.
    */
   private void enableKeyboardNavigation() {
-    setText("_" + getText());
+    addClass("keyboard-navigable");
     setFocusTraversable(true);
-    setMnemonicParsing(true);
     addEventHandler(KeyEvent.KEY_PRESSED, event -> {
       if (event.getCode() == KeyCode.ENTER) {
         // Perform the action as if the button was clicked

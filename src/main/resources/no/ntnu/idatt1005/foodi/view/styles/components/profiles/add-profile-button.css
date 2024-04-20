@@ -1,4 +1,4 @@
-.add-profile-button Button {
+.add-profile-button StandardButton {
   -fx-background-color: transparent;
 
   /* Border */
@@ -10,13 +10,13 @@
 }
 
 
-.add-profile-button Button Label {
+.add-profile-button StandardButton Label {
   -fx-font-size: 26px;
   -fx-text-fill: white;
   -fx-text-alignment: center;
 }
 
-.add-profile-button Button:hover Label {
+.add-profile-button StandardButton:hover Label {
   -fx-font-size: 36px;
   -fx-text-fill: white;
   -fx-text-alignment: center;

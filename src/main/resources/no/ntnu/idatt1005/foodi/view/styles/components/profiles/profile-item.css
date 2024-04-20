@@ -3,7 +3,7 @@
   -fx-min-width: 100px;
 }
 
-.profile-item Button {
+.profile-item StandardButton {
   -fx-background-radius: 5px;
   -fx-cursor: hand;
   -fx-min-width: 100px;
@@ -11,10 +11,16 @@
   -fx-opacity: 0.9;
 }
 
-.profile-item Button:hover {
+.profile-item StandardButton:hover {
   -fx-min-width: 110px;
   -fx-min-height: 110px;
   -fx-opacity: 1;
+}
+
+.profile-item StandardButton:focused {
+  -fx-border-width: 1px;
+  -fx-border-color: white;
+  -fx-border-radius: 5px;
 }
 
 .profile-item Label {
