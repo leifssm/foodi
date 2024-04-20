@@ -98,7 +98,7 @@ public class InventoryController extends PageController {
 
   private void onFreezeItem() {
     List<ExpiringIngredient> ingredients = view.getSelectedItems();
-    LOGGER.info("Toggling freezing " + ingredients.size() + " items");
+    LOGGER.info("Toggling freeze on " + ingredients.size() + " items");
     for (ExpiringIngredient ingredient : ingredients) {
       ingredientDAO.toggleFreezeIngredient(
           currentUserProperty.get().userId(),
