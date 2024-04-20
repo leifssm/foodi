@@ -51,9 +51,6 @@ public class Ingredient {
       return false;
     }
     Ingredient that = (Ingredient) o;
-    if (this.id == that.id) {
-      return true;
-    }
     return Objects.equals(name, that.name) && category == that.category;
   }
 
@@ -134,6 +131,16 @@ public class Ingredient {
    */
   public void setCategory(@NotNull Category category) {
     this.category = category;
+  }
+
+  /**
+   * Checks if the ingredients have the same id.
+   *
+   * @param ingredient the ingredient to compare with
+   * @return true if the ingredients have the same id, false otherwise
+   */
+  public boolean checkIfIdsMatch(@NotNull Ingredient ingredient) {
+    return id == ingredient.getId();
   }
 
   /**

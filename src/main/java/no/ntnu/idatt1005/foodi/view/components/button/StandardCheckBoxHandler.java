@@ -124,7 +124,7 @@ public class StandardCheckBoxHandler<DataT> {
    * @param checkBox The checkbox to bind
    */
   public void bindCheckBox(@NotNull StandardCheckBox checkBox, DataT ingredient) {
-    if (checkBoxDataMap.containsValue(ingredient)) {
+    if (checkBoxDataMap.containsKey(checkBox)) {
       throw new IllegalArgumentException("The ingredient is already bound to a checkbox");
     }
     checkBoxDataMap.put(checkBox, ingredient);
