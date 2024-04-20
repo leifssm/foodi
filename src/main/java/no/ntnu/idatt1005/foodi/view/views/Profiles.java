@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.components.CenteredPage;
 import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
@@ -15,7 +16,7 @@ import no.ntnu.idatt1005.foodi.view.components.profiles.ProfileItems;
 public class Profiles extends CenteredPage {
 
   private Consumer<User> changeUser;
-  private Consumer<String> addUser;
+  private Function<String, Boolean> addUser;
 
   /**
    * Constructor for the Profiles class.
@@ -40,7 +41,7 @@ public class Profiles extends CenteredPage {
     this.changeUser = changeUser;
   }
 
-  public void setAddUser(Consumer<String> addUser) {
+  public void setAddUser(Function<String, Boolean> addUser) {
     this.addUser = addUser;
   }
 }
