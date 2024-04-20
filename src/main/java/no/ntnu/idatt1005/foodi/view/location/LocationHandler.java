@@ -21,7 +21,7 @@ public class LocationHandler {
    * The current location of the application.
    */
   private static final SimpleStringProperty location = new SimpleStringProperty(
-      "shopping-list"
+      "profiles"
   );
 
   /**

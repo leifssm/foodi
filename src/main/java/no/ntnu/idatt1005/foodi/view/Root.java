@@ -39,10 +39,10 @@ public class Root extends BorderPane {
     getStyleClass().add("main");
 
     Router router = new Router()
+        .addRoute("profiles", profilesPage)
         .addRoute("inventory", inventoryPage)
         .addRoute("shopping-list", shoppingListPage)
         .addRoute("cookbook-grid", cookbookGridPage)
-        .addRoute("profiles", profilesPage)
         .addRoute("recipes", recipePage)
         .addRoute("about", aboutPage);
     // add more routes here
