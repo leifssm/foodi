@@ -18,6 +18,7 @@ public class Router extends BorderPane {
    * A map of routes and their corresponding nodes.
    */
   HashMap<String, StatefulPage> routes = new HashMap<>();
+  private StatefulPage activeView;
 
   /**
    * Creates an empty router.
@@ -57,7 +58,17 @@ public class Router extends BorderPane {
    */
   private void setPage(@NotNull StatefulPage page) {
     setCenter(page);
-    page.update();
+    activeView = page;
+    updateActiveView();
+  }
+
+  /**
+   * Updates the active view.
+   */
+  public void updateActiveView() {
+    if (activeView != null) {
+      activeView.update();
+    }
   }
 
   /**
