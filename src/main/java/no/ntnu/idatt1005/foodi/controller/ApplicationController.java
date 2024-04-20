@@ -31,6 +31,7 @@ public class ApplicationController {
     root.setSidebar(new SideBar(this.currentUserProperty));
 
     createControllers();
+    root.updateActiveView();
   }
 
   private void createControllers() {
