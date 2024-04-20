@@ -25,7 +25,7 @@ public class SideBar extends VBox implements ComponentUtils {
     addStylesheet("components/sidebar");
     addClass("sidebar");
 
-    render(currentUserProperty.get().name());
+    render(currentUserProperty.get().getCapitalizedName());
 
     currentUserProperty.subscribe(newUser -> render(newUser.name()));
     LocationHandler.subscribe(l -> render(currentUserProperty.get().name()));
