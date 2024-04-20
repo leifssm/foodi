@@ -1,6 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components.profiles;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
@@ -14,12 +14,12 @@ import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
 public class NewUserDialog extends StandardDialog {
 
   private final TextField nameField;
-  private final Consumer<String> addUser;
+  private final Function<String, Boolean> addUser;
 
   /**
    * Constructor for the NewUserDialog class.
    */
-  public NewUserDialog(Consumer<String> addUser) {
+  public NewUserDialog(Function<String, Boolean> addUser) {
     super();
     this.addUser = addUser;
 
@@ -40,7 +40,9 @@ public class NewUserDialog extends StandardDialog {
   }
 
   private void okAction() throws ValidationException {
-    addUser.accept(getName());
+    if (Boolean.FALSE.equals(addUser.apply(getName()))) {
+      throw new ValidationException("Max users reached");
+    }
   }
 
   private String getName() throws ValidationException {
