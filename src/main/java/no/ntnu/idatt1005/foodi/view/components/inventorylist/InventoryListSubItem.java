@@ -33,6 +33,7 @@ class InventoryListSubItem {
     expiryDate.getStyleClass().addAll("gray", "sub-item-expiration-date");
 
     InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpirationDate());
+    progressBar.setIsFrozen(item.getIsFrozen());
     Label category = new Label(); // Empty
 
     InventoryListInput quantity = new InventoryListInput();
