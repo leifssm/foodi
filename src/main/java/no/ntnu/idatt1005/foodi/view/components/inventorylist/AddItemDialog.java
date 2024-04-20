@@ -96,7 +96,16 @@ public class AddItemDialog extends StandardDialog {
     boolean isFrozen = getIsFrozen();
 
     onItemAdded.accept(
-        new ExpiringIngredient(0, ingredient, unit, category, amount, expirationDate, isFrozen));
+        new ExpiringIngredient(
+            -1,
+            ingredient,
+            unit,
+            category,
+            amount,
+            expirationDate,
+            isFrozen
+        )
+    );
   }
 
   private @NotNull String getIngredient() throws ValidationException {

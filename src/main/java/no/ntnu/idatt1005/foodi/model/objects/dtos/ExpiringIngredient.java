@@ -16,6 +16,7 @@ public class ExpiringIngredient extends AmountedIngredient {
 
   private LocalDate expirationDate;
   private Boolean isFrozen;
+  private int inventoryId = -1;
 
   /**
    * Constructor for extending an amounted ingredient object with an expiration date.
@@ -109,6 +110,24 @@ public class ExpiringIngredient extends AmountedIngredient {
    */
   public void setIsFrozen(Boolean isFrozen) {
     this.isFrozen = isFrozen;
+  }
+
+  /**
+   * Returns the id which the element (not ingredient) is stored as in backend.
+   *
+   * @return the inventoryId of the ingredient
+   */
+  public int getInventoryId() {
+    return inventoryId;
+  }
+
+  /**
+   * Sets the id which the element (not ingredient) is stored as in backend.
+   *
+   * @param inventoryId the new backend id of the ingredient
+   */
+  public void setInventoryId(int inventoryId) {
+    this.inventoryId = inventoryId;
   }
 
   @Override

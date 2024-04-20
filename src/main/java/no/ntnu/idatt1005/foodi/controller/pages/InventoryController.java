@@ -125,7 +125,10 @@ public class InventoryController extends PageController {
     LOGGER.info("Deleting " + ingredients.size() + " items");
 
     for (ExpiringIngredient ingredient : ingredients) {
-      ingredientDAO.deleteIngredientObject(ingredient);
+      ingredientDAO.deleteIngredientFromUserInventory(
+          currentUserProperty.get().userId(),
+          ingredient.getInventoryId()
+      );
     }
     update();
   }
