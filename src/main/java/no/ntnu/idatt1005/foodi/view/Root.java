@@ -22,6 +22,7 @@ public class Root extends BorderPane {
   private final Profiles profilesPage;
   private final RecipePage recipePage;
   private final About aboutPage;
+  private final Router router;
 
   /**
    * Constructor for the Root class.
@@ -38,16 +39,23 @@ public class Root extends BorderPane {
     getStylesheets().add(LoadUtils.getStylesheet("root"));
     getStyleClass().add("main");
 
-    Router router = new Router()
+    router = new Router()
+        .addRoute("profiles", profilesPage)
         .addRoute("inventory", inventoryPage)
         .addRoute("shopping-list", shoppingListPage)
         .addRoute("cookbook-grid", cookbookGridPage)
-        .addRoute("profiles", profilesPage)
         .addRoute("recipes", recipePage)
         .addRoute("about", aboutPage);
     // add more routes here
 
     setCenter(router);
+  }
+
+  /**
+   * Method for updating the active view.
+   */
+  public void updateActiveView() {
+    router.updateActiveView();
   }
 
   public void setSidebar(SideBar sidebar) {
@@ -60,10 +68,6 @@ public class Root extends BorderPane {
 
   public ShoppingList getShoppingListPage() {
     return shoppingListPage;
-  }
-
-  public About getAboutPage() {
-    return aboutPage;
   }
 
   public CookbookGrid getCookbookGridPage() {

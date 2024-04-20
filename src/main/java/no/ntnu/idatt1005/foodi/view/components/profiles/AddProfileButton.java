@@ -3,6 +3,7 @@ package no.ntnu.idatt1005.foodi.view.components.profiles;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
@@ -27,7 +28,7 @@ public class AddProfileButton extends VBox implements ComponentUtils {
     addClass("profile-item");
     addClass("add-profile-button");
 
-    Button button = new Button();
+    Button button = new StandardButton("", false);
 
     Label plusIcon = new Label("+");
     button.setGraphic(plusIcon);

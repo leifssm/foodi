@@ -1,6 +1,8 @@
 package no.ntnu.idatt1005.foodi.view.components.button;
 
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,9 +58,40 @@ public class StandardButton extends Button implements ComponentUtils {
    * @param text The text to be displayed on the button
    */
   public StandardButton(String text) {
+    this(text, true);
+  }
+
+  /**
+   * Constructor for the StandardButton class.
+   *
+   * @param text          The text to be displayed on the button
+   * @param standardStyle Whether to use the standard style
+   */
+  public StandardButton(String text, boolean standardStyle) {
     super(text);
     addStylesheet("components/button/std-button");
-    addClasses("std-button", currentStyle.className);
+    addClass(currentStyle.className);
+
+    if (standardStyle) {
+      addClass("std-button");
+    }
+
+    enableKeyboardNavigation();
+  }
+
+  /**
+   * Enables keyboard navigation for the button.
+   */
+  private void enableKeyboardNavigation() {
+    addClass("keyboard-navigable");
+    setFocusTraversable(true);
+    addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+      if (event.getCode() == KeyCode.ENTER) {
+        // Perform the action as if the button was clicked
+        fire();
+        event.consume(); // Consume the event so it doesn't propagate further
+      }
+    });
   }
 
   /**

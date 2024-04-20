@@ -3,6 +3,8 @@ package no.ntnu.idatt1005.foodi.view.components.profiles;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
@@ -21,19 +23,18 @@ public class ProfileItem extends VBox implements ComponentUtils {
    * @param color   The color of the profile
    * @param onClick The action to perform when the profile item is clicked
    */
-  public ProfileItem(final String name, final String color, final Runnable onClick) {
+  public ProfileItem(final String name, final Runnable onClick) {
     super();
     addStylesheet("components/profiles/profile-item");
     addClass("profile-item");
 
     // square button with color and no text
-    Button button = new Button();
-    button.setStyle("-fx-background-color: " + color + ";");
+    Button button = new StandardButton("", false);
+
+    button.setStyle("-fx-background-color: " + ColorUtils.usernameToColor(name) + ";");
     button.setOnAction(e -> onClick.run());
 
-    final String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1);
-    // label with name
-    Label label = new Label(capitalizedName);
+    Label label = new Label(name);
 
     // add button and label to the profile item
     getChildren().addAll(button, label);

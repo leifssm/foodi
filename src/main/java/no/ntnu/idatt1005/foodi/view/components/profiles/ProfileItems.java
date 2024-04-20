@@ -2,9 +2,9 @@ package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import javafx.scene.layout.HBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
@@ -15,11 +15,6 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @version 1.0
  */
 public class ProfileItems extends HBox implements ComponentUtils {
-  // TODO: When integrating with the backend, the constructor should take a list of profile items
-  //    public ProfileItems(ArrayList<Profile> profileItems) {
-  //        super();
-  ////        Assign color from Profile object
-  //    }
 
   /**
    * Constructor for the ProfileItems class.
@@ -27,7 +22,7 @@ public class ProfileItems extends HBox implements ComponentUtils {
    * @param profileNames List of profile names
    */
   public ProfileItems(List<User> profileNames, Consumer<User> changeUser,
-      Consumer<String> addUser) {
+      Function<String, Boolean> addUser) {
     super();
     addStylesheet("components/profiles/profile-items");
     addClass("profile-items");
@@ -35,7 +30,7 @@ public class ProfileItems extends HBox implements ComponentUtils {
     for (User user : profileNames) {
       // Init ProfileItem
       final Runnable onClick = () -> changeUser.accept(user);
-      ProfileItem profileItem = new ProfileItem(user.name(), ColorUtils.getRandomColor(), onClick);
+      ProfileItem profileItem = new ProfileItem(user.getCapitalizedName(), onClick);
       getChildren().add(profileItem);
     }
 
