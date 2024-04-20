@@ -4,6 +4,7 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
 import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
 import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -157,7 +158,10 @@ class IngredientDAOTest {
     ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.deleteIngredientFromUserInventory(1, 1);
+    var ingredients = ingredientDAO.retrieveExpiringIngredientsFromInventory(1);
+    assertNotNull(ingredients);
+    ExpiringIngredient ingredient = ingredients.get(0);
+    ingredientDAO.deleteIngredientFromUserInventory(1, ingredient.getInventoryId());
     assertEquals(0, ingredientDAO.countIngredientItemsInUserInventory(1));
   }
 

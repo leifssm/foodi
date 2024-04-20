@@ -5,6 +5,7 @@ import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
 import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -106,7 +107,7 @@ class QueryBuilder {
    * @param value The date to use.
    * @return This QueryBuilder instance.
    */
-  public @NotNull QueryBuilder addDate(@NotNull java.sql.Date value) {
+  public @NotNull QueryBuilder addDate(@Nullable Date value) {
     checkLocked();
     parts.add((i, statement) -> statement.setDate(i, value));
     return this;

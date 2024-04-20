@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import javafx.scene.layout.BorderPane;
@@ -9,6 +10,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.view.components.TitledPage;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
 import no.ntnu.idatt1005.foodi.view.components.inventorylist.AddItemDialog;
 import no.ntnu.idatt1005.foodi.view.components.inventorylist.InventoryList;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
@@ -23,6 +25,8 @@ public class Inventory extends TitledPage implements ComponentUtils {
 
   private final InventoryList inventoryList;
   private StandardButton addItemButton;
+  private StandardButton freezeButton;
+  private StandardButton deleteButton;
 
   /**
    * Constructor for the Inventory class.
@@ -42,15 +46,12 @@ public class Inventory extends TitledPage implements ComponentUtils {
     BorderPane topBar = new BorderPane();
     topBar.getStyleClass().add("inventory-top-bar");
 
-    addItemButton = new StandardButton("Add item");
-    topBar.setLeft(
-        addItemButton.setType(
-            StandardButton.Style.SUCCESS));
+    addItemButton = new StandardButton("Add item").setType(StandardButton.Style.SUCCESS);
+    freezeButton = new StandardButton("Toggle Freeze").setType(StandardButton.Style.PRIMARY);
+    deleteButton = new StandardButton("Delete").setType(StandardButton.Style.ERROR);
+    topBar.setLeft(addItemButton);
 
-    HBox actions = new HBox(
-        new StandardButton("Freeze").setType(StandardButton.Style.PRIMARY),
-        new StandardButton("Delete").setType(StandardButton.Style.ERROR)
-    );
+    HBox actions = new HBox(freezeButton, deleteButton);
     actions.getStyleClass().add("inventory-actions");
     topBar.setRight(actions);
 
@@ -67,9 +68,37 @@ public class Inventory extends TitledPage implements ComponentUtils {
   }
 
   /**
+   * Method for setting the runnable triggered when the delete button is clicked.
+   *
+   * @param onDeleteItems The action to be set
+   */
+  public void setOnDeleteItems(Runnable onDeleteItems) {
+    deleteButton.setOnAction(e -> onDeleteItems.run());
+  }
+
+  /**
+   * Method for setting the runnable triggered when the freeze button is clicked.
+   *
+   * @param onFreeze The action to be set
+   */
+  public void setOnFreezeItems(Runnable onFreeze) {
+    freezeButton.setOnAction(e -> onFreeze.run());
+  }
+
+  /**
    * Method for rendering the inventory page.
    */
   public void render(List<GroupedExpiringIngredients> groupedExpiringIngredients) {
     inventoryList.render(groupedExpiringIngredients);
+  }
+
+  public List<ExpiringIngredient> getSelectedItems() {
+    ArrayList<ExpiringIngredient> combinedItems = new ArrayList<>();
+
+    for (StandardCheckBoxHandler<ExpiringIngredient> checkbox : inventoryList.getCheckboxHandlers()) {
+      combinedItems.addAll(checkbox.getSelectedData());
+    }
+
+    return combinedItems;
   }
 }
