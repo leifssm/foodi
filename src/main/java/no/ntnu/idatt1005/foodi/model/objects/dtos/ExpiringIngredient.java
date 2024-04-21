@@ -18,6 +18,22 @@ public class ExpiringIngredient extends AmountedIngredient {
   private Boolean isFrozen;
   private int inventoryId = -1;
 
+  public ExpiringIngredient(
+      AmountedIngredient amountedIngredient,
+      LocalDate expirationDate,
+      Boolean isFrozen
+  ) {
+    this(
+        amountedIngredient.getId(),
+        amountedIngredient.getName(),
+        amountedIngredient.getUnit(),
+        amountedIngredient.getCategory(),
+        amountedIngredient.getAmount(),
+        expirationDate,
+        isFrozen
+    );
+  }
+
   /**
    * Constructor for extending an amounted ingredient object with an expiration date.
    *
