@@ -97,9 +97,14 @@ public class IngredientDAO {
    * @param amount         The amount of the ingredient to save.
    * @param expirationDate The expiration date of the ingredient.
    */
-  public void saveIngredientToUserInventory(int userId, String ingredientName, Ingredient.Unit unit,
-      Ingredient.Category category, double amount, @Nullable Date expirationDate)
-      throws SQLException {
+  public void saveIngredientToUserInventory(
+      int userId,
+      String ingredientName,
+      Ingredient.Unit unit,
+      Ingredient.Category category,
+      double amount,
+      @Nullable Date expirationDate
+  ) {
     int ingredientId = findIngredientId(ingredientName, unit, category);
     if (ingredientId == -1) {
       saveIngredient(ingredientName, unit, category);
@@ -148,8 +153,11 @@ public class IngredientDAO {
    * @param category       The category of the ingredient to save.
    * @throws SQLException if an error occurs while saving the ingredient.
    */
-  public void saveIngredient(@NotNull String ingredientName, @NotNull Ingredient.Unit unit,
-      @NotNull Ingredient.Category category) throws SQLException {
+  public void saveIngredient(
+      @NotNull String ingredientName,
+      @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category
+  ) {
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)
