@@ -17,6 +17,13 @@ public class ExpiringIngredient extends AmountedIngredient {
   private LocalDate expirationDate;
   private Boolean isFrozen;
 
+  /**
+   * Constructor for extending an amounted ingredient object with an expiration date.
+   *
+   * @param amountedIngredient the amounted ingredient object to extend
+   * @param expirationDate     the expiration date of the ingredient without a timestamp
+   * @param isFrozen           whether the ingredient is frozen or not
+   */
   public ExpiringIngredient(
       AmountedIngredient amountedIngredient,
       LocalDate expirationDate,

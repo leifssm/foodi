@@ -40,6 +40,13 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
     setPortions(portions);
   }
 
+  /**
+   * Constructor for extending a recipe with partially removed ingredients.
+   *
+   * @param recipe      the recipe to extend
+   * @param ingredients a list of partially removed ingredients
+   * @param portions    the number of portions
+   */
   public RecipeWithPartiallyRemovedIngredients(
       RecipeWithIngredients recipe,
       List<PartiallyRemovedAmountedIngredient> ingredients,
