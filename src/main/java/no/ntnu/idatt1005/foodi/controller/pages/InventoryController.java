@@ -1,6 +1,9 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,11 +48,8 @@ public class InventoryController extends PageController {
 
   private void attachToView() {
     view.setOnAddItem(this::onAddItem);
-  }
-
-  @Override
-  void update() {
-    view.render(getInventoryDataFromUser());
+    view.setOnFreezeItems(this::onFreezeItem);
+    view.setOnDeleteItems(this::onDeleteItems);
   }
 
   /**
@@ -75,6 +75,70 @@ public class InventoryController extends PageController {
   }
 
   /**
+   * Returns the date a frozen ingredient should be eaten before.
+   *
+   * @param expirationDate the expiration date of the ingredient
+   * @return the date the ingredient should be eaten before
+   */
+  private LocalDate getFrozenDate(@NotNull LocalDate expirationDate) {
+    long daysUntilExpiration = DAYS.between(LocalDate.now(), expirationDate);
+    return LocalDate.now().plusDays(5 * daysUntilExpiration);
+  }
+
+  /**
+   * Returns the date an unfrozen ingredient should be eaten before.
+   *
+   * @param expirationDate the expiration date of the ingredient
+   * @return the date the ingredient should be eaten before
+   */
+  private LocalDate getUnfrozenDate(@NotNull LocalDate expirationDate) {
+    // expiration date is an unused parameter for future compatibility
+    return LocalDate.now().plusDays(2);
+  }
+
+  private void onFreezeItem() {
+    List<ExpiringIngredient> ingredients = view.getSelectedItems();
+    LOGGER.info("Toggling freeze on " + ingredients.size() + " items");
+    for (ExpiringIngredient ingredient : ingredients) {
+      ingredientDAO.toggleFreezeIngredient(
+          currentUserProperty.get().userId(),
+          ingredient.getId(),
+          !ingredient.getIsFrozen()
+      );
+
+      LocalDate newExpirationDate = ingredient.getIsFrozen()
+          ? getUnfrozenDate(ingredient.getExpirationDate())
+          : getFrozenDate(ingredient.getExpirationDate());
+
+      ingredientDAO.updateIngredientExpirationDate(
+          currentUserProperty.get().userId(),
+          ingredient.getId(),
+          newExpirationDate
+      );
+    }
+
+    update();
+  }
+
+  private void onDeleteItems() {
+    List<ExpiringIngredient> ingredients = view.getSelectedItems();
+    LOGGER.info("Deleting " + ingredients.size() + " items");
+
+    for (ExpiringIngredient ingredient : ingredients) {
+      ingredientDAO.deleteIngredientFromUserInventory(
+          currentUserProperty.get().userId(),
+          ingredient.getInventoryId()
+      );
+    }
+    update();
+  }
+
+  @Override
+  void update() {
+    view.render(getInventoryDataFromUser());
+  }
+
+  /**
    * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
    * {@link GroupedExpiringIngredients}.
    *
@@ -82,7 +146,8 @@ public class InventoryController extends PageController {
    */
   private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
     List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
-        currentUserProperty.get().userId());
+        currentUserProperty.get().userId()
+    );
 
     if (inventoryData == null) {
       return new ArrayList<>();
@@ -99,9 +164,12 @@ public class InventoryController extends PageController {
       }
     }
 
-    return groupedInventoryData.entrySet()
+    return groupedInventoryData
+        .entrySet()
         .stream()
-        .map(entry -> new GroupedExpiringIngredients(entry.getKey(), entry.getValue()))
+        .map(entry ->
+            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
+        )
         .toList();
   }
 }

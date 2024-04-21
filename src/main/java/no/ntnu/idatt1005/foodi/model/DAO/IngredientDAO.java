@@ -229,33 +229,34 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-    /**
-     * Deletes an ingredient object from the database and also deletes related entries in the inventory table.
-     *
-     * @param obj The ingredient object to delete.
-     */
-    public void deleteIngredientObject(@NotNull Ingredient obj) {
-        // First, delete the related entries in the inventory table
-        new QueryBuilder("DELETE FROM inventory WHERE ingredient_id = ?")
-                .addInt(obj.getId())
-                .executeUpdateSafe();
+  /**
+   * Deletes an ingredient object from the database and also deletes related entries in the
+   * inventory table.
+   *
+   * @param obj The ingredient object to delete.
+   */
+  public void deleteIngredientObject(@NotNull Ingredient obj) {
+    // First, delete the related entries in the inventory table
+    new QueryBuilder("DELETE FROM inventory WHERE ingredient_id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
 
-        // Then, delete the ingredient from the ingredient table
-        new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
-                .addInt(obj.getId())
-                .executeUpdateSafe();
-    }
+    // Then, delete the ingredient from the ingredient table
+    new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
+  }
 
   /**
    * Deletes an ingredient from a user's inventory.
    *
-   * @param userId       The id of the user to delete the ingredient from.
-   * @param ingredientId The id of the ingredient to delete.
+   * @param userId The id of the user to delete the ingredient from.
+   * @param id     The id of the inventory ingredient to delete.
    */
-  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
-    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
+  public void deleteIngredientFromUserInventory(int userId, int id) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND id = ?")
         .addInt(userId)
-        .addInt(ingredientId)
+        .addInt(id)
         .executeUpdateSafe();
   }
 
@@ -367,6 +368,7 @@ public class IngredientDAO {
         .executeQuerySafe(rs -> {
           List<ExpiringIngredient> ingredients = new ArrayList<>();
           while (rs.next()) {
+            int id = rs.getInt("id");
             int ingredientId = rs.getInt("ingredient_id");
             double amount = rs.getDouble("amount");
             Date expirationDateSql = rs.getDate("expiration_date");
@@ -375,8 +377,17 @@ public class IngredientDAO {
 
             Ingredient ingredient = retrieveIngredientById(ingredientId);
             assert ingredient != null;
-            ingredients.add(new ExpiringIngredient(ingredient.getId(), ingredient.getName(),
-                ingredient.getUnit(), ingredient.getCategory(), amount, expirationDate, isFrozen));
+            ExpiringIngredient expiringIngredient = new ExpiringIngredient(
+                ingredient.getId(),
+                ingredient.getName(),
+                ingredient.getUnit(),
+                ingredient.getCategory(),
+                amount,
+                expirationDate,
+                isFrozen
+            );
+            expiringIngredient.setInventoryId(id);
+            ingredients.add(expiringIngredient);
           }
           return ingredients;
         });

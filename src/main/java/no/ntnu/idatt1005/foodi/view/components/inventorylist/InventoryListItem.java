@@ -22,6 +22,9 @@ class InventoryListItem {
   private final Node[] mainItems;
   private final InventoryListSubItem[] subItems;
 
+  private final StandardCheckBoxHandler<ExpiringIngredient> selectHandler
+      = new StandardCheckBoxHandler<>();
+
   /**
    * Constructor for the InventoryListItem class.
    *
@@ -40,11 +43,11 @@ class InventoryListItem {
 
     this.subItems = new InventoryListSubItem[ingredients.size()];
 
-    StandardCheckBoxHandler selectHandler = new StandardCheckBoxHandler();
     for (int i = 0; i < ingredients.size(); i++) {
-      InventoryListSubItem subItem = new InventoryListSubItem(ingredients.get(i));
+      ExpiringIngredient ingredient = ingredients.get(i);
+      InventoryListSubItem subItem = new InventoryListSubItem(ingredient);
       subItems[i] = subItem;
-      selectHandler.bindCheckBox(subItem.getSelect());
+      selectHandler.bindCheckBox(subItem.getSelect(), ingredient);
     }
 
     Label icon = new Label(mainItem.getCategory().getIcon());
@@ -80,9 +83,6 @@ class InventoryListItem {
     Label unit = new Label(mainItem.getUnit().getName());
     unit.getStyleClass().add("center");
 
-    Label edit = new Label("🖊️");
-    edit.getStyleClass().add("center");
-
     StandardCheckBox select = new StandardCheckBox();
     select.setScale(0.6);
     select.getStyleClass().add("center");
@@ -96,7 +96,6 @@ class InventoryListItem {
         category,
         quantity,
         unit,
-        edit,
         select
     };
   }
@@ -113,5 +112,14 @@ class InventoryListItem {
    */
   public InventoryListSubItem[] getSubItems() {
     return subItems;
+  }
+
+  /**
+   * Returns the select handler.
+   *
+   * @return the select handler
+   */
+  public StandardCheckBoxHandler<ExpiringIngredient> getSelectHandler() {
+    return selectHandler;
   }
 }

@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -7,7 +8,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 public class InventoryList extends VBox implements ComponentUtils {
 
   private final GridPane gridPane;
+  private final ArrayList<StandardCheckBoxHandler<ExpiringIngredient>> checkboxes =
+      new ArrayList<>();
 
   /**
    * Constructor for the InventoryList class.
@@ -41,7 +46,7 @@ public class InventoryList extends VBox implements ComponentUtils {
     ColumnConstraints iconCol = new ColumnConstraints();
     iconCol.setPercentWidth(5);
     ColumnConstraints nameCol = new ColumnConstraints();
-    nameCol.setPercentWidth(25);
+    nameCol.setPercentWidth(30);
     ColumnConstraints expiryCol = new ColumnConstraints();
     expiryCol.setPercentWidth(20);
     ColumnConstraints categoryCol = new ColumnConstraints();
@@ -50,8 +55,6 @@ public class InventoryList extends VBox implements ComponentUtils {
     quantityCol.setPercentWidth(10);
     ColumnConstraints unitCol = new ColumnConstraints();
     unitCol.setPercentWidth(10);
-    ColumnConstraints editCol = new ColumnConstraints();
-    editCol.setPercentWidth(5);
     ColumnConstraints selectCol = new ColumnConstraints();
     selectCol.setPercentWidth(5);
 
@@ -62,7 +65,6 @@ public class InventoryList extends VBox implements ComponentUtils {
         categoryCol,
         quantityCol,
         unitCol,
-        editCol,
         selectCol
     );
 
@@ -78,7 +80,6 @@ public class InventoryList extends VBox implements ComponentUtils {
         new Label("CATEGORY"),
         amount,
         unit,
-        new Label(),
         new Label()
     );
 
@@ -93,10 +94,13 @@ public class InventoryList extends VBox implements ComponentUtils {
    */
   public void render(@NotNull final List<GroupedExpiringIngredients> currentPage) {
     clearCells();
+
     int rowNum = 2;
     for (GroupedExpiringIngredients ingredientGroup : currentPage) {
 
       InventoryListItem rows = new InventoryListItem(ingredientGroup);
+      checkboxes.add(rows.getSelectHandler());
+
       gridPane.addRow(rowNum++, rows.getMainItems());
 
       for (InventoryListSubItem subRow : rows.getSubItems()) {
@@ -112,8 +116,13 @@ public class InventoryList extends VBox implements ComponentUtils {
    * Removes all the displayed cells from view.
    */
   public void clearCells() {
+    checkboxes.clear();
     gridPane.getChildren().removeIf(node ->
         GridPane.getRowIndex(node) == null || GridPane.getRowIndex(node) > 1
     );
+  }
+
+  public ArrayList<StandardCheckBoxHandler<ExpiringIngredient>> getCheckboxHandlers() {
+    return checkboxes;
   }
 }
