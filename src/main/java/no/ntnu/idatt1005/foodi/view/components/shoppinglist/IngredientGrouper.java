@@ -54,7 +54,7 @@ public class IngredientGrouper {
    * @return A list of ingredients with the updated amount
    */
   static @NotNull List<AmountedIngredient> joinIngredientsFromRecipes(
-      RecipeWithPartiallyRemovedIngredients @NotNull [] recipes
+      @NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes
   ) {
     // A hashmap using the ingredient as key and the total amount as value
     HashMap<AmountedIngredient, Double> ingredients = new HashMap<>();

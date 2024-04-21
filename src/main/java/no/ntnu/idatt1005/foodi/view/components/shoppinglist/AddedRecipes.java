@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
 
+import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
@@ -19,7 +20,7 @@ public class AddedRecipes extends VBox implements ComponentUtils {
    *
    * @param recipes An array of recipes to display
    */
-  public AddedRecipes(@NotNull RecipeWithPartiallyRemovedIngredients @NotNull [] recipes) {
+  public AddedRecipes(@NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes) {
     super();
     addStylesheet("components/shopping-list/added-recipes");
     addClass("added-recipes");

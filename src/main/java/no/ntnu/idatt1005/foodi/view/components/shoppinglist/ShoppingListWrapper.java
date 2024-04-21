@@ -23,7 +23,9 @@ public class ShoppingListWrapper extends VBox implements ComponentUtils {
    *
    * @param recipes The recipes to extract the data from
    */
-  public ShoppingListWrapper(RecipeWithPartiallyRemovedIngredients... recipes) {
+  public ShoppingListWrapper(
+      @NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes
+  ) {
     super();
     addStylesheet("components/shopping-list/shopping-list-wrapper");
     addClass("shopping-list-wrapper");
