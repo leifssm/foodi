@@ -8,6 +8,7 @@ import no.ntnu.idatt1005.foodi.view.components.button.DoubleButton;
 import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
 import no.ntnu.idatt1005.foodi.view.components.shoppinglist.IngredientGrouper.IngredientCategoryGroup;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class representing several groups of items in the shopping list, with buttons to either remove or
@@ -17,6 +18,9 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @version 1.0
  */
 public class ShoppingListWrapper extends VBox implements ComponentUtils {
+
+  private final StandardButton addItemsButton;
+  private final StandardButton clearItemsButton;
 
   /**
    * Constructor for the ShoppingListWrapper class.
@@ -37,16 +41,28 @@ public class ShoppingListWrapper extends VBox implements ComponentUtils {
       getChildren().add(shoppingListGroup);
     }
 
-    getChildren().add(
-        new DoubleButton(
-            new StandardButton(
-                "Add Items to Inventory",
-                () -> System.out.println("Add items to inventory"),
-                StandardButton.Style.SUCCESS
-            ),
-            new StandardButton("Clear", () -> System.out.println("Clear"),
-                StandardButton.Style.ERROR)
-        )
+    addItemsButton = new StandardButton(
+        "Add Items to Inventory",
+        () -> System.out.println("Add items to inventory"),
+        StandardButton.Style.SUCCESS
     );
+
+    clearItemsButton = new StandardButton(
+        "Clear",
+        () -> System.out.println("Clear"),
+        StandardButton.Style.ERROR
+    );
+
+    getChildren().add(
+        new DoubleButton(addItemsButton, clearItemsButton)
+    );
+  }
+
+  public StandardButton getAddItemsButton() {
+    return addItemsButton;
+  }
+
+  public StandardButton getClearItemsButton() {
+    return clearItemsButton;
   }
 }

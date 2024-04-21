@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +150,6 @@ public class IngredientDAO {
    * @param ingredientName The name of the ingredient to save.
    * @param unit           The unit of the ingredient to save.
    * @param category       The category of the ingredient to save.
-   * @throws SQLException if an error occurs while saving the ingredient.
    */
   public void saveIngredient(
       @NotNull String ingredientName,
@@ -237,22 +235,23 @@ public class IngredientDAO {
         .executeUpdateSafe();
   }
 
-    /**
-     * Deletes an ingredient object from the database and also deletes related entries in the inventory table.
-     *
-     * @param obj The ingredient object to delete.
-     */
-    public void deleteIngredientObject(@NotNull Ingredient obj) {
-        // First, delete the related entries in the inventory table
-        new QueryBuilder("DELETE FROM inventory WHERE ingredient_id = ?")
-                .addInt(obj.getId())
-                .executeUpdateSafe();
+  /**
+   * Deletes an ingredient object from the database and also deletes related entries in the
+   * inventory table.
+   *
+   * @param obj The ingredient object to delete.
+   */
+  public void deleteIngredientObject(@NotNull Ingredient obj) {
+    // First, delete the related entries in the inventory table
+    new QueryBuilder("DELETE FROM inventory WHERE ingredient_id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
 
-        // Then, delete the ingredient from the ingredient table
-        new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
-                .addInt(obj.getId())
-                .executeUpdateSafe();
-    }
+    // Then, delete the ingredient from the ingredient table
+    new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
+        .addInt(obj.getId())
+        .executeUpdateSafe();
+  }
 
   /**
    * Deletes an ingredient from a user's inventory.

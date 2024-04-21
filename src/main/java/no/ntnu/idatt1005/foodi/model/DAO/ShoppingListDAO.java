@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -66,13 +66,17 @@ public class ShoppingListDAO {
    * @return a list of all ingredients in the shopping list.
    */
   public List<AmountedIngredient> getAllIngredientsFromShoppingList(int userId) {
-    List<Recipe> recipes = getRecipesInShoppingListForUser(userId);
+    List<RecipeWithIngredients> recipes = getRecipesInShoppingListForUser(userId);
     IngredientDAO ingredientDAO = new IngredientDAO();
     List<AmountedIngredient> allIngredients = new ArrayList<>();
 
-    for (Recipe recipe : recipes) {
+    for (RecipeWithIngredients recipe : recipes) {
       List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-          recipe.getId());
+          recipe.getId()
+      );
+      if (ingredients == null) {
+        continue;
+      }
       allIngredients.addAll(ingredients);
     }
 
@@ -85,15 +89,15 @@ public class ShoppingListDAO {
    * @param userId the id of the user.
    * @return a list of recipes in the shopping list.
    */
-  public List<Recipe> getRecipesInShoppingListForUser(int userId) {
+  public List<RecipeWithIngredients> getRecipesInShoppingListForUser(int userId) {
     RecipeDAO recipeDAO = new RecipeDAO();
     Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
-    List<Recipe> recipes = new ArrayList<>();
+    List<RecipeWithIngredients> recipes = new ArrayList<>();
 
     for (Integer ingredientId : shoppingList.keySet()) {
       List<Integer> recipeIds = getRecipeIdsByIngredientId(ingredientId);
       for (Integer recipeId : recipeIds) {
-        Recipe recipe = recipeDAO.retrieveById(recipeId);
+        RecipeWithIngredients recipe = recipeDAO.retrieveRecipeWithIngredientsById(recipeId);
         if (recipe != null) {
           recipes.add(recipe);
         }
