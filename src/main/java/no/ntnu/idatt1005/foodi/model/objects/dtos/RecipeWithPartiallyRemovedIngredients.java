@@ -40,6 +40,25 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
     setPortions(portions);
   }
 
+  public RecipeWithPartiallyRemovedIngredients(
+      RecipeWithIngredients recipe,
+      List<PartiallyRemovedAmountedIngredient> ingredients,
+      int portions
+  ) {
+    super(
+        recipe.getId(),
+        recipe.getName(),
+        recipe.getDescription(),
+        recipe.getDifficulty(),
+        recipe.getDietaryTag(),
+        recipe.getDuration(),
+        recipe.getImagePath(),
+        recipe.getInstruction()
+    );
+    setIngredients(ingredients);
+    setPortions(portions);
+  }
+
   /**
    * Returns an immutable list of partially removed ingredients.
    *
@@ -76,6 +95,7 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
     if (portions < 1) {
       throw new IllegalArgumentException("Error: Portions cannot be less than 1.");
     }
+    this.portions = portions;
   }
 
   /**
