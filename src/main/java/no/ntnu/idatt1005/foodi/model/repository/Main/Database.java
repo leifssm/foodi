@@ -1,14 +1,10 @@
 package no.ntnu.idatt1005.foodi.model.repository.Main;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Logger;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+
+import java.sql.*;
+import java.util.logging.Logger;
 
 /**
  * This class is responsible for creating and initializing the database. It also checks if the
@@ -51,12 +47,12 @@ public class Database {
     try (Statement stmt = conn.createStatement()) {
       stmt.execute("CREATE TABLE IF NOT EXISTS \"user\" ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "name VARCHAR);");
+          + "NAME VARCHAR);");
 
       // Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS ingredient ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "name VARCHAR NOT NULL,"
+          + "NAME VARCHAR NOT NULL,"
           + "unit VARCHAR,"
           + "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON')),"
           + "category VARCHAR,"
@@ -65,7 +61,7 @@ public class Database {
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "name VARCHAR NOT NULL,"
+          + "NAME VARCHAR NOT NULL,"
           + "description VARCHAR,"
           + "difficulty VARCHAR,"
           + "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD')),"
@@ -86,13 +82,12 @@ public class Database {
 
       // Inventory Table
       stmt.execute("CREATE TABLE IF NOT EXISTS inventory ("
-          + "id INT AUTO_INCREMENT,"
+          + "id INT AUTO_INCREMENT PRIMARY KEY,"
           + "ingredient_id INT,"
           + "amount DOUBLE,"
           + "expiration_date DATE,"
           + "is_frozen BOOLEAN DEFAULT FALSE,"
           + "user_id INT,"
-          + "PRIMARY KEY (id, ingredient_id),"
           + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
           + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
 
@@ -155,8 +150,10 @@ public class Database {
     try {
       insertRecipes();
       LOGGER.info("Recipes inserted successfully.");
-      // insertIngredients();
-      // LOGGER.info("Ingredients inserted successfully.");
+      insertIngredients();
+      LOGGER.info("Ingredients inserted successfully.");
+      insertRecipeIngredients();
+      LOGGER.info("Recipe ingredients inserted successfully.");
       insertDefaultUser();
       LOGGER.info("Default user inserted successfully.");
     } catch (SQLException e) {
@@ -413,6 +410,78 @@ public class Database {
       statement.executeUpdate(
           "MERGE INTO ingredient (id, name, unit, category) VALUES (" + id + ", '" + name + "', '"
               + unit + "', '" + category + "')");
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+
+  private static void insertRecipeIngredients() throws SQLException {
+    // Define ingredient mappings (recipeId, ingredientId, amount)
+    final int[][] recipeIngredientsData = {
+        // Garden Salad (Recipe ID 1)
+        {1, 13, 1}, // Lettuce, 1 piece
+        {1, 7, 100}, // Tomato sauce, 100 milliliters (assuming dressing base)
+        {1, 59, 1}, // Onion, 1 piece
+        {1, 47, 1}, // Peppers, 1 piece
+
+        // Grilled Salmon (Recipe ID 2)
+        {2, 19, 200}, // Salmon, 200 grams
+
+        // Seafood Paella (Recipe ID 3)
+        {3, 5, 200}, // Rice, 200 grams
+        {3, 10, 150}, // Shrimp, 150 grams
+        {3, 59, 1}, // Onion, 1 piece
+
+        // Banana Pancakes (Recipe ID 4)
+        {4, 1, 200}, // Milk, 200 milliliters
+        {4, 50, 100}, // Wheat flour, 100 grams
+        {4, 48, 1}, // Banana, 1 piece
+
+        // Cheese Pizza (Recipe ID 5)
+        {5, 44, 150}, // Bread, 150 grams
+        {5, 17, 100}, // Barbecue sauce, 100 milliliters (as tomato sauce)
+        {5, 49, 100}, // Cheese, 100 grams
+
+        // Smoky BBQ Ribs (Recipe ID 6)
+        {6, 42, 500}, // Pork loin, 500 grams
+        {6, 17, 50}, // Barbecue sauce, 50 milliliters
+
+        // Grilled Cheese (Recipe ID 7)
+        {7, 44, 100}, // Bread, 100 grams
+        {7, 31, 50}, // Butter, 50 grams
+        {7, 49, 50}, // Cheese, 50 grams
+
+        // Pesto Farfalle (Recipe ID 8)
+        {8, 53, 200}, // Pasta, 200 grams
+        {8, 37, 100}, // Pesto sauce, 100 milliliters
+
+        // Chicken Soup (Recipe ID 9)
+        {9, 2, 300}, // Chicken breast, 300 grams
+        {9, 59, 1},  // Onion, 1 piece
+        {9, 25, 10}, // Garlic powder, 10 teaspoons
+    };
+
+    try (Connection connection = getConnection()) {
+      for (int i = 0; i < recipeIngredientsData.length; i++) {
+        int[] recipeIngredientData = recipeIngredientsData[i];
+        mergeRecipeIngredient(
+            connection,
+            recipeIngredientData[0],
+            recipeIngredientData[1],
+            recipeIngredientData[2]
+        );
+      }
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+  private static void mergeRecipeIngredient(Connection connection, int recipeId, int ingredientId, int amount) throws SQLException {
+    try (Statement statement = connection.createStatement()) {
+      statement.executeUpdate(
+          "MERGE INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES ("
+              + recipeId + ", " + ingredientId + ", " + amount + ")");
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }

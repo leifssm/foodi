@@ -1,12 +1,16 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
+import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCard;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCardRow;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
 import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Controller for the cookbook grid page. This controller manages the updates to the cookbook grid
@@ -17,6 +21,7 @@ public class CookbookGridController extends PageController {
   private final CookbookGrid view;
   private final RecipeDAO recipeDAO;
 
+
   /**
    * Constructor for the CookbookGridController class.
    *
@@ -26,47 +31,70 @@ public class CookbookGridController extends PageController {
     super(cookbookGridPage);
     this.view = cookbookGridPage;
     this.recipeDAO = new RecipeDAO();
+    LocationHandler.subscribe(e -> {
+      update();
+    });
     update();
   }
 
   @Override
   void update() {
-    // Update the cookbook grid view
-    System.out.println("Get data from backend and update the cookbook grid view.");
-    System.out.println("Call the render() with the appropriate data for the cookbook grid page.");
+    Recipe[] recipes = fetchAllRecipes();
 
-    Recipe[] recipes = recipeDAO.retrieveAll().toArray(new Recipe[0]);
-    System.out.println("length: " + recipes.length);
+    RecipeCardRow twentyMinuteRecipeCardRow = createRecipeCardRow("Twenty minute recipes",
+        filterRecipesByDuration(recipes, 20));
 
-    Recipe[] twentyMinuteRecipes = Arrays.stream(recipes).filter(recipe -> recipe.getDuration() <= 20).toArray(Recipe[]::new);
-    RecipeCard[] twentyMinuteRecipeCards = new RecipeCard[twentyMinuteRecipes.length];
-    for (int i = 0; i < twentyMinuteRecipes.length; i++) {
-      twentyMinuteRecipeCards[i] = new RecipeCard(twentyMinuteRecipes[i].getName(), twentyMinuteRecipes[i].getDuration() + " minutes", twentyMinuteRecipes[i].getImagePath());
-    }
-    RecipeCardRow twentyMinuteRecipeCardRow = new RecipeCardRow("Twenty minute recipes", twentyMinuteRecipeCards);
+    RecipeCardRow easyRecipeCardRow = createRecipeCardRow("Easy recipes",
+        filterRecipesByDifficulty(recipes, Recipe.Difficulty.EASY));
 
-    Recipe[] easyRecipes = Arrays.stream(recipes).filter(recipe -> recipe.getDifficulty() == Recipe.Difficulty.EASY).toArray(Recipe[]::new);
-    RecipeCard[] easyRecipeCards = new RecipeCard[easyRecipes.length];
-    for (int i = 0; i < easyRecipes.length; i++) {
-      easyRecipeCards[i] = new RecipeCard(easyRecipes[i].getName(), easyRecipes[i].getDuration() + " minutes", easyRecipes[i].getImagePath());
-    }
-    RecipeCardRow easyRecipeCardRow = new RecipeCardRow("Easy recipes", easyRecipeCards);
+    RecipeCardRow vegetarianRecipeCardRow = createRecipeCardRow("Vegetarian",
+        filterRecipesByDietaryTags(recipes, Recipe.DietaryTag.VEGETARIAN, Recipe.DietaryTag.VEGAN));
 
-    Recipe[] vegetarianRecipes = Arrays.stream(recipes).filter(recipe -> recipe.getDietaryTag() == Recipe.DietaryTag.VEGETARIAN || recipe.getDietaryTag() == Recipe.DietaryTag.VEGAN).toArray(Recipe[]::new);
-    RecipeCard[] vegetarianRecipeCards = new RecipeCard[vegetarianRecipes.length];
-    for (int i = 0; i < vegetarianRecipes.length; i++) {
-      vegetarianRecipeCards[i] = new RecipeCard(vegetarianRecipes[i].getName(), vegetarianRecipes[i].getDuration() + " minutes", vegetarianRecipes[i].getImagePath());
-    }
-    RecipeCardRow vegetarianRecipeCardRow = new RecipeCardRow("Vegetarian", vegetarianRecipeCards);
+    RecipeCardRow popularRecipeCardRow = createRecipeCardRowForPopularRecipes(recipes);
 
-    Recipe[] popularRecipes = new Recipe[4];
-    RecipeCard[] popularRecipeCards = new RecipeCard[popularRecipes.length];
-    popularRecipeCards[0] = new RecipeCard(recipes[5].getName(), recipes[5].getDuration() + " minutes", recipes[5].getImagePath());
-    popularRecipeCards[1] = new RecipeCard(recipes[2].getName(), recipes[2].getDuration() + " minutes", recipes[2].getImagePath());
-    popularRecipeCards[2] = new RecipeCard(recipes[4].getName(), recipes[4].getDuration() + " minutes", recipes[4].getImagePath());
-    popularRecipeCards[3] = new RecipeCard(recipes[1].getName(), recipes[1].getDuration() + " minutes", recipes[1].getImagePath());
-    RecipeCardRow popularRecipeCardRow = new RecipeCardRow("Popular", popularRecipeCards);
 
-    view.render(popularRecipeCardRow, twentyMinuteRecipeCardRow, easyRecipeCardRow, vegetarianRecipeCardRow);
+    List<RecipeCardRow> cardRows = Arrays.asList(popularRecipeCardRow, twentyMinuteRecipeCardRow, easyRecipeCardRow, vegetarianRecipeCardRow);
+
+    view.render(cardRows.toArray(new RecipeCardRow[0]));
+  }
+
+  private Recipe[] fetchAllRecipes() {
+    return recipeDAO.retrieveAll().toArray(new Recipe[0]);
+  }
+
+  private RecipeCardRow createRecipeCardRow(String title, Recipe[] filteredRecipes) {
+    RecipeCard[] cards = Arrays.stream(filteredRecipes)
+        .map(recipe -> new RecipeCard(recipe.getName(), recipe.getDuration() + " minutes", recipe.getImagePath()))
+        .toArray(RecipeCard[]::new);
+    return new RecipeCardRow(title, cards);
+  }
+
+  private Recipe[] filterRecipesByDuration(Recipe[] recipes, int maxDuration) {
+    return Arrays.stream(recipes)
+        .filter(recipe -> recipe.getDuration() <= maxDuration)
+        .toArray(Recipe[]::new);
+  }
+
+  private Recipe[] filterRecipesByDifficulty(Recipe[] recipes, Recipe.Difficulty difficulty) {
+    return Arrays.stream(recipes)
+        .filter(recipe -> recipe.getDifficulty() == difficulty)
+        .toArray(Recipe[]::new);
+  }
+
+  private Recipe[] filterRecipesByDietaryTags(Recipe[] recipes, Recipe.DietaryTag... tags) {
+    return Arrays.stream(recipes)
+        .filter(recipe -> Arrays.asList(tags).contains(recipe.getDietaryTag()))
+        .toArray(Recipe[]::new);
+  }
+
+  private RecipeCardRow createRecipeCardRowForPopularRecipes(Recipe[] recipes) {
+    // Assuming 'popularRecipes' are predefined; here you may need a more dynamic approach
+    RecipeCard[] cards = {
+        new RecipeCard(recipes[5].getName(), recipes[5].getDuration() + " minutes", recipes[5].getImagePath()),
+        new RecipeCard(recipes[2].getName(), recipes[2].getDuration() + " minutes", recipes[2].getImagePath()),
+        new RecipeCard(recipes[4].getName(), recipes[4].getDuration() + " minutes", recipes[4].getImagePath()),
+        new RecipeCard(recipes[1].getName(), recipes[1].getDuration() + " minutes", recipes[1].getImagePath())
+    };
+    return new RecipeCardRow("Popular", cards);
   }
 }

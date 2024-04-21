@@ -152,7 +152,7 @@ public class IngredientDAO {
       @NotNull Ingredient.Category category) throws SQLException {
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
-        .addString(ingredientName)
+        .addString(ingredientName.toLowerCase())
         .addString(unit.toString())
         .addString(category.toString())
         .executeUpdateSafe();
