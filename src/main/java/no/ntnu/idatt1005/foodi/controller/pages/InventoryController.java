@@ -2,7 +2,6 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,18 +57,14 @@ public class InventoryController extends PageController {
    * @param ingredient the ingredient to add
    */
   private void onAddItem(ExpiringIngredient ingredient) {
-    try {
-      ingredientDAO.saveIngredientToUserInventory(
-          currentUserProperty.get().userId(),
-          ingredient.getName(),
-          ingredient.getUnit(),
-          ingredient.getCategory(),
-          ingredient.getAmount(),
-          new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())
-      );
-    } catch (SQLException e) {
-      LOGGER.severe("Failed to add ingredient to inventory: " + e.getMessage());
-    }
+    ingredientDAO.saveIngredientToUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getName(),
+        ingredient.getUnit(),
+        ingredient.getCategory(),
+        ingredient.getAmount(),
+        new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())
+    );
 
     update();
   }
