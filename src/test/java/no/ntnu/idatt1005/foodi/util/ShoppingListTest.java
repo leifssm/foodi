@@ -214,7 +214,7 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-    assertEquals(5, shoppingListDAO.getRecipesInShoppingListForUser(testUser.userId()).size(),
+    assertEquals(1, shoppingListDAO.getRecipesInShoppingListForUser(testUser.userId()).size(),
         "The amount of recipes in the shopping list should be equal to the amount of ingredients in the shopping list.");
   }
 
@@ -233,7 +233,7 @@ public class ShoppingListTest {
 
     shoppingListDAO.save(shoppingList, testUser.userId(), 1);
 
-    assertEquals(25, shoppingListDAO.getAllIngredientsFromShoppingList(testUser.userId()).size(),
+    assertEquals(5, shoppingListDAO.getAllIngredientsFromShoppingList(testUser.userId()).size(),
         "The amount of ingredients in the shopping list should be equal "
             + "to the amount of ingredients in the shopping list in total.");
   }
@@ -281,7 +281,7 @@ public class ShoppingListTest {
 
   @Test
   @Order(12)
-  @DisplayName("Test that the deleteRecipeFromShoppingList method works correctly.")
+  @DisplayName("deleteRecipeFromShoppingList should delete the selected recipe.")
   void testDeleteRecipeFromShoppingList() throws SQLException {
     shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
     shoppingListDAO.deleteRecipeFromShoppingList(testUser.userId(), 1);
@@ -295,13 +295,37 @@ public class ShoppingListTest {
 
   @Test
   @Order(13)
-  @DisplayName("Test that the getRecipesWithIngredientsInShoppingList method works correctly.")
+  @DisplayName("getRecipesWithIngredientsInShoppingList should return list with size 1.")
   void testGetRecipesWithIngredientsInShoppingList() throws SQLException {
     shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
 
-    System.out.println(shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()));
     assertEquals(1,
         shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()).size(),
         "The amount of recipes in the shopping list should be 1.");
+  }
+
+  @Test
+  @Order(14)
+  @DisplayName("getRecipesWithIngredientsInShoppingList should return an object"
+      + "with the correct information")
+  void testGetRecipesWithIngredientsInShoppingListWithCorrectInformation() throws SQLException {
+    shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
+
+    // Test that the name matches
+    assertEquals("Test Recipe",
+        shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()).get(0).getName(),
+        "The name of the recipe should be 'Test Recipe'.");
+
+    // Test that the description matches
+    assertEquals("This is a test recipe",
+        shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()).get(0)
+            .getDescription(),
+        "The description of the recipe should be 'This is a test recipe'.");
+
+    // Test that the list of ingredients matches
+    assertEquals(5,
+        shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()).get(0)
+            .getIngredients().size(),
+        "The amount of ingredients in the recipe should be 5.");
   }
 }

@@ -57,20 +57,27 @@ public class ShoppingListDAO {
    * @return a list of recipes in the shopping list.
    */
   public List<Recipe> getRecipesInShoppingListForUser(int userId) {
-    RecipeDAO recipeDAO = new RecipeDAO();
-    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
     List<Recipe> recipes = new ArrayList<>();
+    RecipeDAO recipeDAO = new RecipeDAO();
+    IngredientDAO ingredientDAO = new IngredientDAO();
+    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
 
-    for (Integer ingredientId : shoppingList.keySet()) {
-      List<Integer> recipeIds = getRecipeIdsByIngredientId(ingredientId);
-      for (Integer recipeId : recipeIds) {
-        Recipe recipe = recipeDAO.retrieveById(recipeId);
-        if (recipe != null) {
-          recipes.add(recipe);
+    List<Recipe> allRecipes = recipeDAO.retrieveAll();
+
+    for (Recipe recipe : allRecipes) {
+      boolean allIngredientsInShoppingList = true;
+      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
+          recipe.getId());
+      for (AmountedIngredient ingredient : ingredients) {
+        if (!shoppingList.containsKey(ingredient.getId())) {
+          allIngredientsInShoppingList = false;
+          break;
         }
       }
+      if (allIngredientsInShoppingList) {
+        recipes.add(recipe);
+      }
     }
-
     return recipes;
   }
 
@@ -117,7 +124,7 @@ public class ShoppingListDAO {
   }
 
   /**
-   * Adds a recipe to the shopping list
+   * Adds a recipe to the shopping list.
    *
    * @param userId   the id of the user you wish to add a recipe to the shopping list for.
    * @param recipeId the id of the recipe you wish to add to the shopping list.
@@ -194,7 +201,7 @@ public class ShoppingListDAO {
 
   /**
    * Returns a list of RecipeWithIngredient objects containing all the recipes with their
-   * ingredients in the shopping list
+   * ingredients in the shopping list.
    *
    * @param userId the id of the user you wish to retrieve the shopping list for.
    */
@@ -225,7 +232,6 @@ public class ShoppingListDAO {
         ));
       }
     }
-
     return recipesWithIngredients;
   }
 }
