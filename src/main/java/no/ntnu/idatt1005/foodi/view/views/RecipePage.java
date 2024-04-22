@@ -39,9 +39,9 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     recipeImage.getStyleClass().add("recipe-image");
     recipeImage.setPreserveRatio(true);
     recipeImage.setFitWidth(100);
-    widthProperty().addListener(w -> {
-      recipeImage.setFitWidth(getWidth());
-      setPadding(new Insets(getWidth() / 2.2, 0, 0, 0));
+    widthProperty().subscribe(w -> {
+      recipeImage.setFitWidth(w.intValue());
+      setPadding(new Insets(w.intValue() / 2.2, 0, 0, 0));
     });
 
     Label recipeTitle = new Label(recipe.getName());

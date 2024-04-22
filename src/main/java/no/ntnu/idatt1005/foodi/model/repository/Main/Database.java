@@ -427,6 +427,9 @@ public class Database {
 
         // Grilled Salmon (Recipe ID 2)
         {2, 19, 200}, // Salmon, 200 grams
+        {2, 3, 100}, // Spinach, 100 grams
+        {2, 63, 1}, // Cucumber, 1 piece
+        {9, 59, 1},  // Onion, 1 piece
 
         // Seafood Paella (Recipe ID 3)
         {3, 5, 200}, // Rice, 200 grams
@@ -446,6 +449,7 @@ public class Database {
         // Smoky BBQ Ribs (Recipe ID 6)
         {6, 42, 500}, // Pork loin, 500 grams
         {6, 17, 50}, // Barbecue sauce, 50 milliliters
+        {6, 83, 2}, // Tomato, 2 pieces
 
         // Grilled Cheese (Recipe ID 7)
         {7, 44, 100}, // Bread, 100 grams
@@ -455,6 +459,8 @@ public class Database {
         // Pesto Farfalle (Recipe ID 8)
         {8, 53, 200}, // Pasta, 200 grams
         {8, 37, 100}, // Pesto sauce, 100 milliliters
+        {8, 83, 2}, // Tomato, 2 pieces
+        {9, 25, 4}, // Garlic powder, 4 teaspoons
 
         // Chicken Soup (Recipe ID 9)
         {9, 2, 300}, // Chicken breast, 300 grams
