@@ -29,7 +29,9 @@ public class RecipePageController extends PageController {
     this.recipeDAO = new RecipeDAO();
 
     LocationHandler.subscribe(e ->  {
-      update();
+      if (LocationHandler.isLocationFuzzy("recipes/")) {
+        update();
+      }
     });
   }
 
@@ -45,7 +47,6 @@ public class RecipePageController extends PageController {
   }
 
   private RecipeWithIngredients getRecipeFromUrl() {
-    if (LocationHandler.isLocationFuzzy("recipes/")) {
       System.out.println("Gets the recipe from the URL.");
       String segment = LocationHandler.getLocationSegment(1);
       if (segment == null) {
@@ -55,7 +56,4 @@ public class RecipePageController extends PageController {
       int id = Integer.parseInt(segment);
       return recipeDAO.retrieveRecipeWithIngredientsById(id);
     }
-    System.out.println("No recipe found.");
-    return null;
-  }
 }

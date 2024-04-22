@@ -402,6 +402,13 @@ public class Database {
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
+
+    String sqlAlter = "ALTER TABLE ingredient ALTER COLUMN id RESTART WITH " + (ingredientsData.length + 1) + ";";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement()) {
+      stmt.execute(sqlAlter); // Set AUTO_INCREMENT start
+    }
   }
 
   private static void mergeIngredient(Connection connection, int id, String name,

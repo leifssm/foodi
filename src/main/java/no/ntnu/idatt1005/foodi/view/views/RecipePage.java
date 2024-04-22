@@ -7,12 +7,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 
 /**
  * Class for displaying a recipe page.
@@ -80,8 +82,18 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     ingredientsTitle.getStyleClass().add("ingredients-title");
     Button addIngredientsButton = new Button("Add to Shopping List");
     addIngredientsButton.getStyleClass().add("add-ingredients-button");
-    VBox ingredientsList = new VBox(new Label("Chicken"), new Label("Vegetables"),
-        new Label("Spices"));
+
+    VBox ingredientsList = new VBox();
+    List<AmountedIngredient> recipeIngredients = recipe.getIngredients();
+    for (AmountedIngredient ingredient : recipeIngredients) {
+      BorderPane ingredientRow = new BorderPane();
+      Label ingredientName = new Label(ingredient.getName());
+      ingredientRow.setLeft(ingredientName);
+      Label ingredientAmount = new Label(ingredient.getUnitedAmount());
+      ingredientRow.setRight(ingredientAmount);
+      ingredientsList.getChildren().add(ingredientRow);
+    }
+
     VBox ingredientsBox = new VBox(ingredientsTitle, ingredientsList, addIngredientsButton);
     ingredientsBox.getStyleClass().add("ingredients-box");
 

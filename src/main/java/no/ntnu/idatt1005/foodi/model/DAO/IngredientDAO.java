@@ -100,6 +100,7 @@ public class IngredientDAO {
   public void saveIngredientToUserInventory(int userId, String ingredientName, Ingredient.Unit unit,
       Ingredient.Category category, double amount, @Nullable Date expirationDate)
       throws SQLException {
+    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     int ingredientId = findIngredientId(ingredientName, unit, category);
     if (ingredientId == -1) {
       saveIngredient(ingredientName, unit, category);
@@ -150,9 +151,10 @@ public class IngredientDAO {
    */
   public void saveIngredient(@NotNull String ingredientName, @NotNull Ingredient.Unit unit,
       @NotNull Ingredient.Category category) throws SQLException {
+    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
-        .addString(ingredientName.toLowerCase())
+        .addString(ingredientName)
         .addString(unit.toString())
         .addString(category.toString())
         .executeUpdateSafe();

@@ -32,9 +32,10 @@ public class CookbookGridController extends PageController {
     this.view = cookbookGridPage;
     this.recipeDAO = new RecipeDAO();
     LocationHandler.subscribe(e -> {
-      update();
+      if (LocationHandler.isLocationFuzzy("cookbook-grid")) {
+        update();
+      }
     });
-    update();
   }
 
   @Override
