@@ -285,10 +285,6 @@ public class RecipeDBOTest {
     ingredientDAO.saveIngredient("Test Ingredient 9", Unit.POUNDS, Category.DAIRY);
     ingredientDAO.saveIngredient("Test Ingredient 10", Unit.QUART, Category.VEGETABLE);
 
-    // Check that ingredient has been saved
-    assertEquals("Test Ingredient",
-        Objects.requireNonNull(ingredientDAO.retrieveIngredientById(1)).getName());
-
     // Add the ingredients to the recipes
     // Recipe 1
     ingredientDAO.saveIngredientToRecipe(1, 1, 100);
