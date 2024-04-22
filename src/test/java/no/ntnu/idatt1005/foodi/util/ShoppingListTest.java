@@ -237,4 +237,71 @@ public class ShoppingListTest {
         "The amount of ingredients in the shopping list should be equal "
             + "to the amount of ingredients in the shopping list in total.");
   }
+
+  @Test
+  @Order(10)
+  @DisplayName("Test that the getShoppingListForUser method works correctly.")
+  public void testGetShoppingListForUser() throws SQLException {
+    Map<Integer, Double> shoppingList = new HashMap<>();
+    shoppingList.put(testIngredient1.getId(), 2.0);
+    shoppingList.put(testIngredient2.getId(), 3.0);
+    shoppingList.put(testIngredient3.getId(), 4.0);
+    shoppingList.put(testIngredient4.getId(), 5.0);
+    shoppingList.put(testIngredient5.getId(), 6.0);
+
+    shoppingListDAO.save(shoppingList, testUser.userId(), 1);
+
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
+
+    assertEquals(shoppingList, retrievedShoppingList,
+        "The saved shopping list should match the retrieved shopping list.");
+  }
+
+  @Test
+  @Order(11)
+  @DisplayName("Test that the addRecipeToShoppingList method works correctly.")
+  public void testAddRecipeToShoppingList() throws SQLException {
+    shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
+
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
+
+    assertEquals(2.0, retrievedShoppingList.get(testIngredient1.getId()),
+        "The amount of the first ingredient should be 2.0.");
+    assertEquals(3.0, retrievedShoppingList.get(testIngredient2.getId()),
+        "The amount of the second ingredient should be 3.0.");
+    assertEquals(4.0, retrievedShoppingList.get(testIngredient3.getId()),
+        "The amount of the third ingredient should be 4.0.");
+    assertEquals(5.0, retrievedShoppingList.get(testIngredient4.getId()),
+        "The amount of the fourth ingredient should be 5.0.");
+    assertEquals(6.0, retrievedShoppingList.get(testIngredient5.getId()),
+        "The amount of the fifth ingredient should be 6.0.");
+  }
+
+  @Test
+  @Order(12)
+  @DisplayName("Test that the deleteRecipeFromShoppingList method works correctly.")
+  void testDeleteRecipeFromShoppingList() throws SQLException {
+    shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
+    shoppingListDAO.deleteRecipeFromShoppingList(testUser.userId(), 1);
+
+    Map<Integer, Double> retrievedShoppingList = shoppingListDAO.getShoppingListForUser(
+        testUser.userId());
+
+    assertTrue(retrievedShoppingList.isEmpty(),
+        "The shopping list should be empty after deletion.");
+  }
+
+  @Test
+  @Order(13)
+  @DisplayName("Test that the getRecipesWithIngredientsInShoppingList method works correctly.")
+  void testGetRecipesWithIngredientsInShoppingList() throws SQLException {
+    shoppingListDAO.addRecipeToShoppingList(testUser.userId(), 1);
+
+    System.out.println(shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()));
+    assertEquals(1,
+        shoppingListDAO.getRecipesWithIngredientsInShoppingList(testUser.userId()).size(),
+        "The amount of recipes in the shopping list should be 1.");
+  }
 }
