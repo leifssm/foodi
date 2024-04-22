@@ -25,46 +25,6 @@ public class CookbookGrid extends TitledPage implements ComponentUtils {
     super("Cookbook");
     addStylesheet("components/cookbook-grid/cookbook-grid");
     addClass("cookbook");
-
-    RecipeCard[] twentyMinuteRecipes = {
-        new RecipeCard("Pizza", "30 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Pasta", "20 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Salad", "10 minutes", "chicken-soup.jpg")
-    };
-
-    RecipeCard[] popularRecipes = {
-        new RecipeCard("Pasta", "20 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Pizza", "30 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Salad", "10 minutes", "chicken-soup.jpg")
-    };
-
-    RecipeCard[] vegetarianRecipes = {
-        new RecipeCard("Pasta", "20 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Pizza", "30 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Salad", "10 minutes", "chicken-soup.jpg")
-    };
-
-    RecipeCard[] cheapestRecipes = {
-        new RecipeCard("Pasta", "20 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Pizza", "30 minutes", "chicken-soup.jpg"),
-        new RecipeCard("Salad", "10 minutes", "chicken-soup.jpg")
-    };
-
-    VBox recipeCardColumn = new VBox();
-    recipeCardColumn.getChildren().addAll(
-        new RecipeCardRow("20 minute meals", twentyMinuteRecipes),
-        new RecipeCardRow("Popular", popularRecipes),
-        new RecipeCardRow("Vegetarian", vegetarianRecipes),
-        new RecipeCardRow("Cheapest", cheapestRecipes)
-    );
-
-    // Wrap the VBox in a ScrollPane
-    ScrollPane scrollPane = new ScrollPane();
-    scrollPane.setContent(recipeCardColumn);
-    scrollPane.getStyleClass().add("cookbook-grid-scroll");
-    scrollPane.setFitToWidth(true);
-
-    setContent(scrollPane, true); // TODO: Figure out if it should stretch or not (prolly yes)
   }
 
   public void render(RecipeCardRow... recipeCardRows) {

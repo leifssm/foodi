@@ -29,26 +29,33 @@ public class RecipePageController extends PageController {
     this.recipeDAO = new RecipeDAO();
 
     LocationHandler.subscribe(e ->  {
-      getRecipeFromUrl();
       update();
     });
   }
 
   @Override
   void update() {
+    recipe = getRecipeFromUrl();
     System.out.println("Call the render() with the appropriate data for the recipe page.");
-    getRecipeFromUrl();
-    view.render(recipeDAO.retrieveRecipeWithIngredientsById(1));
+    if (recipe == null) {
+      LocationHandler.setLocation("cookbook-grid");
+      return;
+    }
+    view.render(recipe);
   }
 
-  private void getRecipeFromUrl() {
-    if (LocationHandler.isLocationFuzzy("recipe/")) {
+  private RecipeWithIngredients getRecipeFromUrl() {
+    if (LocationHandler.isLocationFuzzy("recipes/")) {
+      System.out.println("Gets the recipe from the URL.");
       String segment = LocationHandler.getLocationSegment(1);
       if (segment == null) {
-        return;
+        System.out.println("No segment found.");
+        return null;
       }
       int id = Integer.parseInt(segment);
-      recipe = recipeDAO.retrieveRecipeWithIngredientsById(id);
+      return recipeDAO.retrieveRecipeWithIngredientsById(id);
     }
+    System.out.println("No recipe found.");
+    return null;
   }
 }

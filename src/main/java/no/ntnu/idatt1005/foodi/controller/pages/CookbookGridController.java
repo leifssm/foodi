@@ -64,7 +64,7 @@ public class CookbookGridController extends PageController {
 
   private RecipeCardRow createRecipeCardRow(String title, Recipe[] filteredRecipes) {
     RecipeCard[] cards = Arrays.stream(filteredRecipes)
-        .map(recipe -> new RecipeCard(recipe.getName(), recipe.getDuration() + " minutes", recipe.getImagePath()))
+        .map(recipe -> new RecipeCard(recipe.getId(), recipe.getName(), recipe.getDuration() + " minutes", recipe.getImagePath()))
         .toArray(RecipeCard[]::new);
     return new RecipeCardRow(title, cards);
   }
@@ -90,10 +90,10 @@ public class CookbookGridController extends PageController {
   private RecipeCardRow createRecipeCardRowForPopularRecipes(Recipe[] recipes) {
     // Assuming 'popularRecipes' are predefined; here you may need a more dynamic approach
     RecipeCard[] cards = {
-        new RecipeCard(recipes[5].getName(), recipes[5].getDuration() + " minutes", recipes[5].getImagePath()),
-        new RecipeCard(recipes[2].getName(), recipes[2].getDuration() + " minutes", recipes[2].getImagePath()),
-        new RecipeCard(recipes[4].getName(), recipes[4].getDuration() + " minutes", recipes[4].getImagePath()),
-        new RecipeCard(recipes[1].getName(), recipes[1].getDuration() + " minutes", recipes[1].getImagePath())
+        new RecipeCard(recipes[5].getId(), recipes[5].getName(), recipes[5].getDuration() + " minutes", recipes[5].getImagePath()),
+        new RecipeCard(recipes[2].getId(), recipes[2].getName(), recipes[2].getDuration() + " minutes", recipes[2].getImagePath()),
+        new RecipeCard(recipes[4].getId(), recipes[4].getName(), recipes[4].getDuration() + " minutes", recipes[4].getImagePath()),
+        new RecipeCard(recipes[1].getId(), recipes[1].getName(), recipes[1].getDuration() + " minutes", recipes[1].getImagePath())
     };
     return new RecipeCardRow("Popular", cards);
   }

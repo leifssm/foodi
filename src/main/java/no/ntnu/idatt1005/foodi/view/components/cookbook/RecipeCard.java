@@ -31,7 +31,7 @@ public class RecipeCard extends StackPane implements ComponentUtils {
    * @param duration  The duration of the recipe
    * @param imagePath The path to the image of the recipe
    */
-  public RecipeCard(String title, String duration, String imagePath) {
+  public RecipeCard(int id, String title, String duration, String imagePath) {
     super();
     addStylesheet("components/cookbook-grid/recipe-card");
     addClass("recipe-card");
@@ -83,7 +83,7 @@ public class RecipeCard extends StackPane implements ComponentUtils {
     setOnMousePressed(event -> clickedTimeline.play());
 
     // On click
-    setOnMouseClicked(event -> LocationHandler.setLocation("recipe-page"));
+    setOnMouseClicked(event -> LocationHandler.setLocation("recipes/" + id));
 
     // Create a clip for the rounded corners
     Rectangle clip = new Rectangle();

@@ -94,7 +94,7 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     recipeContent.setBottom(ingredientsInstructionsBox);
     recipeContent.getStyleClass().add("recipe-content");
 
-    getChildren().removeAll();
+    getChildren().clear();
     getChildren().add(recipeImage);
     setTop(recipeHeader);
     setCenter(recipeContent);
