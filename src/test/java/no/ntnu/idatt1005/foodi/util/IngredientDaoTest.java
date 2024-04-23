@@ -19,6 +19,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
 import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class IngredientDaoTest {
@@ -46,17 +47,20 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("countIngredientItems should return 1")
   void testCountIngredientItems() throws SQLException {
     ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     assertEquals(1, ingredientDao.countIngredientItems());
   }
 
   @Test
+  @DisplayName("countIngredientItems should return 0")
   void testCountIngredientItemsWithNoIngredients() throws SQLException {
     assertEquals(0, ingredientDao.countIngredientItems());
   }
 
   @Test
+  @DisplayName("countIngredientItemsInUserInventory should return 1")
   void testCountIngredientItemsInUserInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -73,6 +77,7 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("saveIngredientToUserInventory should save an ingredient to the user's inventory")
   void testSaveIngredientToUserInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -85,10 +90,17 @@ class IngredientDaoTest {
     ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
+
+    // Assert that the items exists in the user's inventory.
     assertEquals(1, ingredientDao.countIngredientItems());
+
+    // Assert that the item name is correct.
+    assertEquals("Test Ingredient", ingredientDao.retrieveExpiringIngredientsFromInventory(1).get(0)
+        .getName());
   }
 
   @Test
+  @DisplayName("retrieveIngredientById should return the correct ingredient")
   void testRetrieveIngredientById() throws SQLException {
     ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     Ingredient retrievedIngredient = ingredientDao.retrieveIngredientById(1);
@@ -96,6 +108,8 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("updateIngredientInUserInventory should update the "
+      + "amount of an ingredient in the user's inventory")
   void testUpdateIngredientInUserInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -119,6 +133,8 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("updateIngredientExpirationDate should update the"
+      + " expiration date of an ingredient in the user's inventory")
   void testUpdateIngredientExpirationDate() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -141,6 +157,8 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("deleteIngredientFromUserInventory should "
+      + "delete an ingredient from the user's inventory")
   void testDeleteIngredientFromUserInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -161,6 +179,8 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("retrieveExpiringIngredientsFromInventory should return a list of"
+      + "expiringIngredient objects")
   void testRetrieveAmountedIngredientsFromInventory() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -185,9 +205,9 @@ class IngredientDaoTest {
     assertEquals(5, ingredientDao.retrieveAmountedIngredientsFromInventory(1).size());
   }
 
-  // Create a recipe with id 1 and insert five different ingredients
-  // Then retrieve the amounted ingredients from the recipe and check if the size is 5
   @Test
+  @DisplayName("retrieveAmountedIngredientsFromRecipe should return a list of"
+      + "amountedIngredient objects")
   void testRetrieveAmountedIngredientsFromRecipe() throws SQLException {
     // Create a recipe with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
@@ -216,32 +236,9 @@ class IngredientDaoTest {
     assertEquals(5, ingredientDao.retrieveAmountedIngredientsFromRecipe(1).size());
   }
 
-  @Test
-  void testGetTotalAmountOfIngredientsInInventory() throws SQLException {
-    // Create a user with id 1
-    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
-      Statement statement = connection.createStatement();
-      statement.executeUpdate("INSERT INTO PUBLIC.\"user\" (id, name) VALUES (1, 'Test User')");
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-
-    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-
-    assertEquals(500, ingredientDao.getTotalAmountOfIngredientsInInventory(1));
-  }
 
   @Test
+  @DisplayName("toggleFreezeIngredient should toggle the freeze status of an ingredient")
   void testToggleFreezeIngredient() throws SQLException {
     // Create a user with id 1
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {

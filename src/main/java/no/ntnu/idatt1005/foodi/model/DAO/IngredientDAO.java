@@ -395,25 +395,6 @@ public class IngredientDAO {
         });
   }
 
-  /**
-   * Retrieve the total amount of an ingredient in a user's inventory.
-   *
-   * @param userId The id of the user to retrieve the inventory from.
-   * @return The total amount of the ingredient in the user's inventory.
-   */
-  public double getTotalAmountOfIngredientsInInventory(int userId) {
-    Double result = new QueryBuilder("SELECT SUM(amount) FROM inventory WHERE user_id = ?")
-        .addInt(userId)
-        .executeQuerySafe(rs -> {
-          if (rs.next()) {
-            return rs.getDouble(1);
-          }
-          return null;
-        });
-
-    return result != null ? result : 0;
-  }
-
   public void toggleFreezeIngredient(int userId, int ingredientId, boolean isFrozen) {
     new QueryBuilder(
         "UPDATE inventory SET is_frozen = ? WHERE user_id = ? AND ingredient_id = ?")
