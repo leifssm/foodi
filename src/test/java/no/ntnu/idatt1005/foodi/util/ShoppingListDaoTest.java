@@ -33,6 +33,16 @@ class ShoppingListDaoTest {
 
   @BeforeEach
   public void setUp() throws SQLException {
+    // Delete everything in the database
+    try (Connection conn = DriverManager.getConnection(Database.DB_URL, Database.USER,
+        Database.PASS);
+        Statement stmt = conn.createStatement()) {
+      stmt.execute(
+          "DROP ALL OBJECTS DELETE FILES");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
     // Initialize the main database
     Database.initializeEmpty();
 
@@ -171,7 +181,7 @@ class ShoppingListDaoTest {
   @Test
   @DisplayName("addShoppingListToInventory should add all the ingredients for "
       + "the recipes in the shopping list to the user inventory")
-  void testAddShoppingListToInventory() throws SQLException {
+  void testAddShoppingListToInventory() {
     // Add the recipe to the shopping list
     shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
 
