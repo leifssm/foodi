@@ -22,6 +22,8 @@ public class RecipeWithIngredients extends Recipe {
    * @param dietaryTag  the dietary tag of the recipe
    * @param duration    the duration of the recipe in minutes
    * @param ingredients a list of ingredients
+   * @param imagePath   the path to the image of the recipe
+   * @param instruction the instruction of the recipe
    */
   public RecipeWithIngredients(
       int id,

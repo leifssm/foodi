@@ -1,24 +1,21 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 
 /**
  * This class is a Data Access Object (DAO) for the User class. It is used to interact with the
- * database. The class contains methods for saving, deleting, updating and retrieving user objects
- * from the database.
+ * database. from the database.
  *
  * @author Snake727
- * @version 0.5.0
+ * @version 0.9.0
  */
 public class UserDAO {
 
   /**
-   * Adds a default user to the database.
+   * Adds a default user to the database. This is used to ensure that there is always at least one
+   * user in the database.
    */
   public void addDefaultUserIfNotExists() {
     new QueryBuilder("MERGE INTO PUBLIC.\"user\" (id, name) VALUES (?, ?)")
@@ -27,7 +24,25 @@ public class UserDAO {
         .executeUpdateSafe();
 
     int userAmount = retrieveAllUsers().size();
-    new QueryBuilder("ALTER TABLE PUBLIC.\"user\" ALTER COLUMN id RESTART WITH " + (userAmount + 1) + ";").executeUpdateSafe();
+    new QueryBuilder("ALTER TABLE PUBLIC.\"user\" ALTER COLUMN id RESTART WITH " + (userAmount + 1)
+        + ";").executeUpdateSafe();
+  }
+
+  /**
+   * Retrieves a list of all users from the database.
+   *
+   * @return a list of all users
+   */
+  public List<User> retrieveAllUsers() {
+    List<User> users = new ArrayList<>();
+    new QueryBuilder("SELECT * FROM PUBLIC.\"user\"")
+        .executeQuerySafe(rs -> {
+          while (rs.next()) {
+            users.add(new User(rs.getInt("id"), rs.getString("name")));
+          }
+          return users;
+        });
+    return users;
   }
 
   /**
@@ -43,7 +58,7 @@ public class UserDAO {
   }
 
   /**
-   * Deletes a user from the database.
+   * Deletes a user from the database by the user id.
    *
    * @param userId the id of the user to delete
    */
@@ -68,9 +83,9 @@ public class UserDAO {
   }
 
   /**
-   * Retrieves the id of a user from the database.
+   * Retrieves the id of a user from the database by searching for the name.
    *
-   * @param name the name of the user
+   * @param name the name of the user to search for
    * @return the id of the user
    */
   public int retrieveUserId(String name) {
@@ -87,7 +102,7 @@ public class UserDAO {
   }
 
   /**
-   * Retrieves the name of a user from the database.
+   * Retrieves the name of a user from the database by looking up the id.
    *
    * @param userId the id of the user
    * @return the name of the user
@@ -119,22 +134,5 @@ public class UserDAO {
           return null;
         });
     return count != null && count > 0;
-  }
-
-  /**
-   * Retrieves all users from the database.
-   *
-   * @return a list of all users
-   */
-  public List<User> retrieveAllUsers() {
-    List<User> users = new ArrayList<>();
-    new QueryBuilder("SELECT * FROM PUBLIC.\"user\"")
-        .executeQuerySafe(rs -> {
-          while (rs.next()) {
-            users.add(new User(rs.getInt("id"), rs.getString("name")));
-          }
-          return users;
-        });
-    return users;
   }
 }

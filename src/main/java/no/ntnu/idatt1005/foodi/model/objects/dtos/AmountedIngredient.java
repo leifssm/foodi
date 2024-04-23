@@ -1,8 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
+import java.text.DecimalFormat;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
 
 /**
  * This class represents the amounted ingredient object. It extends the Ingredient class and adds an
@@ -38,7 +38,7 @@ public class AmountedIngredient extends Ingredient {
   /**
    * Returns the amount of the ingredient without a unit.
    *
-   * @return the amount of the ingredient
+   * @return the amount of the ingredient.
    */
   public double getAmount() {
     return amount;
@@ -47,8 +47,8 @@ public class AmountedIngredient extends Ingredient {
   /**
    * Sets the amount of the ingredient.
    *
-   * @param amount the new amount of the ingredient
-   * @throws IllegalArgumentException if the amount is negative
+   * @param amount the new amount of the ingredient.
+   * @throws IllegalArgumentException if the amount is negative.
    */
   public void setAmount(double amount) throws IllegalArgumentException {
     if (amount < 0) {
@@ -60,7 +60,7 @@ public class AmountedIngredient extends Ingredient {
   /**
    * Returns the amount of the ingredient with a suffixed unit.
    *
-   * @return an amount with a unit
+   * @return an amount with a unit.
    */
   public @NotNull String getUnitedAmount() {
     return String.format("%s %s", getAmountString(), getUnit().getName());
@@ -69,7 +69,7 @@ public class AmountedIngredient extends Ingredient {
   /**
    * Returns the amount of the ingredient as a string.
    *
-   * @return the amount of the ingredient as a string
+   * @return the amount of the ingredient as a string.
    */
   public @NotNull String getAmountString() {
     DecimalFormat decimalFormat = new DecimalFormat("0.#");
@@ -88,11 +88,6 @@ public class AmountedIngredient extends Ingredient {
     );
   }
 
-  /**
-   * Returns a copy of the amounted ingredient.
-   *
-   * @return a copy of the amounted ingredient
-   */
   @Override
   public AmountedIngredient copy() {
     return new AmountedIngredient(getId(), getName(), getUnit(), getCategory(), amount);
