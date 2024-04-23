@@ -1,6 +1,5 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
  * lists.
  *
  * @author Snake727
- * @version 0.8.0
+ * @version 0.9.0
  */
 public class ShoppingListDAO {
 
@@ -95,8 +94,10 @@ public class ShoppingListDAO {
             int recipeId = rs.getInt("recipe_id");
             int portions = rs.getInt("portions");
             Recipe recipe = new RecipeDAO().retrieveById(recipeId);
-            List<AmountedIngredient> ingredients = new IngredientDAO().retrieveAmountedIngredientsFromRecipe(
-                recipeId);
+            List<AmountedIngredient> ingredients =
+                new IngredientDAO().retrieveAmountedIngredientsFromRecipe(
+                    recipeId);
+            assert ingredients != null;
             for (AmountedIngredient ingredient : ingredients) {
               ingredient.setAmount(ingredient.getAmount() * portions);
             }
@@ -122,13 +123,13 @@ public class ShoppingListDAO {
    * user.
    *
    * @param userId the id of the user to add the shopping list to the inventory for.
-   * @throws SQLException if an error occurs while executing the query.
    */
-  public void addShoppingListToInventory(int userId) throws SQLException {
+  public void addShoppingListToInventory(int userId) {
     new QueryBuilder(
         "INSERT INTO inventory (user_id, ingredient_id, amount) "
             + "SELECT ?, ingredient_id, SUM(amount * "
-            + "(SELECT portions FROM shopping_list WHERE user_id = ? AND recipe_id = ri.recipe_id)) "
+            + "(SELECT portions FROM shopping_list "
+            + "WHERE user_id = ? AND recipe_id = ri.recipe_id)) "
             + "FROM recipe_ingredient ri "
             + "WHERE recipe_id IN (SELECT recipe_id FROM shopping_list WHERE user_id = ?) "
             + "GROUP BY ingredient_id")

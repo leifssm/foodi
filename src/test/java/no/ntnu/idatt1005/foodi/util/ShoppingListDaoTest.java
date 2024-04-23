@@ -205,7 +205,8 @@ class ShoppingListDaoTest {
   }
 
   @Test
-  @DisplayName("getTotalIngredients should return the total amount of ingredients in the shopping list")
+  @DisplayName("getTotalIngredients should return "
+      + "the total amount of ingredients in the shopping list")
   void testGetTotalIngredients() {
     // Add the recipe to the shopping list
     shoppingListDAO.addRecipe(testUser.userId(), 1, 4);
