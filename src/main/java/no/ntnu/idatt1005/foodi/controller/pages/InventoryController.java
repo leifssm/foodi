@@ -50,6 +50,30 @@ public class InventoryController extends PageController {
     view.setOnAddItem(this::onAddItem);
     view.setOnFreezeItems(this::onFreezeItem);
     view.setOnDeleteItems(this::onDeleteItems);
+    view.setOnAmountChange(this::onAmountChange);
+  }
+
+  /**
+   * Updates the amount of an ingredient in the inventory. If the amount is 0, the ingredient is
+   * removed.
+   *
+   * @param ingredient the ingredient to update
+   */
+  private void onAmountChange(ExpiringIngredient ingredient) {
+    if (ingredient.getAmount() == 0) {
+      deleteItem(ingredient);
+      update();
+      return;
+    }
+
+    ingredientDAO.updateIngredientInUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getInventoryId(),
+        ingredient.getAmount(),
+        ingredient.getExpirationDate()
+    );
+
+    update();
   }
 
   /**
@@ -125,11 +149,21 @@ public class InventoryController extends PageController {
     LOGGER.info("Deleting " + ingredients.size() + " items");
 
     for (ExpiringIngredient ingredient : ingredients) {
-      ingredientDAO.deleteIngredientFromUserInventory(
-          currentUserProperty.get().userId(),
-          ingredient.getInventoryId()
-      );
+      deleteItem(ingredient);
     }
+    update();
+  }
+
+  /**
+   * Deletes an ingredient from the inventory.
+   *
+   * @param ingredient the ingredient to delete
+   */
+  private void deleteItem(ExpiringIngredient ingredient) {
+    ingredientDAO.deleteIngredientFromUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getInventoryId()
+    );
     update();
   }
 

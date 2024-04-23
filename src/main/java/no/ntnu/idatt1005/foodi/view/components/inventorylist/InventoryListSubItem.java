@@ -1,5 +1,6 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.function.Consumer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -24,7 +25,8 @@ class InventoryListSubItem {
    *
    * @param item The inventory item to display
    */
-  public InventoryListSubItem(@NotNull ExpiringIngredient item) {
+  public InventoryListSubItem(@NotNull ExpiringIngredient item,
+      @NotNull Consumer<ExpiringIngredient> onAmountChange) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");
@@ -36,10 +38,12 @@ class InventoryListSubItem {
     progressBar.setIsFrozen(item.getIsFrozen());
     Label category = new Label(); // Empty
 
-    InventoryListInput quantity = new InventoryListInput();
-    quantity.setText(item.getAmountString());
+    InventoryListInput quantity = new InventoryListInput(item.getAmount());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
+
+    quantity.setOnAmountChange(
+        (double newAmount) -> onAmountChange.accept(item.copyWithAmount(newAmount)));
 
     Label unit = new Label(item.getUnit().getName());
     unit.getStyleClass().addAll("center", "gray", "vertical-padding");

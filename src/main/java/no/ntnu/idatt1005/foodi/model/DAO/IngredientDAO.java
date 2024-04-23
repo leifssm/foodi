@@ -198,19 +198,19 @@ public class IngredientDAO {
    * Updates an ingredient in a user's inventory.
    *
    * @param userId         The id of the user to update the ingredient in.
-   * @param ingredientId   The id of the ingredient to update.
+   * @param inventoryId    The id of the ingredient to update.
    * @param amount         The new amount of the ingredient.
    * @param expirationDate The new expiration date of the ingredient.
    */
-  public void updateIngredientInUserInventory(int userId, int ingredientId, double amount,
+  public void updateIngredientInUserInventory(int userId, int inventoryId, double amount,
       @NotNull LocalDate expirationDate) {
     new QueryBuilder(
         "UPDATE inventory SET "
-            + "amount = ?, expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
+            + "amount = ?, expiration_date = ? WHERE user_id = ? AND id = ?")
         .addDouble(amount)
         .addDate(Date.valueOf(expirationDate))
         .addInt(userId)
-        .addInt(ingredientId)
+        .addInt(inventoryId)
         .executeUpdateSafe();
   }
 
