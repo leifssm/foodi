@@ -54,11 +54,18 @@ public class InventoryController extends PageController {
   }
 
   /**
-   * Updates the amount of an ingredient in the inventory.
+   * Updates the amount of an ingredient in the inventory. If the amount is 0, the ingredient is
+   * removed.
    *
    * @param ingredient the ingredient to update
    */
   private void onAmountChange(ExpiringIngredient ingredient) {
+    if (ingredient.getAmount() == 0) {
+      deleteItem(ingredient);
+      update();
+      return;
+    }
+
     ingredientDAO.updateIngredientInUserInventory(
         currentUserProperty.get().userId(),
         ingredient.getInventoryId(),
@@ -67,46 +74,6 @@ public class InventoryController extends PageController {
     );
 
     update();
-  }
-
-  @Override
-  void update() {
-    view.render(getInventoryDataFromUser());
-  }
-
-  /**
-   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
-   * {@link GroupedExpiringIngredients}.
-   *
-   * @return a list of grouped expiring ingredients
-   */
-  private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
-    List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
-        currentUserProperty.get().userId()
-    );
-
-    if (inventoryData == null) {
-      return new ArrayList<>();
-    }
-
-    // Group the ingredients by name
-    HashMap<String, ArrayList<ExpiringIngredient>> groupedInventoryData = new HashMap<>();
-    for (ExpiringIngredient ingredient : inventoryData) {
-      String name = ingredient.getName();
-      if (groupedInventoryData.containsKey(name)) {
-        groupedInventoryData.get(name).add(ingredient);
-      } else {
-        groupedInventoryData.put(name, new ArrayList<>(List.of(ingredient)));
-      }
-    }
-
-    return groupedInventoryData
-        .entrySet()
-        .stream()
-        .map(entry ->
-            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
-        )
-        .toList();
   }
 
   /**
@@ -182,11 +149,61 @@ public class InventoryController extends PageController {
     LOGGER.info("Deleting " + ingredients.size() + " items");
 
     for (ExpiringIngredient ingredient : ingredients) {
-      ingredientDAO.deleteIngredientFromUserInventory(
-          currentUserProperty.get().userId(),
-          ingredient.getInventoryId()
-      );
+      deleteItem(ingredient);
     }
     update();
+  }
+
+  /**
+   * Deletes an ingredient from the inventory.
+   *
+   * @param ingredient the ingredient to delete
+   */
+  private void deleteItem(ExpiringIngredient ingredient) {
+    ingredientDAO.deleteIngredientFromUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getInventoryId()
+    );
+    update();
+  }
+
+  @Override
+  void update() {
+    view.render(getInventoryDataFromUser());
+  }
+
+  /**
+   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
+   * {@link GroupedExpiringIngredients}.
+   *
+   * @return a list of grouped expiring ingredients
+   */
+  private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
+    List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
+        currentUserProperty.get().userId()
+    );
+
+    if (inventoryData == null) {
+      return new ArrayList<>();
+    }
+
+    // Group the ingredients by name
+    HashMap<String, ArrayList<ExpiringIngredient>> groupedInventoryData = new HashMap<>();
+    for (ExpiringIngredient ingredient : inventoryData) {
+      String name = ingredient.getName();
+      if (groupedInventoryData.containsKey(name)) {
+        groupedInventoryData.get(name).add(ingredient);
+      } else {
+        groupedInventoryData.put(name, new ArrayList<>(List.of(ingredient)));
+      }
+    }
+
+    return groupedInventoryData
+        .entrySet()
+        .stream()
+        .map(entry ->
+            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
+        )
+        .toList();
   }
 }
