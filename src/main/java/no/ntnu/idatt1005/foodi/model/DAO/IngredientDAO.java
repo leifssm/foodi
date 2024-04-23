@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 public class IngredientDAO {
 
   /**
-   * Counts the number of ingredient items in the database.
+   * Counts the number of ingredient items in the ingredient table.
    *
    * @return the number of ingredient items in the database.
    */
@@ -34,14 +34,13 @@ public class IngredientDAO {
           }
           return null;
         });
-
     return result != null ? result : 0;
   }
 
   /**
    * Counts the number of ingredient items in a user's inventory.
    *
-   * @param userId The id of the user to count the ingredients from.
+   * @param userId The id of the user to count the ingredients for.
    * @return the number of ingredient items in the user's inventory.
    */
   public int countIngredientItemsInUserInventory(int userId) {
@@ -142,7 +141,8 @@ public class IngredientDAO {
   }
 
   /**
-   * Saves an ingredient object to the database.
+   * Saves an ingredient to the database. This is done by inserting the name, unit and category into
+   * the ingredient table.
    *
    * @param ingredientName The name of the ingredient to save.
    * @param unit           The unit of the ingredient to save.
@@ -152,7 +152,6 @@ public class IngredientDAO {
   public void saveIngredient(@NotNull String ingredientName, @NotNull Ingredient.Unit unit,
       @NotNull Ingredient.Category category) throws SQLException {
     ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
-    // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)
         .addString(unit.toString())
@@ -198,7 +197,7 @@ public class IngredientDAO {
    * Updates an ingredient in a user's inventory.
    *
    * @param userId         The id of the user to update the ingredient in.
-   * @param inventoryId    The id of the ingredient to update.
+   * @param inventoryId    The id of the inventory to update.
    * @param amount         The new amount of the ingredient.
    * @param expirationDate The new expiration date of the ingredient.
    */
@@ -243,7 +242,6 @@ public class IngredientDAO {
         .addInt(obj.getId())
         .executeUpdateSafe();
 
-    // Then, delete the ingredient from the ingredient table
     new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
         .addInt(obj.getId())
         .executeUpdateSafe();
@@ -395,6 +393,13 @@ public class IngredientDAO {
         });
   }
 
+  /**
+   * Freezes or unfreezes an ingredient in a user's inventory.
+   *
+   * @param userId       The id of the user to freeze the ingredient for.
+   * @param ingredientId The id of the ingredient to freeze.
+   * @param isFrozen     True if the ingredient should be frozen, false if it should be unfrozen.
+   */
   public void toggleFreezeIngredient(int userId, int ingredientId, boolean isFrozen) {
     new QueryBuilder(
         "UPDATE inventory SET is_frozen = ? WHERE user_id = ? AND ingredient_id = ?")

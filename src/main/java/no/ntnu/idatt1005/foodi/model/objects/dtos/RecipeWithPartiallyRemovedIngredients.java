@@ -21,7 +21,10 @@ public class RecipeWithPartiallyRemovedIngredients extends Recipe {
    * @param difficulty  the difficulty of the recipe
    * @param dietaryTag  the dietary tag of the recipe
    * @param duration    the duration of the recipe in minutes
+   * @param imagePath   the path to the image of the recipe
+   * @param instruction the instruction of the recipe
    * @param ingredients a list of partially removed ingredients
+   * @param portions    the number of portions the recipe should be multiplied by
    */
   public RecipeWithPartiallyRemovedIngredients(
       int id,

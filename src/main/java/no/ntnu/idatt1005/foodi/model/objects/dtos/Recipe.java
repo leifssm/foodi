@@ -21,8 +21,8 @@ public class Recipe {
   private String instruction;
 
   /**
-   * Creates a recipe object with the given id, name, description, difficulty, dietary tag, and
-   * duration.
+   * Creates a recipe object with the given id, name, description, difficulty, dietary tag,
+   * duration, image path, and instruction.
    *
    * @param id          the id of the recipe
    * @param name        the name of the recipe
@@ -30,6 +30,8 @@ public class Recipe {
    * @param difficulty  the difficulty of the recipe
    * @param dietaryTag  the dietary tag of the recipe
    * @param duration    the duration of the recipe in minutes
+   * @param imagePath   the path to the image of the recipe
+   * @param instruction the instruction of the recipe
    */
   public Recipe(
       int id,
