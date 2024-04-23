@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -32,7 +33,8 @@ class InventoryListItem {
    * @throws IllegalArgumentException if the list of items is empty
    */
   public InventoryListItem(
-      @NotNull GroupedExpiringIngredients items
+      @NotNull GroupedExpiringIngredients items,
+      @NotNull Consumer<ExpiringIngredient> onAmountChange
   ) throws IllegalArgumentException {
     if (items.getIngredients().isEmpty()) {
       throw new IllegalArgumentException("At least one item must be provided");
@@ -45,7 +47,7 @@ class InventoryListItem {
 
     for (int i = 0; i < ingredients.size(); i++) {
       ExpiringIngredient ingredient = ingredients.get(i);
-      InventoryListSubItem subItem = new InventoryListSubItem(ingredient);
+      InventoryListSubItem subItem = new InventoryListSubItem(ingredient, onAmountChange);
       subItems[i] = subItem;
       selectHandler.bindCheckBox(subItem.getSelect(), ingredient);
     }

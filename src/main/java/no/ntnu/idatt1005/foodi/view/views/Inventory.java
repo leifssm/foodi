@@ -76,6 +76,10 @@ public class Inventory extends TitledPage implements ComponentUtils {
     deleteButton.setOnAction(e -> onDeleteItems.run());
   }
 
+  public void setOnAmountChange(Consumer<ExpiringIngredient> onAmountChange) {
+    inventoryList.setOnAmountChange(onAmountChange);
+  }
+
   /**
    * Method for setting the runnable triggered when the freeze button is clicked.
    *
@@ -92,6 +96,11 @@ public class Inventory extends TitledPage implements ComponentUtils {
     inventoryList.render(groupedExpiringIngredients);
   }
 
+  /**
+   * Method for getting the selected items in the inventory.
+   *
+   * @return A list of selected items
+   */
   public List<ExpiringIngredient> getSelectedItems() {
     ArrayList<ExpiringIngredient> combinedItems = new ArrayList<>();
 

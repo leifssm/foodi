@@ -133,4 +133,22 @@ public class ExpiringIngredient extends AmountedIngredient {
         isFrozen
     );
   }
+
+  /**
+   * Returns a copy of the ingredient with a new amount.
+   *
+   * @param amount the new amount of the ingredient
+   * @return a copy of the ingredient with the new amount
+   */
+  public ExpiringIngredient copyWithAmount(double amount) {
+    return new ExpiringIngredient(
+        getId(),
+        getName(),
+        getUnit(),
+        getCategory(),
+        amount,
+        expirationDate,
+        isFrozen
+    );
+  }
 }
