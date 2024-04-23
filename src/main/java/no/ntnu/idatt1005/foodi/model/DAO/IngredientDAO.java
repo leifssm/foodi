@@ -1,6 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class IngredientDAO {
       double amount,
       @Nullable Date expirationDate
   ) {
+    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     int ingredientId = findIngredientId(ingredientName, unit, category);
     if (ingredientId == -1) {
       saveIngredient(ingredientName, unit, category);
@@ -156,6 +158,7 @@ public class IngredientDAO {
       @NotNull Ingredient.Unit unit,
       @NotNull Ingredient.Category category
   ) {
+    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     // If no such ingredient exists, proceed with the insertion
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)

@@ -2,6 +2,8 @@ package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+
 /**
  * This class represents the amounted ingredient object. It extends the Ingredient class and adds an
  * amount field.
@@ -61,7 +63,7 @@ public class AmountedIngredient extends Ingredient {
    * @return an amount with a unit
    */
   public @NotNull String getUnitedAmount() {
-    return String.format("%s %s", getAmountString(), getUnit());
+    return String.format("%s %s", getAmountString(), getUnit().getName());
   }
 
   /**
@@ -70,7 +72,8 @@ public class AmountedIngredient extends Ingredient {
    * @return the amount of the ingredient as a string
    */
   public @NotNull String getAmountString() {
-    return String.format("%.2f", amount);
+    DecimalFormat decimalFormat = new DecimalFormat("0.#");
+    return decimalFormat.format(amount);
   }
 
   @Override

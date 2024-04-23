@@ -5,7 +5,6 @@ import no.ntnu.idatt1005.foodi.controller.pages.CookbookGridController;
 import no.ntnu.idatt1005.foodi.controller.pages.InventoryController;
 import no.ntnu.idatt1005.foodi.controller.pages.ProfilesController;
 import no.ntnu.idatt1005.foodi.controller.pages.RecipePageController;
-import no.ntnu.idatt1005.foodi.controller.pages.ShoppingListController;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.Root;
 import no.ntnu.idatt1005.foodi.view.components.sidebar.SideBar;

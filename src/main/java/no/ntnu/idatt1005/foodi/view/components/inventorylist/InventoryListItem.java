@@ -73,9 +73,8 @@ class InventoryListItem {
     for (ExpiringIngredient ingredient : ingredients) {
       quantityValue += ingredient.getAmount();
     }
-    String quantityString = "%.2f %s".formatted(
-        quantityValue,
-        mainItem.getUnit().getName()
+    String quantityString = "%.2f".formatted(
+        quantityValue
     );
     Label quantity = new Label(quantityString);
     quantity.getStyleClass().add("center");
