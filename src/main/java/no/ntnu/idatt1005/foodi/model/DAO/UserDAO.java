@@ -1,5 +1,8 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
@@ -22,6 +25,9 @@ public class UserDAO {
         .addInt(1)
         .addString("Default")
         .executeUpdateSafe();
+
+    int userAmount = retrieveAllUsers().size();
+    new QueryBuilder("ALTER TABLE PUBLIC.\"user\" ALTER COLUMN id RESTART WITH " + (userAmount + 1) + ";").executeUpdateSafe();
   }
 
   /**
