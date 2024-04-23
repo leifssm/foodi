@@ -1,17 +1,13 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.DB_URL;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.PASS;
-import static no.ntnu.idatt1005.foodi.model.repository.Main.Database.USER;
-
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import no.ntnu.idatt1005.foodi.model.repository.ConnectionPool;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -175,7 +171,7 @@ class QueryBuilder {
     // Store the result of the query outside the try-with-resources block so that the connection
     // is ensured to close.
     ReturnT result;
-    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+    try (Connection connection = ConnectionPool.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
       // Throw an exception if the number of parameters does not match the number of parts.
       if (statement.getParameterMetaData().getParameterCount() != parts.size()) {

@@ -21,7 +21,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Unit;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
