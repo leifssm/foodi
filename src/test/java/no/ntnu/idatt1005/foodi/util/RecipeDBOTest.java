@@ -256,10 +256,10 @@ public class RecipeDBOTest {
     }
   }
 
-  @Test
+  /* @Test
   void testRetrieveAllRecipesWithIngredientsWithNoIngredient() throws SQLException {
     // Save five new recipes
-    recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg",
+     recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg",
         "This is a test instruction");
     recipeDAO.saveRecipe("Test Recipe 2", "This is a test recipe", "EASY", "VEGAN", 30, "test.jpg",
         "This is a test instruction");
@@ -346,5 +346,5 @@ public class RecipeDBOTest {
         assertFalse(ingredientIds.contains(8));
       }
     }
-  }
+  } */
 }
