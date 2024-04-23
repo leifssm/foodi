@@ -6,25 +6,12 @@
   -fx-pref-width: 140px;
 }
 
-.sidebar-logo {
-  -fx-alignment: left;
-  -fx-end-margin: 30px;
-}
-
 .sidebar-button {
+  -fx-text-fill: #b4b4b4;
   -fx-max-width: infinity;
   -fx-alignment: center-left;
 }
 
-.selected .sidebar-button {
+.sidebar-button.selected {
   -fx-text-fill: white;
-}
-
-.sidebar-dropdown-button {
-  -fx-margin: 0px 0px 0px 5px;
-}
-
-.sidebar-dropdown {
-  -fx-padding: 2px 0px 0px 15px;
-  -fx-spacing: 2px;
 }
