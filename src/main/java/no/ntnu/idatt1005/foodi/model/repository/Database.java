@@ -1,5 +1,11 @@
-package no.ntnu.idatt1005.foodi.model.repository.Main;
+package no.ntnu.idatt1005.foodi.model.repository;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Logger;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
@@ -40,19 +46,19 @@ public class Database {
   }
 
   private static Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(DB_URL, USER, PASS);
+    return ConnectionPool.getConnection();
   }
 
   private static void createTablesIfNotExists(Connection conn) throws SQLException {
     try (Statement stmt = conn.createStatement()) {
       stmt.execute("CREATE TABLE IF NOT EXISTS \"user\" ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "NAME VARCHAR);");
+          + "name VARCHAR);");
 
       // Ingredient Table
       stmt.execute("CREATE TABLE IF NOT EXISTS ingredient ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "NAME VARCHAR NOT NULL,"
+          + "name VARCHAR NOT NULL,"
           + "unit VARCHAR,"
           + "CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON')),"
           + "category VARCHAR,"
@@ -61,7 +67,7 @@ public class Database {
       // Recipe Table
       stmt.execute("CREATE TABLE IF NOT EXISTS recipe ("
           + "id INT AUTO_INCREMENT PRIMARY KEY,"
-          + "NAME VARCHAR NOT NULL,"
+          + "name VARCHAR NOT NULL,"
           + "description VARCHAR,"
           + "difficulty VARCHAR,"
           + "CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD')),"
