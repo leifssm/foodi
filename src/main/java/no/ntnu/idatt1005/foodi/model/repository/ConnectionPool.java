@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 
@@ -16,8 +15,6 @@ public class ConnectionPool {
   public static final String DB_URL = "jdbc:h2:~/main"; // This URL will create an H2 database in the user's home directory
   public static final String USER = "main";
   public static final String PASS = "";
-  private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class.getName());
-
   private static final DataSource dataSource;
 
   static {
@@ -31,10 +28,15 @@ public class ConnectionPool {
     dataSource = new HikariDataSource(config);
   }
 
+  private ConnectionPool() {
+    throw new IllegalStateException("Utility class");
+  }
+
   /**
    * Get a connection to the database.
    *
    * @return a connection to the database
+   * @throws SQLException if a database access error occurs
    */
   public static Connection getConnection() throws SQLException {
     return dataSource.getConnection();
