@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is responsible for handling the usage of database operations regarding shopping
@@ -24,166 +24,43 @@ public class ShoppingListDAO {
    *
    * @param userId the id of the user.
    */
-  public void deleteAllForUser(int userId) {
+  public void clearShoppingList(int userId) {
     new QueryBuilder("DELETE FROM shopping_list WHERE user_id = ?")
         .addInt(userId)
         .executeUpdateSafe();
   }
 
-  /**
-   * Retrieves all ingredients from every recipe in a users shopping list.
-   *
-   * @param userId the id of the user.
-   * @return a list of all ingredients in the shopping list.
-   */
-  public List<AmountedIngredient> getAllIngredientsFromShoppingList(int userId) {
-    List<Recipe> recipes = getRecipesInShoppingListForUser(userId);
-    IngredientDAO ingredientDAO = new IngredientDAO();
-    List<AmountedIngredient> allIngredients = new ArrayList<>();
-
-    for (Recipe recipe : recipes) {
-      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-          recipe.getId());
-      allIngredients.addAll(ingredients);
-    }
-
-    return allIngredients;
-  }
 
   /**
-   * Retrieves all the recipes in a users shopping list.
-   *
-   * @param userId the id of the user.
-   * @return a list of recipes in the shopping list.
-   */
-  public List<Recipe> getRecipesInShoppingListForUser(int userId) {
-    List<Recipe> recipes = new ArrayList<>();
-    RecipeDAO recipeDAO = new RecipeDAO();
-    IngredientDAO ingredientDAO = new IngredientDAO();
-    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
-
-    List<Recipe> allRecipes = recipeDAO.retrieveAll();
-
-    for (Recipe recipe : allRecipes) {
-      boolean allIngredientsInShoppingList = true;
-      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-          recipe.getId());
-      for (AmountedIngredient ingredient : ingredients) {
-        if (!shoppingList.containsKey(ingredient.getId())) {
-          allIngredientsInShoppingList = false;
-          break;
-        }
-      }
-      if (allIngredientsInShoppingList) {
-        recipes.add(recipe);
-      }
-    }
-    return recipes;
-  }
-
-  /**
-   * Retrieves the shopping list for a user.
-   *
-   * @param userId the id of the user.
-   * @return a map of ingredient ids and their amounts.
-   */
-  public Map<Integer, Double> getShoppingListForUser(int userId) {
-    Map<Integer, Double> currentShoppingList = new HashMap<>();
-
-    new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
-        .addInt(userId)
-        .executeQuerySafe(rs -> {
-          while (rs.next()) {
-            currentShoppingList.put(rs.getInt("ingredient_id"), rs.getDouble("amount"));
-          }
-          return currentShoppingList;
-        });
-
-    return currentShoppingList;
-  }
-
-  /**
-   * Retrieves the recipe ids for a given ingredient id.
-   *
-   * @param ingredientId the id of the ingredient.
-   * @return a list of recipe ids.
-   */
-  private List<Integer> getRecipeIdsByIngredientId(int ingredientId) {
-    List<Integer> recipeIds = new ArrayList<>();
-
-    new QueryBuilder("SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id = ?")
-        .addInt(ingredientId)
-        .executeQuerySafe(rs -> {
-          while (rs.next()) {
-            recipeIds.add(rs.getInt("recipe_id"));
-          }
-          return recipeIds;
-        });
-
-    return recipeIds;
-  }
-
-  /**
-   * Adds a recipe to the shopping list.
+   * Adds a recipe to the shopping list by inserting the parameters into the shopping list table.
+   * This method also checks if the recipe is already in the shopping list, and if so, updates the
+   * portions.
    *
    * @param userId   the id of the user you wish to add a recipe to the shopping list for.
    * @param recipeId the id of the recipe you wish to add to the shopping list.
+   * @param portions the number of portions of the recipe you wish to add to the shopping list.
    */
 
-  public void addRecipeToShoppingList(int userId, int recipeId) throws SQLException {
-    IngredientDAO ingredientDAO = new IngredientDAO();
-    List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-        recipeId);
-    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
+  public void addRecipe(int userId, int recipeId, int portions) {
+    Integer existingPortions = new QueryBuilder(
+        "SELECT portions FROM shopping_list WHERE user_id = ? AND recipe_id = ?")
+        .addInt(userId)
+        .addInt(recipeId)
+        .executeQuerySafe(rs -> rs.next() ? rs.getInt(1) : null);
 
-    for (AmountedIngredient ingredient : ingredients) {
-      shoppingList.put(ingredient.getId(),
-          shoppingList.getOrDefault(ingredient.getId(), 0.0) + ingredient.getAmount());
-    }
-
-    save(shoppingList, userId, 1);
-  }
-
-  /**
-   * Saves a shopping list to the database.
-   *
-   * @param shoppingList the shopping list to be saved.
-   * @param userId       the id of the user.
-   * @param listId       the id of the shopping list.
-   * @throws SQLException if an error occurs while saving the shopping list.
-   */
-
-  public void save(@NotNull Map<Integer, Double> shoppingList, int userId, int listId)
-      throws SQLException {
-
-    for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
-      // Check if the ingredient already exists in the shopping list
-      Double existingAmount = new QueryBuilder(
-          "SELECT amount FROM shopping_list WHERE user_id = ? AND ingredient_id = ?")
+    if (existingPortions != null) {
+      new QueryBuilder(
+          "UPDATE shopping_list SET portions = portions + ? WHERE user_id = ? AND recipe_id = ?")
+          .addInt(portions)
           .addInt(userId)
-          .addInt(entry.getKey())
-          .executeQuerySafe(rs -> rs.next() ? rs.getDouble(1) : null);
-
-      if (existingAmount != null) {
-        // If the ingredient exists, update the amount
-        new QueryBuilder(
-            "UPDATE shopping_list SET amount = amount + ? WHERE user_id = ? AND ingredient_id = ?")
-            .addDouble(entry.getValue())
-            .addInt(userId)
-            .addInt(entry.getKey())
-            .executeUpdateSafe();
-      } else {
-        // If the ingredient doesn't exist, insert it
-        new QueryBuilder(
-            "INSERT INTO shopping_list "
-                + "(SHOPPINGLIST_ID, ITEM_ID, INGREDIENT_ID, AMOUNT, USER_ID) VALUES (?, ?, ?, ?, ?)")
-            .addInt(listId)
-            .addInt(entry.getKey())
-            .addInt(entry.getKey())
-            .addDouble(entry.getValue())
-            .addInt(userId)
-            .executeUpdateSafe();
-      }
+          .addInt(recipeId)
+          .executeUpdateSafe();
+    } else {
+      new QueryBuilder("INSERT INTO shopping_list (user_id, recipe_id, portions) VALUES (?, ?, ?)")
+          .addInt(userId)
+          .addInt(recipeId)
+          .addInt(portions)
+          .executeUpdateSafe();
     }
   }
 
@@ -193,23 +70,11 @@ public class ShoppingListDAO {
    * @param userId   the id of the user you wish to remove a recipe from the shopping list for.
    * @param recipeId the id of the recipe you wish to remove from the shopping list.
    */
-  public void deleteRecipeFromShoppingList(int userId, int recipeId) throws SQLException {
-    IngredientDAO ingredientDAO = new IngredientDAO();
-    List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-        recipeId);
-    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
-
-    for (AmountedIngredient ingredient : ingredients) {
-      double newAmount =
-          shoppingList.getOrDefault(ingredient.getId(), 0.0) - ingredient.getAmount();
-      if (newAmount <= 0) {
-        shoppingList.remove(ingredient.getId());
-      } else {
-        shoppingList.put(ingredient.getId(), newAmount);
-      }
-    }
-
-    save(shoppingList, userId, 1);
+  public void deleteRecipe(int userId, int recipeId) {
+    new QueryBuilder("DELETE FROM shopping_list WHERE user_id = ? AND recipe_id = ?")
+        .addInt(userId)
+        .addInt(recipeId)
+        .executeUpdateSafe();
   }
 
   /**
@@ -219,32 +84,143 @@ public class ShoppingListDAO {
    * @param userId the id of the user you wish to retrieve the shopping list for.
    */
 
-  public List<RecipeWithIngredients> getRecipesWithIngredientsInShoppingList(int userId) {
-    List<Recipe> recipes = getRecipesInShoppingListForUser(userId);
+  public List<RecipeWithIngredients> getRecipesWithIngredients(int userId) {
+    RecipeDAO recipeDAO = new RecipeDAO();
     List<RecipeWithIngredients> recipesWithIngredients = new ArrayList<>();
-    IngredientDAO ingredientDAO = new IngredientDAO();
-    Map<Integer, Double> shoppingList = getShoppingListForUser(userId);
 
+    new QueryBuilder("SELECT recipe_id FROM shopping_list WHERE user_id = ?")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          while (rs.next()) {
+            int recipeId = rs.getInt("recipe_id");
+            RecipeWithIngredients recipeWithIngredients = recipeDAO.retrieveRecipeWithIngredientsById(
+                recipeId);
+            if (recipeWithIngredients != null) {
+              recipesWithIngredients.add(recipeWithIngredients);
+            }
+          }
+          return null;
+        });
+
+    return recipesWithIngredients;
+  }
+
+  /**
+   * Adds all the ingredients from the recipes from the shopping list to the inventory.
+   *
+   * @param userId the id of the user you wish to add the shopping list to the inventory for.
+   * @throws SQLException if an error occurs while executing the query.
+   */
+  public void addShoppingListToInventory(int userId) throws SQLException {
+    new QueryBuilder(
+        "INSERT INTO inventory (user_id, ingredient_id, amount) "
+            + "SELECT ?, ingredient_id, SUM(amount) * (SELECT portions FROM shopping_list WHERE user_id = ? AND recipe_id = recipe_id) "
+            + "FROM recipe_ingredient "
+            + "WHERE recipe_id IN (SELECT recipe_id FROM shopping_list WHERE user_id = ?) "
+            + "GROUP BY ingredient_id")
+        .addInt(userId)
+        .addInt(userId)
+        .addInt(userId)
+        .executeUpdateSafe();
+  }
+
+  /**
+   * Returns a list of AmountedIngredient objects containing all the ingredients in the shopping
+   * list. The list returns a summed amount of each ingredient.
+   *
+   * @param userId the id of the user you wish to retrieve the shopping list for.
+   * @return a list of AmountedIngredient objects containing all the ingredients in the shopping
+   */
+  public List<AmountedIngredient> getTotalIngredients(int userId) {
+    Map<Integer, AmountedIngredient> ingredientMap = new HashMap<>();
+
+    List<Recipe> recipes = getRecipes(userId);
     for (Recipe recipe : recipes) {
-      List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
-          recipe.getId());
-      boolean allIngredientsInShoppingList = ingredients.stream()
-          .allMatch(ingredient -> shoppingList.containsKey(ingredient.getId()));
-
-      if (allIngredientsInShoppingList) {
-        recipesWithIngredients.add(new RecipeWithIngredients(
-            recipe.getId(),
-            recipe.getName(),
-            recipe.getDescription(),
-            recipe.getDifficulty(),
-            recipe.getDietaryTag(),
-            recipe.getDuration(),
-            ingredients,
-            recipe.getImagePath(),
-            recipe.getInstruction()
-        ));
+      List<AmountedIngredient> ingredients = getIngredients(recipe.getId());
+      for (AmountedIngredient ingredient : ingredients) {
+        if (ingredientMap.containsKey(ingredient.getId())) {
+          AmountedIngredient existingIngredient = ingredientMap.get(ingredient.getId());
+          double totalAmount = existingIngredient.getAmount() + ingredient.getAmount();
+          existingIngredient.setAmount(totalAmount);
+        } else {
+          ingredientMap.put(ingredient.getId(), ingredient);
+        }
       }
     }
-    return recipesWithIngredients;
+
+    return new ArrayList<>(ingredientMap.values());
+  }
+
+  /**
+   * Returns a list of Recipe objects containing all the recipes in the shopping list.
+   *
+   * @param userId the id of the user you wish to retrieve the shopping list for.
+   * @return a list of Recipe objects containing all the recipes in the shopping list.
+   */
+  private List<Recipe> getRecipes(int userId) {
+    return new QueryBuilder(
+        "SELECT * FROM recipe WHERE id IN (SELECT recipe_id FROM shopping_list WHERE user_id = ?)")
+        .addInt(userId)
+        .executeQuerySafe(rs -> {
+          List<Recipe> recipes = new ArrayList<>();
+          while (rs.next()) {
+            recipes.add(new Recipe(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                Recipe.Difficulty.valueOf(rs.getString("difficulty").toUpperCase()),
+                Recipe.DietaryTag.valueOf(rs.getString("dietary_tag").toUpperCase()),
+                rs.getInt("duration"),
+                rs.getString("imagePath"),
+                rs.getString("instruction")
+            ));
+          }
+          return recipes;
+        });
+  }
+
+  /**
+   * Returns a list of AmountedIngredient objects containing all the ingredients in a recipe.
+   *
+   * @param recipeId the id of the recipe you wish to retrieve the ingredients for.
+   * @return a list of summed amounts for each ingredient in a recipe.
+   */
+  private List<AmountedIngredient> getIngredients(int recipeId) {
+    return new QueryBuilder("SELECT * FROM recipe_ingredient WHERE recipe_id = ?")
+        .addInt(recipeId)
+        .executeQuerySafe(rs -> {
+          List<AmountedIngredient> ingredients = new ArrayList<>();
+          while (rs.next()) {
+            Ingredient ingredient = retrieveIngredientById(rs.getInt("ingredient_id"));
+            if (ingredient != null) {
+              AmountedIngredient amountedIngredient = new AmountedIngredient(
+                  ingredient.getId(),
+                  ingredient.getName(),
+                  ingredient.getUnit(),
+                  ingredient.getCategory(),
+                  rs.getDouble("amount")
+              );
+              ingredients.add(amountedIngredient);
+            }
+          }
+          return ingredients;
+        });
+  }
+
+  /**
+   * Retrieves an ingredient by its id. If the ingredient does not exist, null is returned.
+   *
+   * @param ingredientId the id of the ingredient you wish to retrieve.
+   * @return an ingredient object if the ingredient exists, otherwise null.
+   */
+  private Ingredient retrieveIngredientById(int ingredientId) {
+    return new QueryBuilder("SELECT * FROM ingredient WHERE id = ?")
+        .addInt(ingredientId)
+        .executeQuerySafe(rs -> rs.next() ? new Ingredient(
+            rs.getInt("id"),
+            rs.getString("name"),
+            Ingredient.Unit.valueOf(rs.getString("unit").toUpperCase()),
+            Ingredient.Category.valueOf(rs.getString("category").toUpperCase())
+        ) : null);
   }
 }

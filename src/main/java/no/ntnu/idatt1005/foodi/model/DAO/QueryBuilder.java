@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Leif Mørstad
  * @version 1.0
  */
-class QueryBuilder {
+public class QueryBuilder {
 
   private static final Logger LOGGER = Logger.getLogger(QueryBuilder.class.getName());
   /**
