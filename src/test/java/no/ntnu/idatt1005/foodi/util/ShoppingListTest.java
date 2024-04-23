@@ -15,7 +15,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
-import no.ntnu.idatt1005.foodi.model.repository.Main.Database;
+import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

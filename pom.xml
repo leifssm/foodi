@@ -111,6 +111,12 @@
   </build>
   <dependencies>
     <dependency>
+      <artifactId>HikariCP</artifactId>
+      <groupId>com.zaxxer</groupId>
+      <version>5.1.0</version>
+    </dependency>
+
+    <dependency>
       <artifactId>javafx-controls</artifactId>
       <groupId>org.openjfx</groupId>
       <version>${javafx.version}</version>

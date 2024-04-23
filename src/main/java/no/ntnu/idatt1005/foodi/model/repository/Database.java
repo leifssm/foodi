@@ -1,8 +1,7 @@
-package no.ntnu.idatt1005.foodi.model.repository.Main;
+package no.ntnu.idatt1005.foodi.model.repository;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -44,7 +43,7 @@ public class Database {
   }
 
   private static Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(DB_URL, USER, PASS);
+    return ConnectionPool.getConnection();
   }
 
   private static void createTablesIfNotExists(Connection conn) throws SQLException {
