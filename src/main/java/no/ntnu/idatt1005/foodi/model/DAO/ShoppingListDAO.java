@@ -155,22 +155,35 @@ public class ShoppingListDAO {
 
   public void save(@NotNull Map<Integer, Double> shoppingList, int userId, int listId)
       throws SQLException {
-    // Delete existing entries for the user to avoid duplicates
-    new QueryBuilder("DELETE FROM shopping_list WHERE user_id = ?")
-        .addInt(userId)
-        .executeUpdateSafe();
 
-    int itemNr = 1;
     for (Map.Entry<Integer, Double> entry : shoppingList.entrySet()) {
-      new QueryBuilder(
-          "INSERT INTO shopping_list "
-              + "(SHOPPINGLIST_ID, ITEM_ID, INGREDIENT_ID, AMOUNT, USER_ID) VALUES (?, ?, ?, ?, ?)")
-          .addInt(listId)
-          .addInt(itemNr++)
-          .addInt(entry.getKey())
-          .addDouble(entry.getValue())
+      // Check if the ingredient already exists in the shopping list
+      Double existingAmount = new QueryBuilder(
+          "SELECT amount FROM shopping_list WHERE user_id = ? AND ingredient_id = ?")
           .addInt(userId)
-          .executeUpdateSafe();
+          .addInt(entry.getKey())
+          .executeQuerySafe(rs -> rs.next() ? rs.getDouble(1) : null);
+
+      if (existingAmount != null) {
+        // If the ingredient exists, update the amount
+        new QueryBuilder(
+            "UPDATE shopping_list SET amount = amount + ? WHERE user_id = ? AND ingredient_id = ?")
+            .addDouble(entry.getValue())
+            .addInt(userId)
+            .addInt(entry.getKey())
+            .executeUpdateSafe();
+      } else {
+        // If the ingredient doesn't exist, insert it
+        new QueryBuilder(
+            "INSERT INTO shopping_list "
+                + "(SHOPPINGLIST_ID, ITEM_ID, INGREDIENT_ID, AMOUNT, USER_ID) VALUES (?, ?, ?, ?, ?)")
+            .addInt(listId)
+            .addInt(entry.getKey())
+            .addInt(entry.getKey())
+            .addDouble(entry.getValue())
+            .addInt(userId)
+            .executeUpdateSafe();
+      }
     }
   }
 

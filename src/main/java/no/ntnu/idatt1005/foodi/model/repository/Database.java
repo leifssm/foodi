@@ -98,13 +98,11 @@ public class Database {
       // Shopping List Table
       stmt.execute(
           "CREATE TABLE IF NOT EXISTS shopping_list ("
-              + "shoppinglist_id INT,"
-              + "item_id INT AUTO_INCREMENT,"
-              + "ingredient_id INT,"
-              + "amount DOUBLE,"
+              + "recipe_id INT,"
               + "user_id INT,"
-              + "PRIMARY KEY (shoppinglist_id, item_id),"
-              + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
+              + "portions INT,"
+              + "PRIMARY KEY (recipe_id, user_id),"
+              + "FOREIGN KEY (recipe_id) REFERENCES recipe(id),"
               + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
     }
   }
