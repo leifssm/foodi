@@ -19,6 +19,32 @@ public class ExpiringIngredient extends AmountedIngredient {
   private int inventoryId = -1;
 
   /**
+   * Constructor for an amounted ingredient object with an expiration date and an inventory id.
+   *
+   * @param id             the id of the ingredient
+   * @param name           the name of the ingredient
+   * @param unit           the unit of the ingredient
+   * @param category       the category of the ingredient
+   * @param amount         the amount of the ingredient in the unit of the given unit
+   * @param expirationDate the expiration date of the ingredient without a timestamp
+   * @param isFrozen       whether the ingredient is frozen or not
+   * @param inventoryId    the id which the element (not ingredient) is stored as in backend
+   */
+  public ExpiringIngredient(
+      int id,
+      String name,
+      Unit unit,
+      Category category,
+      double amount,
+      LocalDate expirationDate,
+      Boolean isFrozen,
+      int inventoryId
+  ) {
+    this(id, name, unit, category, amount, expirationDate, isFrozen);
+    setInventoryId(inventoryId);
+  }
+
+  /**
    * Constructor for an amounted ingredient object with an expiration date.
    *
    * @param id             the id of the ingredient
@@ -148,7 +174,8 @@ public class ExpiringIngredient extends AmountedIngredient {
         getCategory(),
         amount,
         expirationDate,
-        isFrozen
+        isFrozen,
+        inventoryId
     );
   }
 }

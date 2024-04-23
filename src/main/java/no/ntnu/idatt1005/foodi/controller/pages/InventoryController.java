@@ -50,6 +50,63 @@ public class InventoryController extends PageController {
     view.setOnAddItem(this::onAddItem);
     view.setOnFreezeItems(this::onFreezeItem);
     view.setOnDeleteItems(this::onDeleteItems);
+    view.setOnAmountChange(this::onAmountChange);
+  }
+
+  /**
+   * Updates the amount of an ingredient in the inventory.
+   *
+   * @param ingredient the ingredient to update
+   */
+  private void onAmountChange(ExpiringIngredient ingredient) {
+    ingredientDAO.updateIngredientInUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getInventoryId(),
+        ingredient.getAmount(),
+        ingredient.getExpirationDate()
+    );
+
+    update();
+  }
+
+  @Override
+  void update() {
+    view.render(getInventoryDataFromUser());
+  }
+
+  /**
+   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
+   * {@link GroupedExpiringIngredients}.
+   *
+   * @return a list of grouped expiring ingredients
+   */
+  private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
+    List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
+        currentUserProperty.get().userId()
+    );
+
+    if (inventoryData == null) {
+      return new ArrayList<>();
+    }
+
+    // Group the ingredients by name
+    HashMap<String, ArrayList<ExpiringIngredient>> groupedInventoryData = new HashMap<>();
+    for (ExpiringIngredient ingredient : inventoryData) {
+      String name = ingredient.getName();
+      if (groupedInventoryData.containsKey(name)) {
+        groupedInventoryData.get(name).add(ingredient);
+      } else {
+        groupedInventoryData.put(name, new ArrayList<>(List.of(ingredient)));
+      }
+    }
+
+    return groupedInventoryData
+        .entrySet()
+        .stream()
+        .map(entry ->
+            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
+        )
+        .toList();
   }
 
   /**
@@ -131,45 +188,5 @@ public class InventoryController extends PageController {
       );
     }
     update();
-  }
-
-  @Override
-  void update() {
-    view.render(getInventoryDataFromUser());
-  }
-
-  /**
-   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
-   * {@link GroupedExpiringIngredients}.
-   *
-   * @return a list of grouped expiring ingredients
-   */
-  private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
-    List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
-        currentUserProperty.get().userId()
-    );
-
-    if (inventoryData == null) {
-      return new ArrayList<>();
-    }
-
-    // Group the ingredients by name
-    HashMap<String, ArrayList<ExpiringIngredient>> groupedInventoryData = new HashMap<>();
-    for (ExpiringIngredient ingredient : inventoryData) {
-      String name = ingredient.getName();
-      if (groupedInventoryData.containsKey(name)) {
-        groupedInventoryData.get(name).add(ingredient);
-      } else {
-        groupedInventoryData.put(name, new ArrayList<>(List.of(ingredient)));
-      }
-    }
-
-    return groupedInventoryData
-        .entrySet()
-        .stream()
-        .map(entry ->
-            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())
-        )
-        .toList();
   }
 }

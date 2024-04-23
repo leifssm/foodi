@@ -38,8 +38,7 @@ class InventoryListSubItem {
     progressBar.setIsFrozen(item.getIsFrozen());
     Label category = new Label(); // Empty
 
-    InventoryListInput quantity = new InventoryListInput();
-    quantity.setText(item.getAmountString());
+    InventoryListInput quantity = new InventoryListInput(item.getAmount());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
 
