@@ -1,7 +1,11 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
 import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
 import no.ntnu.idatt1005.foodi.view.views.RecipePage;
 
 /**
@@ -10,32 +14,46 @@ import no.ntnu.idatt1005.foodi.view.views.RecipePage;
 public class RecipePageController extends PageController {
 
   private final RecipePage view;
-  private final SimpleObjectProperty<User> currentUserProperty;
+  private RecipeWithIngredients recipe;
+  private final RecipeDAO recipeDAO;
 
   /**
    * Constructor for the InventoryController class.
    *
-   * @param recipePage          the inventory view
-   * @param currentUserProperty the current user property
+   * @param recipePage          the recipe view
    */
-  public RecipePageController(RecipePage recipePage,
-      SimpleObjectProperty<User> currentUserProperty) {
+  public RecipePageController(RecipePage recipePage) {
     super(recipePage);
 
     this.view = recipePage;
-    this.currentUserProperty = currentUserProperty;
+    this.recipeDAO = new RecipeDAO();
 
-    update();
+    LocationHandler.subscribe(e ->  {
+      if (LocationHandler.isLocationFuzzy("recipes/")) {
+        update();
+      }
+    });
   }
 
   @Override
   void update() {
-    // Update the inventory view
-    System.out.println("Get data from backend with userId: " + currentUserProperty.get().userId()
-        + " and update the inventory view.");
+    recipe = getRecipeFromUrl();
     System.out.println("Call the render() with the appropriate data for the recipe page.");
-
+    if (recipe == null) {
+      LocationHandler.setLocation("cookbook-grid");
+      return;
+    }
+    view.render(recipe);
   }
 
-
+  private RecipeWithIngredients getRecipeFromUrl() {
+      System.out.println("Gets the recipe from the URL.");
+      String segment = LocationHandler.getLocationSegment(1);
+      if (segment == null) {
+        System.out.println("No segment found.");
+        return null;
+      }
+      int id = Integer.parseInt(segment);
+      return recipeDAO.retrieveRecipeWithIngredientsById(id);
+    }
 }

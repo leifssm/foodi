@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
+import java.sql.*;
+import java.util.logging.Logger;
+
 /**
  * This class is responsible for creating and initializing the database. It also checks if the
  * database already exists, and if it does, it will not create a new one.
@@ -85,13 +88,12 @@ public class Database {
 
       // Inventory Table
       stmt.execute("CREATE TABLE IF NOT EXISTS inventory ("
-          + "id INT AUTO_INCREMENT,"
+          + "id INT AUTO_INCREMENT PRIMARY KEY,"
           + "ingredient_id INT,"
           + "amount DOUBLE,"
           + "expiration_date DATE,"
           + "is_frozen BOOLEAN DEFAULT FALSE,"
           + "user_id INT,"
-          + "PRIMARY KEY (id, ingredient_id),"
           + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
           + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
 
@@ -154,8 +156,10 @@ public class Database {
     try {
       insertRecipes();
       LOGGER.info("Recipes inserted successfully.");
-      // insertIngredients();
-      // LOGGER.info("Ingredients inserted successfully.");
+      insertIngredients();
+      LOGGER.info("Ingredients inserted successfully.");
+      insertRecipeIngredients();
+      LOGGER.info("Recipe ingredients inserted successfully.");
       insertDefaultUser();
       LOGGER.info("Default user inserted successfully.");
     } catch (SQLException e) {
@@ -166,34 +170,34 @@ public class Database {
   private static void insertRecipes() throws SQLException {
     String[][] recipesData = {
         {
-            "Crispy Tortilla Garden Salad",
+            "Garden Salad",
             "A vibrant garden salad garnished with crispy tortilla squares, fresh cherry tomatoes, and thinly sliced radishes, perfect for a light and healthy meal.",
             "EASY",
             "VEGAN",
-            "15",
+            "25",
             "recipes/crispy-tortilla-garden-salad.png",
             "1. Rinse and dry lettuce leaves and fresh herbs.\n2. Thinly slice radishes and onions.\n3. Cut tortilla into small squares and toast until crispy.\n4. Combine vegetables in a bowl, top with tortilla squares.\n5. Drizzle with olive oil and balsamic vinegar, toss gently.\n6. Serve immediately to maintain the crispiness of tortillas."
         },
         {
-            "Grilled Salmon with Zoodle Medley",
+            "Grilled Salmon",
             "Succulent grilled salmon served on a bed of zucchini noodles and carrots, with a touch of lime for an added zest.",
-            "MEDIUM",
+            "EASY",
             "GLUTEN_FREE",
             "30",
             "recipes/grilled-salmon-zoodle-medley.png",
             "1. Season the salmon with salt, pepper, and a hint of lime zest.\n2. Grill the salmon to desired doneness.\n3. Spiralize zucchini and carrots into noodles.\n4. Sauté the vegetables with a bit of olive oil and garlic.\n5. Plate the zoodles, top with the grilled salmon.\n6. Garnish with a wedge of lime and serve."
         },
         {
-            "Traditional Seafood Paella",
+            "Seafood Paella",
             "A classic Spanish seafood paella with a mix of shrimp, mussels, and squid, infused with aromatic saffron and herbs.",
             "HARD",
             "SEA_FREE",
-            "60",
+            "50",
             "recipes/traditional-seafood-paella.png",
             "1. Prepare the seafood by cleaning and cutting it as needed.\n2. In a paella pan, sauté onions and garlic in olive oil.\n3. Add rice and cook until translucent, stirring frequently.\n4. Stir in saffron-infused broth and simmer.\n5. Add seafood, arranging it evenly across the pan.\n6. Cook without stirring until the rice is tender and seafood is cooked.\n7. Let it rest for a few minutes before serving.\n8. Garnish with lemon wedges and parsley."
         },
         {
-            "Banana Almond Pancakes",
+            "Banana Pancakes",
             "Fluffy pancakes stacked high, topped with freshly sliced bananas, almond slivers, and a generous drizzle of maple syrup.",
             "EASY",
             "NUT_FREE",
@@ -202,7 +206,7 @@ public class Database {
             "1. Mix flour, baking powder, sugar, and a pinch of salt.\n2. In another bowl, beat eggs and then mix in milk and melted butter.\n3. Combine wet and dry ingredients to make the batter.\n4. Pour batter onto a hot griddle to form pancakes, flipping once bubbles form.\n5. Slice bananas and toast almond slivers.\n6. Stack pancakes, adding banana slices and almonds between layers.\n7. Finish with a drizzle of maple syrup and garnish with mint."
         },
         {
-            "Rustic Cheese Pizza",
+            "Cheese Pizza",
             "A homemade pizza with a golden-brown crust, bubbly cheese topping, and a hint of rosemary, perfect for a cozy dinner.",
             "MEDIUM",
             "VEGETARIAN",
@@ -211,7 +215,7 @@ public class Database {
             "1. Prepare pizza dough and let it rise until doubled in size.\n2. Preheat oven to a high temperature with a pizza stone inside.\n3. Roll out the dough and place on a cornmeal-dusted paddle.\n4. Spread tomato sauce and sprinkle a blend of mozzarella and cheddar cheese.\n5. Add fresh rosemary leaves.\n6. Slide pizza onto the hot stone and bake until the crust is crisp and cheese is golden.\n7. Let cool for a few minutes, then slice and serve."
         },
         {
-            "Smoky BBQ Ribs with Sides",
+            "Smoky BBQ Ribs",
             "Tender, fall-off-the-bone ribs smothered in smoky BBQ sauce, served with crispy fries, seasoned tomatoes, and zesty pickles.",
             "HARD",
             "DAIRY_FREE",
@@ -220,7 +224,7 @@ public class Database {
             "1. Season the ribs with a dry rub and let marinate for at least 1 hour.\n2. Preheat the grill to low heat and place ribs on indirect heat.\n3. Grill the ribs, turning occasionally, for about 2 hours.\n4. Baste with BBQ sauce during the last 30 minutes of grilling.\n5. Slice potatoes and season for fries, then bake until golden.\n6. Slice tomatoes and season with salt, pepper, and a pinch of parsley.\n7. Serve ribs with a side of fries, seasoned tomatoes, and pickles."
         },
         {
-            "Classic Grilled Cheese Sandwich",
+            "Grilled Cheese",
             "Golden-brown toasted sandwich with a gooey melted cheese filling, perfect for a quick and satisfying meal.",
             "EASY",
             "VEGETARIAN",
@@ -229,21 +233,21 @@ public class Database {
             "1. Butter two slices of bread on one side each.\n2. Place a slice of cheese between the bread slices, buttered sides out.\n3. Heat a pan over medium heat and place the sandwich in the pan.\n4. Grill until the bread is golden brown and cheese is melted, flipping once.\n5. Remove from pan, let it cool for a minute, then cut diagonally and serve."
         },
         {
-            "Pesto Farfalle Pasta Salad",
+            "Pesto Farfalle",
             "Chilled farfalle pasta coated in rich pesto sauce, mixed with cherry tomatoes and fresh greens for a light and flavorful dish.",
-            "EASY",
+            "MEDIUM",
             "VEGETARIAN",
-            "20",
+            "15",
             "recipes/pesto-farfalle-pasta-salad.png",
             "1. Cook farfalle pasta in salted boiling water until al dente, then drain and cool.\n2. In a bowl, mix the pasta with homemade or store-bought pesto sauce.\n3. Halve cherry tomatoes and shred some fresh basil leaves.\n4. Add the tomatoes and basil to the pasta and toss everything together.\n5. Refrigerate until serving time.\n6. Garnish with parmesan shavings before serving, if desired."
         },
         {
-            "Saucy Chicken with Broccoli and Potatoes",
+            "Chicken soup",
             "Tender chicken pieces simmered in a savory sauce with steamed broccoli and potatoes, a wholesome and comforting meal.",
             "MEDIUM",
             "DAIRY_FREE",
-            "40",
-            "recipes/saucy-chicken-with-broccoli-potatoes.png",
+            "20",
+            "recipes/chicken-soup.jpg",
             "1. Season chicken pieces with salt, pepper, and paprika.\n2. Brown chicken in a pan with olive oil, then remove and set aside.\n3. In the same pan, add diced potatoes and cook until they start to soften.\n4. Add broccoli florets and continue to cook for a few minutes.\n5. Return the chicken to the pan and add your choice of sauce (e.g., tomato-based, cream-based).\n6. Cover and simmer until the chicken is cooked through and the vegetables are tender.\n7. Serve hot, garnished with fresh herbs."
         }
     };
@@ -404,6 +408,13 @@ public class Database {
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
+
+    String sqlAlter = "ALTER TABLE ingredient ALTER COLUMN id RESTART WITH " + (ingredientsData.length + 1) + ";";
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+         Statement stmt = conn.createStatement()) {
+      stmt.execute(sqlAlter); // Set AUTO_INCREMENT start
+    }
   }
 
   private static void mergeIngredient(Connection connection, int id, String name,
@@ -412,6 +423,84 @@ public class Database {
       statement.executeUpdate(
           "MERGE INTO ingredient (id, name, unit, category) VALUES (" + id + ", '" + name + "', '"
               + unit + "', '" + category + "')");
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+
+  private static void insertRecipeIngredients() throws SQLException {
+    // Define ingredient mappings (recipeId, ingredientId, amount)
+    final int[][] recipeIngredientsData = {
+        // Garden Salad (Recipe ID 1)
+        {1, 13, 1}, // Lettuce, 1 piece
+        {1, 7, 100}, // Tomato sauce, 100 milliliters (assuming dressing base)
+        {1, 59, 1}, // Onion, 1 piece
+        {1, 47, 1}, // Peppers, 1 piece
+
+        // Grilled Salmon (Recipe ID 2)
+        {2, 19, 200}, // Salmon, 200 grams
+        {2, 3, 100}, // Spinach, 100 grams
+        {2, 63, 1}, // Cucumber, 1 piece
+        {9, 59, 1},  // Onion, 1 piece
+
+        // Seafood Paella (Recipe ID 3)
+        {3, 5, 200}, // Rice, 200 grams
+        {3, 10, 150}, // Shrimp, 150 grams
+        {3, 59, 1}, // Onion, 1 piece
+
+        // Banana Pancakes (Recipe ID 4)
+        {4, 1, 200}, // Milk, 200 milliliters
+        {4, 50, 100}, // Wheat flour, 100 grams
+        {4, 48, 1}, // Banana, 1 piece
+
+        // Cheese Pizza (Recipe ID 5)
+        {5, 44, 150}, // Bread, 150 grams
+        {5, 17, 100}, // Barbecue sauce, 100 milliliters (as tomato sauce)
+        {5, 49, 100}, // Cheese, 100 grams
+
+        // Smoky BBQ Ribs (Recipe ID 6)
+        {6, 42, 500}, // Pork loin, 500 grams
+        {6, 17, 50}, // Barbecue sauce, 50 milliliters
+        {6, 83, 2}, // Tomato, 2 pieces
+
+        // Grilled Cheese (Recipe ID 7)
+        {7, 44, 100}, // Bread, 100 grams
+        {7, 31, 50}, // Butter, 50 grams
+        {7, 49, 50}, // Cheese, 50 grams
+
+        // Pesto Farfalle (Recipe ID 8)
+        {8, 53, 200}, // Pasta, 200 grams
+        {8, 37, 100}, // Pesto sauce, 100 milliliters
+        {8, 83, 2}, // Tomato, 2 pieces
+        {9, 25, 4}, // Garlic powder, 4 teaspoons
+
+        // Chicken Soup (Recipe ID 9)
+        {9, 2, 300}, // Chicken breast, 300 grams
+        {9, 59, 1},  // Onion, 1 piece
+        {9, 25, 10}, // Garlic powder, 10 teaspoons
+    };
+
+    try (Connection connection = getConnection()) {
+      for (int i = 0; i < recipeIngredientsData.length; i++) {
+        int[] recipeIngredientData = recipeIngredientsData[i];
+        mergeRecipeIngredient(
+            connection,
+            recipeIngredientData[0],
+            recipeIngredientData[1],
+            recipeIngredientData[2]
+        );
+      }
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+  private static void mergeRecipeIngredient(Connection connection, int recipeId, int ingredientId, int amount) throws SQLException {
+    try (Statement statement = connection.createStatement()) {
+      statement.executeUpdate(
+          "MERGE INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES ("
+              + recipeId + ", " + ingredientId + ", " + amount + ")");
     } catch (SQLException e) {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
