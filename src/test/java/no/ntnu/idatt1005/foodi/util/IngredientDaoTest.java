@@ -21,9 +21,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class IngredientDAOTest {
+class IngredientDaoTest {
 
-  private IngredientDAO ingredientDAO;
+  private IngredientDAO ingredientDao;
 
   @BeforeEach
   public void setUp() throws SQLException {
@@ -31,7 +31,7 @@ class IngredientDAOTest {
     Database.initializeEmpty();
 
     // Initialize a new IngredientDAO object
-    ingredientDAO = new IngredientDAO();
+    ingredientDao = new IngredientDAO();
   }
 
   @AfterEach
@@ -40,27 +40,20 @@ class IngredientDAOTest {
         Database.PASS);
         Statement stmt = conn.createStatement()) {
       stmt.execute(
-          "DROP ALL OBJECTS DELETE FILES"); // This will delete all tables and files associated with the database
+          // This will delete all tables and files associated with the database
+          "DROP ALL OBJECTS DELETE FILES");
     }
   }
 
-//  @Test
-//  void testSaveIngredientObject() {
-//    ingredientDAO.saveIngredientObject(testIngredient);
-//    Ingredient retrievedIngredient = ingredientDAO.retrieveIngredient(testIngredient);
-//    assertEquals(testIngredient.toString(), retrievedIngredient.toString());
-//    ingredientDAO.deleteIngredient(testIngredient);
-//  }
-
   @Test
   void testCountIngredientItems() throws SQLException {
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    assertEquals(1, ingredientDAO.countIngredientItems());
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    assertEquals(1, ingredientDao.countIngredientItems());
   }
 
   @Test
   void testCountIngredientItemsWithNoIngredients() throws SQLException {
-    assertEquals(0, ingredientDAO.countIngredientItems());
+    assertEquals(0, ingredientDao.countIngredientItems());
   }
 
   @Test
@@ -73,10 +66,10 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    assertEquals(1, ingredientDAO.countIngredientItemsInUserInventory(1));
+    assertEquals(1, ingredientDao.countIngredientItemsInUserInventory(1));
   }
 
   @Test
@@ -89,16 +82,16 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    assertEquals(1, ingredientDAO.countIngredientItems());
+    assertEquals(1, ingredientDao.countIngredientItems());
   }
 
   @Test
   void testRetrieveIngredientById() throws SQLException {
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    Ingredient retrievedIngredient = ingredientDAO.retrieveIngredientById(1);
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    Ingredient retrievedIngredient = ingredientDao.retrieveIngredientById(1);
     assertEquals("Test Ingredient", retrievedIngredient.getName());
   }
 
@@ -112,14 +105,15 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.updateIngredientInUserInventory(1, 1, 200,
+    ingredientDao.updateIngredientInUserInventory(1, 1, 200,
         Date.valueOf("2022-12-31").toLocalDate());
 
-    // Retrieve the ingredient using the retrieveExpiringIngredientsFromInventory method because it needs an amount and a date
-    ExpiringIngredient retrievedIngredient = ingredientDAO.retrieveExpiringIngredientsFromInventory(
+    // Retrieve the ingredient using the
+    // retrieveExpiringIngredientsFromInventory method because it needs an amount and a date
+    ExpiringIngredient retrievedIngredient = ingredientDao.retrieveExpiringIngredientsFromInventory(
         1).get(0);
     assertEquals(200, retrievedIngredient.getAmount());
   }
@@ -134,13 +128,14 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.updateIngredientExpirationDate(1, 1, Date.valueOf("2023-12-31").toLocalDate());
+    ingredientDao.updateIngredientExpirationDate(1, 1, Date.valueOf("2023-12-31").toLocalDate());
 
-    // Retrieve the ingredient using the retrieveExpiringIngredientsFromInventory method because it needs an amount and a date
-    ExpiringIngredient retrievedIngredient = ingredientDAO.retrieveExpiringIngredientsFromInventory(
+    // Retrieve the ingredient using the retrieveExpiringIngredientsFromInventory
+    // method because it needs an amount and a date
+    ExpiringIngredient retrievedIngredient = ingredientDao.retrieveExpiringIngredientsFromInventory(
         1).get(0);
     assertEquals(Date.valueOf("2023-12-31").toLocalDate(), retrievedIngredient.getExpirationDate());
   }
@@ -155,14 +150,14 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    var ingredients = ingredientDAO.retrieveExpiringIngredientsFromInventory(1);
+    var ingredients = ingredientDao.retrieveExpiringIngredientsFromInventory(1);
     assertNotNull(ingredients);
     ExpiringIngredient ingredient = ingredients.get(0);
-    ingredientDAO.deleteIngredientFromUserInventory(1, ingredient.getInventoryId());
-    assertEquals(0, ingredientDAO.countIngredientItemsInUserInventory(1));
+    ingredientDao.deleteIngredientFromUserInventory(1, ingredient.getInventoryId());
+    assertEquals(0, ingredientDao.countIngredientItemsInUserInventory(1));
   }
 
   @Test
@@ -175,19 +170,19 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
 
-    assertEquals(5, ingredientDAO.retrieveAmountedIngredientsFromInventory(1).size());
+    assertEquals(5, ingredientDao.retrieveAmountedIngredientsFromInventory(1).size());
   }
 
   // Create a recipe with id 1 and insert five different ingredients
@@ -198,26 +193,27 @@ class IngredientDAOTest {
     try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
       Statement statement = connection.createStatement();
       statement.executeUpdate(
-          "INSERT INTO PUBLIC.recipe (id, name, description, difficulty, dietary_tag, duration) VALUES (1, 'Test Recipe', 'Test Description', 'EASY', 'VEGAN', 30)");
+          "INSERT INTO PUBLIC.recipe (id, name, description, difficulty, dietary_tag, duration) "
+              + "VALUES (1, 'Test Recipe', 'Test Description', 'EASY', 'VEGAN', 30)");
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
 
     // Create five different ingredients
-    ingredientDAO.saveIngredient("Test Ingredient 1", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 2", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 3", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 4", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 5", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 1", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 2", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 3", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 4", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 5", Ingredient.Unit.GRAM, Category.MEAT);
 
     // Insert the five different ingredients into the recipe
-    ingredientDAO.saveIngredientToRecipe(1, 1, 100);
-    ingredientDAO.saveIngredientToRecipe(1, 2, 100);
-    ingredientDAO.saveIngredientToRecipe(1, 3, 100);
-    ingredientDAO.saveIngredientToRecipe(1, 4, 100);
-    ingredientDAO.saveIngredientToRecipe(1, 5, 100);
+    ingredientDao.saveIngredientToRecipe(1, 1, 100);
+    ingredientDao.saveIngredientToRecipe(1, 2, 100);
+    ingredientDao.saveIngredientToRecipe(1, 3, 100);
+    ingredientDao.saveIngredientToRecipe(1, 4, 100);
+    ingredientDao.saveIngredientToRecipe(1, 5, 100);
 
-    assertEquals(5, ingredientDAO.retrieveAmountedIngredientsFromRecipe(1).size());
+    assertEquals(5, ingredientDao.retrieveAmountedIngredientsFromRecipe(1).size());
   }
 
   @Test
@@ -230,19 +226,19 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
 
-    assertEquals(500, ingredientDAO.getTotalAmountOfIngredientsInInventory(1));
+    assertEquals(500, ingredientDao.getTotalAmountOfIngredientsInInventory(1));
   }
 
   @Test
@@ -255,13 +251,13 @@ class IngredientDAOTest {
       System.out.println(e.getMessage());
     }
 
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.toggleFreezeIngredient(1, 1, true);
+    ingredientDao.toggleFreezeIngredient(1, 1, true);
 
     ExpiringIngredient retrievedIngredient = Objects.requireNonNull(
-        ingredientDAO.retrieveExpiringIngredientsFromInventory(
+        ingredientDao.retrieveExpiringIngredientsFromInventory(
             1)).get(0);
     assertEquals(true, retrievedIngredient.getIsFrozen());
   }
