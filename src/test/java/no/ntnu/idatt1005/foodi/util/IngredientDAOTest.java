@@ -115,7 +115,7 @@ class IngredientDAOTest {
     ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.updateIngredientInUserInventory(1, 1, 200,
+    ingredientDAO.updateIngredientInUserInventory(1, 200,
         Date.valueOf("2022-12-31").toLocalDate());
 
     // Retrieve the ingredient using the retrieveExpiringIngredientsFromInventory method because it needs an amount and a date
@@ -218,31 +218,6 @@ class IngredientDAOTest {
     ingredientDAO.saveIngredientToRecipe(1, 5, 100);
 
     assertEquals(5, ingredientDAO.retrieveAmountedIngredientsFromRecipe(1).size());
-  }
-
-  @Test
-  void testGetTotalAmountOfIngredientsInInventory() throws SQLException {
-    // Create a user with id 1
-    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
-      Statement statement = connection.createStatement();
-      statement.executeUpdate("INSERT INTO PUBLIC.\"user\" (id, name) VALUES (1, 'Test User')");
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDAO.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
-        Category.MEAT, 100, Date.valueOf("2022-12-31"));
-
-    assertEquals(500, ingredientDAO.getTotalAmountOfIngredientsInInventory(1));
   }
 
   @Test
