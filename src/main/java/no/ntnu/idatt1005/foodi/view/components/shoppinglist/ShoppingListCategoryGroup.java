@@ -29,12 +29,12 @@ public class ShoppingListCategoryGroup extends VBox implements ComponentUtils {
     content.getStyleClass().add("shopping-list-category-group-content");
 
     for (AmountedIngredient item : group.ingredients()) {
-      ShoppingListCategoryItem listItem = new ShoppingListCategoryItem(item, new int[]{});
+      ShoppingListCategoryItem listItem = new ShoppingListCategoryItem(item);
       content.getChildren().add(listItem);
     }
 
     getChildren().addAll(
-        new Label(group.name().getName()),
+        new Label(group.name().getIcon() + " " + group.name().getName()),
         content
     );
   }
