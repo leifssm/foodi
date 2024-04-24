@@ -2,7 +2,6 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,10 +65,10 @@ public class InventoryController extends PageController {
       return;
     }
 
-    ingredientDAO.updateIngredientInUserInventory(
+    ingredientDAO.updateItemAmountInUserInventory(
+        currentUserProperty.get().userId(),
         ingredient.getInventoryId(),
-        ingredient.getAmount(),
-        ingredient.getExpirationDate()
+        ingredient.getAmount()
     );
 
     update();

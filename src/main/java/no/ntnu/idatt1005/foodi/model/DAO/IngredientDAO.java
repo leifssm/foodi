@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -219,6 +218,23 @@ public class IngredientDAO {
         .addDouble(amount)
         .addDate(Date.valueOf(expirationDate))
         .addInt(ingredientId)
+        .executeUpdateSafe();
+  }
+
+
+  /**
+   * Updates the amount of an ingredient in a user's inventory.
+   *
+   * @param userId The id of the user to update the ingredient in.
+   * @param itemId The id of the ingredient to update.
+   * @param amount The new amount of the ingredient.
+   */
+  public void updateItemAmountInUserInventory(int userId, int itemId, double amount) {
+    new QueryBuilder(
+        "UPDATE inventory SET amount = ? WHERE user_id = ? AND id = ?")
+        .addDouble(amount)
+        .addInt(userId)
+        .addInt(itemId)
         .executeUpdateSafe();
   }
 
