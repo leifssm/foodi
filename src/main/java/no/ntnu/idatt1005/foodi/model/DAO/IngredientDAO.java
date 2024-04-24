@@ -1,7 +1,6 @@
 package no.ntnu.idatt1005.foodi.model.DAO;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -204,19 +203,23 @@ public class IngredientDAO {
   /**
    * Updates an ingredient in a user's inventory.
    *
-   * @param userId         The id of the user to update the ingredient in.
    * @param ingredientId   The id of the ingredient to update.
    * @param amount         The new amount of the ingredient.
    * @param expirationDate The new expiration date of the ingredient.
    */
-  public void updateIngredientInUserInventory(int userId, int ingredientId, double amount,
-      @NotNull LocalDate expirationDate) {
+  public void updateIngredientInUserInventory(
+      int ingredientId,
+      double amount,
+      @NotNull LocalDate expirationDate
+  ) {
+    System.out.println(
+        "ingredientId: " + ingredientId + ", amount: " + amount + ", expirationDate: "
+            + expirationDate);
     new QueryBuilder(
         "UPDATE inventory SET "
-            + "amount = ?, expiration_date = ? WHERE user_id = ? AND ingredient_id = ?")
+            + "amount = ?, expiration_date = ? WHERE ingredient_id = ?")
         .addDouble(amount)
         .addDate(Date.valueOf(expirationDate))
-        .addInt(userId)
         .addInt(ingredientId)
         .executeUpdateSafe();
   }
@@ -259,13 +262,13 @@ public class IngredientDAO {
   /**
    * Deletes an ingredient from a user's inventory.
    *
-   * @param userId The id of the user to delete the ingredient from.
-   * @param id     The id of the inventory ingredient to delete.
+   * @param userId       The id of the user to delete the ingredient from.
+   * @param ingredientId The id of the ingredient to delete.
    */
-  public void deleteIngredientFromUserInventory(int userId, int id) {
-    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND id = ?")
+  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
         .addInt(userId)
-        .addInt(id)
+        .addInt(ingredientId)
         .executeUpdateSafe();
   }
 
@@ -400,25 +403,6 @@ public class IngredientDAO {
           }
           return ingredients;
         });
-  }
-
-  /**
-   * Retrieve the total amount of an ingredient in a user's inventory.
-   *
-   * @param userId The id of the user to retrieve the inventory from.
-   * @return The total amount of the ingredient in the user's inventory.
-   */
-  public double getTotalAmountOfIngredientsInInventory(int userId) {
-    Double result = new QueryBuilder("SELECT SUM(amount) FROM inventory WHERE user_id = ?")
-        .addInt(userId)
-        .executeQuerySafe(rs -> {
-          if (rs.next()) {
-            return rs.getDouble(1);
-          }
-          return null;
-        });
-
-    return result != null ? result : 0;
   }
 
   public void toggleFreezeIngredient(int userId, int ingredientId, boolean isFrozen) {

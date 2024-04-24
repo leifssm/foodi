@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.model.repository;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,15 +10,12 @@ import java.util.logging.Logger;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
-import java.sql.*;
-import java.util.logging.Logger;
-
 /**
  * This class is responsible for creating and initializing the database. It also checks if the
  * database already exists, and if it does, it will not create a new one.
  *
  * @author Snake727
- * @version 0.2.0
+ * @version 0.9.0
  */
 
 public class Database {
@@ -100,13 +98,11 @@ public class Database {
       // Shopping List Table
       stmt.execute(
           "CREATE TABLE IF NOT EXISTS shopping_list ("
-              + "shoppinglist_id INT,"
-              + "item_id INT AUTO_INCREMENT,"
-              + "ingredient_id INT,"
-              + "amount DOUBLE,"
+              + "recipe_id INT,"
               + "user_id INT,"
-              + "PRIMARY KEY (shoppinglist_id, item_id),"
-              + "FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),"
+              + "portions INT,"
+              + "PRIMARY KEY (recipe_id, user_id),"
+              + "FOREIGN KEY (recipe_id) REFERENCES recipe(id),"
               + "FOREIGN KEY (user_id) REFERENCES \"user\"(id));");
     }
   }
@@ -272,24 +268,6 @@ public class Database {
     }
   }
 
-  private static void insertDefaultUser() throws SQLException {
-    new UserDAO().addDefaultUserIfNotExists();
-  }
-
-  private static void mergeRecipe(Connection connection, int id, String name, String description,
-      String difficulty,
-      String dietaryTag,
-      int duration, String imagePath, String instruction) {
-    try (Statement statement = connection.createStatement()) {
-      statement.executeUpdate(
-          "MERGE INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES ("
-              + id + ", '" + name + "', '" + description + "', '" + difficulty + "', '" + dietaryTag
-              + "', " + duration + ", '" + imagePath + "', '" + instruction + "')");
-    } catch (SQLException e) {
-      LOGGER.severe("SQL Exception: " + e.getMessage());
-    }
-  }
-
   private static void insertIngredients() throws SQLException {
     final String[][] ingredientsData = {
         {"Milk", "DAIRY", "LITER"},
@@ -409,25 +387,14 @@ public class Database {
       LOGGER.severe("SQL Exception: " + e.getMessage());
     }
 
-    String sqlAlter = "ALTER TABLE ingredient ALTER COLUMN id RESTART WITH " + (ingredientsData.length + 1) + ";";
+    String sqlAlter =
+        "ALTER TABLE ingredient ALTER COLUMN id RESTART WITH " + (ingredientsData.length + 1) + ";";
 
     try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement()) {
+        Statement stmt = conn.createStatement()) {
       stmt.execute(sqlAlter); // Set AUTO_INCREMENT start
     }
   }
-
-  private static void mergeIngredient(Connection connection, int id, String name,
-      Ingredient.Unit unit, Ingredient.Category category) throws SQLException {
-    try (Statement statement = connection.createStatement()) {
-      statement.executeUpdate(
-          "MERGE INTO ingredient (id, name, unit, category) VALUES (" + id + ", '" + name + "', '"
-              + unit + "', '" + category + "')");
-    } catch (SQLException e) {
-      LOGGER.severe("SQL Exception: " + e.getMessage());
-    }
-  }
-
 
   private static void insertRecipeIngredients() throws SQLException {
     // Define ingredient mappings (recipeId, ingredientId, amount)
@@ -496,7 +463,37 @@ public class Database {
     }
   }
 
-  private static void mergeRecipeIngredient(Connection connection, int recipeId, int ingredientId, int amount) throws SQLException {
+  private static void insertDefaultUser() throws SQLException {
+    new UserDAO().addDefaultUserIfNotExists();
+  }
+
+  private static void mergeRecipe(Connection connection, int id, String name, String description,
+      String difficulty,
+      String dietaryTag,
+      int duration, String imagePath, String instruction) {
+    try (Statement statement = connection.createStatement()) {
+      statement.executeUpdate(
+          "MERGE INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES ("
+              + id + ", '" + name + "', '" + description + "', '" + difficulty + "', '" + dietaryTag
+              + "', " + duration + ", '" + imagePath + "', '" + instruction + "')");
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+  private static void mergeIngredient(Connection connection, int id, String name,
+      Ingredient.Unit unit, Ingredient.Category category) throws SQLException {
+    try (Statement statement = connection.createStatement()) {
+      statement.executeUpdate(
+          "MERGE INTO ingredient (id, name, unit, category) VALUES (" + id + ", '" + name + "', '"
+              + unit + "', '" + category + "')");
+    } catch (SQLException e) {
+      LOGGER.severe("SQL Exception: " + e.getMessage());
+    }
+  }
+
+  private static void mergeRecipeIngredient(Connection connection, int recipeId, int ingredientId,
+      int amount) throws SQLException {
     try (Statement statement = connection.createStatement()) {
       statement.executeUpdate(
           "MERGE INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES ("

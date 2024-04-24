@@ -1,5 +1,7 @@
 package no.ntnu.idatt1005.foodi.model.objects.dtos;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This class represents an amounted ingredient object with a removed amount to be displayed to show
  * the difference.
@@ -73,7 +75,7 @@ public class PartiallyRemovedAmountedIngredient extends AmountedIngredient {
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return String.format(
         "PartiallyRemovedAmountedIngredient{id=%o, name='%s', unit=%s, category=%s, amount=%.2f, removedAmount=%.2f}",
         getId(),

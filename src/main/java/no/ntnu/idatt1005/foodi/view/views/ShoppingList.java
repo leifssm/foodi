@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.view.views;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import no.ntnu.idatt1005.foodi.view.components.TitledPage;
@@ -41,23 +42,37 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
     wrapper.getStyleClass().add("shopping-list-content-wrapper");
     setContent(wrapper, true);
 
-    render(new ArrayList<>());
+    render(new ArrayList<>(), new ArrayList<>());
   }
 
-  public void render(@NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes) {
+  public void render(
+      @NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes,
+      @NotNull List<@NotNull Runnable> onRemoveMethods
+  ) {
+    if (recipes.isEmpty()) {
+      wrapper.setLeft(null);
+      wrapper.setRight(null);
+      wrapper.setCenter(new Label("No recipes added yet"));
+      return;
+    }
+    wrapper.setCenter(null);
     ShoppingListWrapper shoppingList = new ShoppingListWrapper(recipes);
     addItemsButton = shoppingList.getAddItemsButton();
     clearItemsButton = shoppingList.getClearItemsButton();
     bindButtonActions();
 
     wrapper.setLeft(shoppingList);
-    wrapper.setRight(new AddedRecipes(recipes));
+    wrapper.setRight(new AddedRecipes(recipes, onRemoveMethods));
 
   }
 
   private void bindButtonActions() {
-    addItemsButton.setOnAction(e -> onAddItems.run());
-    clearItemsButton.setOnAction(e -> onClearItems.run());
+    if (addItemsButton != null) {
+      addItemsButton.setOnAction(e -> onAddItems.run());
+    }
+    if (clearItemsButton != null) {
+      clearItemsButton.setOnAction(e -> onClearItems.run());
+    }
   }
 
   public void setOnAddItems(Runnable onAddItems) {

@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -25,6 +26,7 @@ public class InventoryList extends VBox implements ComponentUtils {
   private final GridPane gridPane;
   private final ArrayList<StandardCheckBoxHandler<ExpiringIngredient>> checkboxes =
       new ArrayList<>();
+  private Consumer<ExpiringIngredient> onAmountChange;
 
   /**
    * Constructor for the InventoryList class.
@@ -98,7 +100,7 @@ public class InventoryList extends VBox implements ComponentUtils {
     int rowNum = 2;
     for (GroupedExpiringIngredients ingredientGroup : currentPage) {
 
-      InventoryListItem rows = new InventoryListItem(ingredientGroup);
+      InventoryListItem rows = new InventoryListItem(ingredientGroup, onAmountChange);
       checkboxes.add(rows.getSelectHandler());
 
       gridPane.addRow(rowNum++, rows.getMainItems());
@@ -122,7 +124,16 @@ public class InventoryList extends VBox implements ComponentUtils {
     );
   }
 
-  public ArrayList<StandardCheckBoxHandler<ExpiringIngredient>> getCheckboxHandlers() {
+  public List<StandardCheckBoxHandler<ExpiringIngredient>> getCheckboxHandlers() {
     return checkboxes;
+  }
+
+  /**
+   * Sets the onAmountChange consumer.
+   *
+   * @param onAmountChange the consumer to set
+   */
+  public void setOnAmountChange(Consumer<ExpiringIngredient> onAmountChange) {
+    this.onAmountChange = onAmountChange;
   }
 }

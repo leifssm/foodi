@@ -28,7 +28,8 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
    *
    * @param recipe The recipe to display
    */
-  public RecipeCard(@NotNull RecipeWithPartiallyRemovedIngredients recipe) {
+  public RecipeCard(@NotNull RecipeWithPartiallyRemovedIngredients recipe,
+      @NotNull Runnable onRemove) {
     super();
     addStylesheet("components/shopping-list/recipe-card");
     addClass("recipe-card");
@@ -42,7 +43,7 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
             new RecipeServings(recipe.getPortions()),
             new StandardButton(
                 "X",
-                () -> System.out.println("Remove recipe"),
+                onRemove,
                 StandardButton.Style.ERROR
             )
         )
@@ -112,7 +113,7 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
 
     public RemovedPartOfIngredientItem(@NotNull String name, @NotNull String amount) {
       super();
-      addClasses("ingredient");
+      addClasses("ingredient", "marked");
 
       BorderPane content = new KeptPartOfIngredientItem(name, amount);
 
@@ -120,7 +121,6 @@ public class RecipeCard extends BorderPane implements ComponentUtils {
       crossedOutLine.getStyleClass().add("crossed-out-line");
 
       getChildren().addAll(content, crossedOutLine);
-      setOnMouseClicked(event -> toggleClass("marked"));
     }
   }
 }

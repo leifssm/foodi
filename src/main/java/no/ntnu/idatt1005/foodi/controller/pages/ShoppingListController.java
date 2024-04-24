@@ -15,7 +15,6 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.components.shoppinglist.AddIngredientsExpirationDialog;
 import no.ntnu.idatt1005.foodi.view.views.ShoppingList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Controller for the inventory page. This controller manages the updates to the inventory page.
@@ -30,11 +29,13 @@ public class ShoppingListController extends PageController {
   private final ShoppingList view;
   private final ShoppingListDAO shoppingListDAO = new ShoppingListDAO();
   private final IngredientDAO ingredientDAO = new IngredientDAO();
+  private List<RecipeWithPartiallyRemovedIngredients> recipes;
 
   /**
    * Constructor for the InventoryController class.
    *
-   * @param inventoryPage the inventory view
+   * @param shoppingListPage    the view to be controlled
+   * @param currentUserProperty the current user
    */
   public ShoppingListController(
       ShoppingList shoppingListPage,
@@ -56,13 +57,26 @@ public class ShoppingListController extends PageController {
 
   @Override
   void update() {
-    view.render(getAccountedRecipes());
+    recipes = getAccountedRecipes();
+
+    List<Runnable> onRemoveMethods = new ArrayList<>();
+    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
+      onRemoveMethods.add(() -> {
+        shoppingListDAO.deleteRecipe(
+            currentUserProperty.get().userId(),
+            recipe.getId()
+        );
+        update();
+      });
+    }
+
+    view.render(recipes, onRemoveMethods);
   }
 
   private void addShoppingListToInventory() {
-    List<AmountedIngredient> ingredients = getNeededIngredients();
+    List<AmountedIngredient> ingredients = getIngredientsFromCurrentRecipes();
 
-    if (ingredients == null || ingredients.isEmpty()) {
+    if (ingredients.isEmpty()) {
       return;
     }
     AddIngredientsExpirationDialog dialog = new AddIngredientsExpirationDialog(ingredients);
@@ -85,13 +99,13 @@ public class ShoppingListController extends PageController {
         );
       }
       clearShoppingList();
-      update();
     });
     dialog.show();
   }
 
   private void clearShoppingList() {
-    LOGGER.severe("Not implemented.");
+    shoppingListDAO.clearShoppingList(currentUserProperty.get().userId());
+    update();
   }
 
   /**
@@ -101,40 +115,19 @@ public class ShoppingListController extends PageController {
    * @return a list of recipes with partially removed ingredients
    */
   private @NotNull List<RecipeWithPartiallyRemovedIngredients> getAccountedRecipes() {
+    List<AmountedIngredient> totalIngredients = getCurrentIngredients();
+
     HashMap<Integer, RecipeWithPartiallyRemovedIngredients> accountedRecipes = new HashMap<>();
-    List<AmountedIngredient> totalIngredients = getNeededIngredients();
+    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDAO.getRecipesWithIngredients(
+        currentUserProperty.get().userId()
+    );
 
-    if (totalIngredients == null) {
-      return new ArrayList<>();
-    }
-    if (true) {
-      return new ArrayList<>();
-    }
-
-    List<RecipeWithPartiallyRemovedIngredients> recipes =
-        new ArrayList<>();
-//        shoppingListDAO
-//        .getRecipesInShoppingListForUser(
-//            currentUserProperty.get().userId()
-//        );
-
-    for (AmountedIngredient ingredient : totalIngredients) {
-
-      for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
-        boolean recipeContainsIngredient = recipe
-            .getIngredients()
-            .stream()
-            .anyMatch(i -> i.getId() == ingredient.getId());
-        if (!recipeContainsIngredient) {
-          continue;
-        }
-        if (!accountedRecipes.containsKey(recipe.getId())) {
-          accountedRecipes.put(
-              recipe.getId(),
-              recipe
-          );
-          continue;
-        }
+    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
+      accountedRecipes.putIfAbsent(
+          recipe.getId(),
+          recipe
+      );
+      for (AmountedIngredient ingredient : totalIngredients) {
         PartiallyRemovedAmountedIngredient matchingIngredient = accountedRecipes
             .get(recipe.getId())
             .getIngredients()
@@ -164,16 +157,17 @@ public class ShoppingListController extends PageController {
    *
    * @return a list of ingredients the user has in their inventory
    */
-  private @Nullable List<AmountedIngredient> getNeededIngredients() {
+  private @NotNull List<AmountedIngredient> getCurrentIngredients() {
     List<ExpiringIngredient> fetchedIngredients = ingredientDAO
         .retrieveExpiringIngredientsFromInventory(currentUserProperty.get().userId());
 
     if (fetchedIngredients == null) {
-      return null;
+      return new ArrayList<>();
     }
 
     ArrayList<AmountedIngredient> compiledIngredients = new ArrayList<>();
 
+    System.out.println(fetchedIngredients.size());
     for (AmountedIngredient ingredient : fetchedIngredients) {
       AmountedIngredient value = compiledIngredients
           .stream()
@@ -187,5 +181,23 @@ public class ShoppingListController extends PageController {
       value.setAmount(value.getAmount() + ingredient.getAmount());
     }
     return compiledIngredients;
+  }
+
+  private List<AmountedIngredient> getIngredientsFromCurrentRecipes() {
+    HashMap<AmountedIngredient, Double> ingredients = new HashMap<>();
+    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
+      for (PartiallyRemovedAmountedIngredient ingredient : recipe.getIngredients()) {
+        ingredients.computeIfPresent(
+            ingredient,
+            (key, value) -> value + ingredient.getRemainingAmount()
+        );
+        ingredients.putIfAbsent(ingredient, ingredient.getRemainingAmount());
+      }
+    }
+    return ingredients
+        .entrySet()
+        .stream()
+        .map(entry -> new AmountedIngredient(entry.getKey(), entry.getValue()))
+        .toList();
   }
 }
