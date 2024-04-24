@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +55,7 @@ public class IngredientGrouper {
    * @return A list of ingredients with the updated amount
    */
   static @NotNull List<AmountedIngredient> joinIngredientsFromRecipes(
-      RecipeWithPartiallyRemovedIngredients @NotNull [] recipes
+      @NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes
   ) {
     // A hashmap using the ingredient as key and the total amount as value
     HashMap<AmountedIngredient, Double> ingredients = new HashMap<>();
@@ -62,15 +63,18 @@ public class IngredientGrouper {
     // For each recipe, add the ingredients to the hashmap, and if it already exists, increase the
     // amount
     for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
-      for (AmountedIngredient ingredient : recipe.getIngredients()) {
-        ingredients.computeIfPresent(ingredient, (k, v) -> v + ingredient.getAmount());
-        ingredients.putIfAbsent(ingredient, ingredient.getAmount());
+      for (PartiallyRemovedAmountedIngredient ingredient : recipe.getIngredients()) {
+        ingredients.computeIfPresent(ingredient, (k, v) -> v + ingredient.getRemainingAmount());
+        ingredients.putIfAbsent(ingredient, ingredient.getRemainingAmount());
       }
     }
 
     // Create a new AmountedIngredient with the same metadata but with the new amount
     List<AmountedIngredient> combinedIngredients = new ArrayList<>();
     for (var ingredient : ingredients.entrySet()) {
+      if (ingredient.getValue() == 0) {
+        continue;
+      }
       AmountedIngredient copy = ingredient.getKey().copy();
       copy.setAmount(ingredient.getValue());
       combinedIngredients.add(copy);

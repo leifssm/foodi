@@ -71,14 +71,6 @@
   -fx-min-width: 100%;
 }
 
-.add-ingredients-button {
-  -fx-background-color: #16992B;
-  -fx-padding: 5px;
-  -fx-border-radius: 5px;
-  -fx-font-size: 12px;
-  -fx-font-weight: bold;
-}
-
 .recipe-content {
   -fx-padding: 20px 20px 20px 10px;
   -fx-content-display: flex;

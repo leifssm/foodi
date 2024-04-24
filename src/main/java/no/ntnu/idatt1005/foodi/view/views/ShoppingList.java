@@ -1,9 +1,16 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import java.util.ArrayList;
+import java.util.List;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import no.ntnu.idatt1005.foodi.view.components.TitledPage;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.shoppinglist.AddedRecipes;
 import no.ntnu.idatt1005.foodi.view.components.shoppinglist.ShoppingListWrapper;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for displaying the shopping list page.
@@ -12,6 +19,14 @@ import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
  * @version 1.0
  */
 public class ShoppingList extends TitledPage implements ComponentUtils {
+
+  private BorderPane wrapper = new BorderPane();
+  private StandardButton addItemsButton;
+  private StandardButton clearItemsButton;
+  private Runnable onAddItems = () -> {
+  };
+  private Runnable onClearItems = () -> {
+  };
 
   /**
    * Constructor for the ShoppingList class.
@@ -24,17 +39,49 @@ public class ShoppingList extends TitledPage implements ComponentUtils {
     addStylesheet("components/shopping-list/shopping-list");
     addClass("shopping-list");
 
-    // Temp test data
-    ShoppingListWrapper shoppingList = new ShoppingListWrapper();
-
-    // TODO: add controller support
-//    AddedRecipes addedRecipes = new AddedRecipes();
-
-    BorderPane wrapper = new BorderPane();
     wrapper.getStyleClass().add("shopping-list-content-wrapper");
-    wrapper.setLeft(shoppingList);
-//    wrapper.setRight(addedRecipes);
-
     setContent(wrapper, true);
+
+    render(new ArrayList<>(), new ArrayList<>());
+  }
+
+  public void render(
+      @NotNull List<@NotNull RecipeWithPartiallyRemovedIngredients> recipes,
+      @NotNull List<@NotNull Runnable> onRemoveMethods
+  ) {
+    if (recipes.isEmpty()) {
+      wrapper.setLeft(null);
+      wrapper.setRight(null);
+      wrapper.setCenter(new Label("No recipes added yet"));
+      return;
+    }
+    wrapper.setCenter(null);
+    ShoppingListWrapper shoppingList = new ShoppingListWrapper(recipes);
+    addItemsButton = shoppingList.getAddItemsButton();
+    clearItemsButton = shoppingList.getClearItemsButton();
+    bindButtonActions();
+
+    wrapper.setLeft(shoppingList);
+    wrapper.setRight(new AddedRecipes(recipes, onRemoveMethods));
+
+  }
+
+  private void bindButtonActions() {
+    if (addItemsButton != null) {
+      addItemsButton.setOnAction(e -> onAddItems.run());
+    }
+    if (clearItemsButton != null) {
+      clearItemsButton.setOnAction(e -> onClearItems.run());
+    }
+  }
+
+  public void setOnAddItems(Runnable onAddItems) {
+    this.onAddItems = onAddItems;
+    bindButtonActions();
+  }
+
+  public void setOnClearItems(Runnable onClearItems) {
+    this.onClearItems = onClearItems;
+    bindButtonActions();
   }
 }

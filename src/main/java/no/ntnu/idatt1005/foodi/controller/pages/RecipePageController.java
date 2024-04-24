@@ -1,8 +1,9 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
@@ -13,22 +14,30 @@ import no.ntnu.idatt1005.foodi.view.views.RecipePage;
  */
 public class RecipePageController extends PageController {
 
+  private static final Logger LOGGER = Logger.getLogger(RecipePageController.class.getName());
+
   private final RecipePage view;
-  private RecipeWithIngredients recipe;
   private final RecipeDAO recipeDAO;
+  private final ShoppingListDAO shoppingListDAO;
+  private final SimpleObjectProperty<User> currentUserProperty;
+  private RecipeWithIngredients recipe;
+
 
   /**
    * Constructor for the InventoryController class.
    *
-   * @param recipePage          the recipe view
+   * @param recipePage the recipe view
    */
-  public RecipePageController(RecipePage recipePage) {
+  public RecipePageController(RecipePage recipePage,
+      SimpleObjectProperty<User> currentUserProperty) {
     super(recipePage);
 
     this.view = recipePage;
     this.recipeDAO = new RecipeDAO();
+    this.shoppingListDAO = new ShoppingListDAO();
+    this.currentUserProperty = currentUserProperty;
 
-    LocationHandler.subscribe(e ->  {
+    LocationHandler.subscribe(e -> {
       if (LocationHandler.isLocationFuzzy("recipes/")) {
         update();
       }
@@ -37,23 +46,26 @@ public class RecipePageController extends PageController {
 
   @Override
   void update() {
-    recipe = getRecipeFromUrl();
-    System.out.println("Call the render() with the appropriate data for the recipe page.");
+    String segment = LocationHandler.getLocationSegment(1);
+
+    if (segment == null) {
+      System.out.println("No segment found.");
+      return;
+    }
+
+    int id = Integer.parseInt(segment);
+    recipe = recipeDAO.retrieveRecipeWithIngredientsById(id);
+
     if (recipe == null) {
       LocationHandler.setLocation("cookbook-grid");
       return;
     }
-    view.render(recipe);
+
+    view.render(recipe, (int portions) -> addRecipe(id, portions));
   }
 
-  private RecipeWithIngredients getRecipeFromUrl() {
-      System.out.println("Gets the recipe from the URL.");
-      String segment = LocationHandler.getLocationSegment(1);
-      if (segment == null) {
-        System.out.println("No segment found.");
-        return null;
-      }
-      int id = Integer.parseInt(segment);
-      return recipeDAO.retrieveRecipeWithIngredientsById(id);
-    }
+  private void addRecipe(int id, int portions) {
+    shoppingListDAO.addRecipe(currentUserProperty.get().userId(), id, portions);
+    LOGGER.info("Added recipe " + id + " to shopping list.");
+  }
 }

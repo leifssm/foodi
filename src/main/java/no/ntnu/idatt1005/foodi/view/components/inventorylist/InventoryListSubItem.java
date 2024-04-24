@@ -25,8 +25,10 @@ class InventoryListSubItem {
    *
    * @param item The inventory item to display
    */
-  public InventoryListSubItem(@NotNull ExpiringIngredient item,
-      @NotNull Consumer<ExpiringIngredient> onAmountChange) {
+  public InventoryListSubItem(
+      @NotNull ExpiringIngredient item,
+      @NotNull Consumer<ExpiringIngredient> onAmountChange
+  ) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");
@@ -39,11 +41,17 @@ class InventoryListSubItem {
     Label category = new Label(); // Empty
 
     InventoryListInput quantity = new InventoryListInput(item.getAmount());
+    quantity.setText(item.getAmountString());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
 
     quantity.setOnAmountChange(
-        (double newAmount) -> onAmountChange.accept(item.copyWithAmount(newAmount)));
+        (double newAmount) -> {
+          ExpiringIngredient newItem = item.copy();
+          newItem.setAmount(newAmount);
+          onAmountChange.accept(newItem);
+        }
+    );
 
     Label unit = new Label(item.getUnit().getName());
     unit.getStyleClass().addAll("center", "gray", "vertical-padding");

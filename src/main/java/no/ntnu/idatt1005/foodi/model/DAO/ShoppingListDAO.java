@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 
 /**
  * This class is responsible for handling the usage of database operations regarding shopping
@@ -85,32 +88,40 @@ public class ShoppingListDAO {
    * @return a list of RecipeWithIngredient objects.
    */
 
-  public List<RecipeWithIngredients> getRecipesWithIngredients(int userId) {
+  public List<RecipeWithPartiallyRemovedIngredients> getRecipesWithIngredients(int userId) {
     return new QueryBuilder("SELECT * FROM shopping_list WHERE user_id = ?")
         .addInt(userId)
         .executeQuerySafe(rs -> {
-          List<RecipeWithIngredients> recipes = new ArrayList<>();
+          List<RecipeWithPartiallyRemovedIngredients> recipes = new ArrayList<>();
           while (rs.next()) {
             int recipeId = rs.getInt("recipe_id");
             int portions = rs.getInt("portions");
             Recipe recipe = new RecipeDAO().retrieveById(recipeId);
-            List<AmountedIngredient> ingredients =
+            List<AmountedIngredient> amountedIngredients =
                 new IngredientDAO().retrieveAmountedIngredientsFromRecipe(
-                    recipeId);
-            assert ingredients != null;
-            for (AmountedIngredient ingredient : ingredients) {
+                    recipeId
+                );
+
+            assert amountedIngredients != null;
+            List<PartiallyRemovedAmountedIngredient> ingredients = amountedIngredients
+                .stream()
+                .map(PartiallyRemovedAmountedIngredient::new)
+                .toList();
+            for (PartiallyRemovedAmountedIngredient ingredient : ingredients) {
               ingredient.setAmount(ingredient.getAmount() * portions);
             }
-            RecipeWithIngredients recipeWithIngredients = new RecipeWithIngredients(
+            RecipeWithPartiallyRemovedIngredients recipeWithIngredients
+                = new RecipeWithPartiallyRemovedIngredients(
                 recipe.getId(),
                 recipe.getName(),
                 recipe.getDescription(),
                 recipe.getDifficulty(),
                 recipe.getDietaryTag(),
                 recipe.getDuration(),
-                ingredients,
                 recipe.getImagePath(),
-                recipe.getInstruction()
+                recipe.getInstruction(),
+                ingredients,
+                portions
             );
             recipes.add(recipeWithIngredients);
           }
@@ -152,7 +163,9 @@ public class ShoppingListDAO {
     List<Recipe> recipes = getRecipes(userId);
     for (Recipe recipe : recipes) {
       int portions = getPortions(userId, recipe.getId());
+
       List<AmountedIngredient> ingredients = getIngredients(recipe.getId());
+
       for (AmountedIngredient ingredient : ingredients) {
         double scaledAmount = ingredient.getAmount() * portions;
         if (ingredientMap.containsKey(ingredient.getId())) {

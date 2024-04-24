@@ -159,7 +159,10 @@ public class AddItemDialog extends StandardDialog {
       return LocalDate.parse(expirationDateField.getText(), dateFormatParser);
     } catch (DateTimeParseException e) {
       throw new ValidationException(
-          "Expiration date must be in the format dd.MM.yyyy or blank for no expiration date.");
+          "Expiration date must be in the format "
+              + DATE_FORMAT
+              + " or blank for no expiration date."
+      );
     }
   }
 

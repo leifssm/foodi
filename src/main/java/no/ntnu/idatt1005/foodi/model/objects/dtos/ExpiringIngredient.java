@@ -45,6 +45,29 @@ public class ExpiringIngredient extends AmountedIngredient {
   }
 
   /**
+   * Constructor for extending an amounted ingredient object with an expiration date.
+   *
+   * @param amountedIngredient the amounted ingredient object to extend
+   * @param expirationDate     the expiration date of the ingredient without a timestamp
+   * @param isFrozen           whether the ingredient is frozen or not
+   */
+  public ExpiringIngredient(
+      AmountedIngredient amountedIngredient,
+      LocalDate expirationDate,
+      Boolean isFrozen
+  ) {
+    this(
+        amountedIngredient.getId(),
+        amountedIngredient.getName(),
+        amountedIngredient.getUnit(),
+        amountedIngredient.getCategory(),
+        amountedIngredient.getAmount(),
+        expirationDate,
+        isFrozen
+    );
+  }
+
+  /**
    * Constructor for an amounted ingredient object with an expiration date.
    *
    * @param id             the id of the ingredient
@@ -155,24 +178,6 @@ public class ExpiringIngredient extends AmountedIngredient {
         getUnit(),
         getCategory(),
         getAmount(),
-        expirationDate,
-        isFrozen
-    );
-  }
-
-  /**
-   * Returns a copy of the ingredient with a new amount.
-   *
-   * @param amount the new amount of the ingredient
-   * @return a copy of the ingredient with the new amount
-   */
-  public ExpiringIngredient copyWithAmount(double amount) {
-    return new ExpiringIngredient(
-        getId(),
-        getName(),
-        getUnit(),
-        getCategory(),
-        amount,
         expirationDate,
         isFrozen,
         inventoryId

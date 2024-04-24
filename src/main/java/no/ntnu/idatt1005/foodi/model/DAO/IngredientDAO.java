@@ -34,13 +34,14 @@ public class IngredientDAO {
           }
           return null;
         });
+
     return result != null ? result : 0;
   }
 
   /**
    * Counts the number of ingredient items in a user's inventory.
    *
-   * @param userId The id of the user to count the ingredients for.
+   * @param userId The id of the user to count the ingredients from.
    * @return the number of ingredient items in the user's inventory.
    */
   public int countIngredientItemsInUserInventory(int userId) {
@@ -96,9 +97,14 @@ public class IngredientDAO {
    * @param amount         The amount of the ingredient to save.
    * @param expirationDate The expiration date of the ingredient.
    */
-  public void saveIngredientToUserInventory(int userId, String ingredientName, Ingredient.Unit unit,
-      Ingredient.Category category, double amount, @Nullable Date expirationDate)
-      throws SQLException {
+  public void saveIngredientToUserInventory(
+      int userId,
+      String ingredientName,
+      Ingredient.Unit unit,
+      Ingredient.Category category,
+      double amount,
+      @Nullable Date expirationDate
+  ) {
     ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     int ingredientId = findIngredientId(ingredientName, unit, category);
     if (ingredientId == -1) {
@@ -147,10 +153,12 @@ public class IngredientDAO {
    * @param ingredientName The name of the ingredient to save.
    * @param unit           The unit of the ingredient to save.
    * @param category       The category of the ingredient to save.
-   * @throws SQLException if an error occurs while saving the ingredient.
    */
-  public void saveIngredient(@NotNull String ingredientName, @NotNull Ingredient.Unit unit,
-      @NotNull Ingredient.Category category) throws SQLException {
+  public void saveIngredient(
+      @NotNull String ingredientName,
+      @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category
+  ) {
     ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);
     new QueryBuilder("INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)")
         .addString(ingredientName)
@@ -196,20 +204,21 @@ public class IngredientDAO {
   /**
    * Updates an ingredient in a user's inventory.
    *
-   * @param userId         The id of the user to update the ingredient in.
-   * @param inventoryId    The id of the inventory to update.
+   * @param ingredientId   The id of the ingredient to update.
    * @param amount         The new amount of the ingredient.
    * @param expirationDate The new expiration date of the ingredient.
    */
-  public void updateIngredientInUserInventory(int userId, int inventoryId, double amount,
-      @NotNull LocalDate expirationDate) {
+  public void updateIngredientInUserInventory(
+      int ingredientId,
+      double amount,
+      @NotNull LocalDate expirationDate
+  ) {
     new QueryBuilder(
         "UPDATE inventory SET "
-            + "amount = ?, expiration_date = ? WHERE user_id = ? AND id = ?")
+            + "amount = ?, expiration_date = ? WHERE ingredient_id = ?")
         .addDouble(amount)
         .addDate(Date.valueOf(expirationDate))
-        .addInt(userId)
-        .addInt(inventoryId)
+        .addInt(ingredientId)
         .executeUpdateSafe();
   }
 
@@ -242,6 +251,7 @@ public class IngredientDAO {
         .addInt(obj.getId())
         .executeUpdateSafe();
 
+    // Then, delete the ingredient from the ingredient table
     new QueryBuilder("DELETE FROM ingredient WHERE id = ?")
         .addInt(obj.getId())
         .executeUpdateSafe();
@@ -250,13 +260,13 @@ public class IngredientDAO {
   /**
    * Deletes an ingredient from a user's inventory.
    *
-   * @param userId The id of the user to delete the ingredient from.
-   * @param id     The id of the inventory ingredient to delete.
+   * @param userId       The id of the user to delete the ingredient from.
+   * @param ingredientId The id of the ingredient to delete.
    */
-  public void deleteIngredientFromUserInventory(int userId, int id) {
-    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND id = ?")
+  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
         .addInt(userId)
-        .addInt(id)
+        .addInt(ingredientId)
         .executeUpdateSafe();
   }
 

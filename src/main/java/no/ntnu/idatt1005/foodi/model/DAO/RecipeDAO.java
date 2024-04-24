@@ -7,6 +7,7 @@ import java.util.List;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -274,7 +275,7 @@ public class RecipeDAO {
    * @return an array of recipes.
    */
   public Recipe[] retrieveAllRecipesWithIngredients(int @NotNull ... ingredientIds) {
-    String query = "SELECT * FROM recipe WHERE id IN ("
+    @Language("SQL") String query = "SELECT * FROM recipe WHERE id IN ("
         + "SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id IN ("
         + String.join(",", Collections.nCopies(ingredientIds.length, "?"))
         + ") GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = ?)";
@@ -299,6 +300,9 @@ public class RecipeDAO {
       }
       return recipesForIngredient.toArray(new Recipe[0]);
     });
+    if (recipes == null) {
+      return new Recipe[0];
+    }
     List<Recipe> allRecipes = new ArrayList<>(Arrays.asList(recipes));
     return allRecipes.toArray(new Recipe[0]);
   }

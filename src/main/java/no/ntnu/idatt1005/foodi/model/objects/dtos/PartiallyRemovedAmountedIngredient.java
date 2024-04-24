@@ -32,6 +32,17 @@ public class PartiallyRemovedAmountedIngredient extends AmountedIngredient {
     setRemovedAmount(removedAmount);
   }
 
+  public PartiallyRemovedAmountedIngredient(AmountedIngredient amountedIngredient) {
+    super(
+        amountedIngredient.getId(),
+        amountedIngredient.getName(),
+        amountedIngredient.getUnit(),
+        amountedIngredient.getCategory(),
+        amountedIngredient.getAmount()
+    );
+    setRemovedAmount(0);
+  }
+
   /**
    * Returns the amount of the ingredient that has been removed.
    *

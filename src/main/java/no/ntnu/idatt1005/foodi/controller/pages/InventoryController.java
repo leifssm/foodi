@@ -60,14 +60,13 @@ public class InventoryController extends PageController {
    * @param ingredient the ingredient to update
    */
   private void onAmountChange(ExpiringIngredient ingredient) {
-    if (ingredient.getAmount() == 0) {
+    if (ingredient.getAmount() <= 0) {
       deleteItem(ingredient);
       update();
       return;
     }
 
     ingredientDAO.updateIngredientInUserInventory(
-        currentUserProperty.get().userId(),
         ingredient.getInventoryId(),
         ingredient.getAmount(),
         ingredient.getExpirationDate()
@@ -81,19 +80,15 @@ public class InventoryController extends PageController {
    *
    * @param ingredient the ingredient to add
    */
-  private void onAddItem(ExpiringIngredient ingredient) {
-    try {
-      ingredientDAO.saveIngredientToUserInventory(
-          currentUserProperty.get().userId(),
-          ingredient.getName(),
-          ingredient.getUnit(),
-          ingredient.getCategory(),
-          ingredient.getAmount(),
-          new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())
-      );
-    } catch (SQLException e) {
-      LOGGER.severe("Failed to add ingredient to inventory: " + e.getMessage());
-    }
+  private void onAddItem(@NotNull ExpiringIngredient ingredient) {
+    ingredientDAO.saveIngredientToUserInventory(
+        currentUserProperty.get().userId(),
+        ingredient.getName(),
+        ingredient.getUnit(),
+        ingredient.getCategory(),
+        ingredient.getAmount(),
+        new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())
+    );
 
     update();
   }
@@ -104,7 +99,7 @@ public class InventoryController extends PageController {
    * @param expirationDate the expiration date of the ingredient
    * @return the date the ingredient should be eaten before
    */
-  private LocalDate getFrozenDate(@NotNull LocalDate expirationDate) {
+  private @NotNull LocalDate getFrozenDate(@NotNull LocalDate expirationDate) {
     long daysUntilExpiration = DAYS.between(LocalDate.now(), expirationDate);
     return LocalDate.now().plusDays(5 * daysUntilExpiration);
   }

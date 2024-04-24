@@ -3,7 +3,6 @@ package no.ntnu.idatt1005.foodi.model.objects.dtos;
 import java.text.DecimalFormat;
 import org.jetbrains.annotations.NotNull;
 
-
 /**
  * This class represents the amounted ingredient object. It extends the Ingredient class and adds an
  * amount field.
@@ -14,6 +13,25 @@ import org.jetbrains.annotations.NotNull;
 public class AmountedIngredient extends Ingredient {
 
   private double amount;
+
+  /**
+   * Constructor for the amounted ingredient object.
+   *
+   * @param ingredient the ingredient to copy
+   * @param amount     the amount of the ingredient in the unit of the given unit
+   */
+  public AmountedIngredient(
+      @NotNull Ingredient ingredient,
+      double amount
+  ) {
+    this(
+        ingredient.getId(),
+        ingredient.getName(),
+        ingredient.getUnit(),
+        ingredient.getCategory(),
+        amount
+    );
+  }
 
   /**
    * Constructor for the amounted ingredient object.
@@ -88,6 +106,11 @@ public class AmountedIngredient extends Ingredient {
     );
   }
 
+  /**
+   * Returns a copy of the amounted ingredient.
+   *
+   * @return a copy of the amounted ingredient
+   */
   @Override
   public AmountedIngredient copy() {
     return new AmountedIngredient(getId(), getName(), getUnit(), getCategory(), amount);

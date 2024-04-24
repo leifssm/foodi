@@ -122,7 +122,7 @@ class IngredientDaoTest {
     ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
     ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
         Category.MEAT, 100, Date.valueOf("2022-12-31"));
-    ingredientDao.updateIngredientInUserInventory(1, 1, 200,
+    ingredientDao.updateIngredientInUserInventory(1, 200,
         Date.valueOf("2022-12-31").toLocalDate());
 
     // Retrieve the ingredient using the
@@ -235,7 +235,6 @@ class IngredientDaoTest {
 
     assertEquals(5, ingredientDao.retrieveAmountedIngredientsFromRecipe(1).size());
   }
-
 
   @Test
   @DisplayName("toggleFreezeIngredient should toggle the freeze status of an ingredient")

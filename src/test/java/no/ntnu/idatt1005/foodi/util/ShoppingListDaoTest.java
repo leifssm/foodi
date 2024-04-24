@@ -15,7 +15,7 @@ import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
 import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.model.repository.Database;
 import org.junit.jupiter.api.AfterEach;
@@ -249,8 +249,9 @@ class ShoppingListDaoTest {
     shoppingListDAO.addRecipe(testUser.userId(), 3, 4);
 
     // Retrieve the saved recipe from the shopping list using only SQL
-    List<RecipeWithIngredients> recipes = shoppingListDAO.getRecipesWithIngredients(
-        testUser.userId());
+    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDAO.getRecipesWithIngredients(
+        testUser.userId()
+    );
 
     // Check if the recipe is in the shopping list
     assertEquals(3, recipes.size());

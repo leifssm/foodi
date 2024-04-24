@@ -124,7 +124,6 @@ public class InventoryList extends VBox implements ComponentUtils {
     );
   }
 
-
   public List<StandardCheckBoxHandler<ExpiringIngredient>> getCheckboxHandlers() {
     return checkboxes;
   }
