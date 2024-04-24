@@ -133,6 +133,29 @@ class IngredientDaoTest {
   }
 
   @Test
+  @DisplayName("updateItemAmountInUserInventory() should update the amount of an ingredient in the user's inventory")
+  void testUpdateItemAmountInUserInventory() throws SQLException {
+    // Create a user with id 1
+    try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+      Statement statement = connection.createStatement();
+      statement.executeUpdate("INSERT INTO PUBLIC.\"user\" (id, name) VALUES (1, 'Test User')");
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.MEAT);
+    ingredientDao.saveIngredientToUserInventory(1, "Test Ingredient", Ingredient.Unit.GRAM,
+        Category.MEAT, 100, Date.valueOf("2022-12-31"));
+    ingredientDao.updateItemAmountInUserInventory(1, 1, 200);
+
+    // Retrieve the ingredient using the retrieveExpiringIngredientsFromInventory
+    // method because it needs an amount and a date
+    ExpiringIngredient retrievedIngredient = ingredientDao.retrieveExpiringIngredientsFromInventory(
+        1).get(0);
+    assertEquals(200, retrievedIngredient.getAmount());
+  }
+
+  @Test
   @DisplayName("updateIngredientExpirationDate should update the"
       + " expiration date of an ingredient in the user's inventory")
   void testUpdateIngredientExpirationDate() throws SQLException {
