@@ -30,7 +30,7 @@ public class Main extends Application {
 
     Root root = new Root();
     new ApplicationController(root);
-    Scene scene = new Scene(root, 800, 600);
+    Scene scene = new Scene(root, 900, 650);
 
     stage.setTitle("Foodi");
     stage.setScene(scene);
