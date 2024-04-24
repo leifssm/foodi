@@ -93,11 +93,11 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     HBox portionsBox = new HBox();
     Label portionsSymbol = new Label("\uD83D\uDC64");
     portionsSymbol.getStyleClass().add("portions-symbol");
-    Button decreasePortions = new StandardButton("-");
+    Button decreasePortions = new StandardButton("-").setType(Style.SUBTLE);
     decreasePortions.getStyleClass().add("portions-button");
     Label portionsValue = new Label(String.valueOf(portions));
     portionsValue.getStyleClass().add("portions-text");
-    Button increasePortions = new StandardButton("+");
+    Button increasePortions = new StandardButton("+").setType(Style.SUBTLE);
     increasePortions.getStyleClass().add("portions-button");
 
     portionsBox.getChildren().addAll(ingredientsTitle, portionsSymbol, decreasePortions, portionsValue, increasePortions);

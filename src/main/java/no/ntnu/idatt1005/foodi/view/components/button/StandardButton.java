@@ -104,7 +104,8 @@ public class StandardButton extends Button implements ComponentUtils {
     SUCCESS("success"),
     ERROR("error"),
     WARNING("warning"),
-    INFO("info");
+    INFO("info"),
+    SUBTLE("subtle");
 
     private final String className;
 
