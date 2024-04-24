@@ -74,6 +74,18 @@
   -fx-background-color: #f44949;
 }
 
+.std-button.subtle {
+  -fx-background-color: #222222;
+}
+
+.std-button.subtle:hover {
+  -fx-background-color: #3a3a3a;
+}
+
+.std-button.subtle:armed {
+  -fx-background-color: #4a4a4a;
+}
+
 /* not used */
 .std-button.info {
   -fx-background-color: red;

@@ -281,7 +281,7 @@ public class Database {
         {"Trout", "FISH", "GRAM"},
         {"Shrimp", "CRUSTACEAN", "GRAM"},
         {"Yogurt", "DAIRY", "MILLILITER"},
-        {"Pork loin", "MEAT", "KILOGRAM"},
+        {"Pork loin", "MEAT", "GRAM"},
         {"Lettuce", "VEGETABLE", "PIECE"},
         {"Orange", "FRUIT", "PIECE"},
         {"Oats", "GRAIN", "GRAM"},
@@ -427,7 +427,7 @@ public class Database {
         {5, 49, 100}, // Cheese, 100 grams
 
         // Smoky BBQ Ribs (Recipe ID 6)
-        {6, 42, 500}, // Pork loin, 500 grams
+        {6, 12, 500}, // Pork loin, 500 grams
         {6, 17, 50}, // Barbecue sauce, 50 milliliters
         {6, 83, 2}, // Tomato, 2 pieces
 

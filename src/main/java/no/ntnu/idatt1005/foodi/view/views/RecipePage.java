@@ -1,8 +1,14 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import java.text.DecimalFormat;
 import java.util.List;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -21,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class RecipePage extends StatefulPage implements ComponentUtils {
 
+  private int portions = 4;
   /**
    * Constructor for the RecipePage class.
    */
@@ -32,6 +39,7 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
   public void render(@NotNull RecipeWithIngredients recipe, @NotNull RecipeAdder onAddRecipe) {
     // Render the recipe page
     // Load the image and create an ImageView for it
+    portions = 4;
     String imagePath = recipe.getImagePath();
     String imageUrl = LoadUtils.getImage(imagePath);
     if (imageUrl == null) {
@@ -43,7 +51,7 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     recipeImage.setFitWidth(100);
     widthProperty().subscribe(w -> {
       recipeImage.setFitWidth(w.intValue());
-      setPadding(new Insets(w.intValue() / 2.2, 0, 0, 0));
+      setPadding(new Insets(w.intValue() / 2.3, 0, 0, 0));
     });
 
     Label recipeTitle = new Label(recipe.getName());
@@ -74,30 +82,54 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
 
     Label instructionsTitle = new Label("Instructions");
     instructionsTitle.getStyleClass().add("instructions-title");
+
     Label instructions = new Label(recipe.getInstruction());
     instructions.getStyleClass().add("instructions");
     VBox instructionsBox = new VBox(instructionsTitle, instructions);
 
     Label ingredientsTitle = new Label("Ingredients");
     ingredientsTitle.getStyleClass().add("ingredients-title");
+
+    HBox portionsBox = new HBox();
+    Label portionsSymbol = new Label("\uD83D\uDC64");
+    portionsSymbol.getStyleClass().add("portions-symbol");
+    Button decreasePortions = new StandardButton("-").setType(Style.SUBTLE);
+    decreasePortions.getStyleClass().add("portions-button");
+    Label portionsValue = new Label(String.valueOf(portions));
+    portionsValue.getStyleClass().add("portions-text");
+    Button increasePortions = new StandardButton("+").setType(Style.SUBTLE);
+    increasePortions.getStyleClass().add("portions-button");
+
+    portionsBox.getChildren().addAll(ingredientsTitle, portionsSymbol, decreasePortions, portionsValue, increasePortions);
+
     StandardButton addIngredientsButton = new StandardButton(
         "Add to Shopping List",
-        () -> onAddRecipe.addRecipe(1) // TODO replace with real value
+        () -> onAddRecipe.addRecipe(portions)
     )
         .setType(Style.SUCCESS);
+    addIngredientsButton.getStyleClass().add("add-ingredients-button");
 
     VBox ingredientsList = new VBox();
-    List<AmountedIngredient> recipeIngredients = recipe.getIngredients();
-    for (AmountedIngredient ingredient : recipeIngredients) {
-      BorderPane ingredientRow = new BorderPane();
-      Label ingredientName = new Label(ingredient.getName());
-      ingredientRow.setLeft(ingredientName);
-      Label ingredientAmount = new Label(ingredient.getUnitedAmount());
-      ingredientRow.setRight(ingredientAmount);
-      ingredientsList.getChildren().add(ingredientRow);
-    }
+    ingredientsList.getChildren().add(ingredientsList(recipe));
 
-    VBox ingredientsBox = new VBox(ingredientsTitle, ingredientsList, addIngredientsButton);
+    decreasePortions.setOnAction(e -> {
+      if (portions > 1) {
+        portions--;
+        portionsValue.setText(String.valueOf(portions));
+        ingredientsList.getChildren().clear();
+        ingredientsList.getChildren().add(ingredientsList(recipe));
+      }
+    });
+    increasePortions.setOnAction(e -> {
+      if (portions < 9) {
+        portions++;
+        portionsValue.setText(String.valueOf(portions));
+        ingredientsList.getChildren().clear();
+        ingredientsList.getChildren().add(ingredientsList(recipe));
+      }
+    });
+
+    VBox ingredientsBox = new VBox(portionsBox, ingredientsList, addIngredientsButton);
     ingredientsBox.getStyleClass().add("ingredients-box");
 
     BorderPane ingredientsInstructionsBox = new BorderPane();
@@ -113,6 +145,21 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     getChildren().add(recipeImage);
     setTop(recipeHeader);
     setCenter(recipeContent);
+  }
+
+  private VBox ingredientsList(RecipeWithIngredients recipe) {
+    VBox ingredientsList = new VBox();
+    List<AmountedIngredient> recipeIngredients = recipe.getIngredients();
+    for (AmountedIngredient ingredient : recipeIngredients) {
+      BorderPane ingredientRow = new BorderPane();
+      Label ingredientName = new Label(ingredient.getName());
+      ingredientRow.setLeft(ingredientName);
+      DecimalFormat decimalFormat = new DecimalFormat("0.#");
+      Label ingredientAmount = new Label(decimalFormat.format(ingredient.getAmount() * portions) + " " + ingredient.getUnit().getName());
+      ingredientRow.setRight(ingredientAmount);
+      ingredientsList.getChildren().add(ingredientRow);
+    }
+    return ingredientsList;
   }
 
   /**
