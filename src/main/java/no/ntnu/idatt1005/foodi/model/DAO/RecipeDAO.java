@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * This class is responsible for handling the usage of database operations regarding stored recipes
  * in the database.
  *
- * @version 0.8.0
+ * @version 0.9.0
  */
 public class RecipeDAO {
 
@@ -64,7 +64,7 @@ public class RecipeDAO {
   /**
    * Merges a recipe to the recipe table in the database.
    *
-   * @param id          the id of the recipe.
+   * @param id          the id of the recipe to be merged with new data.
    * @param name        the name of the recipe.
    * @param description the description of the recipe.
    * @param difficulty  the difficulty of the recipe.
@@ -92,9 +92,9 @@ public class RecipeDAO {
   }
 
   /**
-   * Updates a recipe in the recipe table in the database.
+   * Updates a recipe in the recipe table in the database by its given ID.
    *
-   * @param id          the id of the recipe.
+   * @param id          the id of the recipe to be updated.
    * @param name        the name of the recipe.
    * @param description the description of the recipe.
    * @param difficulty  the difficulty of the recipe.
@@ -151,7 +151,7 @@ public class RecipeDAO {
   }
 
   /**
-   * Deletes a recipe from the recipe table in the database.
+   * Deletes a recipe from the recipe table in the database by its given ID.
    *
    * @param id the id of the recipe to be deleted.
    */
@@ -243,7 +243,7 @@ public class RecipeDAO {
   }
 
   /**
-   * Retrieves a recipe object from the database.
+   * Retrieves a recipe object from the database by its given ID.
    *
    * @param id the id of the recipe to be retrieved.
    * @return the recipe object.
@@ -268,11 +268,17 @@ public class RecipeDAO {
         });
   }
 
+  /**
+   * Retrieves all recipes from the database that contains the given ingredient ids.
+   *
+   * @param ingredientIds the ids of the ingredient to search for.
+   * @return an array of recipes.
+   */
   public Recipe[] retrieveAllRecipesWithIngredients(int @NotNull ... ingredientIds) {
-    @Language("SQL") String query = "SELECT * FROM recipe WHERE id IN (" +
-        "SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id IN (" +
-        String.join(",", Collections.nCopies(ingredientIds.length, "?")) +
-        ") GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = ?)";
+    @Language("SQL") String query = "SELECT * FROM recipe WHERE id IN ("
+        + "SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id IN ("
+        + String.join(",", Collections.nCopies(ingredientIds.length, "?"))
+        + ") GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = ?)";
     QueryBuilder queryBuilder = new QueryBuilder(query);
     for (int ingredientId : ingredientIds) {
       queryBuilder.addInt(ingredientId);

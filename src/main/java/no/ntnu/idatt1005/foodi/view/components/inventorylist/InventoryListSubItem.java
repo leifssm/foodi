@@ -41,6 +41,7 @@ class InventoryListSubItem {
     Label category = new Label(); // Empty
 
     InventoryListInput quantity = new InventoryListInput(item.getAmount());
+    quantity.setText(item.getAmountString());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
 

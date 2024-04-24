@@ -7,7 +7,9 @@ import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 
 /**

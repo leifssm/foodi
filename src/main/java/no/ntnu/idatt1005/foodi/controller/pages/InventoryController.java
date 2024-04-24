@@ -2,6 +2,7 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
