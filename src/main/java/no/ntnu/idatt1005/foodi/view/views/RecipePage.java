@@ -1,7 +1,7 @@
 package no.ntnu.idatt1005.foodi.view.views;
 
+import java.util.List;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -10,11 +10,11 @@ import javafx.scene.layout.VBox;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton.Style;
 import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Class for displaying a recipe page.
@@ -29,7 +29,7 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     addClass("recipe");
   }
 
-  public void render (@NotNull RecipeWithIngredients recipe) {
+  public void render(@NotNull RecipeWithIngredients recipe, @NotNull RecipeAdder onAddRecipe) {
     // Render the recipe page
     // Load the image and create an ImageView for it
     String imagePath = recipe.getImagePath();
@@ -80,8 +80,11 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
 
     Label ingredientsTitle = new Label("Ingredients");
     ingredientsTitle.getStyleClass().add("ingredients-title");
-    Button addIngredientsButton = new Button("Add to Shopping List");
-    addIngredientsButton.getStyleClass().add("add-ingredients-button");
+    StandardButton addIngredientsButton = new StandardButton(
+        "Add to Shopping List",
+        () -> onAddRecipe.addRecipe(1) // TODO replace with real value
+    )
+        .setType(Style.SUCCESS);
 
     VBox ingredientsList = new VBox();
     List<AmountedIngredient> recipeIngredients = recipe.getIngredients();
@@ -110,5 +113,18 @@ public class RecipePage extends StatefulPage implements ComponentUtils {
     getChildren().add(recipeImage);
     setTop(recipeHeader);
     setCenter(recipeContent);
+  }
+
+  /**
+   * Interface for adding a recipe.
+   */
+  public interface RecipeAdder {
+
+    /**
+     * Method for adding a recipe.
+     *
+     * @param portions The number of portions to add, cannot be less than 1
+     */
+    void addRecipe(int portions);
   }
 }
