@@ -93,7 +93,7 @@
 }
 
 .portions-button {
-  -fx-background-color: #222222;
+  -fx-background-color: #222222!important;
   -fx-text-fill: #ededed;
   -fx-font-size: 12px;
   -fx-font-weight: bold;
@@ -106,11 +106,11 @@
 }
 
 .portions-button:hover {
-  -fx-background-color: #333333;
+  -fx-background-color: #333333!important;
 }
 
 .portions-button:pressed {
-  -fx-background-color: #444444;
+  -fx-background-color: #444444!important;
 }
 
 .add-ingredients-button {
