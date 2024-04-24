@@ -179,7 +179,8 @@ public class ExpiringIngredient extends AmountedIngredient {
         getCategory(),
         getAmount(),
         expirationDate,
-        isFrozen
+        isFrozen,
+        inventoryId
     );
   }
 }
