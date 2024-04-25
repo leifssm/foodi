@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
-import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
+import no.ntnu.idatt1005.foodi.model.daos.ShoppingListDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
@@ -27,8 +27,8 @@ public class ShoppingListController extends PageController {
   private static final Logger LOGGER = Logger.getLogger(ShoppingListController.class.getName());
   private final SimpleObjectProperty<User> currentUserProperty;
   private final ShoppingList view;
-  private final ShoppingListDAO shoppingListDAO = new ShoppingListDAO();
-  private final IngredientDAO ingredientDAO = new IngredientDAO();
+  private final ShoppingListDao shoppingListDAO = new ShoppingListDao();
+  private final IngredientDao ingredientDAO = new IngredientDao();
   private List<RecipeWithPartiallyRemovedIngredients> recipes;
 
   /**

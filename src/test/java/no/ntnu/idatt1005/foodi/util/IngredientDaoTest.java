@@ -12,7 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
-import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient.Category;
@@ -24,15 +24,15 @@ import org.junit.jupiter.api.Test;
 
 class IngredientDaoTest {
 
-  private IngredientDAO ingredientDao;
+  private IngredientDao ingredientDao;
 
   @BeforeEach
   public void setUp() throws SQLException {
     // Initialize the main database
     Database.initializeEmpty();
 
-    // Initialize a new IngredientDAO object
-    ingredientDao = new IngredientDAO();
+    // Initialize a new IngredientDao object
+    ingredientDao = new IngredientDao();
   }
 
   @AfterEach

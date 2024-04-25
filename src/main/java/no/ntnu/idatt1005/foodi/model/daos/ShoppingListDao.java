@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +7,7 @@ import java.util.Map;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
 
 /**
@@ -19,7 +17,7 @@ import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngr
  * @author Snake727
  * @version 0.9.0
  */
-public class ShoppingListDAO {
+public class ShoppingListDao {
 
   /**
    * Deletes all shopping list entries for a user.
@@ -96,9 +94,9 @@ public class ShoppingListDAO {
           while (rs.next()) {
             int recipeId = rs.getInt("recipe_id");
             int portions = rs.getInt("portions");
-            Recipe recipe = new RecipeDAO().retrieveById(recipeId);
+            Recipe recipe = new RecipeDao().retrieveById(recipeId);
             List<AmountedIngredient> amountedIngredients =
-                new IngredientDAO().retrieveAmountedIngredientsFromRecipe(
+                new IngredientDao().retrieveAmountedIngredientsFromRecipe(
                     recipeId
                 );
 

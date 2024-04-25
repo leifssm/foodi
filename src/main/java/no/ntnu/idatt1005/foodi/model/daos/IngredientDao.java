@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * @version 0.9.0
  */
 
-public class IngredientDAO {
+public class IngredientDao {
 
   /**
    * Counts the number of ingredient items in the ingredient table.

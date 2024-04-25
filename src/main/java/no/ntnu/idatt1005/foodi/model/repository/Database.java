@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
-import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.daos.UserDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 
 /**
@@ -464,7 +464,7 @@ public class Database {
   }
 
   private static void insertDefaultUser() throws SQLException {
-    new UserDAO().addDefaultUserIfNotExists();
+    new UserDao().addDefaultUserIfNotExists();
   }
 
   private static void mergeRecipe(Connection connection, int id, String name, String description,

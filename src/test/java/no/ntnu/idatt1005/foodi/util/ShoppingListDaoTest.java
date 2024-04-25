@@ -8,11 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.QueryBuilder;
-import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
+import no.ntnu.idatt1005.foodi.model.daos.QueryBuilder;
+import no.ntnu.idatt1005.foodi.model.daos.RecipeDao;
+import no.ntnu.idatt1005.foodi.model.daos.ShoppingListDao;
+import no.ntnu.idatt1005.foodi.model.daos.UserDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
@@ -25,10 +25,10 @@ import org.junit.jupiter.api.Test;
 
 class ShoppingListDaoTest {
 
-  private static ShoppingListDAO shoppingListDAO;
-  private static UserDAO userDAO;
-  private static IngredientDAO ingredientDAO;
-  private static RecipeDAO recipeDAO;
+  private static ShoppingListDao shoppingListDAO;
+  private static UserDao userDAO;
+  private static IngredientDao ingredientDAO;
+  private static RecipeDao recipeDao;
   private static User testUser;
 
   @BeforeEach
@@ -46,11 +46,11 @@ class ShoppingListDaoTest {
     // Initialize the main database
     Database.initializeEmpty();
 
-    // Initialize new DAO objects
-    ingredientDAO = new IngredientDAO();
-    userDAO = new UserDAO();
-    shoppingListDAO = new ShoppingListDAO();
-    recipeDAO = new RecipeDAO();
+    // Initialize new daos objects
+    ingredientDAO = new IngredientDao();
+    userDAO = new UserDao();
+    shoppingListDAO = new ShoppingListDao();
+    recipeDao = new RecipeDao();
 
     // Create a test user
     testUser = new User(1, "Test User");
@@ -69,11 +69,11 @@ class ShoppingListDaoTest {
         Ingredient.Category.VEGETABLE);
 
     // Create new test recipes
-    recipeDAO.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30,
+    recipeDao.saveRecipe("Test Recipe", "This is a test recipe", "EASY", "VEGAN", 30,
         "test.jpg", "This is a test instruction");
-    recipeDAO.saveRecipe("Test Recipe 2", "This is a test recipe 2", "EASY", "VEGAN", 30,
+    recipeDao.saveRecipe("Test Recipe 2", "This is a test recipe 2", "EASY", "VEGAN", 30,
         "test.jpg", "This is a test instruction 2");
-    recipeDAO.saveRecipe("Test Recipe 3", "This is a test recipe 3", "EASY", "VEGAN", 30,
+    recipeDao.saveRecipe("Test Recipe 3", "This is a test recipe 3", "EASY", "VEGAN", 30,
         "test.jpg", "This is a test instruction 3");
 
     // Save the test ingredients to recipes

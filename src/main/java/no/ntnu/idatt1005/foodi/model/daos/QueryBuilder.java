@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.sql.Connection;
 import java.sql.Date;

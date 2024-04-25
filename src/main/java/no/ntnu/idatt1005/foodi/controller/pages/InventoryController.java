@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
-import no.ntnu.idatt1005.foodi.model.DAO.IngredientDAO;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
@@ -26,7 +26,7 @@ public class InventoryController extends PageController {
   private static final Logger LOGGER = Logger.getLogger(InventoryController.class.getName());
   private final SimpleObjectProperty<User> currentUserProperty;
   private final Inventory view;
-  private final IngredientDAO ingredientDAO;
+  private final IngredientDao ingredientDAO;
 
   /**
    * Constructor for the InventoryController class.
@@ -39,7 +39,7 @@ public class InventoryController extends PageController {
     this.view = inventoryPage;
 
     this.currentUserProperty = currentUserProperty;
-    this.ingredientDAO = new IngredientDAO();
+    this.ingredientDAO = new IngredientDao();
 
     attachToView();
     update();
@@ -75,7 +75,7 @@ public class InventoryController extends PageController {
   }
 
   /**
-   * Adds an ingredient to the inventory with {@link IngredientDAO}.
+   * Adds an ingredient to the inventory with {@link IngredientDao}.
    *
    * @param ingredient the ingredient to add
    */

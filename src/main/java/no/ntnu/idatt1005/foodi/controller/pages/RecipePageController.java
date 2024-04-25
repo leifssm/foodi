@@ -2,8 +2,8 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
-import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
-import no.ntnu.idatt1005.foodi.model.DAO.ShoppingListDAO;
+import no.ntnu.idatt1005.foodi.model.daos.RecipeDao;
+import no.ntnu.idatt1005.foodi.model.daos.ShoppingListDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
@@ -17,8 +17,8 @@ public class RecipePageController extends PageController {
   private static final Logger LOGGER = Logger.getLogger(RecipePageController.class.getName());
 
   private final RecipePage view;
-  private final RecipeDAO recipeDAO;
-  private final ShoppingListDAO shoppingListDAO;
+  private final RecipeDao recipeDao;
+  private final ShoppingListDao shoppingListDAO;
   private final SimpleObjectProperty<User> currentUserProperty;
   private RecipeWithIngredients recipe;
 
@@ -33,8 +33,8 @@ public class RecipePageController extends PageController {
     super(recipePage);
 
     this.view = recipePage;
-    this.recipeDAO = new RecipeDAO();
-    this.shoppingListDAO = new ShoppingListDAO();
+    this.recipeDao = new RecipeDao();
+    this.shoppingListDAO = new ShoppingListDao();
     this.currentUserProperty = currentUserProperty;
 
     LocationHandler.subscribe(e -> {
@@ -54,7 +54,7 @@ public class RecipePageController extends PageController {
     }
 
     int id = Integer.parseInt(segment);
-    recipe = recipeDAO.retrieveRecipeWithIngredientsById(id);
+    recipe = recipeDao.retrieveRecipeWithIngredientsById(id);
 
     if (recipe == null) {
       LocationHandler.setLocation("cookbook-grid");
