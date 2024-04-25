@@ -40,7 +40,7 @@ public class InventoryList extends VBox implements ComponentUtils {
     scrollPane.setFitToWidth(true);
     scrollPane.setFitToHeight(true);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     // GridPane was used in favour of TableView because of the greater easy of customization
     gridPane = new GridPane();
