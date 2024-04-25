@@ -2,7 +2,7 @@ package no.ntnu.idatt1005.foodi.controller.pages;
 
 import java.util.List;
 import javafx.beans.property.SimpleObjectProperty;
-import no.ntnu.idatt1005.foodi.model.DAO.UserDAO;
+import no.ntnu.idatt1005.foodi.model.daos.UserDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.views.Profiles;
 
@@ -14,7 +14,7 @@ public class ProfilesController extends PageController {
   private static final int MAX_USERS = 4;
   private final Profiles view;
   private final SimpleObjectProperty<User> currentUserProperty;
-  private final UserDAO userDAO;
+  private final UserDao userDao;
 
   /**
    * Constructor for the ProfilesController class.
@@ -24,7 +24,7 @@ public class ProfilesController extends PageController {
    */
   public ProfilesController(Profiles profilesPage, SimpleObjectProperty<User> currentUserProperty) {
     super(profilesPage);
-    this.userDAO = new UserDAO();
+    this.userDao = new UserDao();
     this.currentUserProperty = currentUserProperty;
 
     this.view = profilesPage;
@@ -57,11 +57,11 @@ public class ProfilesController extends PageController {
    * @return true if the user was added, false if the max users has been reached
    */
   private Boolean addUser(String name) {
-    if (userDAO.retrieveAllUsers().size() >= MAX_USERS) {
+    if (userDao.retrieveAllUsers().size() >= MAX_USERS) {
       return false;
     }
 
-    userDAO.saveUser(name);
+    userDao.saveUser(name);
     update();
 
     return true;
@@ -73,11 +73,11 @@ public class ProfilesController extends PageController {
   }
 
   /**
-   * Method for fetching all users using DAO.
+   * Method for fetching all users using daos.
    *
    * @return a list of all users
    */
   private List<User> getAllUsers() {
-    return userDAO.retrieveAllUsers();
+    return userDao.retrieveAllUsers();
   }
 }

@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @version 0.9.0
  */
-public class RecipeDAO {
+public class RecipeDao {
 
   /**
    * Saves a recipe object to the database.
@@ -225,7 +225,7 @@ public class RecipeDAO {
       return null;
     }
 
-    IngredientDAO ingredientDAO = new IngredientDAO();
+    IngredientDao ingredientDAO = new IngredientDao();
     List<AmountedIngredient> ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(
         recipeId);
 

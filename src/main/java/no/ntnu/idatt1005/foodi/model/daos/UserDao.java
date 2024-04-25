@@ -1,17 +1,17 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.util.ArrayList;
 import java.util.List;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 
 /**
- * This class is a Data Access Object (DAO) for the User class. It is used to interact with the
+ * This class is a Data Access Object (daos) for the User class. It is used to interact with the
  * database. from the database.
  *
  * @author Snake727
  * @version 0.9.0
  */
-public class UserDAO {
+public class UserDao {
 
   /**
    * Adds a default user to the database. This is used to ensure that there is always at least one
