@@ -26,7 +26,7 @@ public class InventoryController extends PageController {
   private static final Logger LOGGER = Logger.getLogger(InventoryController.class.getName());
   private final SimpleObjectProperty<User> currentUserProperty;
   private final Inventory view;
-  private final IngredientDao ingredientDAO;
+  private final IngredientDao ingredientDao;
 
   /**
    * Constructor for the InventoryController class.
@@ -39,7 +39,7 @@ public class InventoryController extends PageController {
     this.view = inventoryPage;
 
     this.currentUserProperty = currentUserProperty;
-    this.ingredientDAO = new IngredientDao();
+    this.ingredientDao = new IngredientDao();
 
     attachToView();
     update();
@@ -65,7 +65,7 @@ public class InventoryController extends PageController {
       return;
     }
 
-    ingredientDAO.updateItemAmountInUserInventory(
+    ingredientDao.updateItemAmountInUserInventory(
         currentUserProperty.get().userId(),
         ingredient.getInventoryId(),
         ingredient.getAmount()
@@ -80,7 +80,7 @@ public class InventoryController extends PageController {
    * @param ingredient the ingredient to add
    */
   private void onAddItem(@NotNull ExpiringIngredient ingredient) {
-    ingredientDAO.saveIngredientToUserInventory(
+    ingredientDao.saveIngredientToUserInventory(
         currentUserProperty.get().userId(),
         ingredient.getName(),
         ingredient.getUnit(),
@@ -118,7 +118,7 @@ public class InventoryController extends PageController {
     List<ExpiringIngredient> ingredients = view.getSelectedItems();
     LOGGER.info("Toggling freeze on " + ingredients.size() + " items");
     for (ExpiringIngredient ingredient : ingredients) {
-      ingredientDAO.toggleFreezeIngredient(
+      ingredientDao.toggleFreezeIngredient(
           currentUserProperty.get().userId(),
           ingredient.getId(),
           !ingredient.getIsFrozen()
@@ -128,7 +128,7 @@ public class InventoryController extends PageController {
           ? getUnfrozenDate(ingredient.getExpirationDate())
           : getFrozenDate(ingredient.getExpirationDate());
 
-      ingredientDAO.updateIngredientExpirationDate(
+      ingredientDao.updateIngredientExpirationDate(
           currentUserProperty.get().userId(),
           ingredient.getId(),
           newExpirationDate
@@ -154,7 +154,7 @@ public class InventoryController extends PageController {
    * @param ingredient the ingredient to delete
    */
   private void deleteItem(ExpiringIngredient ingredient) {
-    ingredientDAO.deleteIngredientFromUserInventory(
+    ingredientDao.deleteIngredientFromUserInventory(
         currentUserProperty.get().userId(),
         ingredient.getInventoryId()
     );
@@ -173,7 +173,7 @@ public class InventoryController extends PageController {
    * @return a list of grouped expiring ingredients
    */
   private @NotNull List<GroupedExpiringIngredients> getInventoryDataFromUser() {
-    List<ExpiringIngredient> inventoryData = ingredientDAO.retrieveExpiringIngredientsFromInventory(
+    List<ExpiringIngredient> inventoryData = ingredientDao.retrieveExpiringIngredientsFromInventory(
         currentUserProperty.get().userId()
     );
 

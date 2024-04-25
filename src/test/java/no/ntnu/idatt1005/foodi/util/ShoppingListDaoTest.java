@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 
 class ShoppingListDaoTest {
 
-  private static ShoppingListDao shoppingListDAO;
-  private static UserDao userDAO;
-  private static IngredientDao ingredientDAO;
+  private static ShoppingListDao shoppingListDao;
+  private static UserDao userDao;
+  private static IngredientDao ingredientDao;
   private static RecipeDao recipeDao;
   private static User testUser;
 
@@ -47,25 +47,25 @@ class ShoppingListDaoTest {
     Database.initializeEmpty();
 
     // Initialize new daos objects
-    ingredientDAO = new IngredientDao();
-    userDAO = new UserDao();
-    shoppingListDAO = new ShoppingListDao();
+    ingredientDao = new IngredientDao();
+    userDao = new UserDao();
+    shoppingListDao = new ShoppingListDao();
     recipeDao = new RecipeDao();
 
     // Create a test user
     testUser = new User(1, "Test User");
-    userDAO.saveUser(testUser.name());
+    userDao.saveUser(testUser.name());
 
     // Save new test ingredients to the database
-    ingredientDAO.saveIngredient("Test Ingredient 1", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient 1", Ingredient.Unit.GRAM,
         Ingredient.Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 2", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient 2", Ingredient.Unit.GRAM,
         Ingredient.Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 3", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient 3", Ingredient.Unit.GRAM,
         Ingredient.Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 4", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient 4", Ingredient.Unit.GRAM,
         Ingredient.Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 5", Ingredient.Unit.GRAM,
+    ingredientDao.saveIngredient("Test Ingredient 5", Ingredient.Unit.GRAM,
         Ingredient.Category.VEGETABLE);
 
     // Create new test recipes
@@ -77,20 +77,20 @@ class ShoppingListDaoTest {
         "test.jpg", "This is a test instruction 3");
 
     // Save the test ingredients to recipes
-    ingredientDAO.saveIngredientToRecipe(1, 1, 2.0);
-    ingredientDAO.saveIngredientToRecipe(1, 2, 3.0);
-    ingredientDAO.saveIngredientToRecipe(1, 3, 4.0);
-    ingredientDAO.saveIngredientToRecipe(1, 4, 5.0);
-    ingredientDAO.saveIngredientToRecipe(1, 5, 6.0);
+    ingredientDao.saveIngredientToRecipe(1, 1, 2.0);
+    ingredientDao.saveIngredientToRecipe(1, 2, 3.0);
+    ingredientDao.saveIngredientToRecipe(1, 3, 4.0);
+    ingredientDao.saveIngredientToRecipe(1, 4, 5.0);
+    ingredientDao.saveIngredientToRecipe(1, 5, 6.0);
 
-    ingredientDAO.saveIngredientToRecipe(2, 1, 2.0);
-    ingredientDAO.saveIngredientToRecipe(2, 2, 3.0);
-    ingredientDAO.saveIngredientToRecipe(2, 3, 4.0);
+    ingredientDao.saveIngredientToRecipe(2, 1, 2.0);
+    ingredientDao.saveIngredientToRecipe(2, 2, 3.0);
+    ingredientDao.saveIngredientToRecipe(2, 3, 4.0);
 
-    ingredientDAO.saveIngredientToRecipe(3, 1, 2.0);
-    ingredientDAO.saveIngredientToRecipe(3, 2, 3.0);
-    ingredientDAO.saveIngredientToRecipe(3, 3, 4.0);
-    ingredientDAO.saveIngredientToRecipe(3, 4, 5.0);
+    ingredientDao.saveIngredientToRecipe(3, 1, 2.0);
+    ingredientDao.saveIngredientToRecipe(3, 2, 3.0);
+    ingredientDao.saveIngredientToRecipe(3, 3, 4.0);
+    ingredientDao.saveIngredientToRecipe(3, 4, 5.0);
   }
 
   @AfterEach
@@ -108,7 +108,7 @@ class ShoppingListDaoTest {
   @DisplayName("Test addRecipe method")
   void testAddRecipe() {
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
 
     // Retrieve the saved recipe from the shopping list using only SQL
     Integer recipeId = new QueryBuilder("SELECT recipe_id FROM shopping_list WHERE user_id = ?")
@@ -124,10 +124,10 @@ class ShoppingListDaoTest {
       + "portions of recipe in the shopping list")
   void testAddExistingRecipe() {
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
 
     // Add the recipe to the shopping list again
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 3);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 3);
 
     // Retrieve the saved portions in recipe from the shopping list using only SQL
     Integer portions = new QueryBuilder(
@@ -144,10 +144,10 @@ class ShoppingListDaoTest {
   @DisplayName("deleteRecipe should delete given recipe based on Id")
   void testDeleteRecipe() {
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
 
     // Delete the recipe from the shopping list
-    shoppingListDAO.deleteRecipe(testUser.userId(), 1);
+    shoppingListDao.deleteRecipe(testUser.userId(), 1);
 
     // Retrieve the saved recipe from the shopping list using only SQL
     Integer recipeId = new QueryBuilder("SELECT recipe_id FROM shopping_list WHERE user_id = ?")
@@ -162,12 +162,12 @@ class ShoppingListDaoTest {
   @DisplayName("clearShoppingList should delete all shopping list entries for a user")
   void testClearShoppingList() {
     // Add several recipes to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
-    shoppingListDAO.addRecipe(testUser.userId(), 2, 3);
-    shoppingListDAO.addRecipe(testUser.userId(), 3, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 2, 3);
+    shoppingListDao.addRecipe(testUser.userId(), 3, 4);
 
     // Clear the shopping list
-    shoppingListDAO.clearShoppingList(testUser.userId());
+    shoppingListDao.clearShoppingList(testUser.userId());
 
     // Retrieve the saved recipes from the shopping list using only SQL
     Integer recipeId = new QueryBuilder("SELECT recipe_id FROM shopping_list WHERE user_id = ?")
@@ -183,16 +183,16 @@ class ShoppingListDaoTest {
       + "the recipes in the shopping list to the user inventory")
   void testAddShoppingListToInventory() {
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
 
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 2, 3);
+    shoppingListDao.addRecipe(testUser.userId(), 2, 3);
 
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 3, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 3, 4);
 
     // Add the shopping list to the inventory
-    shoppingListDAO.addShoppingListToInventory(testUser.userId());
+    shoppingListDao.addShoppingListToInventory(testUser.userId());
 
     // Retrieve the saved ingredients from the inventory using only SQL
     Integer ingredientId = new QueryBuilder(
@@ -219,16 +219,16 @@ class ShoppingListDaoTest {
       + "the total amount of ingredients in the shopping list")
   void testGetTotalIngredients() {
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 4);
 
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 2, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 2, 4);
 
     // Add the recipe to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 3, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 3, 4);
 
     // Retrieve the total amount of ingredients in the shopping list
-    List<AmountedIngredient> totalIngredients = shoppingListDAO.getTotalIngredients(
+    List<AmountedIngredient> totalIngredients = shoppingListDao.getTotalIngredients(
         testUser.userId());
 
     System.out.println(totalIngredients);
@@ -244,12 +244,12 @@ class ShoppingListDaoTest {
       + "RecipeWithIngredients objects.")
   void testGetRecipeWithIngredients() {
     // Add recipes to the shopping list
-    shoppingListDAO.addRecipe(testUser.userId(), 1, 2);
-    shoppingListDAO.addRecipe(testUser.userId(), 2, 3);
-    shoppingListDAO.addRecipe(testUser.userId(), 3, 4);
+    shoppingListDao.addRecipe(testUser.userId(), 1, 2);
+    shoppingListDao.addRecipe(testUser.userId(), 2, 3);
+    shoppingListDao.addRecipe(testUser.userId(), 3, 4);
 
     // Retrieve the saved recipe from the shopping list using only SQL
-    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDAO.getRecipesWithIngredients(
+    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDao.getRecipesWithIngredients(
         testUser.userId()
     );
 

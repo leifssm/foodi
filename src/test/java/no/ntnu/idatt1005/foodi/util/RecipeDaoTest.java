@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 class RecipeDaoTest {
 
-  private static IngredientDao ingredientDAO;
+  private static IngredientDao ingredientDao;
   private static RecipeDao recipeDao;
 
   @BeforeEach
@@ -44,7 +44,7 @@ class RecipeDaoTest {
     Database.initializeEmpty();
 
     // Initialize a new IngredientDao and RecipeDao object.
-    ingredientDAO = new IngredientDao();
+    ingredientDao = new IngredientDao();
     recipeDao = new RecipeDao();
   }
 
@@ -157,14 +157,14 @@ class RecipeDaoTest {
     assertEquals("Test Recipe", recipeDao.retrieveById(1).getName());
 
     // Save a new ingredient
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.VEGETABLE);
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.VEGETABLE);
 
     // Check that ingredient has been saved
     assertEquals("Test Ingredient",
-        Objects.requireNonNull(ingredientDAO.retrieveIngredientById(1)).getName());
+        Objects.requireNonNull(ingredientDao.retrieveIngredientById(1)).getName());
 
     // Add the ingredient to the recipe
-    ingredientDAO.saveIngredientToRecipe(1, 1, 100);
+    ingredientDao.saveIngredientToRecipe(1, 1, 100);
 
     // Check that the ingredient has been added to the recipe
     assertEquals(1, recipeDao.retrieveRecipeWithIngredientsById(1).getIngredients().size());
@@ -190,50 +190,50 @@ class RecipeDaoTest {
     assertEquals("Test Recipe", recipeDao.retrieveById(1).getName());
 
     // Save ten different ingredients with unique combinations
-    ingredientDAO.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 2", Unit.GALLON, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 3", Unit.KILOGRAM, Category.DAIRY);
-    ingredientDAO.saveIngredient("Test Ingredient 4", Unit.LITER, Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 5", Unit.MILLILITER, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 6", Unit.OUNCE, Category.DAIRY);
-    ingredientDAO.saveIngredient("Test Ingredient 7", Unit.PIECE, Category.VEGETABLE);
-    ingredientDAO.saveIngredient("Test Ingredient 8", Unit.PINT, Category.MEAT);
-    ingredientDAO.saveIngredient("Test Ingredient 9", Unit.POUNDS, Category.DAIRY);
-    ingredientDAO.saveIngredient("Test Ingredient 10", Unit.QUART, Category.VEGETABLE);
+    ingredientDao.saveIngredient("Test Ingredient", Ingredient.Unit.GRAM, Category.VEGETABLE);
+    ingredientDao.saveIngredient("Test Ingredient 2", Unit.GALLON, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 3", Unit.KILOGRAM, Category.DAIRY);
+    ingredientDao.saveIngredient("Test Ingredient 4", Unit.LITER, Category.VEGETABLE);
+    ingredientDao.saveIngredient("Test Ingredient 5", Unit.MILLILITER, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 6", Unit.OUNCE, Category.DAIRY);
+    ingredientDao.saveIngredient("Test Ingredient 7", Unit.PIECE, Category.VEGETABLE);
+    ingredientDao.saveIngredient("Test Ingredient 8", Unit.PINT, Category.MEAT);
+    ingredientDao.saveIngredient("Test Ingredient 9", Unit.POUNDS, Category.DAIRY);
+    ingredientDao.saveIngredient("Test Ingredient 10", Unit.QUART, Category.VEGETABLE);
 
     // Check that ingredient has been saved
     assertEquals("Test Ingredient",
-        Objects.requireNonNull(ingredientDAO.retrieveIngredientById(1)).getName());
+        Objects.requireNonNull(ingredientDao.retrieveIngredientById(1)).getName());
 
     // Add the ingredients to the recipes
     // Recipe 1
-    ingredientDAO.saveIngredientToRecipe(1, 1, 100);
-    ingredientDAO.saveIngredientToRecipe(1, 9, 200);
+    ingredientDao.saveIngredientToRecipe(1, 1, 100);
+    ingredientDao.saveIngredientToRecipe(1, 9, 200);
 
     // Recipe 2
-    ingredientDAO.saveIngredientToRecipe(2, 2, 100);
-    ingredientDAO.saveIngredientToRecipe(2, 7, 200);
-    ingredientDAO.saveIngredientToRecipe(2, 3, 300);
-    ingredientDAO.saveIngredientToRecipe(2, 10, 400);
-    ingredientDAO.saveIngredientToRecipe(2, 6, 500);
+    ingredientDao.saveIngredientToRecipe(2, 2, 100);
+    ingredientDao.saveIngredientToRecipe(2, 7, 200);
+    ingredientDao.saveIngredientToRecipe(2, 3, 300);
+    ingredientDao.saveIngredientToRecipe(2, 10, 400);
+    ingredientDao.saveIngredientToRecipe(2, 6, 500);
 
     // Recipe 3
-    ingredientDAO.saveIngredientToRecipe(3, 3, 100);
-    ingredientDAO.saveIngredientToRecipe(3, 4, 200);
-    ingredientDAO.saveIngredientToRecipe(3, 10, 300);
-    ingredientDAO.saveIngredientToRecipe(3, 2, 400);
+    ingredientDao.saveIngredientToRecipe(3, 3, 100);
+    ingredientDao.saveIngredientToRecipe(3, 4, 200);
+    ingredientDao.saveIngredientToRecipe(3, 10, 300);
+    ingredientDao.saveIngredientToRecipe(3, 2, 400);
 
     // Recipe 4
-    ingredientDAO.saveIngredientToRecipe(4, 4, 100);
+    ingredientDao.saveIngredientToRecipe(4, 4, 100);
 
     // Recipe 5
-    ingredientDAO.saveIngredientToRecipe(5, 5, 100);
-    ingredientDAO.saveIngredientToRecipe(5, 7, 200);
-    ingredientDAO.saveIngredientToRecipe(5, 4, 300);
-    ingredientDAO.saveIngredientToRecipe(5, 6, 400);
-    ingredientDAO.saveIngredientToRecipe(5, 1, 500);
-    ingredientDAO.saveIngredientToRecipe(5, 2, 600);
-    ingredientDAO.saveIngredientToRecipe(5, 3, 700);
+    ingredientDao.saveIngredientToRecipe(5, 5, 100);
+    ingredientDao.saveIngredientToRecipe(5, 7, 200);
+    ingredientDao.saveIngredientToRecipe(5, 4, 300);
+    ingredientDao.saveIngredientToRecipe(5, 6, 400);
+    ingredientDao.saveIngredientToRecipe(5, 1, 500);
+    ingredientDao.saveIngredientToRecipe(5, 2, 600);
+    ingredientDao.saveIngredientToRecipe(5, 3, 700);
 
     // Check that the ingredients have been added to the recipes
     assertEquals(2, recipeDao.retrieveRecipeWithIngredientsById(1).getIngredients().size());

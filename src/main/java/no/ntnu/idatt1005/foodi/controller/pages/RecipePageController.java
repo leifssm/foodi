@@ -18,7 +18,7 @@ public class RecipePageController extends PageController {
 
   private final RecipePage view;
   private final RecipeDao recipeDao;
-  private final ShoppingListDao shoppingListDAO;
+  private final ShoppingListDao shoppingListDao;
   private final SimpleObjectProperty<User> currentUserProperty;
   private RecipeWithIngredients recipe;
 
@@ -34,7 +34,7 @@ public class RecipePageController extends PageController {
 
     this.view = recipePage;
     this.recipeDao = new RecipeDao();
-    this.shoppingListDAO = new ShoppingListDao();
+    this.shoppingListDao = new ShoppingListDao();
     this.currentUserProperty = currentUserProperty;
 
     LocationHandler.subscribe(e -> {
@@ -65,7 +65,7 @@ public class RecipePageController extends PageController {
   }
 
   private void addRecipe(int id, int portions) {
-    shoppingListDAO.addRecipe(currentUserProperty.get().userId(), id, portions);
+    shoppingListDao.addRecipe(currentUserProperty.get().userId(), id, portions);
     LOGGER.info("Added recipe " + id + " to shopping list.");
   }
 }

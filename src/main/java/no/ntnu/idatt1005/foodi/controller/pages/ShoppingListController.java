@@ -27,8 +27,8 @@ public class ShoppingListController extends PageController {
   private static final Logger LOGGER = Logger.getLogger(ShoppingListController.class.getName());
   private final SimpleObjectProperty<User> currentUserProperty;
   private final ShoppingList view;
-  private final ShoppingListDao shoppingListDAO = new ShoppingListDao();
-  private final IngredientDao ingredientDAO = new IngredientDao();
+  private final ShoppingListDao shoppingListDao = new ShoppingListDao();
+  private final IngredientDao ingredientDao = new IngredientDao();
   private List<RecipeWithPartiallyRemovedIngredients> recipes;
 
   /**
@@ -62,7 +62,7 @@ public class ShoppingListController extends PageController {
     List<Runnable> onRemoveMethods = new ArrayList<>();
     for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {
       onRemoveMethods.add(() -> {
-        shoppingListDAO.deleteRecipe(
+        shoppingListDao.deleteRecipe(
             currentUserProperty.get().userId(),
             recipe.getId()
         );
@@ -89,7 +89,7 @@ public class ShoppingListController extends PageController {
         if (ingredient == null) {
           continue;
         }
-        ingredientDAO.saveIngredientToUserInventory(
+        ingredientDao.saveIngredientToUserInventory(
             currentUserProperty.get().userId(),
             ingredient.getName(),
             ingredient.getUnit(),
@@ -104,7 +104,7 @@ public class ShoppingListController extends PageController {
   }
 
   private void clearShoppingList() {
-    shoppingListDAO.clearShoppingList(currentUserProperty.get().userId());
+    shoppingListDao.clearShoppingList(currentUserProperty.get().userId());
     update();
   }
 
@@ -118,7 +118,7 @@ public class ShoppingListController extends PageController {
     List<AmountedIngredient> totalIngredients = getCurrentIngredients();
 
     HashMap<Integer, RecipeWithPartiallyRemovedIngredients> accountedRecipes = new HashMap<>();
-    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDAO.getRecipesWithIngredients(
+    List<RecipeWithPartiallyRemovedIngredients> recipes = shoppingListDao.getRecipesWithIngredients(
         currentUserProperty.get().userId()
     );
 
@@ -158,7 +158,7 @@ public class ShoppingListController extends PageController {
    * @return a list of ingredients the user has in their inventory
    */
   private @NotNull List<AmountedIngredient> getCurrentIngredients() {
-    List<ExpiringIngredient> fetchedIngredients = ingredientDAO
+    List<ExpiringIngredient> fetchedIngredients = ingredientDao
         .retrieveExpiringIngredientsFromInventory(currentUserProperty.get().userId());
 
     if (fetchedIngredients == null) {
