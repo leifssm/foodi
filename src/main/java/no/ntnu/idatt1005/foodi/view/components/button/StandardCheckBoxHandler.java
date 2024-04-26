@@ -1,6 +1,8 @@
-package no.ntnu.idatt1002.view.components.button;
+package no.ntnu.idatt1005.foodi.view.components.button;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import org.intellij.lang.annotations.MagicConstant;
@@ -10,29 +12,20 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Class for handling a group of checkboxes, and a main checkbox that controls them.
  *
+ * @param <DataT> The type of data the checkboxes represent
  * @author Leif Mørstad
- * @version 1.0
+ * @version 1.1
  * @see StandardCheckBox
  */
-public class StandardCheckBoxHandler {
+public class StandardCheckBoxHandler<DataT> {
 
+  private final @NotNull HashMap<StandardCheckBox, DataT> checkBoxDataMap = new HashMap<>();
   private @Nullable StandardCheckBox mainCheckBox = null;
-  private @NotNull StandardCheckBox[] checkBoxes;
 
   /**
    * Constructor for the StandardCheckBoxHandler class.
    */
   public StandardCheckBoxHandler() {
-    this(new StandardCheckBox[0]);
-  }
-
-  /**
-   * Constructor for the StandardCheckBoxHandler class.
-   *
-   * @param checkBoxes The checkboxes to handle
-   */
-  public StandardCheckBoxHandler(@NotNull StandardCheckBox @NotNull ... checkBoxes) {
-    this.checkBoxes = checkBoxes;
   }
 
   /**
@@ -69,8 +62,8 @@ public class StandardCheckBoxHandler {
    * @param selected Whether the checkboxes should be selected
    */
   public void setAll(boolean selected) {
-    for (StandardCheckBox checkBox : checkBoxes) {
-      checkBox.setSelected(selected);
+    for (var selectedData : checkBoxDataMap.entrySet()) {
+      selectedData.getKey().setSelected(selected);
     }
     updateMain();
   }
@@ -107,16 +100,18 @@ public class StandardCheckBoxHandler {
    * @return Either "all", "some" or "none"
    */
   public @MagicConstant String getMainCheckBoxState() {
-    if (checkBoxes.length == 0) {
+    if (checkBoxDataMap.isEmpty()) {
       return "none";
     }
 
-    boolean allSelected = checkBoxes[0].isSelected();
-    boolean state;
-    for (int i = 1; i < checkBoxes.length; i++) {
-      state = checkBoxes[i].isSelected();
+    Boolean allSelected = null;
+    for (var checkbox : checkBoxDataMap.keySet()) {
+      if (allSelected == null) {
+        allSelected = checkbox.isSelected();
+        continue;
+      }
 
-      if (state != allSelected) {
+      if (checkbox.isSelected() != allSelected) {
         return "some";
       }
     }
@@ -128,12 +123,28 @@ public class StandardCheckBoxHandler {
    *
    * @param checkBox The checkbox to bind
    */
-  public void bindCheckBox(@NotNull StandardCheckBox checkBox) {
+  public void bindCheckBox(@NotNull StandardCheckBox checkBox, DataT ingredient) {
+    if (checkBoxDataMap.containsKey(checkBox)) {
+      throw new IllegalArgumentException("The ingredient is already bound to a checkbox");
+    }
+    checkBoxDataMap.put(checkBox, ingredient);
     appendEvent(checkBox, this::updateMain);
+  }
 
-    StandardCheckBox[] newCheckBoxes = Arrays.copyOf(checkBoxes, checkBoxes.length + 1);
-    newCheckBoxes[checkBoxes.length] = checkBox;
+  /**
+   * Returns a list of all data corresponding to the selected data.
+   *
+   * @return a list of selected data
+   */
+  public List<DataT> getSelectedData() {
+    ArrayList<DataT> selectedData = new ArrayList<>();
 
-    checkBoxes = newCheckBoxes;
+    for (var entry : checkBoxDataMap.entrySet()) {
+      if (entry.getKey().isSelected()) {
+        selectedData.add(entry.getValue());
+      }
+    }
+
+    return selectedData;
   }
 }

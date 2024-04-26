@@ -1,0 +1,48 @@
+.std-dialog * {
+  -fx-background-color: #1B1B1B;
+  -fx-font-size: 14px;
+  -fx-text-fill: #E6E6E6;
+}
+
+.dialog-pane {
+  -fx-background-color: #1B1B1B;
+  -fx-background-radius: 5px;
+  -fx-text-fill: #E6E6E6;
+}
+
+.button {
+  -fx-background-color: #16992B;
+  -fx-font-weight: bold;
+  -fx-text-fill: #FFFFFF;
+}
+
+.button-ok {
+  -fx-background-color: #16992B;
+}
+
+.button-cancel {
+  -fx-background-color: #FF0000;
+}
+
+.std-dialog Label {
+  -fx-font-size: 24px !important;
+  -fx-font-weight: bold;
+}
+
+.text-field, .text-field *, .combo-box, .combo-box * {
+  -fx-prompt-text-fill: #B4B4B4;
+  -fx-background-color: #000000;
+  -fx-text-fill: #FFFFFF;
+}
+
+.text-field, .combo-box {
+  -fx-background-radius: 5px;
+}
+
+.header {
+  -fx-padding: 10px;
+}
+
+.header * {
+  -fx-font-size: 24px;
+}

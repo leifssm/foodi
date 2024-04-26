@@ -1,9 +1,10 @@
-package no.ntnu.idatt1002.view.components.profiles;
+package no.ntnu.idatt1005.foodi.view.components.profiles;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * Class for creating a profile item. A profile item is a square button with a color and a label
@@ -12,7 +13,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @author Henrik Kvamme
  * @version 1.0
  */
-public class AddProfileButton extends VBox implements CssUtils {
+public class AddProfileButton extends VBox implements ComponentUtils {
 
   /**
    * Constructor for AddProfileButton.
@@ -27,7 +28,7 @@ public class AddProfileButton extends VBox implements CssUtils {
     addClass("profile-item");
     addClass("add-profile-button");
 
-    Button button = new Button();
+    Button button = new StandardButton("", false);
 
     Label plusIcon = new Label("+");
     button.setGraphic(plusIcon);

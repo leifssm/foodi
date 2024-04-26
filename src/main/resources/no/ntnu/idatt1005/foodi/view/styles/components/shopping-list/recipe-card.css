@@ -1,0 +1,55 @@
+.recipe-card {
+  -fx-background-color: #000000;
+  -fx-background-radius: 5px;
+  -fx-padding: 10px 15px;
+}
+
+.recipe-card .recipe-title {
+  -fx-text-fill: #dedede;
+  -fx-font-size: 17px;
+  -fx-font-weight: bold;
+  -fx-max-width: infinity;
+}
+
+.recipe-card .recipe-servings {
+  -fx-text-fill: #e6e6e6;
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-background-color: #313131;
+  -fx-background-radius: 5px;
+  -fx-padding: 1px 8px;
+  -fx-alignment: center;
+}
+
+.recipe-card .ingredients-color {
+  -fx-background-color: #ff2c2c;
+  -fx-background-radius: 5px;
+  -fx-min-width: 5px;
+  -fx-max-width: 5px;
+  -fx-max-height: infinity;
+}
+
+.recipe-card .ingredients-wrapper {
+  -fx-padding: 15px 0 0 0;
+}
+
+.recipe-card .ingredient Label {
+  -fx-text-fill: #e6e6e6;
+  -fx-font-size: 10px;
+}
+
+.recipe-card .ingredient-amount {
+  -fx-font-weight: bold;
+}
+
+.recipe-card .crossed-out-line {
+  -fx-max-height: 1px;
+}
+
+.recipe-card .ingredient.marked .ingredient-amount {
+  -fx-text-fill: #b4b4b4;
+}
+
+.recipe-card .ingredient.marked .crossed-out-line {
+  -fx-background-color: #b4b4b4;
+}

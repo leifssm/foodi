@@ -1,10 +1,12 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.function.Consumer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
-import no.ntnu.idatt1002.view.components.button.StandardCheckBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,27 +25,36 @@ class InventoryListSubItem {
    *
    * @param item The inventory item to display
    */
-  public InventoryListSubItem(@NotNull InventoryItem item) {
+  public InventoryListSubItem(
+      @NotNull ExpiringIngredient item,
+      @NotNull Consumer<ExpiringIngredient> onAmountChange
+  ) {
     Label background = new Label(); // Empty
     GridPane.setColumnSpan(background, 7);
     background.getStyleClass().add("sub-item-background");
 
-    TextFlow expiryDate = new InventoryExpirationDate(item.getExpiryDate());
+    TextFlow expiryDate = new InventoryExpirationDate(item.getExpirationDate());
     expiryDate.getStyleClass().addAll("gray", "sub-item-expiration-date");
 
-    InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpiryDate());
+    InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpirationDate());
+    progressBar.setIsFrozen(item.getIsFrozen());
     Label category = new Label(); // Empty
 
-    InventoryListInput quantity = new InventoryListInput();
-    quantity.setText(item.getQuantity());
+    InventoryListInput quantity = new InventoryListInput(item.getAmount());
+    quantity.setText(item.getAmountString());
     quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);
     quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);
 
-    Label unit = new Label(item.getUnit());
-    unit.getStyleClass().addAll("center", "gray", "vertical-padding");
+    quantity.setOnAmountChange(
+        (double newAmount) -> {
+          ExpiringIngredient newItem = item.copy();
+          newItem.setAmount(newAmount);
+          onAmountChange.accept(newItem);
+        }
+    );
 
-    Label edit = new Label("e");
-    edit.getStyleClass().add("center");
+    Label unit = new Label(item.getUnit().getName());
+    unit.getStyleClass().addAll("center", "gray", "vertical-padding");
 
     select.setScale(0.6);
     select.getStyleClass().add("center");
@@ -55,7 +66,6 @@ class InventoryListSubItem {
         category,
         quantity,
         unit,
-        edit,
         select
     };
   }

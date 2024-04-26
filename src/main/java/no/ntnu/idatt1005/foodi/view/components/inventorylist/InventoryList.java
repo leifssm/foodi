@@ -1,14 +1,19 @@
-package no.ntnu.idatt1002.view.components.inventorylist;
+package no.ntnu.idatt1005.foodi.view.components.inventorylist;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.Paginator;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class for displaying a list of ingredients.
@@ -16,11 +21,12 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * @author Leif Mørstad
  * @version 1.0
  */
-public class InventoryList extends VBox implements CssUtils {
-
-  private final Paginator<InventoryItem> items = new Paginator<>();
+public class InventoryList extends VBox implements ComponentUtils {
 
   private final GridPane gridPane;
+  private final ArrayList<StandardCheckBoxHandler<ExpiringIngredient>> checkboxes =
+      new ArrayList<>();
+  private Consumer<ExpiringIngredient> onAmountChange;
 
   /**
    * Constructor for the InventoryList class.
@@ -34,7 +40,7 @@ public class InventoryList extends VBox implements CssUtils {
     scrollPane.setFitToWidth(true);
     scrollPane.setFitToHeight(true);
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+    scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
     // GridPane was used in favour of TableView because of the greater easy of customization
     gridPane = new GridPane();
@@ -42,7 +48,7 @@ public class InventoryList extends VBox implements CssUtils {
     ColumnConstraints iconCol = new ColumnConstraints();
     iconCol.setPercentWidth(5);
     ColumnConstraints nameCol = new ColumnConstraints();
-    nameCol.setPercentWidth(25);
+    nameCol.setPercentWidth(30);
     ColumnConstraints expiryCol = new ColumnConstraints();
     expiryCol.setPercentWidth(20);
     ColumnConstraints categoryCol = new ColumnConstraints();
@@ -51,8 +57,6 @@ public class InventoryList extends VBox implements CssUtils {
     quantityCol.setPercentWidth(10);
     ColumnConstraints unitCol = new ColumnConstraints();
     unitCol.setPercentWidth(10);
-    ColumnConstraints editCol = new ColumnConstraints();
-    editCol.setPercentWidth(5);
     ColumnConstraints selectCol = new ColumnConstraints();
     selectCol.setPercentWidth(5);
 
@@ -63,7 +67,6 @@ public class InventoryList extends VBox implements CssUtils {
         categoryCol,
         quantityCol,
         unitCol,
-        editCol,
         selectCol
     );
 
@@ -79,41 +82,27 @@ public class InventoryList extends VBox implements CssUtils {
         new Label("CATEGORY"),
         amount,
         unit,
-        new Label(),
         new Label()
     );
 
     scrollPane.setContent(gridPane);
     getChildren().add(scrollPane);
-
-    items.addItems(
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem(),
-        new InventoryItem()
-    );
-    render();
   }
 
   /**
    * Clears the current cells and displays all stored cells to the view.
+   *
+   * @param currentPage a list of grouped expiring ingredients
    */
-  public void render() {
+  public void render(@NotNull final List<GroupedExpiringIngredients> currentPage) {
     clearCells();
 
-    List<InventoryItem> currentPage = items.getCurrentPage();
     int rowNum = 2;
-    for (InventoryItem item : currentPage) {
-      InventoryListItem rows = new InventoryListItem(item, item, item);
+    for (GroupedExpiringIngredients ingredientGroup : currentPage) {
+
+      InventoryListItem rows = new InventoryListItem(ingredientGroup, onAmountChange);
+      checkboxes.add(rows.getSelectHandler());
+
       gridPane.addRow(rowNum++, rows.getMainItems());
 
       for (InventoryListSubItem subRow : rows.getSubItems()) {
@@ -129,12 +118,22 @@ public class InventoryList extends VBox implements CssUtils {
    * Removes all the displayed cells from view.
    */
   public void clearCells() {
+    checkboxes.clear();
     gridPane.getChildren().removeIf(node ->
-        GridPane.getRowIndex(node) == null && GridPane.getRowIndex(node) > 1
+        GridPane.getRowIndex(node) == null || GridPane.getRowIndex(node) > 1
     );
   }
 
-  public Paginator<InventoryItem> getItems() {
-    return items;
+  public List<StandardCheckBoxHandler<ExpiringIngredient>> getCheckboxHandlers() {
+    return checkboxes;
+  }
+
+  /**
+   * Sets the onAmountChange consumer.
+   *
+   * @param onAmountChange the consumer to set
+   */
+  public void setOnAmountChange(Consumer<ExpiringIngredient> onAmountChange) {
+    this.onAmountChange = onAmountChange;
   }
 }

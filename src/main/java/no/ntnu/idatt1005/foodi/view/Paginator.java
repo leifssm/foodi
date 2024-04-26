@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.view;
+package no.ntnu.idatt1005.foodi.view;
 
 import java.util.ArrayList;
 import java.util.List;

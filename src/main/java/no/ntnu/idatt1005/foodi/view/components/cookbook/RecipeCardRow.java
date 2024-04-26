@@ -1,9 +1,9 @@
-package no.ntnu.idatt1002.view.components.cookbook;
+package no.ntnu.idatt1005.foodi.view.components.cookbook;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import no.ntnu.idatt1002.view.utils.CssUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
 
 /**
  * A row of recipe cards.
@@ -11,7 +11,7 @@ import no.ntnu.idatt1002.view.utils.CssUtils;
  * <p>This class is a custom component for displaying a row of recipe cards.
  * It is used in the cookbook grid view.</p>
  */
-public class RecipeCardRow extends VBox implements CssUtils {
+public class RecipeCardRow extends VBox implements ComponentUtils {
 
   /**
    * The constructor of the recipe card row component.
