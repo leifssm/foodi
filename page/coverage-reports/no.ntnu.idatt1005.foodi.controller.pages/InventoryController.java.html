@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.controller.pages</a> &gt; <span class="el_source">InventoryController.java</span></div><h1>InventoryController.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.controller.pages;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.views.Inventory;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Controller for the inventory page. This controller manages the updates to the inventory page.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
+public class InventoryController extends PageController {
+
+<span class="nc" id="L26">  private static final Logger LOGGER = Logger.getLogger(InventoryController.class.getName());</span>
+  private final SimpleObjectProperty&lt;User&gt; currentUserProperty;
+  private final Inventory view;
+  private final IngredientDao ingredientDao;
+
+  /**
+   * Constructor for the InventoryController class.
+   *
+   * @param inventoryPage the inventory view
+   */
+  public InventoryController(Inventory inventoryPage,
+      SimpleObjectProperty&lt;User&gt; currentUserProperty) {
+<span class="nc" id="L38">    super(inventoryPage);</span>
+<span class="nc" id="L39">    this.view = inventoryPage;</span>
+
+<span class="nc" id="L41">    this.currentUserProperty = currentUserProperty;</span>
+<span class="nc" id="L42">    this.ingredientDao = new IngredientDao();</span>
+
+<span class="nc" id="L44">    attachToView();</span>
+<span class="nc" id="L45">    update();</span>
+<span class="nc" id="L46">  }</span>
+
+  private void attachToView() {
+<span class="nc" id="L49">    view.setOnAddItem(this::onAddItem);</span>
+<span class="nc" id="L50">    view.setOnFreezeItems(this::onFreezeItem);</span>
+<span class="nc" id="L51">    view.setOnDeleteItems(this::onDeleteItems);</span>
+<span class="nc" id="L52">    view.setOnAmountChange(this::onAmountChange);</span>
+<span class="nc" id="L53">  }</span>
+
+  /**
+   * Updates the amount of an ingredient in the inventory. If the amount is 0, the ingredient is
+   * removed.
+   *
+   * @param ingredient the ingredient to update
+   */
+  private void onAmountChange(ExpiringIngredient ingredient) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    if (ingredient.getAmount() &lt;= 0) {</span>
+<span class="nc" id="L63">      deleteItem(ingredient);</span>
+<span class="nc" id="L64">      update();</span>
+<span class="nc" id="L65">      return;</span>
+    }
+
+<span class="nc" id="L68">    ingredientDao.updateItemAmountInUserInventory(</span>
+<span class="nc" id="L69">        currentUserProperty.get().userId(),</span>
+<span class="nc" id="L70">        ingredient.getInventoryId(),</span>
+<span class="nc" id="L71">        ingredient.getAmount()</span>
+    );
+
+<span class="nc" id="L74">    update();</span>
+<span class="nc" id="L75">  }</span>
+
+  /**
+   * Adds an ingredient to the inventory with {@link IngredientDao}.
+   *
+   * @param ingredient the ingredient to add
+   */
+  private void onAddItem(@NotNull ExpiringIngredient ingredient) {
+<span class="nc" id="L83">    ingredientDao.saveIngredientToUserInventory(</span>
+<span class="nc" id="L84">        currentUserProperty.get().userId(),</span>
+<span class="nc" id="L85">        ingredient.getName(),</span>
+<span class="nc" id="L86">        ingredient.getUnit(),</span>
+<span class="nc" id="L87">        ingredient.getCategory(),</span>
+<span class="nc" id="L88">        ingredient.getAmount(),</span>
+<span class="nc" id="L89">        new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())</span>
+    );
+
+<span class="nc" id="L92">    update();</span>
+<span class="nc" id="L93">  }</span>
+
+  /**
+   * Returns the date a frozen ingredient should be eaten before.
+   *
+   * @param expirationDate the expiration date of the ingredient
+   * @return the date the ingredient should be eaten before
+   */
+  private @NotNull LocalDate getFrozenDate(@NotNull LocalDate expirationDate) {
+<span class="nc" id="L102">    long daysUntilExpiration = DAYS.between(LocalDate.now(), expirationDate);</span>
+<span class="nc" id="L103">    return LocalDate.now().plusDays(5 * daysUntilExpiration);</span>
+  }
+
+  /**
+   * Returns the date an unfrozen ingredient should be eaten before.
+   *
+   * @param expirationDate the expiration date of the ingredient
+   * @return the date the ingredient should be eaten before
+   */
+  private LocalDate getUnfrozenDate(@NotNull LocalDate expirationDate) {
+    // expiration date is an unused parameter for future compatibility
+<span class="nc" id="L114">    return LocalDate.now().plusDays(2);</span>
+  }
+
+  private void onFreezeItem() {
+<span class="nc" id="L118">    List&lt;ExpiringIngredient&gt; ingredients = view.getSelectedItems();</span>
+<span class="nc" id="L119">    LOGGER.info(&quot;Toggling freeze on &quot; + ingredients.size() + &quot; items&quot;);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">    for (ExpiringIngredient ingredient : ingredients) {</span>
+<span class="nc" id="L121">      ingredientDao.toggleFreezeIngredient(</span>
+<span class="nc" id="L122">          currentUserProperty.get().userId(),</span>
+<span class="nc" id="L123">          ingredient.getId(),</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">          !ingredient.getIsFrozen()</span>
+      );
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">      LocalDate newExpirationDate = ingredient.getIsFrozen()</span>
+<span class="nc" id="L128">          ? getUnfrozenDate(ingredient.getExpirationDate())</span>
+<span class="nc" id="L129">          : getFrozenDate(ingredient.getExpirationDate());</span>
+
+<span class="nc" id="L131">      ingredientDao.updateIngredientExpirationDate(</span>
+<span class="nc" id="L132">          currentUserProperty.get().userId(),</span>
+<span class="nc" id="L133">          ingredient.getId(),</span>
+          newExpirationDate
+      );
+<span class="nc" id="L136">    }</span>
+
+<span class="nc" id="L138">    update();</span>
+<span class="nc" id="L139">  }</span>
+
+  private void onDeleteItems() {
+<span class="nc" id="L142">    List&lt;ExpiringIngredient&gt; ingredients = view.getSelectedItems();</span>
+<span class="nc" id="L143">    LOGGER.info(&quot;Deleting &quot; + ingredients.size() + &quot; items&quot;);</span>
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">    for (ExpiringIngredient ingredient : ingredients) {</span>
+<span class="nc" id="L146">      deleteItem(ingredient);</span>
+<span class="nc" id="L147">    }</span>
+<span class="nc" id="L148">    update();</span>
+<span class="nc" id="L149">  }</span>
+
+  /**
+   * Deletes an ingredient from the inventory.
+   *
+   * @param ingredient the ingredient to delete
+   */
+  private void deleteItem(ExpiringIngredient ingredient) {
+<span class="nc" id="L157">    ingredientDao.deleteIngredientFromUserInventory(</span>
+<span class="nc" id="L158">        currentUserProperty.get().userId(),</span>
+<span class="nc" id="L159">        ingredient.getInventoryId()</span>
+    );
+<span class="nc" id="L161">    update();</span>
+<span class="nc" id="L162">  }</span>
+
+  @Override
+  void update() {
+<span class="nc" id="L166">    view.render(getInventoryDataFromUser());</span>
+<span class="nc" id="L167">  }</span>
+
+  /**
+   * Fetches the inventory {@link ExpiringIngredient} from the user and groups it by
+   * {@link GroupedExpiringIngredients}.
+   *
+   * @return a list of grouped expiring ingredients
+   */
+  private @NotNull List&lt;GroupedExpiringIngredients&gt; getInventoryDataFromUser() {
+<span class="nc" id="L176">    List&lt;ExpiringIngredient&gt; inventoryData = ingredientDao.retrieveExpiringIngredientsFromInventory(</span>
+<span class="nc" id="L177">        currentUserProperty.get().userId()</span>
+    );
+
+<span class="nc bnc" id="L180" title="All 2 branches missed.">    if (inventoryData == null) {</span>
+<span class="nc" id="L181">      return new ArrayList&lt;&gt;();</span>
+    }
+
+    // Group the ingredients by name
+<span class="nc" id="L185">    HashMap&lt;String, ArrayList&lt;ExpiringIngredient&gt;&gt; groupedInventoryData = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">    for (ExpiringIngredient ingredient : inventoryData) {</span>
+<span class="nc" id="L187">      String name = ingredient.getName();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">      if (groupedInventoryData.containsKey(name)) {</span>
+<span class="nc" id="L189">        groupedInventoryData.get(name).add(ingredient);</span>
+      } else {
+<span class="nc" id="L191">        groupedInventoryData.put(name, new ArrayList&lt;&gt;(List.of(ingredient)));</span>
+      }
+<span class="nc" id="L193">    }</span>
+
+<span class="nc" id="L195">    return groupedInventoryData</span>
+<span class="nc" id="L196">        .entrySet()</span>
+<span class="nc" id="L197">        .stream()</span>
+<span class="nc" id="L198">        .map(entry -&gt;</span>
+<span class="nc" id="L199">            new GroupedExpiringIngredients(entry.getKey(), entry.getValue())</span>
+        )
+<span class="nc" id="L201">        .toList();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

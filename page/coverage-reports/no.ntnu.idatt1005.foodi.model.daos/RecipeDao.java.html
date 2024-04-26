@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.daos</a> &gt; <span class="el_source">RecipeDao.java</span></div><h1>RecipeDao.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.daos;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * This class is responsible for handling the usage of database operations regarding stored recipes
+ * in the database.
+ *
+ * @version 0.9.0
+ */
+<span class="fc" id="L19">public class RecipeDao {</span>
+
+  /**
+   * Saves a recipe object to the database.
+   *
+   * @param obj the recipe object to be saved,
+   */
+  public void saveRecipeObject(@NotNull Recipe obj) {
+<span class="nc" id="L27">    saveRecipe(</span>
+<span class="nc" id="L28">        obj.getName(),</span>
+<span class="nc" id="L29">        obj.getDescription(),</span>
+<span class="nc" id="L30">        obj.getDifficulty().toString(),</span>
+<span class="nc" id="L31">        obj.getDietaryTag().toString(),</span>
+<span class="nc" id="L32">        obj.getDuration(),</span>
+<span class="nc" id="L33">        obj.getImagePath(),</span>
+<span class="nc" id="L34">        obj.getInstruction()</span>
+    );
+<span class="nc" id="L36">  }</span>
+
+  /**
+   * Saves a new recipe to the database.
+   *
+   * @param name        The name of the recipe.
+   * @param description The description of the recipe.
+   * @param difficulty  The difficulty of the recipe.
+   * @param dietaryTag  The dietary tag of the recipe.
+   * @param duration    The duration of the recipe.
+   * @param imagePath   The image path of the recipe.
+   * @param instruction The instruction of the recipe.
+   */
+  public void saveRecipe(String name, String description, String difficulty, String dietaryTag,
+      int duration, String imagePath, String instruction) {
+<span class="fc" id="L51">    new QueryBuilder(</span>
+        &quot;INSERT INTO recipe (name, description, difficulty, &quot;
+            + &quot;dietary_tag, duration, imagePath, instruction) VALUES (?, ?, ?, ?, ?, ?, ?)&quot;)
+<span class="fc" id="L54">        .addString(name)</span>
+<span class="fc" id="L55">        .addString(description)</span>
+<span class="fc" id="L56">        .addString(difficulty)</span>
+<span class="fc" id="L57">        .addString(dietaryTag)</span>
+<span class="fc" id="L58">        .addInt(duration)</span>
+<span class="fc" id="L59">        .addString(imagePath)</span>
+<span class="fc" id="L60">        .addString(instruction)</span>
+<span class="fc" id="L61">        .executeUpdateSafe();</span>
+<span class="fc" id="L62">  }</span>
+
+  /**
+   * Merges a recipe to the recipe table in the database.
+   *
+   * @param id          the id of the recipe to be merged with new data.
+   * @param name        the name of the recipe.
+   * @param description the description of the recipe.
+   * @param difficulty  the difficulty of the recipe.
+   * @param dietaryTag  the dietary tag of the recipe.
+   * @param duration    the duration of the recipe.
+   * @param imagePath   the image path of the recipe.
+   * @param instruction the instruction of the recipe.
+   */
+  public void mergeRecipe(int id, String name, String description, String difficulty,
+      String dietaryTag,
+      int duration, String imagePath, String instruction) {
+<span class="nc" id="L79">    new QueryBuilder(</span>
+        &quot;MERGE INTO recipe (id, name, description, difficulty,&quot;
+            + &quot;dietary_tag, duration, imagePath, instruction)&quot;
+            + &quot;VALUES (?, ?, ?, ?, ?, ?, ?, ?)&quot;)
+<span class="nc" id="L83">        .addInt(id)</span>
+<span class="nc" id="L84">        .addString(name)</span>
+<span class="nc" id="L85">        .addString(description)</span>
+<span class="nc" id="L86">        .addString(difficulty)</span>
+<span class="nc" id="L87">        .addString(dietaryTag)</span>
+<span class="nc" id="L88">        .addInt(duration)</span>
+<span class="nc" id="L89">        .addString(imagePath)</span>
+<span class="nc" id="L90">        .addString(instruction)</span>
+<span class="nc" id="L91">        .executeUpdateSafe();</span>
+<span class="nc" id="L92">  }</span>
+
+  /**
+   * Updates a recipe in the recipe table in the database by its given ID.
+   *
+   * @param id          the id of the recipe to be updated.
+   * @param name        the name of the recipe.
+   * @param description the description of the recipe.
+   * @param difficulty  the difficulty of the recipe.
+   * @param dietaryTag  the dietary tag of the recipe.
+   * @param duration    the duration of the recipe.
+   * @param imagePath   the image path of the recipe.
+   * @param instruction the instruction of the recipe.
+   */
+  public void updateRecipeById(int id, String name, String description, String difficulty,
+      String dietaryTag, int duration, String imagePath, String instruction) {
+<span class="fc" id="L108">    new QueryBuilder(</span>
+        &quot;UPDATE recipe SET name = ?, description = ?, difficulty = ?, &quot;
+            + &quot;dietary_tag = ?, duration = ?, imagePath = ?, instruction = ? WHERE id = ?&quot;)
+<span class="fc" id="L111">        .addString(name)</span>
+<span class="fc" id="L112">        .addString(description)</span>
+<span class="fc" id="L113">        .addString(difficulty)</span>
+<span class="fc" id="L114">        .addString(dietaryTag)</span>
+<span class="fc" id="L115">        .addInt(duration)</span>
+<span class="fc" id="L116">        .addString(imagePath)</span>
+<span class="fc" id="L117">        .addString(instruction)</span>
+<span class="fc" id="L118">        .addInt(id)</span>
+<span class="fc" id="L119">        .executeUpdateSafe();</span>
+<span class="fc" id="L120">  }</span>
+
+  /**
+   * Updates a recipe object in the recipe table in the database.
+   *
+   * @param obj the recipe object to be updated,
+   */
+  public void update(@NotNull Recipe obj) {
+<span class="nc" id="L128">    new QueryBuilder(</span>
+        &quot;UPDATE recipe SET name = ?, description = ?, difficulty = ?, &quot;
+            + &quot;dietary_tag = ?, duration = ?, imagePath = ?, instruction = ? WHERE id = ?&quot;)
+<span class="nc" id="L131">        .addString(obj.getName())</span>
+<span class="nc" id="L132">        .addString(obj.getDescription())</span>
+<span class="nc" id="L133">        .addString(obj.getDifficulty().toString())</span>
+<span class="nc" id="L134">        .addString(obj.getDietaryTag().toString())</span>
+<span class="nc" id="L135">        .addInt(obj.getDuration())</span>
+<span class="nc" id="L136">        .addString(obj.getImagePath())</span>
+<span class="nc" id="L137">        .addString(obj.getInstruction())</span>
+<span class="nc" id="L138">        .addInt(obj.getId())</span>
+<span class="nc" id="L139">        .executeUpdateSafe();</span>
+<span class="nc" id="L140">  }</span>
+
+  /**
+   * Deletes a recipe from the recipe table in the database.
+   *
+   * @param obj the recipe object to be deleted.
+   */
+  public void delete(@NotNull Recipe obj) {
+<span class="fc" id="L148">    new QueryBuilder(&quot;DELETE FROM recipe WHERE id = ?&quot;)</span>
+<span class="fc" id="L149">        .addInt(obj.getId())</span>
+<span class="fc" id="L150">        .executeUpdateSafe();</span>
+<span class="fc" id="L151">  }</span>
+
+  /**
+   * Deletes a recipe from the recipe table in the database by its given ID.
+   *
+   * @param id the id of the recipe to be deleted.
+   */
+  public void deleteRecipeById(int id) {
+<span class="fc" id="L159">    new QueryBuilder(&quot;DELETE FROM recipe WHERE id = ?&quot;)</span>
+<span class="fc" id="L160">        .addInt(id)</span>
+<span class="fc" id="L161">        .executeUpdateSafe();</span>
+<span class="fc" id="L162">  }</span>
+
+  /**
+   * Retrieves a recipe object from the database.
+   *
+   * @param obj the recipe object to be retrieved
+   * @return the recipe object
+   */
+  public Recipe retrieveRecipeObject(@NotNull Recipe obj) {
+<span class="nc" id="L171">    return new QueryBuilder(&quot;SELECT * FROM recipe WHERE id = ?&quot;)</span>
+<span class="nc" id="L172">        .addInt(obj.getId())</span>
+<span class="nc" id="L173">        .executeQuerySafe(rs -&gt; {</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">          if (rs.next()) {</span>
+<span class="nc" id="L175">            return new Recipe(</span>
+<span class="nc" id="L176">                rs.getInt(&quot;id&quot;),</span>
+<span class="nc" id="L177">                rs.getString(&quot;name&quot;),</span>
+<span class="nc" id="L178">                rs.getString(&quot;description&quot;),</span>
+<span class="nc" id="L179">                Recipe.Difficulty.valueOf(rs.getString(&quot;difficulty&quot;).toUpperCase()),</span>
+<span class="nc" id="L180">                Recipe.DietaryTag.valueOf(rs.getString(&quot;dietary_tag&quot;).toUpperCase()),</span>
+<span class="nc" id="L181">                rs.getInt(&quot;duration&quot;),</span>
+<span class="nc" id="L182">                rs.getString(&quot;imagePath&quot;),</span>
+<span class="nc" id="L183">                rs.getString(&quot;instruction&quot;)</span>
+            );
+          }
+<span class="nc" id="L186">          return null;</span>
+        });
+  }
+
+  /**
+   * Retrieves all recipes from the database as objects and returns them as a list.
+   *
+   * @return a list of all recipes in the database.
+   */
+  public List&lt;Recipe&gt; retrieveAll() {
+<span class="fc" id="L196">    return new QueryBuilder(&quot;SELECT * FROM recipe&quot;)</span>
+<span class="fc" id="L197">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L198">          List&lt;Recipe&gt; recipes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L200">            recipes.add(new Recipe(</span>
+<span class="fc" id="L201">                rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L202">                rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L203">                rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L204">                Recipe.Difficulty.valueOf(rs.getString(&quot;difficulty&quot;).toUpperCase()),</span>
+<span class="fc" id="L205">                Recipe.DietaryTag.valueOf(rs.getString(&quot;dietary_tag&quot;).toUpperCase()),</span>
+<span class="fc" id="L206">                rs.getInt(&quot;duration&quot;),</span>
+<span class="fc" id="L207">                rs.getString(&quot;imagePath&quot;),</span>
+<span class="fc" id="L208">                rs.getString(&quot;instruction&quot;)</span>
+            ));
+          }
+<span class="fc" id="L211">          return recipes;</span>
+        });
+  }
+
+  /**
+   * Returns a RecipeWithIngredients object by retrieving the necessary data from the database by
+   * searching using the recipe id.
+   *
+   * @param recipeId The id of the recipe to retrieve.
+   * @return A RecipeWithIngredients object.
+   */
+  public RecipeWithIngredients retrieveRecipeWithIngredientsById(int recipeId) {
+<span class="fc" id="L223">    Recipe recipe = retrieveById(recipeId);</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">    if (recipe == null) {</span>
+<span class="nc" id="L225">      return null;</span>
+    }
+
+<span class="fc" id="L228">    IngredientDao ingredientDAO = new IngredientDao();</span>
+<span class="fc" id="L229">    List&lt;AmountedIngredient&gt; ingredients = ingredientDAO.retrieveAmountedIngredientsFromRecipe(</span>
+        recipeId);
+
+<span class="fc" id="L232">    return new RecipeWithIngredients(</span>
+<span class="fc" id="L233">        recipe.getId(),</span>
+<span class="fc" id="L234">        recipe.getName(),</span>
+<span class="fc" id="L235">        recipe.getDescription(),</span>
+<span class="fc" id="L236">        recipe.getDifficulty(),</span>
+<span class="fc" id="L237">        recipe.getDietaryTag(),</span>
+<span class="fc" id="L238">        recipe.getDuration(),</span>
+        ingredients,
+<span class="fc" id="L240">        recipe.getImagePath(),</span>
+<span class="fc" id="L241">        recipe.getInstruction()</span>
+    );
+  }
+
+  /**
+   * Retrieves a recipe object from the database by its given ID.
+   *
+   * @param id the id of the recipe to be retrieved.
+   * @return the recipe object.
+   */
+  public Recipe retrieveById(int id) {
+<span class="fc" id="L252">    return new QueryBuilder(&quot;SELECT * FROM recipe WHERE id = ?&quot;)</span>
+<span class="fc" id="L253">        .addInt(id)</span>
+<span class="fc" id="L254">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc bfc" id="L255" title="All 2 branches covered.">          if (rs.next()) {</span>
+<span class="fc" id="L256">            return new Recipe(</span>
+<span class="fc" id="L257">                rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L258">                rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L259">                rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L260">                Recipe.Difficulty.valueOf(rs.getString(&quot;difficulty&quot;).toUpperCase()),</span>
+<span class="fc" id="L261">                Recipe.DietaryTag.valueOf(rs.getString(&quot;dietary_tag&quot;).toUpperCase()),</span>
+<span class="fc" id="L262">                rs.getInt(&quot;duration&quot;),</span>
+<span class="fc" id="L263">                rs.getString(&quot;imagePath&quot;),</span>
+<span class="fc" id="L264">                rs.getString(&quot;instruction&quot;)</span>
+            );
+          }
+<span class="fc" id="L267">          return null;</span>
+        });
+  }
+
+  /**
+   * Retrieves all recipes from the database that contains the given ingredient ids.
+   *
+   * @param ingredientIds the ids of the ingredient to search for.
+   * @return an array of recipes.
+   */
+  public Recipe[] retrieveAllRecipesWithIngredients(int @NotNull ... ingredientIds) {
+<span class="fc" id="L278">    @Language(&quot;SQL&quot;) String query = &quot;SELECT * FROM recipe WHERE id IN (&quot;</span>
+        + &quot;SELECT recipe_id FROM recipe_ingredient WHERE ingredient_id IN (&quot;
+<span class="fc" id="L280">        + String.join(&quot;,&quot;, Collections.nCopies(ingredientIds.length, &quot;?&quot;))</span>
+        + &quot;) GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = ?)&quot;;
+<span class="fc" id="L282">    QueryBuilder queryBuilder = new QueryBuilder(query);</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">    for (int ingredientId : ingredientIds) {</span>
+<span class="fc" id="L284">      queryBuilder.addInt(ingredientId);</span>
+    }
+<span class="fc" id="L286">    queryBuilder.addInt(ingredientIds.length);</span>
+<span class="fc" id="L287">    Recipe[] recipes = queryBuilder.executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L288">      List&lt;Recipe&gt; recipesForIngredient = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">      while (rs.next()) {</span>
+<span class="fc" id="L290">        recipesForIngredient.add(new Recipe(</span>
+<span class="fc" id="L291">            rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L292">            rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L293">            rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L294">            Recipe.Difficulty.valueOf(rs.getString(&quot;difficulty&quot;).toUpperCase()),</span>
+<span class="fc" id="L295">            Recipe.DietaryTag.valueOf(rs.getString(&quot;dietary_tag&quot;).toUpperCase()),</span>
+<span class="fc" id="L296">            rs.getInt(&quot;duration&quot;),</span>
+<span class="fc" id="L297">            rs.getString(&quot;imagePath&quot;),</span>
+<span class="fc" id="L298">            rs.getString(&quot;instruction&quot;)</span>
+        ));
+      }
+<span class="fc" id="L301">      return recipesForIngredient.toArray(new Recipe[0]);</span>
+    });
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">    if (recipes == null) {</span>
+<span class="nc" id="L304">      return new Recipe[0];</span>
+    }
+<span class="fc" id="L306">    List&lt;Recipe&gt; allRecipes = new ArrayList&lt;&gt;(Arrays.asList(recipes));</span>
+<span class="fc" id="L307">    return allRecipes.toArray(new Recipe[0]);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

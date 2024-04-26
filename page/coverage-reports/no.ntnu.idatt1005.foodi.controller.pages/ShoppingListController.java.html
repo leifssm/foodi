@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingListController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.controller.pages</a> &gt; <span class="el_source">ShoppingListController.java</span></div><h1>ShoppingListController.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.controller.pages;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
+import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.daos.IngredientDao;
+import no.ntnu.idatt1005.foodi.model.daos.ShoppingListDao;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.components.shoppinglist.AddIngredientsExpirationDialog;
+import no.ntnu.idatt1005.foodi.view.views.ShoppingList;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Controller for the inventory page. This controller manages the updates to the inventory page.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
+public class ShoppingListController extends PageController {
+
+<span class="nc" id="L27">  private static final Logger LOGGER = Logger.getLogger(ShoppingListController.class.getName());</span>
+  private final SimpleObjectProperty&lt;User&gt; currentUserProperty;
+  private final ShoppingList view;
+<span class="nc" id="L30">  private final ShoppingListDao shoppingListDao = new ShoppingListDao();</span>
+<span class="nc" id="L31">  private final IngredientDao ingredientDao = new IngredientDao();</span>
+  private List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes;
+
+  /**
+   * Constructor for the InventoryController class.
+   *
+   * @param shoppingListPage    the view to be controlled
+   * @param currentUserProperty the current user
+   */
+  public ShoppingListController(
+      ShoppingList shoppingListPage,
+      SimpleObjectProperty&lt;User&gt; currentUserProperty
+  ) {
+<span class="nc" id="L44">    super(shoppingListPage);</span>
+<span class="nc" id="L45">    this.view = shoppingListPage;</span>
+
+<span class="nc" id="L47">    this.currentUserProperty = currentUserProperty;</span>
+
+<span class="nc" id="L49">    attachToView();</span>
+<span class="nc" id="L50">    update();</span>
+<span class="nc" id="L51">  }</span>
+
+  private void attachToView() {
+<span class="nc" id="L54">    view.setOnAddItems(this::addShoppingListToInventory);</span>
+<span class="nc" id="L55">    view.setOnClearItems(this::clearShoppingList);</span>
+<span class="nc" id="L56">  }</span>
+
+  @Override
+  void update() {
+<span class="nc" id="L60">    recipes = getAccountedRecipes();</span>
+
+<span class="nc" id="L62">    List&lt;Runnable&gt; onRemoveMethods = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {</span>
+<span class="nc" id="L64">      onRemoveMethods.add(() -&gt; {</span>
+<span class="nc" id="L65">        shoppingListDao.deleteRecipe(</span>
+<span class="nc" id="L66">            currentUserProperty.get().userId(),</span>
+<span class="nc" id="L67">            recipe.getId()</span>
+        );
+<span class="nc" id="L69">        update();</span>
+<span class="nc" id="L70">      });</span>
+<span class="nc" id="L71">    }</span>
+
+<span class="nc" id="L73">    view.render(recipes, onRemoveMethods);</span>
+<span class="nc" id="L74">  }</span>
+
+  private void addShoppingListToInventory() {
+<span class="nc" id="L77">    List&lt;AmountedIngredient&gt; ingredients = getIngredientsFromCurrentRecipes();</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">    if (ingredients.isEmpty()) {</span>
+<span class="nc" id="L80">      return;</span>
+    }
+<span class="nc" id="L82">    AddIngredientsExpirationDialog dialog = new AddIngredientsExpirationDialog(ingredients);</span>
+
+<span class="nc" id="L84">    dialog.setOnCloseRequest(e -&gt; {</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">      if (!dialog.isFilled() || dialog.getExpiringIngredients() == null) {</span>
+<span class="nc" id="L86">        return;</span>
+      }
+<span class="nc bnc" id="L88" title="All 2 branches missed.">      for (ExpiringIngredient ingredient : dialog.getExpiringIngredients()) {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (ingredient == null) {</span>
+<span class="nc" id="L90">          continue;</span>
+        }
+<span class="nc" id="L92">        ingredientDao.saveIngredientToUserInventory(</span>
+<span class="nc" id="L93">            currentUserProperty.get().userId(),</span>
+<span class="nc" id="L94">            ingredient.getName(),</span>
+<span class="nc" id="L95">            ingredient.getUnit(),</span>
+<span class="nc" id="L96">            ingredient.getCategory(),</span>
+<span class="nc" id="L97">            ingredient.getAmount(),</span>
+<span class="nc" id="L98">            new java.sql.Date(ingredient.getExpirationDateAsDate().getTime())</span>
+        );
+      }
+<span class="nc" id="L101">      clearShoppingList();</span>
+<span class="nc" id="L102">    });</span>
+<span class="nc" id="L103">    dialog.show();</span>
+<span class="nc" id="L104">  }</span>
+
+  private void clearShoppingList() {
+<span class="nc" id="L107">    shoppingListDao.clearShoppingList(currentUserProperty.get().userId());</span>
+<span class="nc" id="L108">    update();</span>
+<span class="nc" id="L109">  }</span>
+
+  /**
+   * Retrieves the saved recipes for the current user and subtracts the amount of items the user
+   * currently has.
+   *
+   * @return a list of recipes with partially removed ingredients
+   */
+  private @NotNull List&lt;RecipeWithPartiallyRemovedIngredients&gt; getAccountedRecipes() {
+<span class="nc" id="L118">    List&lt;AmountedIngredient&gt; totalIngredients = getCurrentIngredients();</span>
+
+<span class="nc" id="L120">    HashMap&lt;Integer, RecipeWithPartiallyRemovedIngredients&gt; accountedRecipes = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L121">    List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes = shoppingListDao.getRecipesWithIngredients(</span>
+<span class="nc" id="L122">        currentUserProperty.get().userId()</span>
+    );
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {</span>
+<span class="nc" id="L126">      accountedRecipes.putIfAbsent(</span>
+<span class="nc" id="L127">          recipe.getId(),</span>
+          recipe
+      );
+<span class="nc bnc" id="L130" title="All 2 branches missed.">      for (AmountedIngredient ingredient : totalIngredients) {</span>
+<span class="nc" id="L131">        PartiallyRemovedAmountedIngredient matchingIngredient = accountedRecipes</span>
+<span class="nc" id="L132">            .get(recipe.getId())</span>
+<span class="nc" id="L133">            .getIngredients()</span>
+<span class="nc" id="L134">            .stream()</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            .filter(i -&gt; i.getId() == ingredient.getId())</span>
+<span class="nc" id="L136">            .findAny()</span>
+<span class="nc" id="L137">            .orElse(null);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (matchingIngredient == null) {</span>
+<span class="nc" id="L139">          continue;</span>
+        }
+<span class="nc" id="L141">        double transferredAmount = Math.min(</span>
+<span class="nc" id="L142">            matchingIngredient.getRemainingAmount(),</span>
+<span class="nc" id="L143">            ingredient.getAmount()</span>
+        );
+<span class="nc" id="L145">        matchingIngredient.setRemovedAmount(</span>
+<span class="nc" id="L146">            matchingIngredient.getRemovedAmount() + transferredAmount</span>
+        );
+<span class="nc" id="L148">        ingredient.setAmount(ingredient.getAmount() - transferredAmount);</span>
+<span class="nc" id="L149">      }</span>
+<span class="nc" id="L150">    }</span>
+
+<span class="nc" id="L152">    return new ArrayList&lt;&gt;(accountedRecipes.values());</span>
+  }
+
+  /**
+   * Retrieves the ingredients the user has in their inventory.
+   *
+   * @return a list of ingredients the user has in their inventory
+   */
+  private @NotNull List&lt;AmountedIngredient&gt; getCurrentIngredients() {
+<span class="nc" id="L161">    List&lt;ExpiringIngredient&gt; fetchedIngredients = ingredientDao</span>
+<span class="nc" id="L162">        .retrieveExpiringIngredientsFromInventory(currentUserProperty.get().userId());</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">    if (fetchedIngredients == null) {</span>
+<span class="nc" id="L165">      return new ArrayList&lt;&gt;();</span>
+    }
+
+<span class="nc" id="L168">    ArrayList&lt;AmountedIngredient&gt; compiledIngredients = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L170">    System.out.println(fetchedIngredients.size());</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">    for (AmountedIngredient ingredient : fetchedIngredients) {</span>
+<span class="nc" id="L172">      AmountedIngredient value = compiledIngredients</span>
+<span class="nc" id="L173">          .stream()</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">          .filter(i -&gt; i.getId() == ingredient.getId())</span>
+<span class="nc" id="L175">          .findAny()</span>
+<span class="nc" id="L176">          .orElse(null);</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">      if (value == null) {</span>
+<span class="nc" id="L178">        compiledIngredients.add(ingredient);</span>
+<span class="nc" id="L179">        continue;</span>
+      }
+<span class="nc" id="L181">      value.setAmount(value.getAmount() + ingredient.getAmount());</span>
+<span class="nc" id="L182">    }</span>
+<span class="nc" id="L183">    return compiledIngredients;</span>
+  }
+
+  private List&lt;AmountedIngredient&gt; getIngredientsFromCurrentRecipes() {
+<span class="nc" id="L187">    HashMap&lt;AmountedIngredient, Double&gt; ingredients = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">      for (PartiallyRemovedAmountedIngredient ingredient : recipe.getIngredients()) {</span>
+<span class="nc" id="L190">        ingredients.computeIfPresent(</span>
+            ingredient,
+<span class="nc" id="L192">            (key, value) -&gt; value + ingredient.getRemainingAmount()</span>
+        );
+<span class="nc" id="L194">        ingredients.putIfAbsent(ingredient, ingredient.getRemainingAmount());</span>
+<span class="nc" id="L195">      }</span>
+<span class="nc" id="L196">    }</span>
+<span class="nc" id="L197">    return ingredients</span>
+<span class="nc" id="L198">        .entrySet()</span>
+<span class="nc" id="L199">        .stream()</span>
+<span class="nc" id="L200">        .map(entry -&gt; new AmountedIngredient(entry.getKey(), entry.getValue()))</span>
+<span class="nc" id="L201">        .toList();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

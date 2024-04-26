@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileItems.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.profiles</a> &gt; <span class="el_source">ProfileItems.java</span></div><h1>ProfileItems.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.profiles;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import javafx.scene.layout.HBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+
+/**
+ * Class for creating a horizontal list of {@link ProfileItem}. Extends {@link HBox} and implements
+ * {@link ComponentUtils}.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
+public class ProfileItems extends HBox implements ComponentUtils {
+
+  /**
+   * Constructor for the ProfileItems class.
+   *
+   * @param profileNames List of profile names
+   */
+  public ProfileItems(List&lt;User&gt; profileNames, Consumer&lt;User&gt; changeUser,
+      Function&lt;String, Boolean&gt; addUser) {
+<span class="nc" id="L26">    super();</span>
+<span class="nc" id="L27">    addStylesheet(&quot;components/profiles/profile-items&quot;);</span>
+<span class="nc" id="L28">    addClass(&quot;profile-items&quot;);</span>
+
+<span class="nc bnc" id="L30" title="All 2 branches missed.">    for (User user : profileNames) {</span>
+      // Init ProfileItem
+<span class="nc" id="L32">      final Runnable onClick = () -&gt; changeUser.accept(user);</span>
+<span class="nc" id="L33">      ProfileItem profileItem = new ProfileItem(user.getCapitalizedName(), onClick);</span>
+<span class="nc" id="L34">      getChildren().add(profileItem);</span>
+<span class="nc" id="L35">    }</span>
+
+<span class="nc" id="L37">    NewUserDialog newUserDialog = new NewUserDialog(addUser);</span>
+<span class="nc" id="L38">    final Runnable onClick = newUserDialog::showAndWait;</span>
+<span class="nc" id="L39">    getChildren().add(new AddProfileButton(onClick));</span>
+<span class="nc" id="L40">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

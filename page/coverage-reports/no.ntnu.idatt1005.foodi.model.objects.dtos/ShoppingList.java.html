@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.objects.dtos</a> &gt; <span class="el_source">ShoppingList.java</span></div><h1>ShoppingList.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.objects.dtos;
+
+import java.util.List;
+
+/**
+ * A list of recipes with partially removed ingredients.
+ */
+public class ShoppingList {
+
+  private final int shoppingListId;
+  private List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes;
+
+  /**
+   * Constructor for a shopping list.
+   *
+   * @param shoppingListId the id of the shopping list
+   * @param recipes        a list of recipes with partially removed ingredients
+   */
+<span class="nc" id="L19">  public ShoppingList(int shoppingListId, List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes) {</span>
+<span class="nc" id="L20">    this.shoppingListId = shoppingListId;</span>
+<span class="nc" id="L21">    setRecipes(recipes);</span>
+<span class="nc" id="L22">  }</span>
+
+  /**
+   * Returns the id of the shopping list.
+   *
+   * @return the id of the shopping list
+   */
+  public int getShoppingListId() {
+<span class="nc" id="L30">    return shoppingListId;</span>
+  }
+
+  /**
+   * Returns an immutable list of recipes with partially removed ingredients.
+   *
+   * @return an immutable list of recipes with partially removed ingredients
+   */
+  public List&lt;RecipeWithPartiallyRemovedIngredients&gt; getRecipes() {
+<span class="nc" id="L39">    return recipes;</span>
+  }
+
+  /**
+   * Sets the recipes of the shopping list.
+   *
+   * @param recipes a list of recipes with partially removed ingredients.
+   */
+  public void setRecipes(List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes) {
+<span class="nc" id="L48">    this.recipes = List.copyOf(recipes);</span>
+<span class="nc" id="L49">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

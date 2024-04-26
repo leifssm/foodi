@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryListItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.inventorylist</a> &gt; <span class="el_source">InventoryListItem.java</span></div><h1>InventoryListItem.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.inventorylist;
+
+import java.util.List;
+import java.util.function.Consumer;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.GroupedExpiringIngredients;
+import no.ntnu.idatt1005.foodi.view.components.button.DropdownButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBoxHandler;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for creating a standard inventory list item.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+class InventoryListItem {
+
+  private final Node[] mainItems;
+  private final InventoryListSubItem[] subItems;
+
+<span class="nc" id="L26">  private final StandardCheckBoxHandler&lt;ExpiringIngredient&gt; selectHandler</span>
+      = new StandardCheckBoxHandler&lt;&gt;();
+
+  /**
+   * Constructor for the InventoryListItem class.
+   *
+   * @param items The items to display
+   * @throws IllegalArgumentException if the list of items is empty
+   */
+  public InventoryListItem(
+      @NotNull GroupedExpiringIngredients items,
+      @NotNull Consumer&lt;ExpiringIngredient&gt; onAmountChange
+<span class="nc" id="L38">  ) throws IllegalArgumentException {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">    if (items.getIngredients().isEmpty()) {</span>
+<span class="nc" id="L40">      throw new IllegalArgumentException(&quot;At least one item must be provided&quot;);</span>
+    }
+
+<span class="nc" id="L43">    ExpiringIngredient mainItem = items.getMainExpiringIngredient();</span>
+<span class="nc" id="L44">    List&lt;ExpiringIngredient&gt; ingredients = items.getIngredients();</span>
+
+<span class="nc" id="L46">    this.subItems = new InventoryListSubItem[ingredients.size()];</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">    for (int i = 0; i &lt; ingredients.size(); i++) {</span>
+<span class="nc" id="L49">      ExpiringIngredient ingredient = ingredients.get(i);</span>
+<span class="nc" id="L50">      InventoryListSubItem subItem = new InventoryListSubItem(ingredient, onAmountChange);</span>
+<span class="nc" id="L51">      subItems[i] = subItem;</span>
+<span class="nc" id="L52">      selectHandler.bindCheckBox(subItem.getSelect(), ingredient);</span>
+    }
+
+<span class="nc" id="L55">    Label icon = new Label(mainItem.getCategory().getIcon());</span>
+
+<span class="nc" id="L57">    HBox nameBox = new HBox();</span>
+<span class="nc" id="L58">    Label name = new Label(mainItem.getName());</span>
+<span class="nc" id="L59">    name.getStyleClass().add(&quot;vertical-padding&quot;);</span>
+
+<span class="nc" id="L61">    nameBox.getChildren().addAll(</span>
+        name,
+        new DropdownButton((expanded) -&gt; {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">          for (InventoryListSubItem subItem : subItems) {</span>
+<span class="nc" id="L65">            subItem.setVisibility(expanded);</span>
+          }
+<span class="nc" id="L67">        })</span>
+    );
+
+<span class="nc" id="L70">    InventoryExpirationDate expiryDate = new InventoryExpirationDate(mainItem.getExpirationDate());</span>
+
+<span class="nc" id="L72">    Label category = new Label(mainItem.getCategory().getName());</span>
+
+<span class="nc" id="L74">    double quantityValue = 0;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">    for (ExpiringIngredient ingredient : ingredients) {</span>
+<span class="nc" id="L76">      quantityValue += ingredient.getAmount();</span>
+<span class="nc" id="L77">    }</span>
+<span class="nc" id="L78">    String quantityString = &quot;%.2f&quot;.formatted(</span>
+<span class="nc" id="L79">        quantityValue</span>
+    );
+<span class="nc" id="L81">    Label quantity = new Label(quantityString);</span>
+<span class="nc" id="L82">    quantity.getStyleClass().add(&quot;center&quot;);</span>
+
+<span class="nc" id="L84">    Label unit = new Label(mainItem.getUnit().getName());</span>
+<span class="nc" id="L85">    unit.getStyleClass().add(&quot;center&quot;);</span>
+
+<span class="nc" id="L87">    StandardCheckBox select = new StandardCheckBox();</span>
+<span class="nc" id="L88">    select.setScale(0.6);</span>
+<span class="nc" id="L89">    select.getStyleClass().add(&quot;center&quot;);</span>
+
+<span class="nc" id="L91">    selectHandler.bindMainCheckBox(select);</span>
+
+<span class="nc" id="L93">    mainItems = new Node[]{</span>
+        icon,
+        nameBox,
+        expiryDate,
+        category,
+        quantity,
+        unit,
+        select
+    };
+<span class="nc" id="L102">  }</span>
+
+  /**
+   * Returns the main items.
+   */
+  public Node[] getMainItems() {
+<span class="nc" id="L108">    return mainItems;</span>
+  }
+
+  /**
+   * Returns the sub items.
+   */
+  public InventoryListSubItem[] getSubItems() {
+<span class="nc" id="L115">    return subItems;</span>
+  }
+
+  /**
+   * Returns the select handler.
+   *
+   * @return the select handler
+   */
+  public StandardCheckBoxHandler&lt;ExpiringIngredient&gt; getSelectHandler() {
+<span class="nc" id="L124">    return selectHandler;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

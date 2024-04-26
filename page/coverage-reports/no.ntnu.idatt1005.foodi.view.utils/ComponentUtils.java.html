@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ComponentUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.utils</a> &gt; <span class="el_source">ComponentUtils.java</span></div><h1>ComponentUtils.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.utils;
+
+import javafx.collections.ObservableList;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Utils class that can be used with {@code implements} to add shorthands for easier css handling.
+ *
+ * @author Leif Mørstad
+ * @version 1.1
+ */
+public interface ComponentUtils {
+
+  /**
+   * Adds a stylesheet dependency to the element.
+   *
+   * @param path the path from the resources/view/styles/*
+   * @see LoadUtils#getStylesheet(String)
+   */
+  default void addStylesheet(@NotNull String path) {
+<span class="nc" id="L21">    String url = LoadUtils.getStylesheet(path);</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">    if (url == null) {</span>
+<span class="nc" id="L23">      System.out.println(&quot;Could not load stylesheet &quot; + path);</span>
+<span class="nc" id="L24">      return;</span>
+    }
+<span class="nc" id="L26">    getStylesheets().add(url);</span>
+<span class="nc" id="L27">  }</span>
+
+  ObservableList&lt;String&gt; getStylesheets();
+
+  /**
+   * Adds all class names to the elements' css class list.
+   *
+   * @param className the classnames to add
+   */
+  default void addClasses(@NotNull String... className) {
+<span class="nc" id="L37">    getStyleClass().addAll(className);</span>
+<span class="nc" id="L38">  }</span>
+
+  ObservableList&lt;String&gt; getStyleClass();
+
+  /**
+   * Removes class names to the elements' css class list.
+   *
+   * @param classNames the classnames to remove
+   */
+  default void removeClasses(@NotNull String... classNames) {
+<span class="nc" id="L48">    getStyleClass().removeAll(classNames);</span>
+<span class="nc" id="L49">  }</span>
+
+  /**
+   * Adds a class name to the elements' css class list if it is not present, otherwise it removes
+   * it.
+   *
+   * @param className the classname to toggle
+   * @return whether the class exists after the operation
+   */
+  default boolean toggleClass(String className) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">    if (getClasses().contains(className)) {</span>
+<span class="nc" id="L60">      removeClass(className);</span>
+<span class="nc" id="L61">      return false;</span>
+    } else {
+<span class="nc" id="L63">      addClass(className);</span>
+<span class="nc" id="L64">      return true;</span>
+    }
+  }
+
+  /**
+   * Returns the elements' css class list.
+   *
+   * @return the elements' css class list
+   */
+  default ObservableList&lt;String&gt; getClasses() {
+<span class="nc" id="L74">    return getStyleClass();</span>
+  }
+
+  /**
+   * Removes a class name to the elements' css class list.
+   *
+   * @param className the classname to remove
+   */
+  default void removeClass(@NotNull String className) {
+<span class="nc" id="L83">    getStyleClass().remove(className);</span>
+<span class="nc" id="L84">  }</span>
+
+  /**
+   * Adds a class name to the elements' css class list.
+   *
+   * @param className the classname to add
+   */
+  default void addClass(@NotNull String className) {
+<span class="nc" id="L92">    getStyleClass().add(className);</span>
+<span class="nc" id="L93">  }</span>
+
+  /**
+   * Adds a class name to the elements' css class list if the condition is true, otherwise it
+   * removes it.
+   *
+   * @param className the classname to toggle
+   * @param condition whether to add or remove the class
+   * @return the condition
+   */
+  default boolean toggleClass(String className, boolean condition) {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">    if (condition) {</span>
+<span class="nc" id="L105">      addClass(className);</span>
+<span class="nc" id="L106">      return true;</span>
+    } else {
+<span class="nc" id="L108">      removeClass(className);</span>
+<span class="nc" id="L109">      return false;</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

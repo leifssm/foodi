@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.utils</a> &gt; <span class="el_source">LoadUtils.java</span></div><h1>LoadUtils.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.utils;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Objects;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Utility class for loading resources and views.
+ *
+ * @author Leif Mørstad
+ * @version 1.1
+ */
+public final class LoadUtils {
+
+<span class="nc" id="L20">  private LoadUtils() {</span>
+<span class="nc" id="L21">    throw new AssertionError(&quot;Utility class&quot;);</span>
+  }
+
+  /**
+   * Gets the url of an image from the resources folder, or returns null and prints an error message
+   * if the image is not found.
+   *
+   * @param path the path to the image from view/images/*, must include the file extension
+   * @return the string url to the image, or null if the image is not found
+   */
+  public static @Nullable String getImage(@NotNull String path) {
+<span class="nc" id="L32">    URL resource = getResourceUrl(</span>
+        &quot;images/&quot; + path,
+        &quot;Error loading image&quot;
+    );
+
+<span class="nc bnc" id="L37" title="All 2 branches missed.">    if (resource == null) {</span>
+<span class="nc" id="L38">      return null;</span>
+    }
+
+<span class="nc" id="L41">    return resource.toExternalForm();</span>
+  }
+
+  /**
+   * Gets a valid a resource url from the resources folder, or returns null and prints an error
+   * message if the resource is not found.
+   *
+   * @param path         the path to the resource
+   * @param errorMessage the error message to print if the resource is not found
+   * @return the resource url, or null if the resource is not found
+   */
+  private static @Nullable URL getResourceUrl(@NotNull String path, @NotNull String errorMessage) {
+    try {
+<span class="nc" id="L54">      return Objects.requireNonNull(</span>
+<span class="nc" id="L55">          LoadUtils.class.getResource(&quot;../&quot; + path),</span>
+          &quot;Could not find resource: &quot; + path
+      );
+<span class="nc" id="L58">    } catch (NullPointerException e) {</span>
+<span class="nc" id="L59">      System.out.println(errorMessage + &quot;: &quot; + e.getMessage());</span>
+<span class="nc" id="L60">      return null;</span>
+    }
+  }
+
+  /**
+   * Gets the url of a font from the resources folder, or returns null and prints an error message
+   * if the font is not found.
+   *
+   * @param path the path to the font from view/fonts/*
+   * @return the string url to the font, or null if the font is not found
+   */
+  public static URI getFontDirectoryUri(@NotNull String path) {
+<span class="nc" id="L72">    URI resource = getResourceUri(</span>
+        &quot;fonts/&quot; + path,
+        &quot;Error loading font&quot;
+    );
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    if (resource == null) {</span>
+<span class="nc" id="L78">      throw new IllegalArgumentException(&quot;Could not find font directory: &quot; + path);</span>
+    }
+
+<span class="nc" id="L81">    return resource;</span>
+  }
+
+  private static @Nullable URI getResourceUri(@NotNull String path, @NotNull String errorMessage) {
+<span class="nc" id="L85">    URL resource = getResourceUrl(path, errorMessage);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">    if (resource == null) {</span>
+<span class="nc" id="L87">      return null;</span>
+    }
+
+    try {
+<span class="nc" id="L91">      return resource.toURI();</span>
+<span class="nc" id="L92">    } catch (Exception e) {</span>
+<span class="nc" id="L93">      System.out.println(errorMessage + &quot;: &quot; + e.getMessage());</span>
+<span class="nc" id="L94">      return null;</span>
+    }
+  }
+
+  /**
+   * Gets the url of a stylesheet from the resources folder, or returns null and prints an error
+   * message if the stylesheet is not found.
+   *
+   * @param path the path to the stylesheet from view/styles/* without the .css file extension
+   * @return the string url to the stylesheet, or null if the stylesheet is not found
+   */
+  public static @Nullable String getStylesheet(@NotNull String path) {
+<span class="nc" id="L106">    URL resource = getResourceUrl(</span>
+        &quot;styles/&quot; + path + &quot;.css&quot;,
+        &quot;Error loading stylesheet&quot;
+    );
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">    if (resource == null) {</span>
+<span class="nc" id="L112">      return null;</span>
+    }
+
+<span class="nc" id="L115">    return resource.toExternalForm();</span>
+  }
+
+  /**
+   * Loads a fxml file from the resources folder, or returns null and prints an error message if the
+   * fxml file is not found.
+   *
+   * @param path the path to the fxml file from view/views/* without the .fxml file extension
+   * @return the parent node of the fxml file, or null if the fxml file is not found
+   */
+  public static @Nullable Parent loadFxml(@NotNull String path) {
+<span class="nc" id="L126">    URL resource = getResourceUrl(</span>
+        &quot;views/&quot; + path + &quot;.fxml&quot;,
+        &quot;Error finding fxml file&quot;
+    );
+<span class="nc bnc" id="L130" title="All 2 branches missed.">    if (resource == null) {</span>
+<span class="nc" id="L131">      return null;</span>
+    }
+    try {
+<span class="nc" id="L134">      return FXMLLoader.load(resource);</span>
+<span class="nc" id="L135">    } catch (NullPointerException | IOException e) {</span>
+<span class="nc" id="L136">      System.out.println(&quot;Error loading view: &quot; + e.getMessage());</span>
+<span class="nc" id="L137">      return null;</span>
+    }
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

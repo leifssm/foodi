@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CookbookGridController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.controller.pages</a> &gt; <span class="el_source">CookbookGridController.java</span></div><h1>CookbookGridController.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.controller.pages;
+
+import java.util.Arrays;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.daos.RecipeDao;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCard;
+import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCardRow;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
+import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
+
+/**
+ * Controller for the cookbook grid page. This controller manages the updates to the cookbook grid
+ * page.
+ */
+public class CookbookGridController extends PageController {
+
+  private final CookbookGrid view;
+  private final RecipeDao recipeDao;
+
+
+  /**
+   * Constructor for the CookbookGridController class.
+   *
+   * @param cookbookGridPage the cookbook grid view
+   */
+  public CookbookGridController(CookbookGrid cookbookGridPage) {
+<span class="nc" id="L28">    super(cookbookGridPage);</span>
+<span class="nc" id="L29">    this.view = cookbookGridPage;</span>
+<span class="nc" id="L30">    this.recipeDao = new RecipeDao();</span>
+<span class="nc" id="L31">    LocationHandler.subscribe(e -&gt; {</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">      if (LocationHandler.isLocationFuzzy(&quot;cookbook-grid&quot;)) {</span>
+<span class="nc" id="L33">        update();</span>
+      }
+<span class="nc" id="L35">    });</span>
+<span class="nc" id="L36">  }</span>
+
+  @Override
+  void update() {
+<span class="nc" id="L40">    Recipe[] recipes = fetchAllRecipes();</span>
+
+<span class="nc" id="L42">    RecipeCardRow twentyMinuteRecipeCardRow = createRecipeCardRow(&quot;Twenty minute recipes&quot;,</span>
+<span class="nc" id="L43">        filterRecipesByDuration(recipes, 20));</span>
+
+<span class="nc" id="L45">    RecipeCardRow easyRecipeCardRow = createRecipeCardRow(&quot;Easy recipes&quot;,</span>
+<span class="nc" id="L46">        filterRecipesByDifficulty(recipes, Recipe.Difficulty.EASY));</span>
+
+<span class="nc" id="L48">    RecipeCardRow vegetarianRecipeCardRow = createRecipeCardRow(&quot;Vegetarian&quot;,</span>
+<span class="nc" id="L49">        filterRecipesByDietaryTags(recipes, Recipe.DietaryTag.VEGETARIAN, Recipe.DietaryTag.VEGAN));</span>
+
+<span class="nc" id="L51">    RecipeCardRow popularRecipeCardRow = createRecipeCardRowForPopularRecipes(recipes);</span>
+
+<span class="nc" id="L53">    List&lt;RecipeCardRow&gt; cardRows = Arrays.asList(popularRecipeCardRow, twentyMinuteRecipeCardRow,</span>
+        easyRecipeCardRow, vegetarianRecipeCardRow);
+
+<span class="nc" id="L56">    view.render(cardRows.toArray(new RecipeCardRow[0]));</span>
+<span class="nc" id="L57">  }</span>
+
+  private Recipe[] fetchAllRecipes() {
+<span class="nc" id="L60">    return recipeDao.retrieveAll().toArray(new Recipe[0]);</span>
+  }
+
+  private RecipeCardRow createRecipeCardRow(String title, Recipe[] filteredRecipes) {
+<span class="nc" id="L64">    RecipeCard[] cards = Arrays.stream(filteredRecipes)</span>
+<span class="nc" id="L65">        .map(recipe -&gt; new RecipeCard(recipe.getId(), recipe.getName(),</span>
+<span class="nc" id="L66">            recipe.getDuration() + &quot; minutes&quot;, recipe.getImagePath()))</span>
+<span class="nc" id="L67">        .toArray(RecipeCard[]::new);</span>
+<span class="nc" id="L68">    return new RecipeCardRow(title, cards);</span>
+  }
+
+  private Recipe[] filterRecipesByDuration(Recipe[] recipes, int maxDuration) {
+<span class="nc" id="L72">    return Arrays.stream(recipes)</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        .filter(recipe -&gt; recipe.getDuration() &lt;= maxDuration)</span>
+<span class="nc" id="L74">        .toArray(Recipe[]::new);</span>
+  }
+
+  private Recipe[] filterRecipesByDifficulty(Recipe[] recipes, Recipe.Difficulty difficulty) {
+<span class="nc" id="L78">    return Arrays.stream(recipes)</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        .filter(recipe -&gt; recipe.getDifficulty() == difficulty)</span>
+<span class="nc" id="L80">        .toArray(Recipe[]::new);</span>
+  }
+
+  private Recipe[] filterRecipesByDietaryTags(Recipe[] recipes, Recipe.DietaryTag... tags) {
+<span class="nc" id="L84">    return Arrays.stream(recipes)</span>
+<span class="nc" id="L85">        .filter(recipe -&gt; Arrays.asList(tags).contains(recipe.getDietaryTag()))</span>
+<span class="nc" id="L86">        .toArray(Recipe[]::new);</span>
+  }
+
+  private RecipeCardRow createRecipeCardRowForPopularRecipes(Recipe[] recipes) {
+    // Assuming 'popularRecipes' are predefined; here you may need a more dynamic approach
+<span class="nc" id="L91">    RecipeCard[] cards = {</span>
+<span class="nc" id="L92">        new RecipeCard(recipes[5].getId(), recipes[5].getName(),</span>
+<span class="nc" id="L93">            recipes[5].getDuration() + &quot; minutes&quot;, recipes[5].getImagePath()),</span>
+<span class="nc" id="L94">        new RecipeCard(recipes[2].getId(), recipes[2].getName(),</span>
+<span class="nc" id="L95">            recipes[2].getDuration() + &quot; minutes&quot;, recipes[2].getImagePath()),</span>
+<span class="nc" id="L96">        new RecipeCard(recipes[4].getId(), recipes[4].getName(),</span>
+<span class="nc" id="L97">            recipes[4].getDuration() + &quot; minutes&quot;, recipes[4].getImagePath()),</span>
+<span class="nc" id="L98">        new RecipeCard(recipes[1].getId(), recipes[1].getName(),</span>
+<span class="nc" id="L99">            recipes[1].getDuration() + &quot; minutes&quot;, recipes[1].getImagePath())</span>
+    };
+<span class="nc" id="L101">    return new RecipeCardRow(&quot;Popular&quot;, cards);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

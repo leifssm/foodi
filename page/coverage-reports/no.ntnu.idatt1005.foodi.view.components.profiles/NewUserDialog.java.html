@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewUserDialog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.profiles</a> &gt; <span class="el_source">NewUserDialog.java</span></div><h1>NewUserDialog.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.profiles;
+
+import java.util.function.Function;
+import javafx.application.Platform;
+import javafx.scene.control.TextField;
+import no.ntnu.idatt1005.foodi.view.components.dialog.StandardDialog;
+import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
+
+/**
+ * Class for creating a dialog for adding a new user.
+ *
+ * @author Henrik Kvamme
+ */
+public class NewUserDialog extends StandardDialog {
+
+  private final TextField nameField;
+  private final Function&lt;String, Boolean&gt; addUser;
+
+  /**
+   * Constructor for the NewUserDialog class.
+   */
+  public NewUserDialog(Function&lt;String, Boolean&gt; addUser) {
+<span class="nc" id="L23">    super();</span>
+<span class="nc" id="L24">    this.addUser = addUser;</span>
+
+<span class="nc" id="L26">    setTitle(&quot;Add new user&quot;);</span>
+<span class="nc" id="L27">    setHeaderTitle(&quot;Enter the name of the new user&quot;);</span>
+
+<span class="nc" id="L29">    nameField = new TextField();</span>
+<span class="nc" id="L30">    nameField.setPromptText(&quot;Mr. Example Exampleman&quot;);</span>
+
+<span class="nc" id="L32">    getDialogPane().setContent(nameField);</span>
+
+<span class="nc" id="L34">    addOkButton();</span>
+<span class="nc" id="L35">    addCancelButton();</span>
+
+<span class="nc" id="L37">    setOkAction(this::okAction);</span>
+
+<span class="nc" id="L39">    Platform.runLater(nameField::requestFocus);</span>
+<span class="nc" id="L40">  }</span>
+
+  private void okAction() throws ValidationException {
+<span class="nc bnc" id="L43" title="All 2 branches missed.">    if (Boolean.FALSE.equals(addUser.apply(getName()))) {</span>
+<span class="nc" id="L44">      throw new ValidationException(&quot;Max users reached&quot;);</span>
+    }
+<span class="nc" id="L46">  }</span>
+
+  private String getName() throws ValidationException {
+<span class="nc bnc" id="L49" title="All 2 branches missed.">    if (nameField.getText().isBlank()) {</span>
+<span class="nc" id="L50">      throw new ValidationException(&quot;Name cannot be blank&quot;);</span>
+    }
+<span class="nc" id="L52">    return nameField.getText().toLowerCase();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
