@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddProfileButton.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.profiles</a> &gt; <span class="el_source">AddProfileButton.java</span></div><h1>AddProfileButton.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.profiles;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+
+/**
+ * Class for creating a profile item. A profile item is a square button with a color and a label
+ * with a name beneath.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
+public class AddProfileButton extends VBox implements ComponentUtils {
+
+  /**
+   * Constructor for AddProfileButton.
+   *
+   * @param onClick Runnable to be executed when the button is clicked
+   */
+  public AddProfileButton(Runnable onClick) {
+<span class="nc" id="L24">    super();</span>
+
+<span class="nc" id="L26">    addStylesheet(&quot;components/profiles/profile-item&quot;);</span>
+<span class="nc" id="L27">    addStylesheet(&quot;components/profiles/add-profile-button&quot;);</span>
+<span class="nc" id="L28">    addClass(&quot;profile-item&quot;);</span>
+<span class="nc" id="L29">    addClass(&quot;add-profile-button&quot;);</span>
+
+<span class="nc" id="L31">    Button button = new StandardButton(&quot;&quot;, false);</span>
+
+<span class="nc" id="L33">    Label plusIcon = new Label(&quot;+&quot;);</span>
+<span class="nc" id="L34">    button.setGraphic(plusIcon);</span>
+
+<span class="nc" id="L36">    button.setOnAction(e -&gt; onClick.run());</span>
+
+<span class="nc" id="L38">    getChildren().addAll(button, new Label(&quot; &quot;));</span>
+<span class="nc" id="L39">  }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

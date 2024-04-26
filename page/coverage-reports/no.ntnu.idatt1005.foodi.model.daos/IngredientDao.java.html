@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.daos</a> &gt; <span class="el_source">IngredientDao.java</span></div><h1>IngredientDao.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.daos;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * This class is responsible for handling the interaction between the Ingredient class and the
+ * Database.
+ *
+ * @author Snake727
+ * @version 0.9.0
+ */
+
+<span class="fc" id="L21">public class IngredientDao {</span>
+
+  /**
+   * Counts the number of ingredient items in the ingredient table.
+   *
+   * @return the number of ingredient items in the database.
+   */
+  public int countIngredientItems() {
+<span class="fc" id="L29">    Integer result = new QueryBuilder(&quot;SELECT COUNT(*) FROM ingredient&quot;)</span>
+<span class="fc" id="L30">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L32">            return rs.getInt(1);</span>
+          }
+<span class="nc" id="L34">          return null;</span>
+        });
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">    return result != null ? result : 0;</span>
+  }
+
+  /**
+   * Counts the number of ingredient items in a user's inventory.
+   *
+   * @param userId The id of the user to count the ingredients from.
+   * @return the number of ingredient items in the user's inventory.
+   */
+  public int countIngredientItemsInUserInventory(int userId) {
+<span class="fc" id="L47">    Integer result = new QueryBuilder(&quot;SELECT COUNT(*) FROM inventory WHERE user_id = ?&quot;)</span>
+<span class="fc" id="L48">        .addInt(userId)</span>
+<span class="fc" id="L49">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L51">            return rs.getInt(1);</span>
+          }
+<span class="nc" id="L53">          return null;</span>
+        });
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">    return result != null ? result : 0;</span>
+  }
+
+  /**
+   * Saves an ingredient to a recipe. This is done by inserting the recipe id, ingredient id and
+   * amount into the recipe_ingredient table.
+   *
+   * @param recipeId     The id of the recipe to save the ingredient to.
+   * @param ingredientId The id of the ingredient to save.
+   * @param amount       The amount of the ingredient to save.
+   */
+  public void saveIngredientToRecipe(int recipeId, int ingredientId, double amount) {
+<span class="fc" id="L68">    new QueryBuilder(</span>
+        &quot;INSERT INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES (?, ?, ?)&quot;)
+<span class="fc" id="L70">        .addInt(recipeId)</span>
+<span class="fc" id="L71">        .addInt(ingredientId)</span>
+<span class="fc" id="L72">        .addDouble(amount)</span>
+<span class="fc" id="L73">        .executeUpdateSafe();</span>
+<span class="fc" id="L74">  }</span>
+
+  /**
+   * Saves an ingredient object to the database.
+   *
+   * @param obj The ingredient object to save.
+   */
+  public void saveIngredientObject(@NotNull Ingredient obj) {
+<span class="nc" id="L82">    new QueryBuilder(&quot;INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)&quot;)</span>
+<span class="nc" id="L83">        .addString(obj.getName())</span>
+<span class="nc" id="L84">        .addString(obj.getUnit().getDatabaseKey())</span>
+<span class="nc" id="L85">        .addString(obj.getCategory().getDatabaseKey())</span>
+<span class="nc" id="L86">        .executeUpdateSafe();</span>
+<span class="nc" id="L87">  }</span>
+
+  /**
+   * Saves an ingredient to a user's inventory.
+   *
+   * @param userId         The id of the user to save the ingredient to.
+   * @param ingredientName The name of the ingredient to save.
+   * @param unit           The unit of the ingredient to save.
+   * @param category       The category of the ingredient to save.
+   * @param amount         The amount of the ingredient to save.
+   * @param expirationDate The expiration date of the ingredient.
+   */
+  public void saveIngredientToUserInventory(
+      int userId,
+      String ingredientName,
+      Ingredient.Unit unit,
+      Ingredient.Category category,
+      double amount,
+      @Nullable Date expirationDate
+  ) {
+<span class="fc" id="L107">    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);</span>
+<span class="fc" id="L108">    int ingredientId = findIngredientId(ingredientName, unit, category);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">    if (ingredientId == -1) {</span>
+<span class="nc" id="L110">      saveIngredient(ingredientName, unit, category);</span>
+<span class="nc" id="L111">      ingredientId = findIngredientId(ingredientName, unit, category);</span>
+    }
+
+<span class="fc" id="L114">    new QueryBuilder(</span>
+        &quot;INSERT INTO inventory &quot;
+            + &quot;(ingredient_id, user_id, amount, expiration_date) VALUES (?, ?, ?, ?)&quot;)
+<span class="fc" id="L117">        .addInt(ingredientId)</span>
+<span class="fc" id="L118">        .addInt(userId)</span>
+<span class="fc" id="L119">        .addDouble(amount)</span>
+<span class="fc" id="L120">        .addDate(expirationDate)</span>
+<span class="fc" id="L121">        .executeUpdateSafe();</span>
+<span class="fc" id="L122">  }</span>
+
+  /**
+   * Finds the id of an ingredient in the database.
+   *
+   * @param ingredientName The name of the ingredient to find.
+   * @param unit           The unit of the ingredient to find.
+   * @param category       The category of the ingredient to find.
+   * @return The id of the ingredient. Returns -1 if nothing was found.
+   */
+  private static Integer findIngredientId(@NotNull String ingredientName,
+      @NotNull Ingredient.Unit unit, @NotNull Ingredient.Category category) {
+<span class="fc" id="L134">    Integer result = new QueryBuilder(</span>
+        &quot;SELECT id FROM ingredient WHERE name = ? AND unit = ? AND category = ?&quot;)
+<span class="fc" id="L136">        .addString(ingredientName)</span>
+<span class="fc" id="L137">        .addString(unit.toString())</span>
+<span class="fc" id="L138">        .addString(category.toString())</span>
+<span class="fc" id="L139">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L141">            return rs.getInt(1);</span>
+          }
+<span class="nc" id="L143">          return -1;</span>
+        });
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">    return result != null ? result : -1;</span>
+  }
+
+  /**
+   * Saves an ingredient to the database. This is done by inserting the name, unit and category into
+   * the ingredient table.
+   *
+   * @param ingredientName The name of the ingredient to save.
+   * @param unit           The unit of the ingredient to save.
+   * @param category       The category of the ingredient to save.
+   */
+  public void saveIngredient(
+      @NotNull String ingredientName,
+      @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category
+  ) {
+<span class="fc" id="L161">    ingredientName = ingredientName.substring(0, 1).toUpperCase() + ingredientName.substring(1);</span>
+<span class="fc" id="L162">    new QueryBuilder(&quot;INSERT INTO ingredient (name, unit, category) VALUES (?, ?, ?)&quot;)</span>
+<span class="fc" id="L163">        .addString(ingredientName)</span>
+<span class="fc" id="L164">        .addString(unit.toString())</span>
+<span class="fc" id="L165">        .addString(category.toString())</span>
+<span class="fc" id="L166">        .executeUpdateSafe();</span>
+<span class="fc" id="L167">  }</span>
+
+  /**
+   * Merges an ingredient object into the database. If the ingredient already exists, it will be
+   * updated. If not, it will be inserted.
+   *
+   * @param id             The id of the ingredient to merge.
+   * @param ingredientName The name of the ingredient to merge.
+   * @param unit           The unit of the ingredient to merge.
+   * @param category       The category of the ingredient to merge.
+   */
+  public void mergeIngredient(int id, @NotNull String ingredientName, @NotNull Ingredient.Unit unit,
+      @NotNull Ingredient.Category category) {
+    // If no such ingredient exists, proceed with the insertion
+<span class="nc" id="L181">    new QueryBuilder(&quot;MERGE INTO ingredient (id, name, unit, category) VALUES (?, ?, ?, ?)&quot;)</span>
+<span class="nc" id="L182">        .addInt(id)</span>
+<span class="nc" id="L183">        .addString(ingredientName)</span>
+<span class="nc" id="L184">        .addString(unit.toString())</span>
+<span class="nc" id="L185">        .addString(category.toString())</span>
+<span class="nc" id="L186">        .executeUpdateSafe();</span>
+<span class="nc" id="L187">  }</span>
+
+  /**
+   * Updates an ingredient object in the database.
+   *
+   * @param obj The ingredient object to update.
+   */
+  private void updateIngredient(@NotNull Ingredient obj) {
+<span class="nc" id="L195">    new QueryBuilder(&quot;UPDATE ingredient SET name = ?, unit = ?, category = ? WHERE id = ?&quot;)</span>
+<span class="nc" id="L196">        .addString(obj.getName())</span>
+<span class="nc" id="L197">        .addString(obj.getUnit().getDatabaseKey())</span>
+<span class="nc" id="L198">        .addString(obj.getCategory().getDatabaseKey())</span>
+<span class="nc" id="L199">        .addInt(obj.getId())</span>
+<span class="nc" id="L200">        .executeUpdateSafe();</span>
+<span class="nc" id="L201">  }</span>
+
+  /**
+   * Updates an ingredient in a user's inventory.
+   *
+   * @param ingredientId   The id of the ingredient to update.
+   * @param amount         The new amount of the ingredient.
+   * @param expirationDate The new expiration date of the ingredient.
+   */
+  public void updateIngredientInUserInventory(
+      int ingredientId,
+      double amount,
+      @NotNull LocalDate expirationDate
+  ) {
+<span class="fc" id="L215">    new QueryBuilder(</span>
+        &quot;UPDATE inventory SET &quot;
+            + &quot;amount = ?, expiration_date = ? WHERE ingredient_id = ?&quot;)
+<span class="fc" id="L218">        .addDouble(amount)</span>
+<span class="fc" id="L219">        .addDate(Date.valueOf(expirationDate))</span>
+<span class="fc" id="L220">        .addInt(ingredientId)</span>
+<span class="fc" id="L221">        .executeUpdateSafe();</span>
+<span class="fc" id="L222">  }</span>
+
+
+  /**
+   * Updates the amount of an ingredient in a user's inventory.
+   *
+   * @param userId The id of the user to update the ingredient in.
+   * @param itemId The id of the ingredient to update.
+   * @param amount The new amount of the ingredient.
+   */
+  public void updateItemAmountInUserInventory(int userId, int itemId, double amount) {
+<span class="fc" id="L233">    new QueryBuilder(</span>
+        &quot;UPDATE inventory SET amount = ? WHERE user_id = ? AND id = ?&quot;)
+<span class="fc" id="L235">        .addDouble(amount)</span>
+<span class="fc" id="L236">        .addInt(userId)</span>
+<span class="fc" id="L237">        .addInt(itemId)</span>
+<span class="fc" id="L238">        .executeUpdateSafe();</span>
+<span class="fc" id="L239">  }</span>
+
+  /**
+   * Updates the expiration date of an ingredient in a user's inventory.
+   *
+   * @param userId         The id of the user to update the ingredient in.
+   * @param ingredientId   The id of the ingredient to update.
+   * @param expirationDate The new expiration date of the ingredient.
+   */
+  public void updateIngredientExpirationDate(int userId, int ingredientId,
+      @NotNull LocalDate expirationDate) {
+<span class="fc" id="L250">    new QueryBuilder(</span>
+        &quot;UPDATE inventory SET expiration_date = ? WHERE user_id = ? AND ingredient_id = ?&quot;)
+<span class="fc" id="L252">        .addDate(Date.valueOf(expirationDate))</span>
+<span class="fc" id="L253">        .addInt(userId)</span>
+<span class="fc" id="L254">        .addInt(ingredientId)</span>
+<span class="fc" id="L255">        .executeUpdateSafe();</span>
+<span class="fc" id="L256">  }</span>
+
+  /**
+   * Deletes an ingredient object from the database and also deletes related entries in the
+   * inventory table.
+   *
+   * @param obj The ingredient object to delete.
+   */
+  public void deleteIngredientObject(@NotNull Ingredient obj) {
+    // First, delete the related entries in the inventory table
+<span class="nc" id="L266">    new QueryBuilder(&quot;DELETE FROM inventory WHERE ingredient_id = ?&quot;)</span>
+<span class="nc" id="L267">        .addInt(obj.getId())</span>
+<span class="nc" id="L268">        .executeUpdateSafe();</span>
+
+    // Then, delete the ingredient from the ingredient table
+<span class="nc" id="L271">    new QueryBuilder(&quot;DELETE FROM ingredient WHERE id = ?&quot;)</span>
+<span class="nc" id="L272">        .addInt(obj.getId())</span>
+<span class="nc" id="L273">        .executeUpdateSafe();</span>
+<span class="nc" id="L274">  }</span>
+
+  /**
+   * Deletes an ingredient from a user's inventory.
+   *
+   * @param userId       The id of the user to delete the ingredient from.
+   * @param ingredientId The id of the ingredient to delete.
+   */
+  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
+<span class="fc" id="L283">    new QueryBuilder(&quot;DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?&quot;)</span>
+<span class="fc" id="L284">        .addInt(userId)</span>
+<span class="fc" id="L285">        .addInt(ingredientId)</span>
+<span class="fc" id="L286">        .executeUpdateSafe();</span>
+<span class="fc" id="L287">  }</span>
+
+  /**
+   * Retrieves an ingredient object from the database.
+   *
+   * @param obj The ingredient object to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable Ingredient retrieveIngredientObject(@NotNull Ingredient obj) {
+<span class="nc" id="L296">    return new QueryBuilder(&quot;SELECT * FROM ingredient WHERE id = ?&quot;)</span>
+<span class="nc" id="L297">        .addInt(obj.getId())</span>
+<span class="nc" id="L298">        .executeQuerySafe(rs -&gt; {</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">          if (rs.next()) {</span>
+<span class="nc" id="L300">            String name = rs.getString(&quot;name&quot;);</span>
+<span class="nc" id="L301">            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString(&quot;unit&quot;));</span>
+<span class="nc" id="L302">            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString(&quot;category&quot;));</span>
+
+<span class="nc" id="L304">            return new Ingredient(obj.getId(), name, unit, category);</span>
+          }
+<span class="nc" id="L306">          return null;</span>
+        });
+  }
+
+  /**
+   * Retrieves all ingredients and their amounts in a recipe. This is done by checking the recipe
+   * table for a matching recipe id.
+   *
+   * @param recipeId The id of the recipe to retrieve ingredients from.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable List&lt;AmountedIngredient&gt; retrieveAmountedIngredientsFromRecipe(int recipeId) {
+<span class="fc" id="L318">    return new QueryBuilder(</span>
+        &quot;SELECT i.*, ri.amount FROM recipe_ingredient ri &quot;
+            + &quot;JOIN ingredient i ON ri.ingredient_id = i.id WHERE ri.recipe_id = ?&quot;)
+<span class="fc" id="L321">        .addInt(recipeId)</span>
+<span class="fc" id="L322">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L323">          List&lt;AmountedIngredient&gt; ingredients = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L325">            int id = rs.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L326">            String name = rs.getString(&quot;name&quot;);</span>
+<span class="fc" id="L327">            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString(&quot;unit&quot;));</span>
+<span class="fc" id="L328">            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString(&quot;category&quot;));</span>
+<span class="fc" id="L329">            double amount = rs.getDouble(&quot;amount&quot;);</span>
+
+<span class="fc" id="L331">            ingredients.add(new AmountedIngredient(id, name, unit, category, amount));</span>
+<span class="fc" id="L332">          }</span>
+<span class="fc" id="L333">          return ingredients;</span>
+        });
+  }
+
+  /**
+   * Retrieve a list of all the ingredients in a users inventory. The list contains
+   * AmountedIngredient objects with the amount of each ingredient.
+   *
+   * @param userId The id of the user to retrieve the inventory from.
+   * @return A list of AmountedIngredient objects.
+   */
+  public @Nullable List&lt;AmountedIngredient&gt; retrieveAmountedIngredientsFromInventory(int userId) {
+<span class="fc" id="L345">    return new QueryBuilder(&quot;SELECT * FROM inventory WHERE user_id = ?&quot;)</span>
+<span class="fc" id="L346">        .addInt(userId)</span>
+<span class="fc" id="L347">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L348">          List&lt;AmountedIngredient&gt; ingredients = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L350">            int ingredientId = rs.getInt(&quot;ingredient_id&quot;);</span>
+<span class="fc" id="L351">            double amount = rs.getDouble(&quot;amount&quot;);</span>
+
+<span class="fc" id="L353">            Ingredient ingredient = retrieveIngredientById(ingredientId);</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">            assert ingredient != null;</span>
+<span class="fc" id="L355">            ingredients.add(new AmountedIngredient(ingredient.getId(), ingredient.getName(),</span>
+<span class="fc" id="L356">                ingredient.getUnit(), ingredient.getCategory(), amount));</span>
+<span class="fc" id="L357">          }</span>
+<span class="fc" id="L358">          return ingredients;</span>
+        });
+  }
+
+  /**
+   * Retrieve an ingredient from the database by its ID.
+   *
+   * @param id the id of the ingredient to retrieve.
+   * @return The Ingredient object. Returns null if nothing was found.
+   */
+  public @Nullable Ingredient retrieveIngredientById(int id) {
+<span class="fc" id="L369">    return new QueryBuilder(&quot;SELECT * FROM ingredient WHERE id = ?&quot;)</span>
+<span class="fc" id="L370">        .addInt(id)</span>
+<span class="fc" id="L371">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L372" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L373">            String name = rs.getString(&quot;name&quot;);</span>
+<span class="fc" id="L374">            Ingredient.Unit unit = Ingredient.Unit.fromKey(rs.getString(&quot;unit&quot;));</span>
+<span class="fc" id="L375">            Ingredient.Category category = Ingredient.Category.fromKey(rs.getString(&quot;category&quot;));</span>
+
+<span class="fc" id="L377">            return new Ingredient(id, name, unit, category);</span>
+          }
+<span class="nc" id="L379">          return null;</span>
+        });
+  }
+
+  /**
+   * Retrieve a list of all the ingredients in a users inventory. The list contains
+   * ExpiringIngredient objects with the amount and expiration date of each ingredient.
+   *
+   * @param userId The id of the user to retrieve the inventory from.
+   * @return A list of ExpiringIngredient objects.
+   */
+
+  public @Nullable List&lt;ExpiringIngredient&gt; retrieveExpiringIngredientsFromInventory(int userId) {
+<span class="fc" id="L392">    return new QueryBuilder(&quot;SELECT * FROM inventory WHERE user_id = ?&quot;)</span>
+<span class="fc" id="L393">        .addInt(userId)</span>
+<span class="fc" id="L394">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L395">          List&lt;ExpiringIngredient&gt; ingredients = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L397">            int id = rs.getInt(&quot;id&quot;);</span>
+<span class="fc" id="L398">            int ingredientId = rs.getInt(&quot;ingredient_id&quot;);</span>
+<span class="fc" id="L399">            double amount = rs.getDouble(&quot;amount&quot;);</span>
+<span class="fc" id="L400">            Date expirationDateSql = rs.getDate(&quot;expiration_date&quot;);</span>
+<span class="fc" id="L401">            LocalDate expirationDate = expirationDateSql.toLocalDate();</span>
+<span class="fc" id="L402">            boolean isFrozen = rs.getBoolean(&quot;is_frozen&quot;);</span>
+
+<span class="fc" id="L404">            Ingredient ingredient = retrieveIngredientById(ingredientId);</span>
+<span class="pc bpc" id="L405" title="1 of 2 branches missed.">            assert ingredient != null;</span>
+<span class="fc" id="L406">            ExpiringIngredient expiringIngredient = new ExpiringIngredient(</span>
+<span class="fc" id="L407">                ingredient.getId(),</span>
+<span class="fc" id="L408">                ingredient.getName(),</span>
+<span class="fc" id="L409">                ingredient.getUnit(),</span>
+<span class="fc" id="L410">                ingredient.getCategory(),</span>
+                amount,
+                expirationDate,
+<span class="fc" id="L413">                isFrozen</span>
+            );
+<span class="fc" id="L415">            expiringIngredient.setInventoryId(id);</span>
+<span class="fc" id="L416">            ingredients.add(expiringIngredient);</span>
+<span class="fc" id="L417">          }</span>
+<span class="fc" id="L418">          return ingredients;</span>
+        });
+  }
+
+  /**
+   * Freezes or unfreezes an ingredient in a user's inventory.
+   *
+   * @param userId       The id of the user to freeze the ingredient for.
+   * @param ingredientId The id of the ingredient to freeze.
+   * @param isFrozen     True if the ingredient should be frozen, false if it should be unfrozen.
+   */
+  public void toggleFreezeIngredient(int userId, int ingredientId, boolean isFrozen) {
+<span class="fc" id="L430">    new QueryBuilder(</span>
+        &quot;UPDATE inventory SET is_frozen = ? WHERE user_id = ? AND ingredient_id = ?&quot;)
+<span class="fc" id="L432">        .addBoolean(isFrozen)</span>
+<span class="fc" id="L433">        .addInt(userId)</span>
+<span class="fc" id="L434">        .addInt(ingredientId)</span>
+<span class="fc" id="L435">        .executeUpdateSafe();</span>
+<span class="fc" id="L436">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

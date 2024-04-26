@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SideBar.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.sidebar</a> &gt; <span class="el_source">SideBar.java</span></div><h1>SideBar.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.sidebar;
+
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Insets;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
+import no.ntnu.idatt1005.foodi.view.utils.ColorUtils;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+
+/**
+ * A simple sidebar component.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class SideBar extends VBox implements ComponentUtils {
+
+  /**
+   * The constructor of the sidebar component.
+   */
+  public SideBar(SimpleObjectProperty&lt;User&gt; currentUserProperty) {
+<span class="nc" id="L27">    super();</span>
+<span class="nc" id="L28">    addStylesheet(&quot;components/sidebar&quot;);</span>
+<span class="nc" id="L29">    addClass(&quot;sidebar&quot;);</span>
+
+<span class="nc" id="L31">    render(currentUserProperty.get());</span>
+
+<span class="nc" id="L33">    currentUserProperty.subscribe(this::render);</span>
+<span class="nc" id="L34">    LocationHandler.subscribe(l -&gt; render(currentUserProperty.get()));</span>
+<span class="nc" id="L35">  }</span>
+
+  /**
+   * Method for rendering the sidebar.
+   *
+   * @param currentUser the current user
+   */
+  public void render(User currentUser) {
+<span class="nc" id="L43">    String currentUsername = currentUser.getCapitalizedName();</span>
+<span class="nc" id="L44">    getChildren().clear();</span>
+
+<span class="nc" id="L46">    String image = LoadUtils.getImage(&quot;foodi.png&quot;);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    if (image != null) {</span>
+<span class="nc" id="L48">      ImageView logo = new ImageView(image);</span>
+<span class="nc" id="L49">      logo.getStyleClass().add(&quot;sidebar-logo&quot;);</span>
+<span class="nc" id="L50">      logo.setPreserveRatio(true);</span>
+<span class="nc" id="L51">      logo.setFitWidth(100);</span>
+
+      // Set margin for the logo (impossible to do with CSS)
+<span class="nc" id="L54">      VBox.setMargin(logo, new Insets(10, 0, 10, 0));</span>
+
+<span class="nc" id="L56">      getChildren().add(logo);</span>
+    }
+
+<span class="nc" id="L59">    getChildren().addAll(</span>
+<span class="nc" id="L60">        getProfilesButton(currentUsername),</span>
+        new SideBarItem(
+            &quot;Inventory&quot;,
+            &quot;inventory&quot;
+        ),
+        new SideBarItem(
+            &quot;Cookbook&quot;,
+            &quot;cookbook-grid&quot;
+        ),
+        new SideBarItem(
+            &quot;Shopping List&quot;,
+            &quot;shopping-list&quot;
+        ),
+        new SideBarItem(
+            &quot;About us&quot;,
+            &quot;about&quot;
+        )
+    );
+<span class="nc" id="L78">  }</span>
+
+  private HBox getProfilesButton(String currentUsername) {
+<span class="nc" id="L81">    SideBarItem navButton = new SideBarItem(</span>
+        currentUsername,
+        &quot;profiles&quot;
+    );
+
+<span class="nc" id="L86">    Rectangle profileImage = new Rectangle(12, 12);</span>
+<span class="nc" id="L87">    profileImage.setStyle(&quot;-fx-fill: &quot; + ColorUtils.usernameToColor(currentUsername) + &quot;;&quot;);</span>
+
+<span class="nc" id="L89">    HBox container = new HBox(profileImage, navButton);</span>
+<span class="nc" id="L90">    container.setAlignment(javafx.geometry.Pos.CENTER_LEFT);</span>
+<span class="nc" id="L91">    container.setPadding(new Insets(0, 0, 0, 8));</span>
+
+<span class="nc" id="L93">    return container;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

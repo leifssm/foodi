@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfilesController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.controller.pages</a> &gt; <span class="el_source">ProfilesController.java</span></div><h1>ProfilesController.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.controller.pages;
+
+import java.util.List;
+import javafx.beans.property.SimpleObjectProperty;
+import no.ntnu.idatt1005.foodi.model.daos.UserDao;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+import no.ntnu.idatt1005.foodi.view.views.Profiles;
+
+/**
+ * Controller for the profiles page. This controller manages the updates to the profiles page.
+ */
+public class ProfilesController extends PageController {
+
+  private static final int MAX_USERS = 4;
+  private final Profiles view;
+  private final SimpleObjectProperty&lt;User&gt; currentUserProperty;
+  private final UserDao userDao;
+
+  /**
+   * Constructor for the ProfilesController class.
+   *
+   * @param profilesPage        the profiles view
+   * @param currentUserProperty the current user property
+   */
+  public ProfilesController(Profiles profilesPage, SimpleObjectProperty&lt;User&gt; currentUserProperty) {
+<span class="nc" id="L26">    super(profilesPage);</span>
+<span class="nc" id="L27">    this.userDao = new UserDao();</span>
+<span class="nc" id="L28">    this.currentUserProperty = currentUserProperty;</span>
+
+<span class="nc" id="L30">    this.view = profilesPage;</span>
+
+<span class="nc" id="L32">    attachToView();</span>
+<span class="nc" id="L33">  }</span>
+
+  /**
+   * Method for attaching the controller to the view.
+   */
+  private void attachToView() {
+<span class="nc" id="L39">    view.setChangeUser(this::changeUser);</span>
+<span class="nc" id="L40">    view.setAddUser(this::addUser);</span>
+<span class="nc" id="L41">  }</span>
+
+
+  /**
+   * Method for changing the current user.
+   *
+   * @param user the user to change to
+   */
+  private void changeUser(User user) {
+<span class="nc" id="L50">    currentUserProperty.set(user);</span>
+<span class="nc" id="L51">  }</span>
+
+  /**
+   * Method for adding a new user.
+   *
+   * @param name the name of the new user
+   * @return true if the user was added, false if the max users has been reached
+   */
+  private Boolean addUser(String name) {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    if (userDao.retrieveAllUsers().size() &gt;= MAX_USERS) {</span>
+<span class="nc" id="L61">      return false;</span>
+    }
+
+<span class="nc" id="L64">    userDao.saveUser(name);</span>
+<span class="nc" id="L65">    update();</span>
+
+<span class="nc" id="L67">    return true;</span>
+  }
+
+  @Override
+  void update() {
+<span class="nc" id="L72">    view.render(getAllUsers());</span>
+<span class="nc" id="L73">  }</span>
+
+  /**
+   * Method for fetching all users using daos.
+   *
+   * @return a list of all users
+   */
+  private List&lt;User&gt; getAllUsers() {
+<span class="nc" id="L81">    return userDao.retrieveAllUsers();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

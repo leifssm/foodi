@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.daos</a> &gt; <span class="el_source">UserDao.java</span></div><h1>UserDao.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.daos;
+
+import java.util.ArrayList;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
+
+/**
+ * This class is a Data Access Object (daos) for the User class. It is used to interact with the
+ * database. from the database.
+ *
+ * @author Snake727
+ * @version 0.9.0
+ */
+<span class="fc" id="L14">public class UserDao {</span>
+
+  /**
+   * Adds a default user to the database. This is used to ensure that there is always at least one
+   * user in the database.
+   */
+  public void addDefaultUserIfNotExists() {
+<span class="fc" id="L21">    new QueryBuilder(&quot;MERGE INTO PUBLIC.\&quot;user\&quot; (id, name) VALUES (?, ?)&quot;)</span>
+<span class="fc" id="L22">        .addInt(1)</span>
+<span class="fc" id="L23">        .addString(&quot;Default&quot;)</span>
+<span class="fc" id="L24">        .executeUpdateSafe();</span>
+
+<span class="fc" id="L26">    int userAmount = retrieveAllUsers().size();</span>
+<span class="fc" id="L27">    new QueryBuilder(&quot;ALTER TABLE PUBLIC.\&quot;user\&quot; ALTER COLUMN id RESTART WITH &quot; + (userAmount + 1)</span>
+<span class="fc" id="L28">        + &quot;;&quot;).executeUpdateSafe();</span>
+<span class="fc" id="L29">  }</span>
+
+  /**
+   * Retrieves a list of all users from the database.
+   *
+   * @return a list of all users
+   */
+  public List&lt;User&gt; retrieveAllUsers() {
+<span class="fc" id="L37">    List&lt;User&gt; users = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">    new QueryBuilder(&quot;SELECT * FROM PUBLIC.\&quot;user\&quot;&quot;)</span>
+<span class="fc" id="L39">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L41">            users.add(new User(rs.getInt(&quot;id&quot;), rs.getString(&quot;name&quot;)));</span>
+          }
+<span class="fc" id="L43">          return users;</span>
+        });
+<span class="fc" id="L45">    return users;</span>
+  }
+
+  /**
+   * Saves a user to the database.
+   *
+   * @param name the name of the user
+   */
+
+  public void saveUser(String name) {
+<span class="fc" id="L55">    new QueryBuilder(&quot;INSERT INTO PUBLIC.\&quot;user\&quot; (name) VALUES (?)&quot;)</span>
+<span class="fc" id="L56">        .addString(name)</span>
+<span class="fc" id="L57">        .executeUpdateSafe();</span>
+<span class="fc" id="L58">  }</span>
+
+  /**
+   * Deletes a user from the database by the user id.
+   *
+   * @param userId the id of the user to delete
+   */
+
+  public void deleteUser(int userId) {
+<span class="fc" id="L67">    new QueryBuilder(&quot;DELETE FROM PUBLIC.\&quot;user\&quot; WHERE id = ?&quot;)</span>
+<span class="fc" id="L68">        .addInt(userId)</span>
+<span class="fc" id="L69">        .executeUpdateSafe();</span>
+<span class="fc" id="L70">  }</span>
+
+  /**
+   * Updates the name of a user in the database.
+   *
+   * @param userId the id of the user to update
+   * @param name   the new name of the user
+   */
+  public void updateUserName(int userId, String name) {
+<span class="fc" id="L79">    new QueryBuilder(&quot;UPDATE PUBLIC.\&quot;user\&quot; SET name = ? WHERE id = ?&quot;)</span>
+<span class="fc" id="L80">        .addString(name)</span>
+<span class="fc" id="L81">        .addInt(userId)</span>
+<span class="fc" id="L82">        .executeUpdateSafe();</span>
+<span class="fc" id="L83">  }</span>
+
+  /**
+   * Retrieves the id of a user from the database by searching for the name.
+   *
+   * @param name the name of the user to search for
+   * @return the id of the user
+   */
+  public int retrieveUserId(String name) {
+<span class="fc" id="L92">    Integer result = new QueryBuilder(&quot;SELECT id FROM PUBLIC.\&quot;user\&quot; WHERE name = ?&quot;)</span>
+<span class="fc" id="L93">        .addString(name)</span>
+<span class="fc" id="L94">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L96">            return rs.getInt(1);</span>
+          }
+<span class="nc" id="L98">          return null;</span>
+        });
+
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    return (result != null) ? result : -1; // or any default value</span>
+  }
+
+  /**
+   * Retrieves the name of a user from the database by looking up the id.
+   *
+   * @param userId the id of the user
+   * @return the name of the user
+   */
+  public String retrieveUserName(int userId) {
+<span class="fc" id="L111">    return new QueryBuilder(&quot;SELECT name FROM PUBLIC.\&quot;user\&quot; WHERE id = ?&quot;)</span>
+<span class="fc" id="L112">        .addInt(userId)</span>
+<span class="fc" id="L113">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L115">            return rs.getString(1);</span>
+          }
+<span class="nc" id="L117">          return null;</span>
+        });
+  }
+
+  /**
+   * Checks if a user exists in the database.
+   *
+   * @param userId the id of the user
+   * @return true if the user exists, false otherwise
+   */
+  public boolean userExists(int userId) {
+<span class="fc" id="L128">    Integer count = new QueryBuilder(&quot;SELECT COUNT(*) FROM PUBLIC.\&quot;user\&quot; WHERE id = ?&quot;)</span>
+<span class="fc" id="L129">        .addInt(userId)</span>
+<span class="fc" id="L130">        .executeQuerySafe(rs -&gt; {</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+<span class="fc" id="L132">            return rs.getInt(1);</span>
+          }
+<span class="nc" id="L134">          return null;</span>
+        });
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">    return count != null &amp;&amp; count &gt; 0;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

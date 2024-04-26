@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StandardCheckBoxHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.button</a> &gt; <span class="el_source">StandardCheckBoxHandler.java</span></div><h1>StandardCheckBoxHandler.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.button;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Class for handling a group of checkboxes, and a main checkbox that controls them.
+ *
+ * @param &lt;DataT&gt; The type of data the checkboxes represent
+ * @author Leif Mørstad
+ * @version 1.1
+ * @see StandardCheckBox
+ */
+public class StandardCheckBoxHandler&lt;DataT&gt; {
+
+<span class="nc" id="L22">  private final @NotNull HashMap&lt;StandardCheckBox, DataT&gt; checkBoxDataMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L23">  private @Nullable StandardCheckBox mainCheckBox = null;</span>
+
+  /**
+   * Constructor for the StandardCheckBoxHandler class.
+   */
+<span class="nc" id="L28">  public StandardCheckBoxHandler() {</span>
+<span class="nc" id="L29">  }</span>
+
+  /**
+   * Binds the main checkbox to the handler.
+   *
+   * @param mainCheckBox The checkbox to bind as a main controller
+   */
+  public void bindMainCheckBox(@NotNull StandardCheckBox mainCheckBox) {
+<span class="nc" id="L37">    this.mainCheckBox = mainCheckBox;</span>
+<span class="nc" id="L38">    appendEvent(mainCheckBox, () -&gt; setAll(mainCheckBox.isSelected()));</span>
+<span class="nc" id="L39">  }</span>
+
+  /**
+   * Appends an event to a checkbox.
+   *
+   * @param checkBox The checkbox to append the event to
+   * @param event    The event to append
+   */
+  private static void appendEvent(@NotNull StandardCheckBox checkBox, @NotNull Runnable event) {
+<span class="nc" id="L48">    EventHandler&lt;ActionEvent&gt; oldEvent = checkBox.getOnAction();</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">    if (oldEvent == null) {</span>
+<span class="nc" id="L50">      checkBox.setOnAction(e -&gt; event.run());</span>
+    } else {
+<span class="nc" id="L52">      checkBox.setOnAction(e -&gt; {</span>
+<span class="nc" id="L53">        oldEvent.handle(e);</span>
+<span class="nc" id="L54">        event.run();</span>
+<span class="nc" id="L55">      });</span>
+    }
+<span class="nc" id="L57">  }</span>
+
+  /**
+   * Sets all checkboxes to the given state.
+   *
+   * @param selected Whether the checkboxes should be selected
+   */
+  public void setAll(boolean selected) {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    for (var selectedData : checkBoxDataMap.entrySet()) {</span>
+<span class="nc" id="L66">      selectedData.getKey().setSelected(selected);</span>
+<span class="nc" id="L67">    }</span>
+<span class="nc" id="L68">    updateMain();</span>
+<span class="nc" id="L69">  }</span>
+
+  /**
+   * Updates the main checkbox.
+   */
+  private void updateMain() {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (mainCheckBox == null) {</span>
+<span class="nc" id="L76">      return;</span>
+    }
+<span class="nc" id="L78">    String state = getMainCheckBoxState();</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">    switch (state) {</span>
+      case &quot;all&quot;:
+<span class="nc" id="L81">        mainCheckBox.setSelected(true);</span>
+<span class="nc" id="L82">        mainCheckBox.setIndeterminate(false);</span>
+<span class="nc" id="L83">        break;</span>
+      case &quot;some&quot;:
+<span class="nc" id="L85">        mainCheckBox.setSelected(false);</span>
+<span class="nc" id="L86">        mainCheckBox.setIndeterminate(true);</span>
+<span class="nc" id="L87">        break;</span>
+      case &quot;none&quot;:
+<span class="nc" id="L89">        mainCheckBox.setSelected(false);</span>
+<span class="nc" id="L90">        mainCheckBox.setIndeterminate(false);</span>
+<span class="nc" id="L91">        break;</span>
+      default:
+<span class="nc" id="L93">        throw new IllegalStateException(&quot;Unexpected value: &quot; + state);</span>
+    }
+<span class="nc" id="L95">  }</span>
+
+  /**
+   * Returns the state of the main checkbox.
+   *
+   * @return Either &quot;all&quot;, &quot;some&quot; or &quot;none&quot;
+   */
+  public @MagicConstant String getMainCheckBoxState() {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">    if (checkBoxDataMap.isEmpty()) {</span>
+<span class="nc" id="L104">      return &quot;none&quot;;</span>
+    }
+
+<span class="nc" id="L107">    Boolean allSelected = null;</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">    for (var checkbox : checkBoxDataMap.keySet()) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">      if (allSelected == null) {</span>
+<span class="nc" id="L110">        allSelected = checkbox.isSelected();</span>
+<span class="nc" id="L111">        continue;</span>
+      }
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">      if (checkbox.isSelected() != allSelected) {</span>
+<span class="nc" id="L115">        return &quot;some&quot;;</span>
+      }
+<span class="nc" id="L117">    }</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">    return allSelected ? &quot;all&quot; : &quot;none&quot;;</span>
+  }
+
+  /**
+   * Binds a checkbox to the handler.
+   *
+   * @param checkBox The checkbox to bind
+   */
+  public void bindCheckBox(@NotNull StandardCheckBox checkBox, DataT ingredient) {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">    if (checkBoxDataMap.containsKey(checkBox)) {</span>
+<span class="nc" id="L128">      throw new IllegalArgumentException(&quot;The ingredient is already bound to a checkbox&quot;);</span>
+    }
+<span class="nc" id="L130">    checkBoxDataMap.put(checkBox, ingredient);</span>
+<span class="nc" id="L131">    appendEvent(checkBox, this::updateMain);</span>
+<span class="nc" id="L132">  }</span>
+
+  /**
+   * Returns a list of all data corresponding to the selected data.
+   *
+   * @return a list of selected data
+   */
+  public List&lt;DataT&gt; getSelectedData() {
+<span class="nc" id="L140">    ArrayList&lt;DataT&gt; selectedData = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">    for (var entry : checkBoxDataMap.entrySet()) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">      if (entry.getKey().isSelected()) {</span>
+<span class="nc" id="L144">        selectedData.add(entry.getValue());</span>
+      }
+<span class="nc" id="L146">    }</span>
+
+<span class="nc" id="L148">    return selectedData;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

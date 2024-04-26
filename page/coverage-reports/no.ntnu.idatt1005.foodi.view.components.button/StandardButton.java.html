@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StandardButton.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.button</a> &gt; <span class="el_source">StandardButton.java</span></div><h1>StandardButton.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.button;
+
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for creating a standard styled button.
+ *
+ * @author Leif Mørstad
+ * @version 1.1
+ */
+public class StandardButton extends Button implements ComponentUtils {
+
+<span class="nc" id="L17">  private Style currentStyle = Style.NORMAL;</span>
+
+  /**
+   * Constructor for the StandardButton class.
+   *
+   * @param text   The text to be displayed on the button
+   * @param action The function to run when the button is clicked
+   * @param style  The style of the button
+   */
+  public StandardButton(String text, @NotNull Runnable action, @NotNull Style style) {
+<span class="nc" id="L27">    this(text, action);</span>
+<span class="nc" id="L28">    setType(style);</span>
+<span class="nc" id="L29">  }</span>
+
+  /**
+   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
+   *
+   * @param text   The text to be displayed on the button
+   * @param action The function to run when the button is clicked
+   */
+  public StandardButton(String text, @NotNull Runnable action) {
+<span class="nc" id="L38">    this(text);</span>
+<span class="nc" id="L39">    setOnAction(event -&gt; action.run());</span>
+<span class="nc" id="L40">  }</span>
+
+  /**
+   * Sets the style of the button.
+   *
+   * @param type The style of the button
+   * @return The button
+   */
+  public StandardButton setType(@NotNull Style type) {
+<span class="nc" id="L49">    removeClass(currentStyle.className);</span>
+<span class="nc" id="L50">    addClass(type.className);</span>
+<span class="nc" id="L51">    currentStyle = type;</span>
+<span class="nc" id="L52">    return this;</span>
+  }
+
+  /**
+   * Constructor for the StandardButton class. Defaults the style to {@link Style#NORMAL}
+   *
+   * @param text The text to be displayed on the button
+   */
+  public StandardButton(String text) {
+<span class="nc" id="L61">    this(text, true);</span>
+<span class="nc" id="L62">  }</span>
+
+  /**
+   * Constructor for the StandardButton class.
+   *
+   * @param text          The text to be displayed on the button
+   * @param standardStyle Whether to use the standard style
+   */
+  public StandardButton(String text, boolean standardStyle) {
+<span class="nc" id="L71">    super(text);</span>
+<span class="nc" id="L72">    addStylesheet(&quot;components/button/std-button&quot;);</span>
+<span class="nc" id="L73">    addClass(currentStyle.className);</span>
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (standardStyle) {</span>
+<span class="nc" id="L76">      addClass(&quot;std-button&quot;);</span>
+    }
+
+<span class="nc" id="L79">    enableKeyboardNavigation();</span>
+<span class="nc" id="L80">  }</span>
+
+  /**
+   * Enables keyboard navigation for the button.
+   */
+  private void enableKeyboardNavigation() {
+<span class="nc" id="L86">    addClass(&quot;keyboard-navigable&quot;);</span>
+<span class="nc" id="L87">    setFocusTraversable(true);</span>
+<span class="nc" id="L88">    addEventHandler(KeyEvent.KEY_PRESSED, event -&gt; {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">      if (event.getCode() == KeyCode.ENTER) {</span>
+        // Perform the action as if the button was clicked
+<span class="nc" id="L91">        fire();</span>
+<span class="nc" id="L92">        event.consume(); // Consume the event so it doesn't propagate further</span>
+      }
+<span class="nc" id="L94">    });</span>
+<span class="nc" id="L95">  }</span>
+
+  /**
+   * Enum for the different button styles.
+   */
+<span class="nc" id="L100">  public enum Style {</span>
+<span class="nc" id="L101">    NORMAL(&quot;normal&quot;),</span>
+<span class="nc" id="L102">    PRIMARY(&quot;primary&quot;),</span>
+<span class="nc" id="L103">    SECONDARY(&quot;secondary&quot;),</span>
+<span class="nc" id="L104">    SUCCESS(&quot;success&quot;),</span>
+<span class="nc" id="L105">    ERROR(&quot;error&quot;),</span>
+<span class="nc" id="L106">    WARNING(&quot;warning&quot;),</span>
+<span class="nc" id="L107">    INFO(&quot;info&quot;),</span>
+<span class="nc" id="L108">    SUBTLE(&quot;subtle&quot;);</span>
+
+    private final String className;
+
+<span class="nc" id="L112">    Style(String className) {</span>
+<span class="nc" id="L113">      this.className = className;</span>
+<span class="nc" id="L114">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PartiallyRemovedAmountedIngredient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.objects.dtos</a> &gt; <span class="el_source">PartiallyRemovedAmountedIngredient.java</span></div><h1>PartiallyRemovedAmountedIngredient.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.objects.dtos;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * This class represents an amounted ingredient object with a removed amount to be displayed to show
+ * the difference.
+ */
+public class PartiallyRemovedAmountedIngredient extends AmountedIngredient {
+
+  private double removedAmount;
+
+  /**
+   * Constructor for the partially removed amounted ingredient object.
+   *
+   * @param id            the id of the ingredient
+   * @param name          the name of the ingredient
+   * @param unit          the unit of the ingredient
+   * @param category      the category of the ingredient
+   * @param amount        the amount of the ingredient in the unit of the given unit
+   * @param removedAmount the amount of the ingredient that has been removed
+   */
+  public PartiallyRemovedAmountedIngredient(
+      int id,
+      String name,
+      Unit unit,
+      Category category,
+      double amount,
+      double removedAmount
+  ) {
+<span class="nc" id="L31">    super(id, name, unit, category, amount);</span>
+<span class="nc" id="L32">    setRemovedAmount(removedAmount);</span>
+<span class="nc" id="L33">  }</span>
+
+  public PartiallyRemovedAmountedIngredient(AmountedIngredient amountedIngredient) {
+<span class="fc" id="L36">    super(</span>
+<span class="fc" id="L37">        amountedIngredient.getId(),</span>
+<span class="fc" id="L38">        amountedIngredient.getName(),</span>
+<span class="fc" id="L39">        amountedIngredient.getUnit(),</span>
+<span class="fc" id="L40">        amountedIngredient.getCategory(),</span>
+<span class="fc" id="L41">        amountedIngredient.getAmount()</span>
+    );
+<span class="fc" id="L43">    setRemovedAmount(0);</span>
+<span class="fc" id="L44">  }</span>
+
+  /**
+   * Returns the amount of the ingredient that has been removed.
+   *
+   * @return the amount of the ingredient that has been removed
+   */
+  public double getRemovedAmount() {
+<span class="nc" id="L52">    return removedAmount;</span>
+  }
+
+  /**
+   * Sets the amount of the ingredient that has been removed.
+   *
+   * @param removedAmount the new amount of the ingredient that has been removed
+   * @throws IllegalArgumentException if the removed amount is negative
+   */
+  public void setRemovedAmount(double removedAmount) throws IllegalArgumentException {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">    if (removedAmount &lt; 0) {</span>
+<span class="nc" id="L63">      throw new IllegalArgumentException(&quot;Error: Removed amount cannot be negative.&quot;);</span>
+    }
+<span class="fc" id="L65">    this.removedAmount = removedAmount;</span>
+<span class="fc" id="L66">  }</span>
+
+  /**
+   * Returns the total amount subtracted by the removed amount of the ingredient.
+   *
+   * @return the remaining amount of the ingredient
+   */
+  public double getRemainingAmount() {
+<span class="nc" id="L74">    return getAmount() - removedAmount;</span>
+  }
+
+  @Override
+  public @NotNull String toString() {
+<span class="nc" id="L79">    return String.format(</span>
+        &quot;PartiallyRemovedAmountedIngredient{id=%o, name='%s', unit=%s, category=%s, amount=%.2f, removedAmount=%.2f}&quot;,
+<span class="nc" id="L81">        getId(),</span>
+<span class="nc" id="L82">        getName(),</span>
+<span class="nc" id="L83">        getUnit(),</span>
+<span class="nc" id="L84">        getCategory(),</span>
+<span class="nc" id="L85">        getAmount(),</span>
+<span class="nc" id="L86">        removedAmount</span>
+    );
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

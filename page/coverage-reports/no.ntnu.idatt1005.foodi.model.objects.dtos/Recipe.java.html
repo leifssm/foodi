@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Recipe.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.objects.dtos</a> &gt; <span class="el_source">Recipe.java</span></div><h1>Recipe.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.objects.dtos;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * This class represents a recipe. A recipe has a name, description, difficulty, and duration. The
+ * duration is in minutes.
+ *
+ * @author Snake727
+ * @version 0.4.0
+ */
+public class Recipe {
+
+  private final int id;
+  private String name;
+  private String description;
+  private Difficulty difficulty;
+  private DietaryTag dietaryTag;
+  private int duration;
+  private String imagePath;
+  private String instruction;
+
+  /**
+   * Creates a recipe object with the given id, name, description, difficulty, dietary tag,
+   * duration, image path, and instruction.
+   *
+   * @param id          the id of the recipe
+   * @param name        the name of the recipe
+   * @param description the description of the recipe
+   * @param difficulty  the difficulty of the recipe
+   * @param dietaryTag  the dietary tag of the recipe
+   * @param duration    the duration of the recipe in minutes
+   * @param imagePath   the path to the image of the recipe
+   * @param instruction the instruction of the recipe
+   */
+  public Recipe(
+      int id,
+      @NotNull String name,
+      @NotNull String description,
+      @NotNull Difficulty difficulty,
+      @NotNull DietaryTag dietaryTag,
+      int duration,
+      @NotNull String imagePath,
+      @NotNull String instruction
+<span class="fc" id="L45">  ) {</span>
+<span class="fc" id="L46">    this.id = id;</span>
+<span class="fc" id="L47">    setName(name);</span>
+<span class="fc" id="L48">    setDescription(description);</span>
+<span class="fc" id="L49">    setDifficulty(difficulty);</span>
+<span class="fc" id="L50">    setDietaryTag(dietaryTag);</span>
+    // Duration is in minutes
+<span class="fc" id="L52">    setDuration(duration);</span>
+<span class="fc" id="L53">    setImagePath(imagePath);</span>
+<span class="fc" id="L54">    setInstruction(instruction);</span>
+<span class="fc" id="L55">  }</span>
+
+  /**
+   * Get the id of the recipe.
+   *
+   * @return the id of the recipe
+   */
+  public int getId() {
+<span class="fc" id="L63">    return id;</span>
+  }
+
+  /**
+   * Get the name of the recipe.
+   *
+   * @return the name of the recipe
+   */
+  public @NotNull String getName() {
+<span class="fc" id="L72">    return name;</span>
+  }
+
+  /**
+   * Set the name of the recipe.
+   *
+   * @param name the new name of the recipe
+   */
+  public void setName(@NotNull String name) {
+<span class="fc" id="L81">    this.name = name;</span>
+<span class="fc" id="L82">  }</span>
+
+  /**
+   * Get the difficulty of the recipe.
+   *
+   * @return the difficulty of the recipe
+   */
+  public @NotNull Difficulty getDifficulty() {
+<span class="fc" id="L90">    return difficulty;</span>
+  }
+
+  /**
+   * Set the difficulty of the recipe.
+   *
+   * @param difficulty the new difficulty of the recipe
+   */
+  public void setDifficulty(@NotNull Difficulty difficulty) {
+<span class="fc" id="L99">    this.difficulty = difficulty;</span>
+<span class="fc" id="L100">  }</span>
+
+  /**
+   * Get the duration of the recipe. The number represents the duration in minutes.
+   *
+   * @return the duration of the recipe
+   */
+  public int getDuration() {
+<span class="fc" id="L108">    return duration;</span>
+  }
+
+  /**
+   * Set the duration of the recipe. The number represents the duration in minutes.
+   *
+   * @param duration the new duration of the recipe
+   */
+  public void setDuration(int duration) {
+<span class="fc" id="L117">    this.duration = duration;</span>
+<span class="fc" id="L118">  }</span>
+
+  /**
+   * Get the description of the recipe.
+   *
+   * @return the description of the recipe.
+   */
+  public @NotNull String getDescription() {
+<span class="fc" id="L126">    return description;</span>
+  }
+
+  /**
+   * Set the description of the recipe.
+   *
+   * @param description the new description of the recipe
+   */
+  public void setDescription(@NotNull String description) {
+<span class="fc" id="L135">    this.description = description;</span>
+<span class="fc" id="L136">  }</span>
+
+  /**
+   * Get the dietary tag of the recipe.
+   *
+   * @return the dietary tag of the recipe
+   */
+  public @NotNull DietaryTag getDietaryTag() {
+<span class="fc" id="L144">    return dietaryTag;</span>
+  }
+
+  /**
+   * Set the dietary tag of the recipe.
+   *
+   * @param dietaryTag the new dietary tag of the recipe
+   */
+  public void setDietaryTag(@NotNull DietaryTag dietaryTag) {
+<span class="fc" id="L153">    this.dietaryTag = dietaryTag;</span>
+<span class="fc" id="L154">  }</span>
+
+  public @NotNull String getImagePath() {
+<span class="fc" id="L157">    return imagePath;</span>
+  }
+
+  /**
+   * Set the image path of the recipe.
+   *
+   * @param imagePath the new image path of the recipe
+   */
+  public void setImagePath(@NotNull String imagePath) {
+<span class="fc" id="L166">    this.imagePath = imagePath;</span>
+<span class="fc" id="L167">  }</span>
+
+  public @NotNull String getInstruction() {
+<span class="fc" id="L170">    return instruction;</span>
+  }
+
+  /**
+   * Set the instruction of the recipe.
+   *
+   * @param instruction the new instruction of the recipe
+   */
+  public void setInstruction(@NotNull String instruction) {
+<span class="fc" id="L179">    this.instruction = instruction;</span>
+<span class="fc" id="L180">  }</span>
+
+
+  @Override
+  public @NotNull String toString() {
+<span class="nc" id="L185">    return &quot;Recipe{&quot; +</span>
+        &quot;id=&quot; + id +
+        &quot;, name='&quot; + name + '\'' +
+        &quot;, description='&quot; + description + '\'' +
+        &quot;, difficulty=&quot; + difficulty +
+        &quot;, duration=&quot; + duration +
+        &quot;, imagePath='&quot; + imagePath + '\'' +
+        &quot;, instruction='&quot; + instruction + '\'' +
+        '}';
+  }
+
+  /**
+   * This enum represents the difficulty of a recipe. The difficulty can be easy, medium, or hard.
+   */
+<span class="fc" id="L199">  public enum Difficulty {</span>
+<span class="fc" id="L200">    EASY(&quot;EASY&quot;, &quot;Easy&quot;),</span>
+<span class="fc" id="L201">    MEDIUM(&quot;MEDIUM&quot;, &quot;Medium&quot;),</span>
+<span class="fc" id="L202">    HARD(&quot;HARD&quot;, &quot;Hard&quot;);</span>
+
+    private final @NotNull String databaseKey;
+    private final @NotNull String difficulty;
+
+<span class="fc" id="L207">    Difficulty(@NotNull String databaseKey, @NotNull String difficulty) {</span>
+<span class="fc" id="L208">      this.databaseKey = databaseKey;</span>
+<span class="fc" id="L209">      this.difficulty = difficulty;</span>
+<span class="fc" id="L210">    }</span>
+
+    /**
+     * Returns the difficulty from the given key.
+     *
+     * @param key the key of the difficulty
+     * @return the difficulty enum
+     */
+    public static @NotNull Difficulty fromKey(@NotNull String key) {
+<span class="nc bnc" id="L219" title="All 2 branches missed.">      for (Difficulty difficulty : Difficulty.values()) {</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        if (difficulty.getDatabaseKey().equals(key)) {</span>
+<span class="nc" id="L221">          return difficulty;</span>
+        }
+      }
+<span class="nc" id="L224">      throw new IllegalArgumentException(&quot;No difficulty found for key: &quot; + key);</span>
+    }
+
+    /**
+     * Returns the key of the difficulty to be used with the database.
+     *
+     * @return the key of the difficulty
+     */
+    public @NotNull String getDatabaseKey() {
+<span class="nc" id="L233">      return databaseKey;</span>
+    }
+
+    /**
+     * Returns the difficulty as a string to be used for display purposes.
+     *
+     * @return the difficulty as a string
+     */
+    public @NotNull String getDifficulty() {
+<span class="nc" id="L242">      return difficulty;</span>
+    }
+
+    /**
+     * Returns the database key of the difficulty.
+     *
+     * @return the database key of the difficulty
+     */
+    public @NotNull String toString() {
+<span class="nc" id="L251">      return databaseKey;</span>
+    }
+  }
+
+  /**
+   * This enum represents the dietary tag of a recipe,
+   */
+<span class="fc" id="L258">  public enum DietaryTag {</span>
+<span class="fc" id="L259">    VEGAN(&quot;VEGAN&quot;, &quot;Vegan&quot;),</span>
+<span class="fc" id="L260">    VEGETARIAN(&quot;VEGETARIAN&quot;, &quot;Vegetarian&quot;),</span>
+<span class="fc" id="L261">    GLUTEN_FREE(&quot;GLUTEN_FREE&quot;, &quot;Gluten-free&quot;),</span>
+<span class="fc" id="L262">    DAIRY_FREE(&quot;DAIRY_FREE&quot;, &quot;Dairy-free&quot;),</span>
+<span class="fc" id="L263">    NUT_FREE(&quot;NUT_FREE&quot;, &quot;Nut-free&quot;),</span>
+<span class="fc" id="L264">    EGG_FREE(&quot;EGG_FREE&quot;, &quot;Egg-free&quot;),</span>
+<span class="fc" id="L265">    SEA_FREE(&quot;SEA_FREE&quot;, &quot;Sea-free&quot;),</span>
+<span class="fc" id="L266">    NONE(&quot;NONE&quot;, &quot;None&quot;);</span>
+    private final @NotNull String databaseKey;
+    private final @NotNull String name;
+
+<span class="fc" id="L270">    DietaryTag(@NotNull String databaseKey, @NotNull String name) {</span>
+<span class="fc" id="L271">      this.databaseKey = databaseKey;</span>
+<span class="fc" id="L272">      this.name = name;</span>
+<span class="fc" id="L273">    }</span>
+
+    /**
+     * Returns the dietary tag from the given key.
+     *
+     * @param key the key of the dietary tag
+     * @return the dietary tag enum
+     */
+    public static @NotNull DietaryTag fromKey(@NotNull String key) {
+<span class="nc bnc" id="L282" title="All 2 branches missed.">      for (DietaryTag tag : DietaryTag.values()) {</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">        if (tag.getDatabaseKey().equals(key)) {</span>
+<span class="nc" id="L284">          return tag;</span>
+        }
+      }
+<span class="nc" id="L287">      throw new IllegalArgumentException(&quot;No dietary tag found for key: &quot; + key);</span>
+    }
+
+    /**
+     * Returns the key of the dietary tag to be used with the database.
+     *
+     * @return the key of the dietary tag
+     */
+    public @NotNull String getDatabaseKey() {
+<span class="nc" id="L296">      return databaseKey;</span>
+    }
+
+    /**
+     * Returns the name of the dietary tag.
+     *
+     * @return the name of the dietary tag
+     */
+    public @NotNull String getName() {
+<span class="nc" id="L305">      return name;</span>
+    }
+
+    /**
+     * Returns the database key of the dietary tag.
+     *
+     * @return the database key of the dietary tag
+     */
+    public @NotNull String toString() {
+<span class="nc" id="L314">      return databaseKey;</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

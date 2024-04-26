@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Root.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view</a> &gt; <span class="el_source">Root.java</span></div><h1>Root.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view;
+
+import javafx.scene.layout.BorderPane;
+import no.ntnu.idatt1005.foodi.view.components.sidebar.SideBar;
+import no.ntnu.idatt1005.foodi.view.location.Router;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+import no.ntnu.idatt1005.foodi.view.views.About;
+import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
+import no.ntnu.idatt1005.foodi.view.views.Inventory;
+import no.ntnu.idatt1005.foodi.view.views.Profiles;
+import no.ntnu.idatt1005.foodi.view.views.RecipePage;
+import no.ntnu.idatt1005.foodi.view.views.ShoppingList;
+
+/**
+ * Class that creates the main view of the application.
+ */
+public class Root extends BorderPane {
+
+  private final Inventory inventoryPage;
+  private final ShoppingList shoppingListPage;
+  private final CookbookGrid cookbookGridPage;
+  private final Profiles profilesPage;
+  private final RecipePage recipePage;
+  private final About aboutPage;
+  private final Router router;
+
+  /**
+   * Constructor for the Root class.
+   */
+  public Root() {
+<span class="nc" id="L31">    super();</span>
+<span class="nc" id="L32">    inventoryPage = new Inventory();</span>
+<span class="nc" id="L33">    shoppingListPage = new ShoppingList();</span>
+<span class="nc" id="L34">    cookbookGridPage = new CookbookGrid();</span>
+<span class="nc" id="L35">    profilesPage = new Profiles();</span>
+<span class="nc" id="L36">    recipePage = new RecipePage();</span>
+<span class="nc" id="L37">    aboutPage = new About();</span>
+
+<span class="nc" id="L39">    getStylesheets().add(LoadUtils.getStylesheet(&quot;root&quot;));</span>
+<span class="nc" id="L40">    getStyleClass().add(&quot;main&quot;);</span>
+
+<span class="nc" id="L42">    router = new Router()</span>
+<span class="nc" id="L43">        .addRoute(&quot;profiles&quot;, profilesPage)</span>
+<span class="nc" id="L44">        .addRoute(&quot;inventory&quot;, inventoryPage)</span>
+<span class="nc" id="L45">        .addRoute(&quot;shopping-list&quot;, shoppingListPage)</span>
+<span class="nc" id="L46">        .addRoute(&quot;cookbook-grid&quot;, cookbookGridPage)</span>
+<span class="nc" id="L47">        .addRoute(&quot;recipes&quot;, recipePage)</span>
+<span class="nc" id="L48">        .addRoute(&quot;about&quot;, aboutPage);</span>
+    // add more routes here
+
+<span class="nc" id="L51">    setCenter(router);</span>
+<span class="nc" id="L52">  }</span>
+
+  /**
+   * Method for updating the active view.
+   */
+  public void updateActiveView() {
+<span class="nc" id="L58">    router.updateActiveView();</span>
+<span class="nc" id="L59">  }</span>
+
+  public void setSidebar(SideBar sidebar) {
+<span class="nc" id="L62">    setLeft(sidebar);</span>
+<span class="nc" id="L63">  }</span>
+
+  public Inventory getInventoryPage() {
+<span class="nc" id="L66">    return inventoryPage;</span>
+  }
+
+  public ShoppingList getShoppingListPage() {
+<span class="nc" id="L70">    return shoppingListPage;</span>
+  }
+
+  public CookbookGrid getCookbookGridPage() {
+<span class="nc" id="L74">    return cookbookGridPage;</span>
+  }
+
+  public Profiles getProfilesPage() {
+<span class="nc" id="L78">    return profilesPage;</span>
+  }
+
+  public RecipePage getRecipePage() {
+<span class="nc" id="L82">    return recipePage;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

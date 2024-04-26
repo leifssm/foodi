@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StandardDialog.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.dialog</a> &gt; <span class="el_source">StandardDialog.java</span></div><h1>StandardDialog.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.dialog;
+
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import no.ntnu.idatt1005.foodi.view.exceptions.ValidationException;
+import no.ntnu.idatt1005.foodi.view.utils.DialogComponentUtils;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for creating a dialog for adding a new user.
+ *
+ * @author Henrik Kvamme
+ */
+public class StandardDialog extends Dialog&lt;Void&gt; implements DialogComponentUtils {
+
+  private ButtonType okButtonType;
+
+  /**
+   * Constructor for the NewUserDialog class.
+   */
+  public StandardDialog() {
+<span class="nc" id="L27">    super();</span>
+<span class="nc" id="L28">    addStylesheet(&quot;components/std-dialog&quot;);</span>
+<span class="nc" id="L29">    addClass(&quot;std-dialog&quot;);</span>
+<span class="nc" id="L30">  }</span>
+
+  /**
+   * Sets the title of the dialog.
+   *
+   * @param title The title of the dialog
+   */
+  public void setHeaderTitle(String title) {
+<span class="nc" id="L38">    Label header = new Label(title);</span>
+<span class="nc" id="L39">    header.getStyleClass().add(&quot;header&quot;);</span>
+<span class="nc" id="L40">    getDialogPane().setHeader(header);</span>
+<span class="nc" id="L41">  }</span>
+
+  /**
+   * Sets the action to be performed when the OK button is clicked. If the action throws a
+   * {@link ValidationException}, an {@link InvalidInputDialog} will be shown.
+   *
+   * @param action The action to be performed
+   */
+  public void setOkAction(@NotNull final ResultHandler action) {
+<span class="nc" id="L50">    getOkButton().addEventFilter(ActionEvent.ACTION, event -&gt; {</span>
+      try {
+<span class="nc" id="L52">        action.run();</span>
+<span class="nc" id="L53">      } catch (ValidationException e) {</span>
+<span class="nc" id="L54">        new InvalidInputDialog(e.getMessage()).showAndWait();</span>
+<span class="nc" id="L55">        event.consume();</span>
+<span class="nc" id="L56">      } catch (Exception e) {</span>
+<span class="nc" id="L57">        new InvalidInputDialog(&quot;Unexpected error: &quot; + e.getMessage()).showAndWait();</span>
+<span class="nc" id="L58">        Logger.getLogger(getClass().getName()).severe(e.getMessage());</span>
+<span class="nc" id="L59">      }</span>
+<span class="nc" id="L60">    });</span>
+<span class="nc" id="L61">  }</span>
+
+  private Node getOkButton() {
+<span class="nc" id="L64">    return getDialogPane().lookupButton(okButtonType);</span>
+  }
+
+  public void addOkButton() {
+<span class="nc" id="L68">    addOkButton(&quot;OK&quot;);</span>
+<span class="nc" id="L69">  }</span>
+
+  /**
+   * Adds an OK button to the dialog.
+   */
+  public void addOkButton(String text) {
+<span class="nc" id="L75">    okButtonType = new ButtonType(text, ButtonBar.ButtonData.OK_DONE);</span>
+<span class="nc" id="L76">    getDialogPane().getButtonTypes().add(okButtonType);</span>
+<span class="nc" id="L77">    getOkButton().getStyleClass().add(&quot;button-ok&quot;);</span>
+<span class="nc" id="L78">  }</span>
+
+  /**
+   * Adds a cancel button to the dialog.
+   */
+  public void addCancelButton() {
+<span class="nc" id="L84">    ButtonType cancelButtonType = new ButtonType(&quot;Cancel&quot;, ButtonBar.ButtonData.CANCEL_CLOSE);</span>
+<span class="nc" id="L85">    getDialogPane().getButtonTypes().add(cancelButtonType);</span>
+<span class="nc" id="L86">    Node cancelButton = getDialogPane().lookupButton(cancelButtonType);</span>
+<span class="nc" id="L87">    cancelButton.getStyleClass().add(&quot;button-cancel&quot;);</span>
+<span class="nc" id="L88">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

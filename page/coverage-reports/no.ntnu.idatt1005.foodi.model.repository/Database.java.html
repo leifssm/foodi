@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Database.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.repository</a> &gt; <span class="el_source">Database.java</span></div><h1>Database.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.repository;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Logger;
+import no.ntnu.idatt1005.foodi.model.daos.UserDao;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+
+/**
+ * This class is responsible for creating and initializing the database. It also checks if the
+ * database already exists, and if it does, it will not create a new one.
+ *
+ * @author Snake727
+ * @version 0.9.0
+ */
+
+public class Database {
+
+  public static final String DB_URL = &quot;jdbc:h2:~/main&quot;; // This URL will create an H2 database in the user's home directory
+  public static final String USER = &quot;main&quot;;
+  public static final String PASS = &quot;&quot;;
+<span class="fc" id="L26">  private static final Logger LOGGER = Logger.getLogger(Database.class.getName());</span>
+
+<span class="nc" id="L28">  private Database() {</span>
+<span class="nc" id="L29">    throw new IllegalStateException(&quot;Utility class&quot;);</span>
+  }
+
+  /**
+   * This method creates a database in the user's home directory with empty tables. Used by test
+   * classes.
+   */
+  public static void initializeEmpty() {
+<span class="fc" id="L37">    try (Connection conn = getConnection()) {</span>
+<span class="fc" id="L38">      createTablesIfNotExists(conn);</span>
+<span class="fc" id="L39">      LOGGER.info(&quot;Database has been created and initialized.&quot;);</span>
+<span class="fc" id="L40">      removeAllData();</span>
+<span class="nc" id="L41">    } catch (SQLException e) {</span>
+<span class="nc" id="L42">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L43">    }</span>
+<span class="fc" id="L44">  }</span>
+
+  private static Connection getConnection() throws SQLException {
+<span class="fc" id="L47">    return ConnectionPool.getConnection();</span>
+  }
+
+  private static void createTablesIfNotExists(Connection conn) throws SQLException {
+<span class="fc" id="L51">    try (Statement stmt = conn.createStatement()) {</span>
+<span class="fc" id="L52">      stmt.execute(&quot;CREATE TABLE IF NOT EXISTS \&quot;user\&quot; (&quot;</span>
+          + &quot;id INT AUTO_INCREMENT PRIMARY KEY,&quot;
+          + &quot;name VARCHAR);&quot;);
+
+      // Ingredient Table
+<span class="fc" id="L57">      stmt.execute(&quot;CREATE TABLE IF NOT EXISTS ingredient (&quot;</span>
+          + &quot;id INT AUTO_INCREMENT PRIMARY KEY,&quot;
+          + &quot;name VARCHAR NOT NULL,&quot;
+          + &quot;unit VARCHAR,&quot;
+          + &quot;CHECK (unit IN ('GRAM', 'KILOGRAM', 'LITER', 'MILLILITER', 'PIECE', 'POUNDS', 'OUNCE', 'GALLON', 'QUART', 'PINT', 'CUP', 'TABLESPOON', 'TEASPOON')),&quot;
+          + &quot;category VARCHAR,&quot;
+          + &quot;CHECK (category IN ('DAIRY', 'MEAT', 'VEGETABLE', 'FRUIT', 'GRAIN', 'SPICE', 'SAUCE', 'SWEET', 'BEVERAGE', 'FISH', 'POULTRY', 'CRUSTACEAN')));&quot;);
+
+      // Recipe Table
+<span class="fc" id="L66">      stmt.execute(&quot;CREATE TABLE IF NOT EXISTS recipe (&quot;</span>
+          + &quot;id INT AUTO_INCREMENT PRIMARY KEY,&quot;
+          + &quot;name VARCHAR NOT NULL,&quot;
+          + &quot;description VARCHAR,&quot;
+          + &quot;difficulty VARCHAR,&quot;
+          + &quot;CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD')),&quot;
+          + &quot;dietary_tag VARCHAR,&quot;
+          + &quot;CHECK (dietary_tag IN ('VEGAN', 'VEGETARIAN', 'GLUTEN_FREE', 'DAIRY_FREE', 'NUT_FREE', 'EGG_FREE', 'SEA_FREE', 'NONE')),&quot;
+          + &quot;duration INT,&quot;
+          + &quot;imagePath VARCHAR,&quot;
+          + &quot;Instruction VARCHAR);&quot;);
+
+      // Recipe Ingredient Table
+<span class="fc" id="L79">      stmt.execute(&quot;CREATE TABLE IF NOT EXISTS recipe_ingredient (&quot;</span>
+          + &quot;recipe_id INT,&quot;
+          + &quot;ingredient_id INT,&quot;
+          + &quot;amount DOUBLE,&quot;
+          + &quot;PRIMARY KEY (recipe_id, ingredient_id),&quot;
+          + &quot;FOREIGN KEY (recipe_id) REFERENCES recipe(id),&quot;
+          + &quot;FOREIGN KEY (ingredient_id) REFERENCES ingredient(id));&quot;);
+
+      // Inventory Table
+<span class="fc" id="L88">      stmt.execute(&quot;CREATE TABLE IF NOT EXISTS inventory (&quot;</span>
+          + &quot;id INT AUTO_INCREMENT PRIMARY KEY,&quot;
+          + &quot;ingredient_id INT,&quot;
+          + &quot;amount DOUBLE,&quot;
+          + &quot;expiration_date DATE,&quot;
+          + &quot;is_frozen BOOLEAN DEFAULT FALSE,&quot;
+          + &quot;user_id INT,&quot;
+          + &quot;FOREIGN KEY (ingredient_id) REFERENCES ingredient(id),&quot;
+          + &quot;FOREIGN KEY (user_id) REFERENCES \&quot;user\&quot;(id));&quot;);
+
+      // Shopping List Table
+<span class="fc" id="L99">      stmt.execute(</span>
+          &quot;CREATE TABLE IF NOT EXISTS shopping_list (&quot;
+              + &quot;recipe_id INT,&quot;
+              + &quot;user_id INT,&quot;
+              + &quot;portions INT,&quot;
+              + &quot;PRIMARY KEY (recipe_id, user_id),&quot;
+              + &quot;FOREIGN KEY (recipe_id) REFERENCES recipe(id),&quot;
+              + &quot;FOREIGN KEY (user_id) REFERENCES \&quot;user\&quot;(id));&quot;);
+    }
+<span class="fc" id="L108">  }</span>
+
+  /**
+   * This method removes all data from the database.
+   */
+  public static void removeAllData() {
+<span class="fc" id="L114">    String deleteInventorySql = &quot;DELETE FROM inventory&quot;;</span>
+<span class="fc" id="L115">    String deleteShoppingListSql = &quot;DELETE FROM shopping_list&quot;;</span>
+<span class="fc" id="L116">    String deleteUserSql = &quot;DELETE FROM MAIN.PUBLIC.\&quot;user\&quot;&quot;;</span>
+<span class="fc" id="L117">    String deleteRecipe_IngredientSql = &quot;DELETE FROM recipe_ingredient&quot;;</span>
+<span class="fc" id="L118">    String deleteIngredientSql = &quot;DELETE FROM ingredient&quot;;</span>
+<span class="fc" id="L119">    String deleteRecipeSql = &quot;DELETE FROM recipe&quot;;</span>
+
+<span class="fc" id="L121">    try (Connection connection = getConnection()) {</span>
+<span class="fc" id="L122">      Statement statement = connection.createStatement();</span>
+<span class="fc" id="L123">      statement.executeUpdate(deleteInventorySql);</span>
+<span class="fc" id="L124">      statement.executeUpdate(deleteShoppingListSql);</span>
+<span class="fc" id="L125">      statement.executeUpdate(deleteUserSql);</span>
+<span class="fc" id="L126">      statement.executeUpdate(deleteRecipe_IngredientSql);</span>
+<span class="fc" id="L127">      statement.executeUpdate(deleteIngredientSql);</span>
+<span class="fc" id="L128">      statement.executeUpdate(deleteRecipeSql);</span>
+<span class="nc" id="L129">    } catch (SQLException e) {</span>
+<span class="nc" id="L130">      LOGGER.info(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L131">    }</span>
+
+<span class="fc" id="L133">  }</span>
+
+  /**
+   * This method creates a database in the user's home directory. It also populates the database
+   * with the necessary tables. The method also checks if the database already exists, and if it
+   * does, it will not create a new one.
+   */
+  public static void initialize() {
+<span class="fc" id="L141">    try (Connection conn = getConnection()) {</span>
+<span class="fc" id="L142">      createTablesIfNotExists(conn);</span>
+<span class="fc" id="L143">      LOGGER.info(&quot;Database has been created and initialized.&quot;);</span>
+<span class="nc" id="L144">    } catch (SQLException e) {</span>
+<span class="nc" id="L145">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L146">    }</span>
+
+<span class="fc" id="L148">    insertDefaultData();</span>
+<span class="fc" id="L149">  }</span>
+
+  private static void insertDefaultData() {
+    try {
+<span class="fc" id="L153">      insertRecipes();</span>
+<span class="fc" id="L154">      LOGGER.info(&quot;Recipes inserted successfully.&quot;);</span>
+<span class="fc" id="L155">      insertIngredients();</span>
+<span class="fc" id="L156">      LOGGER.info(&quot;Ingredients inserted successfully.&quot;);</span>
+<span class="fc" id="L157">      insertRecipeIngredients();</span>
+<span class="fc" id="L158">      LOGGER.info(&quot;Recipe ingredients inserted successfully.&quot;);</span>
+<span class="fc" id="L159">      insertDefaultUser();</span>
+<span class="fc" id="L160">      LOGGER.info(&quot;Default user inserted successfully.&quot;);</span>
+<span class="nc" id="L161">    } catch (SQLException e) {</span>
+<span class="nc" id="L162">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L163">    }</span>
+<span class="fc" id="L164">  }</span>
+
+  private static void insertRecipes() throws SQLException {
+<span class="fc" id="L167">    String[][] recipesData = {</span>
+        {
+            &quot;Garden Salad&quot;,
+            &quot;A vibrant garden salad garnished with crispy tortilla squares, fresh cherry tomatoes, and thinly sliced radishes, perfect for a light and healthy meal.&quot;,
+            &quot;EASY&quot;,
+            &quot;VEGAN&quot;,
+            &quot;25&quot;,
+            &quot;recipes/crispy-tortilla-garden-salad.png&quot;,
+            &quot;1. Rinse and dry lettuce leaves and fresh herbs.\n2. Thinly slice radishes and onions.\n3. Cut tortilla into small squares and toast until crispy.\n4. Combine vegetables in a bowl, top with tortilla squares.\n5. Drizzle with olive oil and balsamic vinegar, toss gently.\n6. Serve immediately to maintain the crispiness of tortillas.&quot;
+        },
+        {
+            &quot;Grilled Salmon&quot;,
+            &quot;Succulent grilled salmon served on a bed of zucchini noodles and carrots, with a touch of lime for an added zest.&quot;,
+            &quot;EASY&quot;,
+            &quot;GLUTEN_FREE&quot;,
+            &quot;30&quot;,
+            &quot;recipes/grilled-salmon-zoodle-medley.png&quot;,
+            &quot;1. Season the salmon with salt, pepper, and a hint of lime zest.\n2. Grill the salmon to desired doneness.\n3. Spiralize zucchini and carrots into noodles.\n4. Sauté the vegetables with a bit of olive oil and garlic.\n5. Plate the zoodles, top with the grilled salmon.\n6. Garnish with a wedge of lime and serve.&quot;
+        },
+        {
+            &quot;Seafood Paella&quot;,
+            &quot;A classic Spanish seafood paella with a mix of shrimp, mussels, and squid, infused with aromatic saffron and herbs.&quot;,
+            &quot;HARD&quot;,
+            &quot;SEA_FREE&quot;,
+            &quot;50&quot;,
+            &quot;recipes/traditional-seafood-paella.png&quot;,
+            &quot;1. Prepare the seafood by cleaning and cutting it as needed.\n2. In a paella pan, sauté onions and garlic in olive oil.\n3. Add rice and cook until translucent, stirring frequently.\n4. Stir in saffron-infused broth and simmer.\n5. Add seafood, arranging it evenly across the pan.\n6. Cook without stirring until the rice is tender and seafood is cooked.\n7. Let it rest for a few minutes before serving.\n8. Garnish with lemon wedges and parsley.&quot;
+        },
+        {
+            &quot;Banana Pancakes&quot;,
+            &quot;Fluffy pancakes stacked high, topped with freshly sliced bananas, almond slivers, and a generous drizzle of maple syrup.&quot;,
+            &quot;EASY&quot;,
+            &quot;NUT_FREE&quot;,
+            &quot;20&quot;,
+            &quot;recipes/banana-almond-pancakes.png&quot;,
+            &quot;1. Mix flour, baking powder, sugar, and a pinch of salt.\n2. In another bowl, beat eggs and then mix in milk and melted butter.\n3. Combine wet and dry ingredients to make the batter.\n4. Pour batter onto a hot griddle to form pancakes, flipping once bubbles form.\n5. Slice bananas and toast almond slivers.\n6. Stack pancakes, adding banana slices and almonds between layers.\n7. Finish with a drizzle of maple syrup and garnish with mint.&quot;
+        },
+        {
+            &quot;Cheese Pizza&quot;,
+            &quot;A homemade pizza with a golden-brown crust, bubbly cheese topping, and a hint of rosemary, perfect for a cozy dinner.&quot;,
+            &quot;MEDIUM&quot;,
+            &quot;VEGETARIAN&quot;,
+            &quot;45&quot;,
+            &quot;recipes/rustic-cheese-pizza.png&quot;,
+            &quot;1. Prepare pizza dough and let it rise until doubled in size.\n2. Preheat oven to a high temperature with a pizza stone inside.\n3. Roll out the dough and place on a cornmeal-dusted paddle.\n4. Spread tomato sauce and sprinkle a blend of mozzarella and cheddar cheese.\n5. Add fresh rosemary leaves.\n6. Slide pizza onto the hot stone and bake until the crust is crisp and cheese is golden.\n7. Let cool for a few minutes, then slice and serve.&quot;
+        },
+        {
+            &quot;Smoky BBQ Ribs&quot;,
+            &quot;Tender, fall-off-the-bone ribs smothered in smoky BBQ sauce, served with crispy fries, seasoned tomatoes, and zesty pickles.&quot;,
+            &quot;HARD&quot;,
+            &quot;DAIRY_FREE&quot;,
+            &quot;120&quot;,
+            &quot;recipes/smoky-bbq-ribs-with-sides.png&quot;,
+            &quot;1. Season the ribs with a dry rub and let marinate for at least 1 hour.\n2. Preheat the grill to low heat and place ribs on indirect heat.\n3. Grill the ribs, turning occasionally, for about 2 hours.\n4. Baste with BBQ sauce during the last 30 minutes of grilling.\n5. Slice potatoes and season for fries, then bake until golden.\n6. Slice tomatoes and season with salt, pepper, and a pinch of parsley.\n7. Serve ribs with a side of fries, seasoned tomatoes, and pickles.&quot;
+        },
+        {
+            &quot;Grilled Cheese&quot;,
+            &quot;Golden-brown toasted sandwich with a gooey melted cheese filling, perfect for a quick and satisfying meal.&quot;,
+            &quot;EASY&quot;,
+            &quot;VEGETARIAN&quot;,
+            &quot;10&quot;,
+            &quot;recipes/classic-grilled-cheese-sandwich.png&quot;,
+            &quot;1. Butter two slices of bread on one side each.\n2. Place a slice of cheese between the bread slices, buttered sides out.\n3. Heat a pan over medium heat and place the sandwich in the pan.\n4. Grill until the bread is golden brown and cheese is melted, flipping once.\n5. Remove from pan, let it cool for a minute, then cut diagonally and serve.&quot;
+        },
+        {
+            &quot;Pesto Farfalle&quot;,
+            &quot;Chilled farfalle pasta coated in rich pesto sauce, mixed with cherry tomatoes and fresh greens for a light and flavorful dish.&quot;,
+            &quot;MEDIUM&quot;,
+            &quot;VEGETARIAN&quot;,
+            &quot;15&quot;,
+            &quot;recipes/pesto-farfalle-pasta-salad.png&quot;,
+            &quot;1. Cook farfalle pasta in salted boiling water until al dente, then drain and cool.\n2. In a bowl, mix the pasta with homemade or store-bought pesto sauce.\n3. Halve cherry tomatoes and shred some fresh basil leaves.\n4. Add the tomatoes and basil to the pasta and toss everything together.\n5. Refrigerate until serving time.\n6. Garnish with parmesan shavings before serving, if desired.&quot;
+        },
+        {
+            &quot;Chicken soup&quot;,
+            &quot;Tender chicken pieces simmered in a savory sauce with steamed broccoli and potatoes, a wholesome and comforting meal.&quot;,
+            &quot;MEDIUM&quot;,
+            &quot;DAIRY_FREE&quot;,
+            &quot;20&quot;,
+            &quot;recipes/chicken-soup.jpg&quot;,
+            &quot;1. Season chicken pieces with salt, pepper, and paprika.\n2. Brown chicken in a pan with olive oil, then remove and set aside.\n3. In the same pan, add diced potatoes and cook until they start to soften.\n4. Add broccoli florets and continue to cook for a few minutes.\n5. Return the chicken to the pan and add your choice of sauce (e.g., tomato-based, cream-based).\n6. Cover and simmer until the chicken is cooked through and the vegetables are tender.\n7. Serve hot, garnished with fresh herbs.&quot;
+        }
+    };
+
+<span class="fc" id="L251">    try (Connection connection = getConnection()) {</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">      for (int i = 0; i &lt; recipesData.length; i++) {</span>
+<span class="fc" id="L253">        String[] recipeData = recipesData[i];</span>
+<span class="fc" id="L254">        mergeRecipe(</span>
+            connection,
+            i + 1,
+            recipeData[0],
+            recipeData[1],
+<span class="fc" id="L259">            recipeData[2].toUpperCase(),</span>
+<span class="fc" id="L260">            recipeData[3].toUpperCase(),</span>
+<span class="fc" id="L261">            Integer.parseInt(recipeData[4]),</span>
+            recipeData[5],
+            recipeData[6]
+        );
+      }
+<span class="nc" id="L266">    } catch (SQLException e) {</span>
+<span class="nc" id="L267">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L268">    }</span>
+<span class="fc" id="L269">  }</span>
+
+  private static void insertIngredients() throws SQLException {
+<span class="fc" id="L272">    final String[][] ingredientsData = {</span>
+        {&quot;Milk&quot;, &quot;DAIRY&quot;, &quot;LITER&quot;},
+        {&quot;Chicken breast&quot;, &quot;POULTRY&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Spinach&quot;, &quot;VEGETABLE&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Apple&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Rice&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Cinnamon&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Tomato sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Honey&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Trout&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Shrimp&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Yogurt&quot;, &quot;DAIRY&quot;, &quot;MILLILITER&quot;},
+        {&quot;Pork loin&quot;, &quot;MEAT&quot;, &quot;GRAM&quot;},
+        {&quot;Lettuce&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Orange&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Oats&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Garlic powder&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Barbecue sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Maple syrup&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Salmon&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Lobster&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Cream&quot;, &quot;DAIRY&quot;, &quot;LITER&quot;},
+        {&quot;Turkey&quot;, &quot;POULTRY&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Kale&quot;, &quot;VEGETABLE&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Pear&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Wheat flour&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Paprika&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Alfredo sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Sugar&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Cod&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Crab&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Butter&quot;, &quot;DAIRY&quot;, &quot;GRAM&quot;},
+        {&quot;Duck&quot;, &quot;POULTRY&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Broccoli&quot;, &quot;VEGETABLE&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Peach&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Cornmeal&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Turmeric&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Pesto sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Chocolate&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Tuna&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Crawfish&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Buttermilk&quot;, &quot;DAIRY&quot;, &quot;LITER&quot;},
+        {&quot;Quail&quot;, &quot;POULTRY&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Asparagus&quot;, &quot;VEGETABLE&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Cherry&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Barley&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Chili powder&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Marinara sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Jam&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Halibut&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Octopus&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Cheese&quot;, &quot;DAIRY&quot;, &quot;GRAM&quot;},
+        {&quot;Venison&quot;, &quot;MEAT&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Peppers&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Grape&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Pasta&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Cumin&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Soy sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Molasses&quot;, &quot;SWEET&quot;, &quot;TABLESPOON&quot;},
+        {&quot;Anchovy&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Mussel&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Ice cream&quot;, &quot;DAIRY&quot;, &quot;LITER&quot;},
+        {&quot;Lamb chops&quot;, &quot;MEAT&quot;, &quot;KILOGRAM&quot;},
+        {&quot;Cucumber&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Kiwi&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Bread&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Cardamom&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Hot sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Honeycomb&quot;, &quot;SWEET&quot;, &quot;PIECE&quot;},
+        {&quot;Mackerel&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Snail&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Paneer&quot;, &quot;DAIRY&quot;, &quot;GRAM&quot;},
+        {&quot;Bacon&quot;, &quot;MEAT&quot;, &quot;GRAM&quot;},
+        {&quot;Onion&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Banana&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Polenta&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Coriander&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Salsa&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Biscuits&quot;, &quot;SWEET&quot;, &quot;PIECE&quot;},
+        {&quot;Sardines&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Clam&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Kefir&quot;, &quot;DAIRY&quot;, &quot;LITER&quot;},
+        {&quot;Beef jerky&quot;, &quot;MEAT&quot;, &quot;GRAM&quot;},
+        {&quot;Tomato&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Strawberry&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Couscous&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Nutmeg&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Tartar sauce&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Cupcake&quot;, &quot;SWEET&quot;, &quot;PIECE&quot;},
+        {&quot;Catfish&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Squid&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;},
+        {&quot;Ghee&quot;, &quot;DAIRY&quot;, &quot;GRAM&quot;},
+        {&quot;Sausage&quot;, &quot;MEAT&quot;, &quot;GRAM&quot;},
+        {&quot;Zucchini&quot;, &quot;VEGETABLE&quot;, &quot;PIECE&quot;},
+        {&quot;Watermelon&quot;, &quot;FRUIT&quot;, &quot;PIECE&quot;},
+        {&quot;Granola&quot;, &quot;GRAIN&quot;, &quot;GRAM&quot;},
+        {&quot;Mustard seeds&quot;, &quot;SPICE&quot;, &quot;TEASPOON&quot;},
+        {&quot;Caesar dressing&quot;, &quot;SAUCE&quot;, &quot;MILLILITER&quot;},
+        {&quot;Brownie&quot;, &quot;SWEET&quot;, &quot;PIECE&quot;},
+        {&quot;Swordfish&quot;, &quot;FISH&quot;, &quot;GRAM&quot;},
+        {&quot;Prawn&quot;, &quot;CRUSTACEAN&quot;, &quot;GRAM&quot;}
+    };
+
+<span class="fc" id="L375">    try (Connection connection = getConnection()) {</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">      for (int i = 0; i &lt; ingredientsData.length; i++) {</span>
+<span class="fc" id="L377">        String[] ingredientData = ingredientsData[i];</span>
+<span class="fc" id="L378">        mergeIngredient(</span>
+            connection,
+            i + 1,
+            ingredientData[0],
+<span class="fc" id="L382">            Ingredient.Unit.valueOf(ingredientData[2].toUpperCase()),</span>
+<span class="fc" id="L383">            Ingredient.Category.valueOf(ingredientData[1].toUpperCase())</span>
+        );
+      }
+<span class="nc" id="L386">    } catch (SQLException e) {</span>
+<span class="nc" id="L387">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L388">    }</span>
+
+<span class="fc" id="L390">    String sqlAlter =</span>
+        &quot;ALTER TABLE ingredient ALTER COLUMN id RESTART WITH &quot; + (ingredientsData.length + 1) + &quot;;&quot;;
+
+<span class="fc" id="L393">    try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);</span>
+<span class="fc" id="L394">        Statement stmt = conn.createStatement()) {</span>
+<span class="fc" id="L395">      stmt.execute(sqlAlter); // Set AUTO_INCREMENT start</span>
+    }
+<span class="fc" id="L397">  }</span>
+
+  private static void insertRecipeIngredients() throws SQLException {
+    // Define ingredient mappings (recipeId, ingredientId, amount)
+<span class="fc" id="L401">    final int[][] recipeIngredientsData = {</span>
+        // Garden Salad (Recipe ID 1)
+        {1, 13, 1}, // Lettuce, 1 piece
+        {1, 7, 100}, // Tomato sauce, 100 milliliters (assuming dressing base)
+        {1, 59, 1}, // Onion, 1 piece
+        {1, 47, 1}, // Peppers, 1 piece
+
+        // Grilled Salmon (Recipe ID 2)
+        {2, 19, 200}, // Salmon, 200 grams
+        {2, 3, 100}, // Spinach, 100 grams
+        {2, 63, 1}, // Cucumber, 1 piece
+        {9, 59, 1},  // Onion, 1 piece
+
+        // Seafood Paella (Recipe ID 3)
+        {3, 5, 200}, // Rice, 200 grams
+        {3, 10, 150}, // Shrimp, 150 grams
+        {3, 59, 1}, // Onion, 1 piece
+
+        // Banana Pancakes (Recipe ID 4)
+        {4, 1, 200}, // Milk, 200 milliliters
+        {4, 50, 100}, // Wheat flour, 100 grams
+        {4, 48, 1}, // Banana, 1 piece
+
+        // Cheese Pizza (Recipe ID 5)
+        {5, 44, 150}, // Bread, 150 grams
+        {5, 17, 100}, // Barbecue sauce, 100 milliliters (as tomato sauce)
+        {5, 49, 100}, // Cheese, 100 grams
+
+        // Smoky BBQ Ribs (Recipe ID 6)
+        {6, 12, 500}, // Pork loin, 500 grams
+        {6, 17, 50}, // Barbecue sauce, 50 milliliters
+        {6, 83, 2}, // Tomato, 2 pieces
+
+        // Grilled Cheese (Recipe ID 7)
+        {7, 44, 100}, // Bread, 100 grams
+        {7, 31, 50}, // Butter, 50 grams
+        {7, 49, 50}, // Cheese, 50 grams
+
+        // Pesto Farfalle (Recipe ID 8)
+        {8, 53, 200}, // Pasta, 200 grams
+        {8, 37, 100}, // Pesto sauce, 100 milliliters
+        {8, 83, 2}, // Tomato, 2 pieces
+        {9, 25, 4}, // Garlic powder, 4 teaspoons
+
+        // Chicken Soup (Recipe ID 9)
+        {9, 2, 300}, // Chicken breast, 300 grams
+        {9, 59, 1},  // Onion, 1 piece
+        {9, 25, 10}, // Garlic powder, 10 teaspoons
+    };
+
+<span class="fc" id="L451">    try (Connection connection = getConnection()) {</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">      for (int i = 0; i &lt; recipeIngredientsData.length; i++) {</span>
+<span class="fc" id="L453">        int[] recipeIngredientData = recipeIngredientsData[i];</span>
+<span class="fc" id="L454">        mergeRecipeIngredient(</span>
+            connection,
+            recipeIngredientData[0],
+            recipeIngredientData[1],
+            recipeIngredientData[2]
+        );
+      }
+<span class="nc" id="L461">    } catch (SQLException e) {</span>
+<span class="nc" id="L462">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L463">    }</span>
+<span class="fc" id="L464">  }</span>
+
+  private static void insertDefaultUser() throws SQLException {
+<span class="fc" id="L467">    new UserDao().addDefaultUserIfNotExists();</span>
+<span class="fc" id="L468">  }</span>
+
+  private static void mergeRecipe(Connection connection, int id, String name, String description,
+      String difficulty,
+      String dietaryTag,
+      int duration, String imagePath, String instruction) {
+<span class="fc" id="L474">    try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L475">      statement.executeUpdate(</span>
+          &quot;MERGE INTO recipe (id, name, description, difficulty, dietary_tag, duration, imagePath, instruction) VALUES (&quot;
+              + id + &quot;, '&quot; + name + &quot;', '&quot; + description + &quot;', '&quot; + difficulty + &quot;', '&quot; + dietaryTag
+              + &quot;', &quot; + duration + &quot;, '&quot; + imagePath + &quot;', '&quot; + instruction + &quot;')&quot;);
+<span class="nc" id="L479">    } catch (SQLException e) {</span>
+<span class="nc" id="L480">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L481">    }</span>
+<span class="fc" id="L482">  }</span>
+
+  private static void mergeIngredient(Connection connection, int id, String name,
+      Ingredient.Unit unit, Ingredient.Category category) throws SQLException {
+<span class="fc" id="L486">    try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L487">      statement.executeUpdate(</span>
+          &quot;MERGE INTO ingredient (id, name, unit, category) VALUES (&quot; + id + &quot;, '&quot; + name + &quot;', '&quot;
+              + unit + &quot;', '&quot; + category + &quot;')&quot;);
+<span class="nc" id="L490">    } catch (SQLException e) {</span>
+<span class="nc" id="L491">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L492">    }</span>
+<span class="fc" id="L493">  }</span>
+
+  private static void mergeRecipeIngredient(Connection connection, int recipeId, int ingredientId,
+      int amount) throws SQLException {
+<span class="fc" id="L497">    try (Statement statement = connection.createStatement()) {</span>
+<span class="fc" id="L498">      statement.executeUpdate(</span>
+          &quot;MERGE INTO recipe_ingredient (recipe_id, ingredient_id, amount) VALUES (&quot;
+              + recipeId + &quot;, &quot; + ingredientId + &quot;, &quot; + amount + &quot;)&quot;);
+<span class="nc" id="L501">    } catch (SQLException e) {</span>
+<span class="nc" id="L502">      LOGGER.severe(&quot;SQL Exception: &quot; + e.getMessage());</span>
+<span class="fc" id="L503">    }</span>
+<span class="fc" id="L504">  }</span>
+
+  private static boolean tablesExist(Connection conn) throws SQLException {
+<span class="nc" id="L507">    DatabaseMetaData dbm = conn.getMetaData();</span>
+<span class="nc" id="L508">    ResultSet tables = dbm.getTables(null, null, &quot;user&quot;, null);</span>
+<span class="nc" id="L509">    return tables.next();</span>
+  }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

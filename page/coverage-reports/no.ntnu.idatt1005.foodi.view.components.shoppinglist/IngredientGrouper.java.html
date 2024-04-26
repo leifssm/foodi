@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IngredientGrouper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.shoppinglist</a> &gt; <span class="el_source">IngredientGrouper.java</span></div><h1>IngredientGrouper.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for grouping ingredients.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+<span class="nc" id="L19">public class IngredientGrouper {</span>
+
+  /**
+   * Groups ingredients by category.
+   *
+   * @param ingredients The ingredients to group
+   * @return A list of ingredient category groups
+   */
+  static List&lt;IngredientCategoryGroup&gt; groupByCategory(
+      List&lt;AmountedIngredient&gt; ingredients
+  ) {
+<span class="nc" id="L30">    ArrayList&lt;AmountedIngredient&gt; sortedIngredients = new ArrayList&lt;&gt;(ingredients);</span>
+<span class="nc" id="L31">    sortedIngredients.sort(Comparator.comparing(a -&gt; a.getCategory().getName()));</span>
+
+<span class="nc" id="L33">    ArrayList&lt;IngredientCategoryGroup&gt; groups = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L35" title="All 2 branches missed.">    for (AmountedIngredient ingredient : sortedIngredients) {</span>
+      IngredientCategoryGroup currentGroup;
+<span class="nc" id="L37">      if (</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">          groups.isEmpty() ||</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">              !groups.get(groups.size() - 1).name.equals(ingredient.getCategory())</span>
+      ) {
+<span class="nc" id="L41">        currentGroup = new IngredientCategoryGroup(ingredient.getCategory(), new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L42">        groups.add(currentGroup);</span>
+      } else {
+<span class="nc" id="L44">        currentGroup = groups.get(groups.size() - 1);</span>
+      }
+<span class="nc" id="L46">      currentGroup.ingredients.add(ingredient);</span>
+<span class="nc" id="L47">    }</span>
+<span class="nc" id="L48">    return groups;</span>
+  }
+
+  /**
+   * Joins ingredients from multiple recipes and adds up the total.
+   *
+   * @param recipes The recipes to join
+   * @return A list of ingredients with the updated amount
+   */
+  static @NotNull List&lt;AmountedIngredient&gt; joinIngredientsFromRecipes(
+      @NotNull List&lt;@NotNull RecipeWithPartiallyRemovedIngredients&gt; recipes
+  ) {
+    // A hashmap using the ingredient as key and the total amount as value
+<span class="nc" id="L61">    HashMap&lt;AmountedIngredient, Double&gt; ingredients = new HashMap&lt;&gt;();</span>
+
+    // For each recipe, add the ingredients to the hashmap, and if it already exists, increase the
+    // amount
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    for (RecipeWithPartiallyRemovedIngredients recipe : recipes) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">      for (PartiallyRemovedAmountedIngredient ingredient : recipe.getIngredients()) {</span>
+<span class="nc" id="L67">        ingredients.computeIfPresent(ingredient, (k, v) -&gt; v + ingredient.getRemainingAmount());</span>
+<span class="nc" id="L68">        ingredients.putIfAbsent(ingredient, ingredient.getRemainingAmount());</span>
+<span class="nc" id="L69">      }</span>
+<span class="nc" id="L70">    }</span>
+
+    // Create a new AmountedIngredient with the same metadata but with the new amount
+<span class="nc" id="L73">    List&lt;AmountedIngredient&gt; combinedIngredients = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">    for (var ingredient : ingredients.entrySet()) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">      if (ingredient.getValue() == 0) {</span>
+<span class="nc" id="L76">        continue;</span>
+      }
+<span class="nc" id="L78">      AmountedIngredient copy = ingredient.getKey().copy();</span>
+<span class="nc" id="L79">      copy.setAmount(ingredient.getValue());</span>
+<span class="nc" id="L80">      combinedIngredients.add(copy);</span>
+<span class="nc" id="L81">    }</span>
+
+<span class="nc" id="L83">    combinedIngredients.sort(Comparator.comparing(AmountedIngredient::getCategory));</span>
+
+<span class="nc" id="L85">    return combinedIngredients;</span>
+  }
+
+  /**
+   * A record for grouping ingredients by category.
+   *
+   * @param name        The category grouped by
+   * @param ingredients The ingredients in the category
+   */
+<span class="nc" id="L94">  public record IngredientCategoryGroup(</span>
+      @NotNull Ingredient.Category name,
+      @NotNull ArrayList&lt;AmountedIngredient&gt; ingredients
+  ) {
+
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

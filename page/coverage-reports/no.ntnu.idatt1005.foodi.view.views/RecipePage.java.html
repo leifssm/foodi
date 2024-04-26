@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipePage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.views</a> &gt; <span class="el_source">RecipePage.java</span></div><h1>RecipePage.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.views;
+
+import java.text.DecimalFormat;
+import java.util.List;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithIngredients;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton.Style;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for displaying a recipe page.
+ */
+public class RecipePage extends StatefulPage implements ComponentUtils {
+
+<span class="nc" id="L30">  private int portions = 4;</span>
+  /**
+   * Constructor for the RecipePage class.
+   */
+<span class="nc" id="L34">  public RecipePage() {</span>
+<span class="nc" id="L35">    addStylesheet(&quot;components/recipe/recipe-page&quot;);</span>
+<span class="nc" id="L36">    addClass(&quot;recipe&quot;);</span>
+<span class="nc" id="L37">  }</span>
+
+  public void render(@NotNull RecipeWithIngredients recipe, @NotNull RecipeAdder onAddRecipe) {
+    // Render the recipe page
+    // Load the image and create an ImageView for it
+<span class="nc" id="L42">    portions = 4;</span>
+<span class="nc" id="L43">    String imagePath = recipe.getImagePath();</span>
+<span class="nc" id="L44">    String imageUrl = LoadUtils.getImage(imagePath);</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">    if (imageUrl == null) {</span>
+<span class="nc" id="L46">      throw new AssertionError(&quot;Image not found: &quot; + imagePath);</span>
+    }
+<span class="nc" id="L48">    ImageView recipeImage = new ImageView(imageUrl);</span>
+<span class="nc" id="L49">    recipeImage.getStyleClass().add(&quot;recipe-image&quot;);</span>
+<span class="nc" id="L50">    recipeImage.setPreserveRatio(true);</span>
+<span class="nc" id="L51">    recipeImage.setFitWidth(100);</span>
+<span class="nc" id="L52">    widthProperty().subscribe(w -&gt; {</span>
+<span class="nc" id="L53">      recipeImage.setFitWidth(w.intValue());</span>
+<span class="nc" id="L54">      setPadding(new Insets(w.intValue() / 2.3, 0, 0, 0));</span>
+<span class="nc" id="L55">    });</span>
+
+<span class="nc" id="L57">    Label recipeTitle = new Label(recipe.getName());</span>
+<span class="nc" id="L58">    recipeTitle.getStyleClass().add(&quot;recipe-title&quot;);</span>
+
+<span class="nc" id="L60">    imageUrl = LoadUtils.getImage(&quot;difficulty/&quot; + recipe.getDifficulty() + &quot;.png&quot;);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (imageUrl == null) {</span>
+<span class="nc" id="L62">      throw new AssertionError(&quot;Image not found: &quot; + imagePath);</span>
+    }
+<span class="nc" id="L64">    ImageView difficultyImage = new ImageView(imageUrl);</span>
+<span class="nc" id="L65">    difficultyImage.getStyleClass().add(&quot;difficulty&quot;);</span>
+<span class="nc" id="L66">    difficultyImage.setPreserveRatio(true);</span>
+<span class="nc" id="L67">    difficultyImage.setFitHeight(30);</span>
+
+<span class="nc" id="L69">    HBox titleDifficultyBox = new HBox(recipeTitle, difficultyImage);</span>
+<span class="nc" id="L70">    titleDifficultyBox.getStyleClass().add(&quot;title-difficulty-box&quot;);</span>
+
+<span class="nc" id="L72">    Label recipeTime = new Label(&quot;⏱ &quot; + recipe.getDuration() + &quot; minutes&quot;);</span>
+<span class="nc" id="L73">    recipeTime.getStyleClass().add(&quot;recipe-time&quot;);</span>
+
+<span class="nc" id="L75">    BorderPane recipeHeader = new BorderPane();</span>
+<span class="nc" id="L76">    recipeHeader.setCenter(titleDifficultyBox);</span>
+<span class="nc" id="L77">    recipeHeader.setRight(recipeTime);</span>
+<span class="nc" id="L78">    recipeHeader.getStyleClass().add(&quot;recipe-header&quot;);</span>
+
+<span class="nc" id="L80">    Label recipeDescription = new Label(recipe.getDescription());</span>
+<span class="nc" id="L81">    recipeDescription.getStyleClass().add(&quot;recipe-description&quot;);</span>
+
+<span class="nc" id="L83">    Label instructionsTitle = new Label(&quot;Instructions&quot;);</span>
+<span class="nc" id="L84">    instructionsTitle.getStyleClass().add(&quot;instructions-title&quot;);</span>
+
+<span class="nc" id="L86">    Label instructions = new Label(recipe.getInstruction());</span>
+<span class="nc" id="L87">    instructions.getStyleClass().add(&quot;instructions&quot;);</span>
+<span class="nc" id="L88">    VBox instructionsBox = new VBox(instructionsTitle, instructions);</span>
+
+<span class="nc" id="L90">    Label ingredientsTitle = new Label(&quot;Ingredients&quot;);</span>
+<span class="nc" id="L91">    ingredientsTitle.getStyleClass().add(&quot;ingredients-title&quot;);</span>
+
+<span class="nc" id="L93">    HBox portionsBox = new HBox();</span>
+<span class="nc" id="L94">    Label portionsSymbol = new Label(&quot;\uD83D\uDC64&quot;);</span>
+<span class="nc" id="L95">    portionsSymbol.getStyleClass().add(&quot;portions-symbol&quot;);</span>
+<span class="nc" id="L96">    Button decreasePortions = new StandardButton(&quot;-&quot;).setType(Style.SUBTLE);</span>
+<span class="nc" id="L97">    decreasePortions.getStyleClass().add(&quot;portions-button&quot;);</span>
+<span class="nc" id="L98">    Label portionsValue = new Label(String.valueOf(portions));</span>
+<span class="nc" id="L99">    portionsValue.getStyleClass().add(&quot;portions-text&quot;);</span>
+<span class="nc" id="L100">    Button increasePortions = new StandardButton(&quot;+&quot;).setType(Style.SUBTLE);</span>
+<span class="nc" id="L101">    increasePortions.getStyleClass().add(&quot;portions-button&quot;);</span>
+
+<span class="nc" id="L103">    portionsBox.getChildren().addAll(ingredientsTitle, portionsSymbol, decreasePortions, portionsValue, increasePortions);</span>
+
+<span class="nc" id="L105">    StandardButton addIngredientsButton = new StandardButton(</span>
+        &quot;Add to Shopping List&quot;,
+<span class="nc" id="L107">        () -&gt; onAddRecipe.addRecipe(portions)</span>
+    )
+<span class="nc" id="L109">        .setType(Style.SUCCESS);</span>
+<span class="nc" id="L110">    addIngredientsButton.getStyleClass().add(&quot;add-ingredients-button&quot;);</span>
+
+<span class="nc" id="L112">    VBox ingredientsList = new VBox();</span>
+<span class="nc" id="L113">    ingredientsList.getChildren().add(ingredientsList(recipe));</span>
+
+<span class="nc" id="L115">    decreasePortions.setOnAction(e -&gt; {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">      if (portions &gt; 1) {</span>
+<span class="nc" id="L117">        portions--;</span>
+<span class="nc" id="L118">        portionsValue.setText(String.valueOf(portions));</span>
+<span class="nc" id="L119">        ingredientsList.getChildren().clear();</span>
+<span class="nc" id="L120">        ingredientsList.getChildren().add(ingredientsList(recipe));</span>
+      }
+<span class="nc" id="L122">    });</span>
+<span class="nc" id="L123">    increasePortions.setOnAction(e -&gt; {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">      if (portions &lt; 9) {</span>
+<span class="nc" id="L125">        portions++;</span>
+<span class="nc" id="L126">        portionsValue.setText(String.valueOf(portions));</span>
+<span class="nc" id="L127">        ingredientsList.getChildren().clear();</span>
+<span class="nc" id="L128">        ingredientsList.getChildren().add(ingredientsList(recipe));</span>
+      }
+<span class="nc" id="L130">    });</span>
+
+<span class="nc" id="L132">    VBox ingredientsBox = new VBox(portionsBox, ingredientsList, addIngredientsButton);</span>
+<span class="nc" id="L133">    ingredientsBox.getStyleClass().add(&quot;ingredients-box&quot;);</span>
+
+<span class="nc" id="L135">    BorderPane ingredientsInstructionsBox = new BorderPane();</span>
+<span class="nc" id="L136">    ingredientsInstructionsBox.setCenter(instructionsBox);</span>
+<span class="nc" id="L137">    ingredientsInstructionsBox.setRight(ingredientsBox);</span>
+
+<span class="nc" id="L139">    BorderPane recipeContent = new BorderPane();</span>
+<span class="nc" id="L140">    recipeContent.setLeft(recipeDescription);</span>
+<span class="nc" id="L141">    recipeContent.setBottom(ingredientsInstructionsBox);</span>
+<span class="nc" id="L142">    recipeContent.getStyleClass().add(&quot;recipe-content&quot;);</span>
+
+<span class="nc" id="L144">    getChildren().clear();</span>
+<span class="nc" id="L145">    getChildren().add(recipeImage);</span>
+<span class="nc" id="L146">    setTop(recipeHeader);</span>
+<span class="nc" id="L147">    setCenter(recipeContent);</span>
+<span class="nc" id="L148">  }</span>
+
+  private VBox ingredientsList(RecipeWithIngredients recipe) {
+<span class="nc" id="L151">    VBox ingredientsList = new VBox();</span>
+<span class="nc" id="L152">    List&lt;AmountedIngredient&gt; recipeIngredients = recipe.getIngredients();</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">    for (AmountedIngredient ingredient : recipeIngredients) {</span>
+<span class="nc" id="L154">      BorderPane ingredientRow = new BorderPane();</span>
+<span class="nc" id="L155">      Label ingredientName = new Label(ingredient.getName());</span>
+<span class="nc" id="L156">      ingredientRow.setLeft(ingredientName);</span>
+<span class="nc" id="L157">      DecimalFormat decimalFormat = new DecimalFormat(&quot;0.#&quot;);</span>
+<span class="nc" id="L158">      Label ingredientAmount = new Label(decimalFormat.format(ingredient.getAmount() * portions) + &quot; &quot; + ingredient.getUnit().getName());</span>
+<span class="nc" id="L159">      ingredientRow.setRight(ingredientAmount);</span>
+<span class="nc" id="L160">      ingredientsList.getChildren().add(ingredientRow);</span>
+<span class="nc" id="L161">    }</span>
+<span class="nc" id="L162">    return ingredientsList;</span>
+  }
+
+  /**
+   * Interface for adding a recipe.
+   */
+  public interface RecipeAdder {
+
+    /**
+     * Method for adding a recipe.
+     *
+     * @param portions The number of portions to add, cannot be less than 1
+     */
+    void addRecipe(int portions);
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

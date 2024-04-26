@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TitledPage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components</a> &gt; <span class="el_source">TitledPage.java</span></div><h1>TitledPage.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components;
+
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class for creating a standard titled page.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class TitledPage extends StatefulPage implements ComponentUtils {
+
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title The title of the page
+   */
+  public TitledPage(@NotNull String title) {
+<span class="nc" id="L24">    this(title, null);</span>
+<span class="nc" id="L25">  }</span>
+
+  /**
+   * Constructor for the TitledPage class.
+   *
+   * @param title    The title of the page
+   * @param subtitle The subtitle of the page
+   */
+  public TitledPage(@NotNull String title, String subtitle) {
+<span class="nc" id="L34">    super();</span>
+<span class="nc" id="L35">    addStylesheet(&quot;components/titled-page&quot;);</span>
+<span class="nc" id="L36">    addClass(&quot;titled-page&quot;);</span>
+
+<span class="nc" id="L38">    VBox wrapper = new VBox();</span>
+
+<span class="nc" id="L40">    Label titleLabel = new Label(title);</span>
+<span class="nc" id="L41">    titleLabel.getStyleClass().add(&quot;title&quot;);</span>
+<span class="nc" id="L42">    wrapper.getChildren().add(titleLabel);</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">    if (subtitle != null) {</span>
+<span class="nc" id="L45">      Label subtitleLabel = new Label(subtitle);</span>
+<span class="nc" id="L46">      subtitleLabel.getStyleClass().add(&quot;subtitle&quot;);</span>
+<span class="nc" id="L47">      wrapper.getChildren().add(subtitleLabel);</span>
+    }
+
+<span class="nc" id="L50">    setTop(wrapper);</span>
+<span class="nc" id="L51">  }</span>
+
+  /**
+   * Sets the content of the page.
+   *
+   * @param content The content to set
+   */
+  public void setContent(Node content, boolean stretch) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">    if (stretch) {</span>
+<span class="nc" id="L60">      setCenter(content);</span>
+    } else {
+<span class="nc" id="L62">      Pane contentWrapper = new Pane();</span>
+<span class="nc" id="L63">      contentWrapper.getChildren().add(content);</span>
+<span class="nc" id="L64">      setCenter(contentWrapper);</span>
+    }
+
+<span class="nc" id="L67">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

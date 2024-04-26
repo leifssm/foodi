@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AmountedIngredient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.objects.dtos</a> &gt; <span class="el_source">AmountedIngredient.java</span></div><h1>AmountedIngredient.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.objects.dtos;
+
+import java.text.DecimalFormat;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * This class represents the amounted ingredient object. It extends the Ingredient class and adds an
+ * amount field.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class AmountedIngredient extends Ingredient {
+
+  private double amount;
+
+  /**
+   * Constructor for the amounted ingredient object.
+   *
+   * @param ingredient the ingredient to copy
+   * @param amount     the amount of the ingredient in the unit of the given unit
+   */
+  public AmountedIngredient(
+      @NotNull Ingredient ingredient,
+      double amount
+  ) {
+<span class="nc" id="L27">    this(</span>
+<span class="nc" id="L28">        ingredient.getId(),</span>
+<span class="nc" id="L29">        ingredient.getName(),</span>
+<span class="nc" id="L30">        ingredient.getUnit(),</span>
+<span class="nc" id="L31">        ingredient.getCategory(),</span>
+        amount
+    );
+<span class="nc" id="L34">  }</span>
+
+  /**
+   * Constructor for the amounted ingredient object.
+   *
+   * @param id       the id of the ingredient
+   * @param name     the name of the ingredient
+   * @param unit     the unit of the ingredient
+   * @param category the category of the ingredient
+   * @param amount   the amount of the ingredient in the unit of the given unit
+   */
+  public AmountedIngredient(
+      int id,
+      @NotNull String name,
+      @NotNull Unit unit,
+      @NotNull Category category,
+      double amount
+  ) {
+<span class="fc" id="L52">    super(id, name, unit, category);</span>
+<span class="fc" id="L53">    setAmount(amount);</span>
+<span class="fc" id="L54">  }</span>
+
+  /**
+   * Returns the amount of the ingredient without a unit.
+   *
+   * @return the amount of the ingredient.
+   */
+  public double getAmount() {
+<span class="fc" id="L62">    return amount;</span>
+  }
+
+  /**
+   * Sets the amount of the ingredient.
+   *
+   * @param amount the new amount of the ingredient.
+   * @throws IllegalArgumentException if the amount is negative.
+   */
+  public void setAmount(double amount) throws IllegalArgumentException {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    if (amount &lt; 0) {</span>
+<span class="nc" id="L73">      throw new IllegalArgumentException(&quot;Error: Amount cannot be negative.&quot;);</span>
+    }
+<span class="fc" id="L75">    this.amount = amount;</span>
+<span class="fc" id="L76">  }</span>
+
+  /**
+   * Returns the amount of the ingredient with a suffixed unit.
+   *
+   * @return an amount with a unit.
+   */
+  public @NotNull String getUnitedAmount() {
+<span class="nc" id="L84">    return String.format(&quot;%s %s&quot;, getAmountString(), getUnit().getName());</span>
+  }
+
+  /**
+   * Returns the amount of the ingredient as a string.
+   *
+   * @return the amount of the ingredient as a string.
+   */
+  public @NotNull String getAmountString() {
+<span class="nc" id="L93">    DecimalFormat decimalFormat = new DecimalFormat(&quot;0.#&quot;);</span>
+<span class="nc" id="L94">    return decimalFormat.format(amount);</span>
+  }
+
+  @Override
+  public @NotNull String toString() {
+<span class="fc" id="L99">    return String.format(</span>
+        &quot;AmountedIngredient{id=%o, name='%s', unit=%s, category=%s, amount=.2%f}&quot;,
+<span class="fc" id="L101">        getId(),</span>
+<span class="fc" id="L102">        getName(),</span>
+<span class="fc" id="L103">        getUnit(),</span>
+<span class="fc" id="L104">        getCategory(),</span>
+<span class="fc" id="L105">        amount</span>
+    );
+  }
+
+  /**
+   * Returns a copy of the amounted ingredient.
+   *
+   * @return a copy of the amounted ingredient
+   */
+  @Override
+  public AmountedIngredient copy() {
+<span class="nc" id="L116">    return new AmountedIngredient(getId(), getName(), getUnit(), getCategory(), amount);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
