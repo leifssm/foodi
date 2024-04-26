@@ -20,7 +20,6 @@ public class ProfileItem extends VBox implements ComponentUtils {
    * Constructor for the ProfileItem class.
    *
    * @param name    The name of the profile
-   * @param color   The color of the profile
    * @param onClick The action to perform when the profile item is clicked
    */
   public ProfileItem(final String name, final Runnable onClick) {

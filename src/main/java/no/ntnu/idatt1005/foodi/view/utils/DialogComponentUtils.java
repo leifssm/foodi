@@ -7,7 +7,7 @@ import javafx.scene.control.DialogPane;
  * Utils class that can be used with {@code implements} to add shorthands for easier css handling.
  * This interface is used for classes that extend {@link javafx.scene.control.Dialog}.
  *
- * @author Henrik Kvamme & Leif Mørstad
+ * @author Henrik Kvamme and Leif Mørstad
  * @version 1.0
  */
 public interface DialogComponentUtils extends ComponentUtils {
