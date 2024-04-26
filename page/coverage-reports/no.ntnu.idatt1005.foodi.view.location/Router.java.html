@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Router.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.location</a> &gt; <span class="el_source">Router.java</span></div><h1>Router.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.location;
+
+import java.util.HashMap;
+import java.util.Map;
+import javafx.scene.layout.BorderPane;
+import no.ntnu.idatt1005.foodi.view.components.StatefulPage;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * A router that displays different nodes depending on the current location.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class Router extends BorderPane {
+
+  /**
+   * A map of routes and their corresponding nodes.
+   */
+<span class="nc" id="L20">  HashMap&lt;String, StatefulPage&gt; routes = new HashMap&lt;&gt;();</span>
+  private StatefulPage activeView;
+
+  /**
+   * Creates an empty router.
+   */
+  public Router() {
+<span class="nc" id="L27">    super();</span>
+<span class="nc" id="L28">    LocationHandler.subscribe(this::updateLocation);</span>
+<span class="nc" id="L29">  }</span>
+
+  /**
+   * Changes the shown node depending on the given location.
+   *
+   * @param location The new location
+   */
+  private void updateLocation(@NotNull String location) {
+<span class="nc bnc" id="L37" title="All 2 branches missed.">    if (routes.containsKey(location)) {</span>
+<span class="nc" id="L38">      setPage(routes.get(location));</span>
+<span class="nc" id="L39">      return;</span>
+    }
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">    for (Map.Entry&lt;String, StatefulPage&gt; entry : routes.entrySet()) {</span>
+<span class="nc" id="L43">      String route = entry.getKey();</span>
+<span class="nc" id="L44">      StatefulPage page = entry.getValue();</span>
+
+<span class="nc bnc" id="L46" title="All 2 branches missed.">      if (LocationHandler.isLocationFuzzy(route)) {</span>
+<span class="nc" id="L47">        setPage(page);</span>
+<span class="nc" id="L48">        return;</span>
+      }
+<span class="nc" id="L50">    }</span>
+<span class="nc" id="L51">    setCenter(null);</span>
+<span class="nc" id="L52">  }</span>
+
+  /**
+   * Sets the center of the router to the given page and refreshes it.
+   *
+   * @param page The page to show
+   */
+  private void setPage(@NotNull StatefulPage page) {
+<span class="nc" id="L60">    setCenter(page);</span>
+<span class="nc" id="L61">    activeView = page;</span>
+<span class="nc" id="L62">    updateActiveView();</span>
+<span class="nc" id="L63">  }</span>
+
+  /**
+   * Updates the active view.
+   */
+  public void updateActiveView() {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    if (activeView != null) {</span>
+<span class="nc" id="L70">      activeView.update();</span>
+    }
+<span class="nc" id="L72">  }</span>
+
+  /**
+   * Adds a route to the router, which is shown when the given route is active.
+   *
+   * @param path The path of the route
+   * @param page The page to display when the route is active
+   * @throws IllegalArgumentException If the route already exists
+   */
+  public Router addRoute(
+      @NotNull String path,
+      @NotNull StatefulPage page
+  ) throws IllegalArgumentException {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (routes.containsKey(path)) {</span>
+<span class="nc" id="L86">      throw new IllegalArgumentException(&quot;Route already exists&quot;);</span>
+    }
+
+<span class="nc" id="L89">    routes.put(path, page);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">    if (LocationHandler.isLocationFuzzy(path)) {</span>
+<span class="nc" id="L91">      setPage(page);</span>
+    }
+
+<span class="nc" id="L94">    return this;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

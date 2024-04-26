@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FontLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.utils</a> &gt; <span class="el_source">FontLoader.java</span></div><h1>FontLoader.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URI;
+import java.util.logging.Logger;
+import javafx.scene.text.Font;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Utility class for loading fonts. Utilises {@link LoadUtils} to get the path to the font
+ * directory.
+ *
+ * @author Henrik Kvamme
+ * @version 1.0
+ */
+public final class FontLoader {
+
+<span class="nc" id="L19">  private static final Logger LOGGER = Logger.getLogger(FontLoader.class.getName());</span>
+
+  private static final int DEFAULT_FONT_SIZE = 12;
+
+<span class="nc" id="L23">  private FontLoader() {</span>
+<span class="nc" id="L24">    throw new AssertionError(&quot;Utility class&quot;);</span>
+  }
+
+  /**
+   * Loads fonts from a directory.
+   *
+   * @param fontDirectoryName the name of the directory containing the fonts
+   */
+  public static void loadFontsFromDirectory(@NotNull String fontDirectoryName) {
+<span class="nc" id="L33">    URI directoryPath = LoadUtils.getFontDirectoryUri(fontDirectoryName);</span>
+<span class="nc" id="L34">    File[] fontFiles = getFiles(directoryPath);</span>
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">    for (File fontFile : fontFiles) {</span>
+      try {
+<span class="nc" id="L38">        loadFont(fontFile);</span>
+<span class="nc" id="L39">      } catch (Exception e) {</span>
+<span class="nc" id="L40">        LOGGER.severe(&quot;Error loading font: &quot; + e.getMessage());</span>
+<span class="nc" id="L41">      }</span>
+    }
+<span class="nc" id="L43">  }</span>
+
+  /**
+   * Gets the files in a directory.
+   *
+   * @param directoryUri the URI of the directory containing the fonts
+   * @return the files in the directory
+   * @throws IllegalArgumentException if the directory is not a directory or is empty
+   */
+  @NotNull
+  private static File[] getFiles(URI directoryUri) {
+<span class="nc" id="L54">    String fontDirectoryName = directoryUri.getPath();</span>
+
+<span class="nc" id="L56">    File dir = new File(directoryUri);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    if (!dir.isDirectory()) {</span>
+<span class="nc" id="L58">      throw new IllegalArgumentException(&quot;Font directory is not a directory: &quot; + fontDirectoryName);</span>
+    }
+
+<span class="nc" id="L61">    File[] fontFiles = dir.listFiles();</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">    if (fontFiles == null) {</span>
+<span class="nc" id="L64">      throw new IllegalArgumentException(&quot;Font directory is empty: &quot; + fontDirectoryName);</span>
+    }
+<span class="nc" id="L66">    return fontFiles;</span>
+  }
+
+  /**
+   * Loads a font from a file.
+   *
+   * @param fontFile the file to load the font from
+   */
+  private static void loadFont(@NotNull File fontFile) throws FileNotFoundException {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">    if (!fontFile.isFile()) {</span>
+<span class="nc" id="L76">      throw new FileNotFoundException(&quot;Font file is not a file: &quot; + fontFile.getName());</span>
+    }
+
+<span class="nc bnc" id="L79" title="All 4 branches missed.">    if (!fontFile.getName().endsWith(&quot;.ttf&quot;) &amp;&amp; !fontFile.getName().endsWith(&quot;.otf&quot;)) {</span>
+<span class="nc" id="L80">      throw new FileNotFoundException(</span>
+<span class="nc" id="L81">          &quot;Font file is neither a .ttf or .otf file: &quot; + fontFile.getName());</span>
+    }
+
+<span class="nc" id="L84">    Font.loadFont(fontFile.toURI().toString(), DEFAULT_FONT_SIZE);</span>
+<span class="nc" id="L85">  }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

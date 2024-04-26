@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryListSubItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.inventorylist</a> &gt; <span class="el_source">InventoryListSubItem.java</span></div><h1>InventoryListSubItem.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.inventorylist;
+
+import java.util.function.Consumer;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextFlow;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.ExpiringIngredient;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardCheckBox;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * A class for displaying the sub items in the inventory list.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+class InventoryListSubItem {
+
+  private final Node[] nodes;
+<span class="nc" id="L21">  private final StandardCheckBox select = new StandardCheckBox();</span>
+
+  /**
+   * Constructor for the InventoryListSubItem class.
+   *
+   * @param item The inventory item to display
+   */
+  public InventoryListSubItem(
+      @NotNull ExpiringIngredient item,
+      @NotNull Consumer&lt;ExpiringIngredient&gt; onAmountChange
+<span class="nc" id="L31">  ) {</span>
+<span class="nc" id="L32">    Label background = new Label(); // Empty</span>
+<span class="nc" id="L33">    GridPane.setColumnSpan(background, 7);</span>
+<span class="nc" id="L34">    background.getStyleClass().add(&quot;sub-item-background&quot;);</span>
+
+<span class="nc" id="L36">    TextFlow expiryDate = new InventoryExpirationDate(item.getExpirationDate());</span>
+<span class="nc" id="L37">    expiryDate.getStyleClass().addAll(&quot;gray&quot;, &quot;sub-item-expiration-date&quot;);</span>
+
+<span class="nc" id="L39">    InventoryListProgressBar progressBar = new InventoryListProgressBar(item.getExpirationDate());</span>
+<span class="nc" id="L40">    progressBar.setIsFrozen(item.getIsFrozen());</span>
+<span class="nc" id="L41">    Label category = new Label(); // Empty</span>
+
+<span class="nc" id="L43">    InventoryListInput quantity = new InventoryListInput(item.getAmount());</span>
+<span class="nc" id="L44">    quantity.setText(item.getAmountString());</span>
+<span class="nc" id="L45">    quantity.setMaxHeight(expiryDate.getMaxHeight() - 4);</span>
+<span class="nc" id="L46">    quantity.setPrefHeight(expiryDate.getMaxHeight() - 4);</span>
+
+<span class="nc" id="L48">    quantity.setOnAmountChange(</span>
+        (double newAmount) -&gt; {
+<span class="nc" id="L50">          ExpiringIngredient newItem = item.copy();</span>
+<span class="nc" id="L51">          newItem.setAmount(newAmount);</span>
+<span class="nc" id="L52">          onAmountChange.accept(newItem);</span>
+<span class="nc" id="L53">        }</span>
+    );
+
+<span class="nc" id="L56">    Label unit = new Label(item.getUnit().getName());</span>
+<span class="nc" id="L57">    unit.getStyleClass().addAll(&quot;center&quot;, &quot;gray&quot;, &quot;vertical-padding&quot;);</span>
+
+<span class="nc" id="L59">    select.setScale(0.6);</span>
+<span class="nc" id="L60">    select.getStyleClass().add(&quot;center&quot;);</span>
+
+<span class="nc" id="L62">    nodes = new Node[]{</span>
+        background,
+        expiryDate,
+        progressBar,
+        category,
+        quantity,
+        unit,
+        select
+    };
+<span class="nc" id="L71">  }</span>
+
+  public Node[] getNodes() {
+<span class="nc" id="L74">    return nodes;</span>
+  }
+
+  /**
+   * Sets the visibility of the sub item.
+   *
+   * @param visible Whether the sub item should be displayed
+   */
+  public void setVisibility(boolean visible) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">    for (Node node : nodes) {</span>
+<span class="nc" id="L84">      node.setVisible(visible);</span>
+<span class="nc" id="L85">      node.setManaged(visible);</span>
+    }
+<span class="nc" id="L87">  }</span>
+
+  public StandardCheckBox getSelect() {
+<span class="nc" id="L90">    return select;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

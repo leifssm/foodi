@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.cookbook</a> &gt; <span class="el_source">RecipeCard.java</span></div><h1>RecipeCard.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.cookbook;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import no.ntnu.idatt1005.foodi.view.utils.LoadUtils;
+
+/**
+ * A recipe card component.
+ *
+ * &lt;p&gt;This class is a custom component for displaying a recipe card.
+ * It is used in the cookbook grid view. &lt;/p&gt;
+ */
+
+public class RecipeCard extends StackPane implements ComponentUtils {
+
+
+  /**
+   * The constructor of the recipe card component.
+   *
+   * @param title     The title of the recipe
+   * @param duration  The duration of the recipe
+   * @param imagePath The path to the image of the recipe
+   */
+  public RecipeCard(int id, String title, String duration, String imagePath) {
+<span class="nc" id="L35">    super();</span>
+<span class="nc" id="L36">    addStylesheet(&quot;components/cookbook-grid/recipe-card&quot;);</span>
+<span class="nc" id="L37">    addClass(&quot;recipe-card&quot;);</span>
+
+<span class="nc" id="L39">    cursorProperty().setValue(javafx.scene.Cursor.HAND);</span>
+
+    // Load the image and create an ImageView for it
+<span class="nc" id="L42">    String imageUrl = LoadUtils.getImage(imagePath);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">    if (imageUrl == null) {</span>
+<span class="nc" id="L44">      throw new AssertionError(&quot;Image not found: &quot; + imagePath);</span>
+    }
+
+<span class="nc" id="L47">    ImageView backgroundImage = new ImageView(imageUrl);</span>
+<span class="nc" id="L48">    backgroundImage.setPreserveRatio(true);</span>
+<span class="nc" id="L49">    backgroundImage.fitWidthProperty().bind(widthProperty());</span>
+<span class="nc" id="L50">    backgroundImage.fitHeightProperty().bind(heightProperty());</span>
+
+    // Initial ColorAdjust effect with no brightness adjustment
+<span class="nc" id="L53">    ColorAdjust colorAdjust = new ColorAdjust();</span>
+<span class="nc" id="L54">    colorAdjust.setBrightness(-0.5);</span>
+<span class="nc" id="L55">    backgroundImage.setEffect(colorAdjust);</span>
+
+    // Timeline for animating brightness and scale change on hover
+<span class="nc" id="L58">    Timeline fadeInTimeline = new Timeline(</span>
+<span class="nc" id="L59">        new KeyFrame(Duration.seconds(0.07), new KeyValue(colorAdjust.brightnessProperty(), -0.3)),</span>
+<span class="nc" id="L60">        new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleXProperty(), 1.03)),</span>
+<span class="nc" id="L61">        new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleYProperty(), 1.03)));</span>
+<span class="nc" id="L62">    Timeline fadeOutTimeline = new Timeline(</span>
+<span class="nc" id="L63">        new KeyFrame(Duration.seconds(0.07), new KeyValue(colorAdjust.brightnessProperty(), -0.5)),</span>
+<span class="nc" id="L64">        new KeyFrame(Duration.seconds(0.07), new KeyValue(scaleXProperty(), 1)),</span>
+<span class="nc" id="L65">        new KeyFrame(Duration.seconds(0.07), new KeyValue(scaleYProperty(), 1)));</span>
+
+    // Timeline for animating brightness and scale change on click
+<span class="nc" id="L68">    Timeline clickedTimeline = new Timeline(</span>
+<span class="nc" id="L69">        new KeyFrame(Duration.seconds(0.03), new KeyValue(colorAdjust.brightnessProperty(), -0.6)),</span>
+<span class="nc" id="L70">        new KeyFrame(Duration.seconds(0.03), new KeyValue(scaleXProperty(), 0.97)),</span>
+<span class="nc" id="L71">        new KeyFrame(Duration.seconds(0.03), new KeyValue(scaleYProperty(), 0.97)));</span>
+
+    // Listener to trigger animation on hover
+<span class="nc" id="L74">    hoverProperty().addListener((obs, wasHovered, isNowHovered) -&gt; {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">      if (isNowHovered) {</span>
+<span class="nc" id="L76">        fadeInTimeline.play();</span>
+      } else {
+<span class="nc" id="L78">        fadeOutTimeline.play();</span>
+      }
+<span class="nc" id="L80">    });</span>
+
+    // On mouse down
+<span class="nc" id="L83">    setOnMousePressed(event -&gt; clickedTimeline.play());</span>
+
+    // On click
+<span class="nc" id="L86">    setOnMouseClicked(event -&gt; LocationHandler.setLocation(&quot;recipes/&quot; + id));</span>
+
+    // Create a clip for the rounded corners
+<span class="nc" id="L89">    Rectangle clip = new Rectangle();</span>
+<span class="nc" id="L90">    clip.setArcWidth(5);</span>
+<span class="nc" id="L91">    clip.setArcHeight(5);</span>
+<span class="nc" id="L92">    clip.widthProperty().bind(widthProperty());</span>
+<span class="nc" id="L93">    clip.heightProperty().bind(heightProperty());</span>
+<span class="nc" id="L94">    setClip(clip);</span>
+
+    // Create a container for the text and other content
+<span class="nc" id="L97">    VBox contentBox = new VBox();</span>
+<span class="nc" id="L98">    contentBox.getStyleClass().add(&quot;recipe-card-content&quot;);</span>
+
+<span class="nc" id="L100">    Label recipeTitle = new Label(title);</span>
+<span class="nc" id="L101">    recipeTitle.getStyleClass().add(&quot;recipe-card-title&quot;);</span>
+<span class="nc" id="L102">    contentBox.getChildren().add(recipeTitle);</span>
+
+<span class="nc" id="L104">    Label recipeDuration = new Label(duration);</span>
+<span class="nc" id="L105">    recipeDuration.getStyleClass().add(&quot;recipe-card-duration&quot;);</span>
+<span class="nc" id="L106">    contentBox.getChildren().add(recipeDuration);</span>
+
+    // First, add the image to the stack, then the content on top
+<span class="nc" id="L109">    getChildren().addAll(backgroundImage, contentBox);</span>
+<span class="nc" id="L110">  }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

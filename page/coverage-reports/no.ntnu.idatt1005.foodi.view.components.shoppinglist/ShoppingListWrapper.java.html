@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingListWrapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.shoppinglist</a> &gt; <span class="el_source">ShoppingListWrapper.java</span></div><h1>ShoppingListWrapper.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.shoppinglist;
+
+import java.util.List;
+import javafx.scene.layout.VBox;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
+import no.ntnu.idatt1005.foodi.view.components.button.DoubleButton;
+import no.ntnu.idatt1005.foodi.view.components.button.StandardButton;
+import no.ntnu.idatt1005.foodi.view.components.shoppinglist.IngredientGrouper.IngredientCategoryGroup;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Class representing several groups of items in the shopping list, with buttons to either remove or
+ * add the items to the inventory.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class ShoppingListWrapper extends VBox implements ComponentUtils {
+
+  private final StandardButton addItemsButton;
+  private final StandardButton clearItemsButton;
+
+  /**
+   * Constructor for the ShoppingListWrapper class.
+   *
+   * @param recipes The recipes to extract the data from
+   */
+  public ShoppingListWrapper(
+      @NotNull List&lt;@NotNull RecipeWithPartiallyRemovedIngredients&gt; recipes
+  ) {
+<span class="nc" id="L33">    super();</span>
+<span class="nc" id="L34">    addStylesheet(&quot;components/shopping-list/shopping-list-wrapper&quot;);</span>
+<span class="nc" id="L35">    addClass(&quot;shopping-list-wrapper&quot;);</span>
+<span class="nc" id="L36">    List&lt;AmountedIngredient&gt; joinedRecipes = IngredientGrouper.joinIngredientsFromRecipes(recipes);</span>
+<span class="nc" id="L37">    List&lt;IngredientCategoryGroup&gt; groupItems = IngredientGrouper.groupByCategory(joinedRecipes);</span>
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">    for (IngredientCategoryGroup group : groupItems) {</span>
+<span class="nc" id="L40">      ShoppingListCategoryGroup shoppingListGroup = new ShoppingListCategoryGroup(group);</span>
+<span class="nc" id="L41">      getChildren().add(shoppingListGroup);</span>
+<span class="nc" id="L42">    }</span>
+
+<span class="nc" id="L44">    addItemsButton = new StandardButton(</span>
+        &quot;Add Items to Inventory&quot;,
+<span class="nc" id="L46">        () -&gt; System.out.println(&quot;Add items to inventory&quot;),</span>
+        StandardButton.Style.SUCCESS
+    );
+
+<span class="nc" id="L50">    clearItemsButton = new StandardButton(</span>
+        &quot;Clear&quot;,
+<span class="nc" id="L52">        () -&gt; System.out.println(&quot;Clear&quot;),</span>
+        StandardButton.Style.ERROR
+    );
+
+<span class="nc" id="L56">    getChildren().add(</span>
+        new DoubleButton(addItemsButton, clearItemsButton)
+    );
+<span class="nc" id="L59">  }</span>
+
+  public StandardButton getAddItemsButton() {
+<span class="nc" id="L62">    return addItemsButton;</span>
+  }
+
+  public StandardButton getClearItemsButton() {
+<span class="nc" id="L66">    return clearItemsButton;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

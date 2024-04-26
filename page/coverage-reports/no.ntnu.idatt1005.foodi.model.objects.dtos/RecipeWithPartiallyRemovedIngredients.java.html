@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeWithPartiallyRemovedIngredients.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.objects.dtos</a> &gt; <span class="el_source">RecipeWithPartiallyRemovedIngredients.java</span></div><h1>RecipeWithPartiallyRemovedIngredients.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.objects.dtos;
+
+import java.util.List;
+
+/**
+ * This class represents a recipe with partially removed ingredients. To be used with the shopping
+ * list.
+ */
+public class RecipeWithPartiallyRemovedIngredients extends Recipe {
+
+  private List&lt;PartiallyRemovedAmountedIngredient&gt; ingredients;
+  private int portions;
+
+  /**
+   * Constructor for a recipe with partially removed ingredients.
+   *
+   * @param id          the id of the recipe
+   * @param name        the name of the recipe
+   * @param description the description of the recipe
+   * @param difficulty  the difficulty of the recipe
+   * @param dietaryTag  the dietary tag of the recipe
+   * @param duration    the duration of the recipe in minutes
+   * @param imagePath   the path to the image of the recipe
+   * @param instruction the instruction of the recipe
+   * @param ingredients a list of partially removed ingredients
+   * @param portions    the number of portions the recipe should be multiplied by
+   */
+  public RecipeWithPartiallyRemovedIngredients(
+      int id,
+      String name,
+      String description,
+      Difficulty difficulty,
+      DietaryTag dietaryTag,
+      int duration,
+      String imagePath,
+      String instruction,
+      List&lt;PartiallyRemovedAmountedIngredient&gt; ingredients,
+      int portions
+  ) {
+<span class="fc" id="L40">    super(id, name, description, difficulty, dietaryTag, duration, imagePath, instruction);</span>
+<span class="fc" id="L41">    setIngredients(ingredients);</span>
+<span class="fc" id="L42">    setPortions(portions);</span>
+<span class="fc" id="L43">  }</span>
+
+  /**
+   * Constructor for extending a recipe with partially removed ingredients.
+   *
+   * @param recipe      the recipe to extend
+   * @param ingredients a list of partially removed ingredients
+   * @param portions    the number of portions
+   */
+  public RecipeWithPartiallyRemovedIngredients(
+      RecipeWithIngredients recipe,
+      List&lt;PartiallyRemovedAmountedIngredient&gt; ingredients,
+      int portions
+  ) {
+<span class="nc" id="L57">    super(</span>
+<span class="nc" id="L58">        recipe.getId(),</span>
+<span class="nc" id="L59">        recipe.getName(),</span>
+<span class="nc" id="L60">        recipe.getDescription(),</span>
+<span class="nc" id="L61">        recipe.getDifficulty(),</span>
+<span class="nc" id="L62">        recipe.getDietaryTag(),</span>
+<span class="nc" id="L63">        recipe.getDuration(),</span>
+<span class="nc" id="L64">        recipe.getImagePath(),</span>
+<span class="nc" id="L65">        recipe.getInstruction()</span>
+    );
+<span class="nc" id="L67">    setIngredients(ingredients);</span>
+<span class="nc" id="L68">    setPortions(portions);</span>
+<span class="nc" id="L69">  }</span>
+
+  /**
+   * Returns an immutable list of partially removed ingredients.
+   *
+   * @return an immutable list of partially removed ingredients
+   */
+  public List&lt;PartiallyRemovedAmountedIngredient&gt; getIngredients() {
+<span class="fc" id="L77">    return ingredients;</span>
+  }
+
+  /**
+   * Sets the partially removed ingredients of the recipe.
+   *
+   * @param ingredients a list of partially removed ingredients.
+   */
+  public void setIngredients(List&lt;PartiallyRemovedAmountedIngredient&gt; ingredients) {
+<span class="fc" id="L86">    this.ingredients = List.copyOf(ingredients);</span>
+<span class="fc" id="L87">  }</span>
+
+  /**
+   * Returns the number of portions the recipe should be multiplied by.
+   *
+   * @return the number of portions
+   */
+  public int getPortions() {
+<span class="nc" id="L95">    return portions;</span>
+  }
+
+  /**
+   * Sets the number of portions recipe should be multiplied by.
+   *
+   * @param portions the number of portions
+   */
+  public void setPortions(int portions) {
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">    if (portions &lt; 1) {</span>
+<span class="nc" id="L105">      throw new IllegalArgumentException(&quot;Error: Portions cannot be less than 1.&quot;);</span>
+    }
+<span class="fc" id="L107">    this.portions = portions;</span>
+<span class="fc" id="L108">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

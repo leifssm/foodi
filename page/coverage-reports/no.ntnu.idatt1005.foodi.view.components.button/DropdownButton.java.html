@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DropdownButton.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.button</a> &gt; <span class="el_source">DropdownButton.java</span></div><h1>DropdownButton.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.button;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * A standard dropdown button.
+ *
+ * @author Leif Mørstad
+ * @version 1.1
+ */
+public class DropdownButton extends StandardButton {
+
+  private final DropdownToggle mainAction;
+<span class="nc" id="L14">  private String expandedText = &quot;▲&quot;;</span>
+
+<span class="nc" id="L16">  private String collapsedText = &quot;▼&quot;;</span>
+
+<span class="nc" id="L18">  private boolean expanded = false;</span>
+
+  /**
+   * Constructor for the dropdown button, with the option to set the text shown when the dropdown is
+   * expanded or collapsed.
+   *
+   * @param expandedText  The text to be shown when the dropdown is expanded
+   * @param collapsedText The text to be shown when the dropdown is collapsed
+   * @param action        The action to be performed when the button is clicked
+   */
+  public DropdownButton(String expandedText, String collapsedText, @NotNull DropdownToggle action) {
+<span class="nc" id="L29">    this(action);</span>
+<span class="nc" id="L30">    this.expandedText = expandedText;</span>
+<span class="nc" id="L31">    this.collapsedText = collapsedText;</span>
+<span class="nc" id="L32">    updateText();</span>
+<span class="nc" id="L33">  }</span>
+
+  /**
+   * Constructor for the dropdown button.
+   *
+   * @param action The action to be performed when the button is clicked
+   */
+  public DropdownButton(@NotNull DropdownToggle action) {
+<span class="nc" id="L41">    super(&quot;&quot;);</span>
+<span class="nc" id="L42">    this.mainAction = action;</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">    setOnAction(e -&gt; setIsExpanded(!expanded));</span>
+<span class="nc" id="L44">    action.toggle(expanded);</span>
+<span class="nc" id="L45">    setIsExpanded(expanded);</span>
+<span class="nc" id="L46">    updateText();</span>
+<span class="nc" id="L47">  }</span>
+
+  /**
+   * Updates the text of the button to match the current state.
+   */
+  private void updateText() {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">    setText(expanded ? expandedText : collapsedText);</span>
+<span class="nc" id="L54">  }</span>
+
+  public String getExpandedText() {
+<span class="nc" id="L57">    return expandedText;</span>
+  }
+
+  /**
+   * Sets the text to be shown when the dropdown is expanded.
+   */
+  public void setExpandedText(String expandedText) {
+<span class="nc" id="L64">    this.expandedText = expandedText;</span>
+<span class="nc" id="L65">    updateText();</span>
+<span class="nc" id="L66">  }</span>
+
+  public String getCollapsedText() {
+<span class="nc" id="L69">    return collapsedText;</span>
+  }
+
+  /**
+   * Sets the text to be shown when the dropdown is collapsed.
+   */
+  public void setCollapsedText(String collapsedText) {
+<span class="nc" id="L76">    this.collapsedText = collapsedText;</span>
+<span class="nc" id="L77">    updateText();</span>
+<span class="nc" id="L78">  }</span>
+
+  /**
+   * Returns whether the dropdown button is expanded or not.
+   */
+  public boolean getIsExpanded() {
+<span class="nc" id="L84">    return expanded;</span>
+  }
+
+  /**
+   * Sets whether the dropdown button is expanded or not, and runs the on click action of the state
+   * changed.
+   *
+   * @param state The state to set the dropdown button to
+   */
+  public void setIsExpanded(boolean state) {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">    if (expanded == state) {</span>
+<span class="nc" id="L95">      return;</span>
+    }
+<span class="nc" id="L97">    expanded = state;</span>
+<span class="nc" id="L98">    mainAction.toggle(expanded);</span>
+<span class="nc" id="L99">    updateText();</span>
+<span class="nc" id="L100">  }</span>
+
+  /**
+   * Functional interface for the action of the dropdown button which takes one boolean parameter.
+   */
+  public interface DropdownToggle {
+
+    void toggle(boolean expanded);
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

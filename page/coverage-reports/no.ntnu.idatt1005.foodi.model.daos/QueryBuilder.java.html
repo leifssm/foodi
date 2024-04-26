@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QueryBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.daos</a> &gt; <span class="el_source">QueryBuilder.java</span></div><h1>QueryBuilder.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.daos;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+import no.ntnu.idatt1005.foodi.model.repository.ConnectionPool;
+import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * A helper class for building SQL queries.
+ * &lt;pre&gt;
+ * Ingredient i =  new QueryBuilder(&quot;SELECT * FROM ingredient WHERE id = ?&quot;)
+ *         .addInt(5) // the id of the ingredient
+ *         .executeQuerySafe(rs -&gt; {
+ *           if (rs.next()) {
+ *             // code to create an ingredient object
+ *             return new Ingredient(...);
+ *           }
+ *           return null;
+ *         });
+ * &lt;/pre&gt;
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class QueryBuilder {
+
+<span class="fc" id="L34">  private static final Logger LOGGER = Logger.getLogger(QueryBuilder.class.getName());</span>
+  /**
+   * The SQL query to use and build from.
+   */
+  private final String query;
+  /**
+   * A list of methods to modify the statement.
+   */
+<span class="fc" id="L42">  private final ArrayList&lt;StatementModifier&gt; parts = new ArrayList&lt;&gt;();</span>
+  /**
+   * Whether the query is locked or not. After the query is run, the statement is locked and the
+   * query parameters can no longer be modified.
+   */
+<span class="fc" id="L47">  private boolean locked = false;</span>
+
+  /**
+   * Creates a new QueryBuilder with the given SQL query, with &quot;?&quot; as parameters.
+   *
+   * @param query The SQL query to build from.
+   */
+<span class="fc" id="L54">  public QueryBuilder(@Language(&quot;SQL&quot;) String query) {</span>
+<span class="fc" id="L55">    this.query = query;</span>
+<span class="fc" id="L56">  }</span>
+
+  /**
+   * Replaces the next &quot;?&quot; parameter with the given integer.
+   *
+   * @param value The integer to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addInt(int value) {
+<span class="fc" id="L65">    checkLocked();</span>
+<span class="fc" id="L66">    parts.add((i, statement) -&gt; statement.setInt(i, value));</span>
+<span class="fc" id="L67">    return this;</span>
+  }
+
+  private void checkLocked() {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">    if (locked) {</span>
+<span class="nc" id="L72">      throw new IllegalStateException(&quot;Query is locked and cannot be modified.&quot;);</span>
+    }
+<span class="fc" id="L74">  }</span>
+
+  /**
+   * Replaces the next &quot;?&quot; parameter with the given string.
+   *
+   * @param value The string to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addString(@NotNull String value) {
+<span class="fc" id="L83">    checkLocked();</span>
+<span class="fc" id="L84">    parts.add((i, statement) -&gt; statement.setString(i, value));</span>
+<span class="fc" id="L85">    return this;</span>
+  }
+
+  /**
+   * Replaces the next &quot;?&quot; parameter with the given double.
+   *
+   * @param value The double to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addDouble(@NotNull Double value) {
+<span class="fc" id="L95">    checkLocked();</span>
+<span class="fc" id="L96">    parts.add((i, statement) -&gt; statement.setDouble(i, value));</span>
+<span class="fc" id="L97">    return this;</span>
+  }
+
+  /**
+   * Replaces the next &quot;?&quot; parameter with the given date.
+   *
+   * @param value The date to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addDate(@Nullable Date value) {
+<span class="fc" id="L107">    checkLocked();</span>
+<span class="fc" id="L108">    parts.add((i, statement) -&gt; statement.setDate(i, value));</span>
+<span class="fc" id="L109">    return this;</span>
+  }
+
+  /**
+   * Replaces the next &quot;?&quot; parameter with the given boolean.
+   *
+   * @param value The boolean to use.
+   * @return This QueryBuilder instance.
+   */
+  public @NotNull QueryBuilder addBoolean(boolean value) {
+<span class="fc" id="L119">    checkLocked();</span>
+<span class="fc" id="L120">    parts.add((i, statement) -&gt; statement.setBoolean(i, value));</span>
+<span class="fc" id="L121">    return this;</span>
+  }
+
+  /**
+   * Executes a SELECT query and returns the result without throwing if it encounters an error.
+   * Returns {@code null} if it does.
+   *
+   * @return The result of the query. Returns null if the query throws.
+   * @see PreparedStatement#executeQuery()
+   * @see #executeQuery(ResultHandler)
+   */
+  public &lt;T&gt; @Nullable T executeQuerySafe(@NotNull ResultHandler&lt;ResultSet, T&gt; handler) {
+    try {
+<span class="fc" id="L134">      return executeQuery(handler);</span>
+<span class="nc" id="L135">    } catch (SQLException e) {</span>
+<span class="nc" id="L136">      LOGGER.info(&quot;Error while executing query: &quot; + e.getMessage());</span>
+<span class="nc" id="L137">      return null;</span>
+    }
+  }
+
+  // TODO: Add more add methods for different types of parameters if needed.
+
+  /**
+   * Executes a SELECT query and returns the result through a handler function.
+   *
+   * @return The result of the query.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
+   */
+  public &lt;T&gt; T executeQuery(@NotNull ResultHandler&lt;ResultSet, T&gt; handler) throws SQLException {
+<span class="fc" id="L151">    return runAndThenReturnWithMethod(PreparedStatement::executeQuery, handler);</span>
+  }
+
+  /**
+   * Runs the given method on the query and returns the result. Running it locks the query. The
+   * handler param should not return {@link ResultSet}, as this &lt;i&gt;might&lt;/i&gt; cause a resource leak,
+   * but if needed for a hack remember to {@link ResultSet#close()} it after use.
+   *
+   * @param method       The method to run.
+   * @param handler      The handler to handle the result.
+   * @param &lt;StatementT&gt; The return type of the statement.
+   * @param &lt;ReturnT&gt;    The return type of the method.
+   * @throws SQLException If an error occurs while running the query.
+   */
+  private &lt;StatementT, ReturnT&gt; ReturnT runAndThenReturnWithMethod(
+      @NotNull StatementMethod&lt;StatementT&gt; method,
+      @NotNull ResultHandler&lt;StatementT, ReturnT&gt; handler
+  ) throws SQLException {
+<span class="fc" id="L169">    locked = true;</span>
+
+    // Store the result of the query outside the try-with-resources block so that the connection
+    // is ensured to close.
+    ReturnT result;
+<span class="fc" id="L174">    try (Connection connection = ConnectionPool.getConnection();</span>
+<span class="fc" id="L175">        PreparedStatement statement = connection.prepareStatement(query)) {</span>
+      // Throw an exception if the number of parameters does not match the number of parts.
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">      if (statement.getParameterMetaData().getParameterCount() != parts.size()) {</span>
+<span class="nc" id="L178">        throw new IllegalStateException(</span>
+            &quot;Incorrect number of parameters. Got &quot;
+<span class="nc" id="L180">                + parts.size()</span>
+                + &quot;, expected &quot;
+<span class="nc" id="L182">                + statement.getParameterMetaData().getParameterCount()</span>
+                + &quot;.&quot;
+        );
+      }
+      // Modify the statement with all the modifier functions.
+<span class="fc bfc" id="L187" title="All 2 branches covered.">      for (int i = 0; i &lt; parts.size(); i++) {</span>
+<span class="fc" id="L188">        parts</span>
+<span class="fc" id="L189">            .get(i)</span>
+<span class="fc" id="L190">            .modifyStatement(i + 1, statement);</span>
+      }
+      // Run the method and handle the result.
+<span class="fc" id="L193">      StatementT statementResult = method.runMethod(statement);</span>
+<span class="fc" id="L194">      result = handler.handleResult(statementResult);</span>
+    }
+<span class="fc" id="L196">    return result;</span>
+  }
+
+  /**
+   * Executes a SELECT query and consumes the value without throwing if it encounters an error.
+   *
+   * @see PreparedStatement#executeQuery()
+   * @see #executeQuery(ResultHandler)
+   */
+  public void executeQuerySafe(@NotNull ThrowingConsumer&lt;ResultSet&gt; handler) {
+    try {
+<span class="nc" id="L207">      executeQuery(handler);</span>
+<span class="nc" id="L208">    } catch (SQLException e) {</span>
+<span class="nc" id="L209">      LOGGER.info(&quot;Error while executing query: &quot; + e.getMessage());</span>
+<span class="nc" id="L210">    }</span>
+<span class="nc" id="L211">  }</span>
+
+  /**
+   * Executes a SELECT query.
+   *
+   * @param handler The handler to handle the result.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeQuery(@NotNull ThrowingConsumer&lt;ResultSet&gt; handler) throws SQLException {
+<span class="nc" id="L221">    runAndThenReturnWithMethod(PreparedStatement::executeQuery, convertToConsumer(handler));</span>
+<span class="nc" id="L222">  }</span>
+
+  /**
+   * Converts a {@link ThrowingConsumer} to a {@link ResultHandler} with a null return.
+   *
+   * @param consumer The consumer to convert.
+   * @param &lt;T&gt;      The return type of the consumer.
+   * @return The converted consumer.
+   */
+  private &lt;T&gt; @NotNull ResultHandler&lt;T, Void&gt; convertToConsumer(
+      @NotNull ThrowingConsumer&lt;T&gt; consumer
+  ) {
+<span class="nc" id="L234">    return e -&gt; {</span>
+<span class="nc" id="L235">      consumer.accept(e);</span>
+<span class="nc" id="L236">      return null;</span>
+    };
+  }
+
+  /**
+   * Executes a SELECT query and consumes the value without throwing if it encounters an error.
+   *
+   * @see PreparedStatement#executeQuery()
+   * @see #executeQuery(ResultHandler)
+   */
+  public void executeQuerySafe() {
+    try {
+<span class="nc" id="L248">      executeQuery();</span>
+<span class="nc" id="L249">    } catch (SQLException e) {</span>
+<span class="nc" id="L250">      LOGGER.info(&quot;Error while executing query: &quot; + e.getMessage());</span>
+<span class="nc" id="L251">    }</span>
+<span class="nc" id="L252">  }</span>
+
+  /**
+   * Executes a SELECT query.
+   *
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeQuery() throws SQLException {
+<span class="nc" id="L261">    runAndThenReturnWithMethod(PreparedStatement::executeQuery, e -&gt; null);</span>
+<span class="nc" id="L262">  }</span>
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query without throwing if it encounters an error.
+   * Returns {@code null} if it does.
+   *
+   * @return The result of the query. Returns null if the query throws.
+   * @see PreparedStatement#executeUpdate()
+   * @see #executeUpdate(ResultHandler)
+   */
+  public &lt;T&gt; @Nullable T executeUpdateSafe(@NotNull ResultHandler&lt;Integer, T&gt; handler) {
+    try {
+<span class="nc" id="L274">      return executeUpdate(handler);</span>
+<span class="nc" id="L275">    } catch (SQLException e) {</span>
+<span class="nc" id="L276">      return null;</span>
+    }
+  }
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @return The result of the query.
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeUpdate()
+   */
+  public &lt;T&gt; T executeUpdate(@NotNull ResultHandler&lt;Integer, T&gt; handler) throws SQLException {
+<span class="nc" id="L288">    return runAndThenReturnWithMethod(PreparedStatement::executeUpdate, handler);</span>
+  }
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query and consumes the value without throwing if
+   * it encounters an error.
+   *
+   * @see PreparedStatement#executeUpdate()
+   * @see #executeUpdate(ResultHandler)
+   */
+  public void executeUpdateSafe(@NotNull ThrowingConsumer&lt;Integer&gt; handler) {
+    try {
+<span class="nc" id="L300">      executeUpdate(handler);</span>
+<span class="nc" id="L301">    } catch (SQLException e) {</span>
+<span class="nc" id="L302">      LOGGER.info(&quot;Error while executing query: &quot; + e.getMessage());</span>
+<span class="nc" id="L303">    }</span>
+<span class="nc" id="L304">  }</span>
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @param handler The handler to handle the result.
+   * @throws SQLException If an error occurs while executing the update.
+   * @see PreparedStatement#executeQuery()
+   */
+  public void executeUpdate(@NotNull ThrowingConsumer&lt;Integer&gt; handler) throws SQLException {
+<span class="nc" id="L314">    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, convertToConsumer(handler));</span>
+<span class="nc" id="L315">  }</span>
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query without throwing if it encounters an error.
+   *
+   * @see PreparedStatement#executeUpdate()
+   * @see #executeUpdate(ResultHandler)
+   */
+  public void executeUpdateSafe() {
+    try {
+<span class="fc" id="L325">      executeUpdate();</span>
+<span class="nc" id="L326">    } catch (SQLException e) {</span>
+<span class="nc" id="L327">      LOGGER.info(&quot;Error while executing query: &quot; + e.getMessage());</span>
+<span class="fc" id="L328">    }</span>
+<span class="fc" id="L329">  }</span>
+
+  /**
+   * Executes either a INSERT, UPDATE or a DELETE query.
+   *
+   * @throws SQLException If an error occurs while executing the query.
+   * @see PreparedStatement#executeUpdate()
+   */
+  public void executeUpdate() throws SQLException {
+<span class="fc" id="L338">    runAndThenReturnWithMethod(PreparedStatement::executeUpdate, e -&gt; null);</span>
+<span class="fc" id="L339">  }</span>
+
+  /**
+   * A functional interface for modifying a {@link PreparedStatement} parameter at a given index.
+   * Index starts at 1.
+   */
+  public interface StatementModifier {
+
+    /**
+     * Modifies the statement at the given index.
+     *
+     * @param modifyingIndex The index to modify starting at 1.
+     * @param statement      The statement to modify.
+     * @throws SQLException If an error occurs while modifying the statement.
+     */
+    void modifyStatement(int modifyingIndex, PreparedStatement statement) throws SQLException;
+  }
+
+  /**
+   * Represents a method that can be run on a {@link PreparedStatement}.
+   *
+   * @param &lt;T&gt; The return type of the method.
+   */
+  public interface StatementMethod&lt;T&gt; {
+
+    /**
+     * Runs the method on the given statement.
+     *
+     * @param statement The statement to run the method on.
+     * @return The return value of the method.
+     * @throws SQLException If an error occurs while running the method.
+     */
+    T runMethod(@NotNull PreparedStatement statement) throws SQLException;
+  }
+
+  /**
+   * Runs the given method on the query and returns the result.
+   *
+   * @param &lt;InputT&gt;   The given type of the method.
+   * @param &lt;ResultT&gt;&gt; The return type of the method.
+   */
+  public interface ResultHandler&lt;InputT, ResultT&gt; {
+
+    /**
+     * Handles the result of the query.
+     *
+     * @param resultSet The result to handle.
+     * @return The result of the handler.
+     * @throws SQLException If an error occurs while handling the result.
+     */
+    ResultT handleResult(InputT resultSet) throws SQLException;
+  }
+
+  /**
+   * A functional interface for consuming a value and throwing an exception.
+   *
+   * @param &lt;T&gt; The type of the value to consume.
+   */
+  public interface ThrowingConsumer&lt;T&gt; {
+
+    /**
+     * Consumes the value.
+     *
+     * @param t The value to consume.
+     * @throws SQLException If an error occurs while consuming the value.
+     */
+    void accept(T t) throws SQLException;
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

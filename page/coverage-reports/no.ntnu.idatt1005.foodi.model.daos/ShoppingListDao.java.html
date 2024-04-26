@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingListDao.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.model.daos</a> &gt; <span class="el_source">ShoppingListDao.java</span></div><h1>ShoppingListDao.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.model.daos;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.AmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Ingredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.PartiallyRemovedAmountedIngredient;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
+import no.ntnu.idatt1005.foodi.model.objects.dtos.RecipeWithPartiallyRemovedIngredients;
+
+/**
+ * This class is responsible for handling the usage of database operations regarding shopping
+ * lists.
+ *
+ * @author Snake727
+ * @version 0.9.0
+ */
+<span class="fc" id="L20">public class ShoppingListDao {</span>
+
+  /**
+   * Deletes all shopping list entries for a user.
+   *
+   * @param userId the id of the user.
+   */
+  public void clearShoppingList(int userId) {
+<span class="fc" id="L28">    new QueryBuilder(&quot;DELETE FROM shopping_list WHERE user_id = ?&quot;)</span>
+<span class="fc" id="L29">        .addInt(userId)</span>
+<span class="fc" id="L30">        .executeUpdateSafe();</span>
+<span class="fc" id="L31">  }</span>
+
+
+  /**
+   * Adds a recipe to the shopping list by inserting the parameters into the shopping list table.
+   * This method also checks if the recipe is already in the shopping list, and if so, updates the
+   * portions.
+   *
+   * @param userId   the id of the user to add a recipe to the shopping list for.
+   * @param recipeId the id of the recipe to add to the shopping list.
+   * @param portions the amount of portions for the recipe.
+   */
+
+  public void addRecipe(int userId, int recipeId, int portions) {
+<span class="fc" id="L45">    Integer existingPortions = new QueryBuilder(</span>
+        &quot;SELECT portions FROM shopping_list WHERE user_id = ? AND recipe_id = ?&quot;)
+<span class="fc" id="L47">        .addInt(userId)</span>
+<span class="fc" id="L48">        .addInt(recipeId)</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        .executeQuerySafe(rs -&gt; rs.next() ? rs.getInt(1) : null);</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">    if (existingPortions != null) {</span>
+<span class="fc" id="L52">      new QueryBuilder(</span>
+          &quot;UPDATE shopping_list SET portions = portions + ? WHERE user_id = ? AND recipe_id = ?&quot;)
+<span class="fc" id="L54">          .addInt(portions)</span>
+<span class="fc" id="L55">          .addInt(userId)</span>
+<span class="fc" id="L56">          .addInt(recipeId)</span>
+<span class="fc" id="L57">          .executeUpdateSafe();</span>
+    } else {
+<span class="fc" id="L59">      new QueryBuilder(&quot;INSERT INTO shopping_list (user_id, recipe_id, portions) VALUES (?, ?, ?)&quot;)</span>
+<span class="fc" id="L60">          .addInt(userId)</span>
+<span class="fc" id="L61">          .addInt(recipeId)</span>
+<span class="fc" id="L62">          .addInt(portions)</span>
+<span class="fc" id="L63">          .executeUpdateSafe();</span>
+    }
+<span class="fc" id="L65">  }</span>
+
+  /**
+   * Deletes a recipe from the shopping list.
+   *
+   * @param userId   the id of the user to remove a recipe from the shopping list for.
+   * @param recipeId the id of the recipe to remove from the shopping list.
+   */
+  public void deleteRecipe(int userId, int recipeId) {
+<span class="fc" id="L74">    new QueryBuilder(&quot;DELETE FROM shopping_list WHERE user_id = ? AND recipe_id = ?&quot;)</span>
+<span class="fc" id="L75">        .addInt(userId)</span>
+<span class="fc" id="L76">        .addInt(recipeId)</span>
+<span class="fc" id="L77">        .executeUpdateSafe();</span>
+<span class="fc" id="L78">  }</span>
+
+  /**
+   * Returns a list of RecipeWithIngredient objects containing all the recipes with their
+   * ingredients in the shopping list. This method also scales each ingredient in every recipe by
+   * the amount of portions.
+   *
+   * @param userId the id of the user to retrieve the shopping list for.
+   * @return a list of RecipeWithIngredient objects.
+   */
+
+  public List&lt;RecipeWithPartiallyRemovedIngredients&gt; getRecipesWithIngredients(int userId) {
+<span class="fc" id="L90">    return new QueryBuilder(&quot;SELECT * FROM shopping_list WHERE user_id = ?&quot;)</span>
+<span class="fc" id="L91">        .addInt(userId)</span>
+<span class="fc" id="L92">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L93">          List&lt;RecipeWithPartiallyRemovedIngredients&gt; recipes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L95">            int recipeId = rs.getInt(&quot;recipe_id&quot;);</span>
+<span class="fc" id="L96">            int portions = rs.getInt(&quot;portions&quot;);</span>
+<span class="fc" id="L97">            Recipe recipe = new RecipeDao().retrieveById(recipeId);</span>
+<span class="fc" id="L98">            List&lt;AmountedIngredient&gt; amountedIngredients =</span>
+<span class="fc" id="L99">                new IngredientDao().retrieveAmountedIngredientsFromRecipe(</span>
+                    recipeId
+                );
+
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            assert amountedIngredients != null;</span>
+<span class="fc" id="L104">            List&lt;PartiallyRemovedAmountedIngredient&gt; ingredients = amountedIngredients</span>
+<span class="fc" id="L105">                .stream()</span>
+<span class="fc" id="L106">                .map(PartiallyRemovedAmountedIngredient::new)</span>
+<span class="fc" id="L107">                .toList();</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            for (PartiallyRemovedAmountedIngredient ingredient : ingredients) {</span>
+<span class="fc" id="L109">              ingredient.setAmount(ingredient.getAmount() * portions);</span>
+<span class="fc" id="L110">            }</span>
+<span class="fc" id="L111">            RecipeWithPartiallyRemovedIngredients recipeWithIngredients</span>
+                = new RecipeWithPartiallyRemovedIngredients(
+<span class="fc" id="L113">                recipe.getId(),</span>
+<span class="fc" id="L114">                recipe.getName(),</span>
+<span class="fc" id="L115">                recipe.getDescription(),</span>
+<span class="fc" id="L116">                recipe.getDifficulty(),</span>
+<span class="fc" id="L117">                recipe.getDietaryTag(),</span>
+<span class="fc" id="L118">                recipe.getDuration(),</span>
+<span class="fc" id="L119">                recipe.getImagePath(),</span>
+<span class="fc" id="L120">                recipe.getInstruction(),</span>
+                ingredients,
+                portions
+            );
+<span class="fc" id="L124">            recipes.add(recipeWithIngredients);</span>
+<span class="fc" id="L125">          }</span>
+<span class="fc" id="L126">          return recipes;</span>
+        });
+  }
+
+  /**
+   * Adds all the ingredients from the recipes from the shopping list to the inventory of given
+   * user.
+   *
+   * @param userId the id of the user to add the shopping list to the inventory for.
+   */
+  public void addShoppingListToInventory(int userId) {
+<span class="fc" id="L137">    new QueryBuilder(</span>
+        &quot;INSERT INTO inventory (user_id, ingredient_id, amount) &quot;
+            + &quot;SELECT ?, ingredient_id, SUM(amount * &quot;
+            + &quot;(SELECT portions FROM shopping_list &quot;
+            + &quot;WHERE user_id = ? AND recipe_id = ri.recipe_id)) &quot;
+            + &quot;FROM recipe_ingredient ri &quot;
+            + &quot;WHERE recipe_id IN (SELECT recipe_id FROM shopping_list WHERE user_id = ?) &quot;
+            + &quot;GROUP BY ingredient_id&quot;)
+<span class="fc" id="L145">        .addInt(userId)</span>
+<span class="fc" id="L146">        .addInt(userId)</span>
+<span class="fc" id="L147">        .addInt(userId)</span>
+<span class="fc" id="L148">        .executeUpdateSafe();</span>
+<span class="fc" id="L149">  }</span>
+
+  /**
+   * Returns a list of AmountedIngredient objects containing all the ingredients in the shopping
+   * list. The list returns a summed amount of each ingredient.
+   *
+   * @param userId the id of the user to retrieve the list from.
+   * @return a list of AmountedIngredient objects containing all the ingredients in the shopping
+   * list.
+   */
+  public List&lt;AmountedIngredient&gt; getTotalIngredients(int userId) {
+<span class="fc" id="L160">    Map&lt;Integer, AmountedIngredient&gt; ingredientMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L161">    List&lt;Recipe&gt; recipes = getRecipes(userId);</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">    for (Recipe recipe : recipes) {</span>
+<span class="fc" id="L163">      int portions = getPortions(userId, recipe.getId());</span>
+
+<span class="fc" id="L165">      List&lt;AmountedIngredient&gt; ingredients = getIngredients(recipe.getId());</span>
+
+<span class="fc bfc" id="L167" title="All 2 branches covered.">      for (AmountedIngredient ingredient : ingredients) {</span>
+<span class="fc" id="L168">        double scaledAmount = ingredient.getAmount() * portions;</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (ingredientMap.containsKey(ingredient.getId())) {</span>
+<span class="fc" id="L170">          AmountedIngredient existingIngredient = ingredientMap.get(ingredient.getId());</span>
+<span class="fc" id="L171">          double totalAmount = existingIngredient.getAmount() + scaledAmount;</span>
+<span class="fc" id="L172">          existingIngredient.setAmount(totalAmount);</span>
+<span class="fc" id="L173">        } else {</span>
+<span class="fc" id="L174">          ingredient.setAmount(scaledAmount);</span>
+<span class="fc" id="L175">          ingredientMap.put(ingredient.getId(), ingredient);</span>
+        }
+<span class="fc" id="L177">      }</span>
+<span class="fc" id="L178">    }</span>
+<span class="fc" id="L179">    return new ArrayList&lt;&gt;(ingredientMap.values());</span>
+  }
+
+  /**
+   * Returns a list of Recipe objects containing all the recipes in the shopping list.
+   *
+   * @param userId the id of the user to retrieve the list for.
+   * @return a list of Recipe objects containing all the recipes in the shopping list.
+   */
+  private List&lt;Recipe&gt; getRecipes(int userId) {
+<span class="fc" id="L189">    return new QueryBuilder(</span>
+        &quot;SELECT * FROM recipe WHERE id IN (SELECT recipe_id FROM shopping_list WHERE user_id = ?)&quot;)
+<span class="fc" id="L191">        .addInt(userId)</span>
+<span class="fc" id="L192">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L193">          List&lt;Recipe&gt; recipes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L195">            recipes.add(new Recipe(</span>
+<span class="fc" id="L196">                rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L197">                rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L198">                rs.getString(&quot;description&quot;),</span>
+<span class="fc" id="L199">                Recipe.Difficulty.valueOf(rs.getString(&quot;difficulty&quot;).toUpperCase()),</span>
+<span class="fc" id="L200">                Recipe.DietaryTag.valueOf(rs.getString(&quot;dietary_tag&quot;).toUpperCase()),</span>
+<span class="fc" id="L201">                rs.getInt(&quot;duration&quot;),</span>
+<span class="fc" id="L202">                rs.getString(&quot;imagePath&quot;),</span>
+<span class="fc" id="L203">                rs.getString(&quot;instruction&quot;)</span>
+            ));
+          }
+<span class="fc" id="L206">          return recipes;</span>
+        });
+  }
+
+  /**
+   * Returns amount of portions for a given recipe in the shopping list.
+   *
+   * @param userId   the id of the user to retrieve the portions for.
+   * @param recipeId the id of the recipe to retrieve the portions for.
+   * @return the amount of portions in a recipe in the shopping list.
+   */
+  public int getPortions(int userId, int recipeId) {
+<span class="fc" id="L218">    Integer result = new QueryBuilder(</span>
+        &quot;SELECT portions FROM shopping_list WHERE user_id = ? AND recipe_id = ?&quot;)
+<span class="fc" id="L220">        .addInt(userId)</span>
+<span class="fc" id="L221">        .addInt(recipeId)</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        .executeQuerySafe(rs -&gt; rs.next() ? rs.getInt(1) : null);</span>
+
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">    return result != null ? result : 0;</span>
+  }
+
+  /**
+   * Returns a list of AmountedIngredient objects containing all the ingredients in a recipe.
+   *
+   * @param recipeId the id of the recipe to retrieve the list of ingredients for.
+   * @return a list of summed amounts for each ingredient in a recipe.
+   */
+  private List&lt;AmountedIngredient&gt; getIngredients(int recipeId) {
+<span class="fc" id="L234">    return new QueryBuilder(&quot;SELECT * FROM recipe_ingredient WHERE recipe_id = ?&quot;)</span>
+<span class="fc" id="L235">        .addInt(recipeId)</span>
+<span class="fc" id="L236">        .executeQuerySafe(rs -&gt; {</span>
+<span class="fc" id="L237">          List&lt;AmountedIngredient&gt; ingredients = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">          while (rs.next()) {</span>
+<span class="fc" id="L239">            Ingredient ingredient = retrieveIngredientById(rs.getInt(&quot;ingredient_id&quot;));</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            if (ingredient != null) {</span>
+<span class="fc" id="L241">              AmountedIngredient amountedIngredient = new AmountedIngredient(</span>
+<span class="fc" id="L242">                  ingredient.getId(),</span>
+<span class="fc" id="L243">                  ingredient.getName(),</span>
+<span class="fc" id="L244">                  ingredient.getUnit(),</span>
+<span class="fc" id="L245">                  ingredient.getCategory(),</span>
+<span class="fc" id="L246">                  rs.getDouble(&quot;amount&quot;)</span>
+              );
+<span class="fc" id="L248">              ingredients.add(amountedIngredient);</span>
+            }
+<span class="fc" id="L250">          }</span>
+<span class="fc" id="L251">          return ingredients;</span>
+        });
+  }
+
+  /**
+   * Retrieves an ingredient by its id. If the ingredient does not exist, null is returned.
+   *
+   * @param ingredientId the id of the ingredient to retrieve.
+   * @return an ingredient object if the ingredient exists, otherwise null.
+   */
+  private Ingredient retrieveIngredientById(int ingredientId) {
+<span class="fc" id="L262">    return new QueryBuilder(&quot;SELECT * FROM ingredient WHERE id = ?&quot;)</span>
+<span class="fc" id="L263">        .addInt(ingredientId)</span>
+<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        .executeQuerySafe(rs -&gt; rs.next() ? new Ingredient(</span>
+<span class="fc" id="L265">            rs.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L266">            rs.getString(&quot;name&quot;),</span>
+<span class="fc" id="L267">            Ingredient.Unit.valueOf(rs.getString(&quot;unit&quot;).toUpperCase()),</span>
+<span class="fc" id="L268">            Ingredient.Category.valueOf(rs.getString(&quot;category&quot;).toUpperCase())</span>
+<span class="nc" id="L269">        ) : null);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

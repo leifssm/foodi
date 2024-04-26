@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>About.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.views</a> &gt; <span class="el_source">About.java</span></div><h1>About.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.views;
+
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import no.ntnu.idatt1005.foodi.view.components.TitledPage;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+
+/**
+ * The about view.
+ *
+ * &lt;p&gt; This class is a custom component for displaying the about page. &lt;/p&gt;
+ */
+
+public class About extends TitledPage implements ComponentUtils {
+
+  /**
+   * The constructor of the about view.
+   */
+  public About() {
+<span class="nc" id="L20">    super(&quot;Your vision, our mission&quot;);</span>
+<span class="nc" id="L21">    addStylesheet(&quot;components/about/about&quot;);</span>
+<span class="nc" id="L22">    addClass(&quot;about&quot;);</span>
+
+<span class="nc" id="L24">    Label aboutText = new Label(&quot;As a dynamic and innovative team, we excel due to our unique &quot;</span>
+        + &quot;blend of skills and perspectives. Our diversity in expertise, from computer science to &quot;
+        + &quot;design, allows us to approach problems from multiple angles, ensuring comprehensive &quot;
+        + &quot;solutions. Our proficiency in Java, coupled with design tools like Figma, enhances our &quot;
+        + &quot;technical versatility. Our eagerness to embrace new technologies, like Rust and Java UI &quot;
+        + &quot;libraries, keeps us at the forefront of cutting-edge developments. Our collaboration is &quot;
+        + &quot;not just about skill; it's about a shared passion for excellence and continuous &quot;
+        + &quot;learning, making us an unstoppable force in any project. 🍽&quot;
+    );
+<span class="nc" id="L33">    aboutText.getStyleClass().add(&quot;about-text&quot;);</span>
+<span class="nc" id="L34">    BorderPane content = new BorderPane();</span>
+<span class="nc" id="L35">    content.setTop(aboutText);</span>
+
+<span class="nc" id="L37">    setCenter(content);</span>
+<span class="nc" id="L38">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

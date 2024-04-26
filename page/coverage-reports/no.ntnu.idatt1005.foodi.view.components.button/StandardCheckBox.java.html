@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StandardCheckBox.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodi</a> &gt; <a href="index.source.html" class="el_package">no.ntnu.idatt1005.foodi.view.components.button</a> &gt; <span class="el_source">StandardCheckBox.java</span></div><h1>StandardCheckBox.java</h1><pre class="source lang-java linenums">package no.ntnu.idatt1005.foodi.view.components.button;
+
+import javafx.scene.control.CheckBox;
+import no.ntnu.idatt1005.foodi.view.utils.ComponentUtils;
+
+/**
+ * Class for creating a standard styled checkbox.
+ *
+ * @author Leif Mørstad
+ * @version 1.0
+ */
+public class StandardCheckBox extends CheckBox implements ComponentUtils {
+
+  /**
+   * Constructor for the StandardCheckBox class. Defaults the checkbox to be unselected.
+   */
+  public StandardCheckBox() {
+<span class="nc" id="L18">    this(false);</span>
+<span class="nc" id="L19">  }</span>
+
+  /**
+   * Constructor for the StandardCheckBox class.
+   *
+   * @param active Whether the checkbox should be selected or not at first
+   */
+  public StandardCheckBox(boolean active) {
+<span class="nc" id="L27">    super();</span>
+<span class="nc" id="L28">    setSelected(active);</span>
+<span class="nc" id="L29">    addStylesheet(&quot;components/button/std-checkbox&quot;);</span>
+<span class="nc" id="L30">    addClass(&quot;std-checkbox&quot;);</span>
+<span class="nc" id="L31">  }</span>
+
+  /**
+   * Sets the scale of the checkbox.
+   *
+   * @param scale The scale to set
+   */
+  public void setScale(double scale) {
+<span class="nc" id="L39">    setScaleX(scale);</span>
+<span class="nc" id="L40">    setScaleY(scale);</span>
+<span class="nc" id="L41">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
