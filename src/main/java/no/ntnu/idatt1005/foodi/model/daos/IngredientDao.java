@@ -276,13 +276,13 @@ public class IngredientDao {
   /**
    * Deletes an ingredient from a user's inventory.
    *
-   * @param userId       The id of the user to delete the ingredient from.
-   * @param ingredientId The id of the ingredient to delete.
+   * @param userId      The id of the user to delete the ingredient from.
+   * @param inventoryId The id of the ingredient to delete.
    */
-  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
-    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
+  public void deleteIngredientFromUserInventory(int userId, int inventoryId) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND id = ?")
         .addInt(userId)
-        .addInt(ingredientId)
+        .addInt(inventoryId)
         .executeUpdateSafe();
   }
 
