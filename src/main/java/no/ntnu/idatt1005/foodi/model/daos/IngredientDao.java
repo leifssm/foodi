@@ -1,4 +1,4 @@
-package no.ntnu.idatt1005.foodi.model.DAO;
+package no.ntnu.idatt1005.foodi.model.daos;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * @version 0.9.0
  */
 
-public class IngredientDAO {
+public class IngredientDao {
 
   /**
    * Counts the number of ingredient items in the ingredient table.
@@ -276,13 +276,13 @@ public class IngredientDAO {
   /**
    * Deletes an ingredient from a user's inventory.
    *
-   * @param userId       The id of the user to delete the ingredient from.
-   * @param ingredientId The id of the ingredient to delete.
+   * @param userId      The id of the user to delete the ingredient from.
+   * @param inventoryId The id of the ingredient to delete.
    */
-  public void deleteIngredientFromUserInventory(int userId, int ingredientId) {
-    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND ingredient_id = ?")
+  public void deleteIngredientFromUserInventory(int userId, int inventoryId) {
+    new QueryBuilder("DELETE FROM inventory WHERE user_id = ? AND id = ?")
         .addInt(userId)
-        .addInt(ingredientId)
+        .addInt(inventoryId)
         .executeUpdateSafe();
   }
 

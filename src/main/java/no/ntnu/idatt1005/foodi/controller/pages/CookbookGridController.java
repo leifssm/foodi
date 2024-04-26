@@ -1,16 +1,13 @@
 package no.ntnu.idatt1005.foodi.controller.pages;
 
-import javafx.beans.property.SimpleObjectProperty;
-import no.ntnu.idatt1005.foodi.model.DAO.RecipeDAO;
+import java.util.Arrays;
+import java.util.List;
+import no.ntnu.idatt1005.foodi.model.daos.RecipeDao;
 import no.ntnu.idatt1005.foodi.model.objects.dtos.Recipe;
-import no.ntnu.idatt1005.foodi.model.objects.dtos.User;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCard;
 import no.ntnu.idatt1005.foodi.view.components.cookbook.RecipeCardRow;
 import no.ntnu.idatt1005.foodi.view.location.LocationHandler;
 import no.ntnu.idatt1005.foodi.view.views.CookbookGrid;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Controller for the cookbook grid page. This controller manages the updates to the cookbook grid
@@ -19,7 +16,7 @@ import java.util.List;
 public class CookbookGridController extends PageController {
 
   private final CookbookGrid view;
-  private final RecipeDAO recipeDAO;
+  private final RecipeDao recipeDao;
 
 
   /**
@@ -30,7 +27,7 @@ public class CookbookGridController extends PageController {
   public CookbookGridController(CookbookGrid cookbookGridPage) {
     super(cookbookGridPage);
     this.view = cookbookGridPage;
-    this.recipeDAO = new RecipeDAO();
+    this.recipeDao = new RecipeDao();
     LocationHandler.subscribe(e -> {
       if (LocationHandler.isLocationFuzzy("cookbook-grid")) {
         update();
@@ -53,19 +50,20 @@ public class CookbookGridController extends PageController {
 
     RecipeCardRow popularRecipeCardRow = createRecipeCardRowForPopularRecipes(recipes);
 
-
-    List<RecipeCardRow> cardRows = Arrays.asList(popularRecipeCardRow, twentyMinuteRecipeCardRow, easyRecipeCardRow, vegetarianRecipeCardRow);
+    List<RecipeCardRow> cardRows = Arrays.asList(popularRecipeCardRow, twentyMinuteRecipeCardRow,
+        easyRecipeCardRow, vegetarianRecipeCardRow);
 
     view.render(cardRows.toArray(new RecipeCardRow[0]));
   }
 
   private Recipe[] fetchAllRecipes() {
-    return recipeDAO.retrieveAll().toArray(new Recipe[0]);
+    return recipeDao.retrieveAll().toArray(new Recipe[0]);
   }
 
   private RecipeCardRow createRecipeCardRow(String title, Recipe[] filteredRecipes) {
     RecipeCard[] cards = Arrays.stream(filteredRecipes)
-        .map(recipe -> new RecipeCard(recipe.getId(), recipe.getName(), recipe.getDuration() + " minutes", recipe.getImagePath()))
+        .map(recipe -> new RecipeCard(recipe.getId(), recipe.getName(),
+            recipe.getDuration() + " minutes", recipe.getImagePath()))
         .toArray(RecipeCard[]::new);
     return new RecipeCardRow(title, cards);
   }
@@ -91,10 +89,14 @@ public class CookbookGridController extends PageController {
   private RecipeCardRow createRecipeCardRowForPopularRecipes(Recipe[] recipes) {
     // Assuming 'popularRecipes' are predefined; here you may need a more dynamic approach
     RecipeCard[] cards = {
-        new RecipeCard(recipes[5].getId(), recipes[5].getName(), recipes[5].getDuration() + " minutes", recipes[5].getImagePath()),
-        new RecipeCard(recipes[2].getId(), recipes[2].getName(), recipes[2].getDuration() + " minutes", recipes[2].getImagePath()),
-        new RecipeCard(recipes[4].getId(), recipes[4].getName(), recipes[4].getDuration() + " minutes", recipes[4].getImagePath()),
-        new RecipeCard(recipes[1].getId(), recipes[1].getName(), recipes[1].getDuration() + " minutes", recipes[1].getImagePath())
+        new RecipeCard(recipes[5].getId(), recipes[5].getName(),
+            recipes[5].getDuration() + " minutes", recipes[5].getImagePath()),
+        new RecipeCard(recipes[2].getId(), recipes[2].getName(),
+            recipes[2].getDuration() + " minutes", recipes[2].getImagePath()),
+        new RecipeCard(recipes[4].getId(), recipes[4].getName(),
+            recipes[4].getDuration() + " minutes", recipes[4].getImagePath()),
+        new RecipeCard(recipes[1].getId(), recipes[1].getName(),
+            recipes[1].getDuration() + " minutes", recipes[1].getImagePath())
     };
     return new RecipeCardRow("Popular", cards);
   }

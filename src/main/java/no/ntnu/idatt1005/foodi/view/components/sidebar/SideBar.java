@@ -37,7 +37,7 @@ public class SideBar extends VBox implements ComponentUtils {
   /**
    * Method for rendering the sidebar.
    *
-   * @param currentUsername The username of the currently logged in user
+   * @param currentUser the current user
    */
   public void render(User currentUser) {
     String currentUsername = currentUser.getCapitalizedName();
